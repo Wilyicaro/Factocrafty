@@ -1,0 +1,10 @@
+{
+  "type": "factocrafty:compressing",
+  "ingredient": {
+    "item": "factocrafty:energium_dust",
+    "count": 9
+  },
+  "result": "factocrafty:energy_crystal",
+  "experience": 0.2,
+  "processtime": 200
+}

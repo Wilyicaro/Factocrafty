@@ -1,0 +1,30 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "block/composter_bottom"
+	},
+	"elements": [
+		{
+			"name": "full",
+			"from": [2, 1, 2],
+			"to": [14, 8, 14],
+			"color": 3,
+			"faces": {
+				"north": {"uv": [0, 0, 12, 7], "texture": "#missing"},
+				"east": {"uv": [4, 9, 16, 16], "texture": "#missing"},
+				"south": {"uv": [0, 9, 12, 16], "texture": "#missing"},
+				"west": {"uv": [0, 9, 12, 16], "texture": "#missing"},
+				"up": {"uv": [0, 0, 12, 12], "texture": "#missing"},
+				"down": {"uv": [4, 0, 16, 12], "texture": "#missing"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "latex",
+			"origin": [8, 9.5, 12.5],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

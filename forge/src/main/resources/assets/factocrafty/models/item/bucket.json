@@ -1,0 +1,10 @@
+{
+    "parent": "forge:item/default",
+    "loader": "forge:fluid_container",
+    "textures": {
+        "base": "minecraft:item/bucket",
+        "fluid": "factocrafty:item/bucket_background"
+    },
+    "flip_gas": false,
+    "fluid": "minecraft:empty"
+}

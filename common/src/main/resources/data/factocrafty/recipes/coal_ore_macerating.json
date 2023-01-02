@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:coal_ore"
+  },
+  "result": "factocrafty:crushed_coal",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:diamond_ore"
+  },
+  "result": "factocrafty:crushed_diamond",
+  "experience": 0.2,
+  "processtime": 200
+}

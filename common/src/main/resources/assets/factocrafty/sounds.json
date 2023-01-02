@@ -1,0 +1,104 @@
+{
+  "block.generator": {
+    "sounds": [
+      {
+        "name": "factocrafty:generator"
+      }
+    ]
+  },
+
+  "block.geo_generator": {
+    "sounds": [
+      {
+        "name": "factocrafty:geo_generator"
+      }
+    ]
+  },
+
+  "block.solar_generator": {
+    "sounds": [
+      {
+        "name": "factocrafty:solar_generator"
+      }
+    ]
+  },
+
+  "block.macerator": {
+    "subtitle": "subtitles.factocrafty.macerator",
+    "sounds": [
+      {
+        "name": "factocrafty:macerator"
+      }
+    ]
+  },
+
+  "block.compressor": {
+    "sounds": [
+      {
+        "name": "factocrafty:compressor"
+      }
+    ]
+  },
+
+  "block.extractor": {
+    "sounds": [
+      {
+        "name": "factocrafty:extractor"
+      }
+    ]
+  },
+
+  "block.sawmill": {
+    "sounds": [
+      {
+        "name": "factocrafty:sawmill"
+      }
+    ]
+  },
+
+  "item.treetap": {
+    "sounds": [
+      {
+        "name": "factocrafty:treetap"
+      }
+    ]
+  },
+
+  "item.wrench": {
+    "sounds": [
+      {
+        "name": "factocrafty:wrench"
+      }
+    ]
+  },
+  "block.cable.dig": {
+    "sounds": [
+      {
+        "name": "factocrafty:dig_rubber_cable"
+      },
+      {
+        "name": "factocrafty:dig1_rubber_cable"
+      }
+
+    ]
+  },
+  "block.cable.place": {
+    "sounds": [
+      {
+        "name": "factocrafty:place_rubber_cable"
+      },
+      {
+        "name": "factocrafty:place1_rubber_cable"
+      }
+
+    ]
+  },
+  "block.cable.broken": {
+    "sounds": [
+      {
+        "name": "factocrafty:broken1_rubber_cable"
+      }
+
+    ]
+  }
+}

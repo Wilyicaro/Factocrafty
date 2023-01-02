@@ -1,0 +1,10 @@
+{
+  "type": "factocrafty:compressing",
+  "ingredient": {
+    "item": "minecraft:obsidian",
+    "count": 63
+  },
+  "result": "minecraft:diamond",
+  "experience": 0.2,
+  "processtime": 600
+}

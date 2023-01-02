@@ -1,0 +1,54 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "factocrafty:item/crafting/scrap_box",
+		"sb": "factocrafty:item/crafting/scrap_box"
+	},
+	"elements": [
+		{
+			"name": "scrap_box",
+			"from": [2, 0, 3],
+			"to": [14, 8, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 14, 9], "texture": "#sb"},
+				"east": {"uv": [1, 0, 13, 9], "texture": "#sb"},
+				"south": {"uv": [0, 0, 14, 9], "texture": "#sb"},
+				"west": {"uv": [1, 0, 13, 9], "texture": "#sb"},
+				"up": {"uv": [0, 8, 10, 16], "texture": "#sb"},
+				"down": {"uv": [9, 8, 16, 16], "rotation": 90, "texture": "#sb"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 225, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

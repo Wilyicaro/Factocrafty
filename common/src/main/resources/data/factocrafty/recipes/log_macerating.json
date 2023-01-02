@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "result": "factocrafty:sawdust",
+  "other_result": {
+    "result": "minecraft:stick",
+    "chance" : 0.4
+  },
+  "experience": 0.3,
+  "processtime": 200
+}

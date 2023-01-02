@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": "factocrafty:netherite_dust",
+  "experience": 0.45,
+  "processtime": 200
+}

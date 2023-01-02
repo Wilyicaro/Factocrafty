@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "factocrafty:block/fluid_tank/fluid_model"
+    }
+  }
+}

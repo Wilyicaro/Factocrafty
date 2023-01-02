@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:compressing",
+  "ingredient": {
+    "item": "factocrafty:combined_carbon_fibers"
+  },
+  "result": "factocrafty:carbon_plate",
+  "experience": 0.2,
+  "processtime": 150
+}

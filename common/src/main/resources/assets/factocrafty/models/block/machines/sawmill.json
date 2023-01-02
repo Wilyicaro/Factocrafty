@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/sawmill_front",
+		"top": "factocrafty:block/machines/sawmill_top",
+		"bottom": "factocrafty:block/machines/sawmill_bottom",
+		"side": "factocrafty:block/machines/sawmill_side"
+	}
+}

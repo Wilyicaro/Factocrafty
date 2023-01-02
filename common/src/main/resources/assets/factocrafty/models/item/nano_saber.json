@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "factocrafty:item/tool/electric/nano_saber"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "factocrafty:active": 0.0
+      },
+      "model": "factocrafty:item/tool/electric/nano_saber"
+    },
+    {
+      "predicate": {
+        "factocrafty:active": 1.0
+      },
+      "model": "factocrafty:item/tool/electric/nano_saber_active"
+    }
+  ]
+}

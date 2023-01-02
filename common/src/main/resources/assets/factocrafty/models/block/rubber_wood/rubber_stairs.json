@@ -1,0 +1,8 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "bottom": "factocrafty:block/rubber_wood/rubber_planks",
+        "top": "factocrafty:block/rubber_wood/rubber_planks",
+        "side": "factocrafty:block/rubber_wood/rubber_planks"
+    }
+}

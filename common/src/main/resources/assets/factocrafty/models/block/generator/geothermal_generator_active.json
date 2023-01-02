@@ -1,0 +1,10 @@
+{
+	"parent": "factocrafty:block/generator/irorientable",
+	"textures": {
+		"front": "minecraft:block/lava_still",
+		"top": "factocrafty:block/generator/geothermal_generator_top",
+		"bottom": "factocrafty:block/generator/geothermal_generator_bottom",
+		"side": "factocrafty:block/generator/geothermal_generator_side",
+		"overlay": "factocrafty:block/generator/geothermal_generator_front_active"
+	}
+}

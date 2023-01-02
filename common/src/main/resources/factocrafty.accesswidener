@@ -1,0 +1,21 @@
+accessWidener   v2  named
+extendable class net/minecraft/world/level/material/FogType
+extendable class net/minecraft/client/renderer/FogRenderer$FogData
+accessible method net/minecraft/world/level/block/state/properties/WoodType <init> (Ljava/lang/String;)V
+accessible method net/minecraft/world/level/block/state/properties/WoodType register (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/world/level/block/state/properties/WoodType;
+accessible method net/minecraft/client/renderer/Sheets createSignMaterial (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/client/resources/model/Material;
+accessible method net/minecraft/client/gui/screens/MenuScreens register (Lnet/minecraft/world/inventory/MenuType;Lnet/minecraft/client/gui/screens/MenuScreens$ScreenConstructor;)V
+extendable method net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity getTotalCookTime (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)I
+extendable method net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity canBurn (Lnet/minecraft/world/item/crafting/Recipe;Lnet/minecraft/core/NonNullList;I)Z
+accessible field net/minecraft/world/entity/vehicle/Boat DATA_ID_TYPE Lnet/minecraft/network/syncher/EntityDataAccessor;
+accessible method net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity createExperience (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;IF)V
+accessible method net/minecraft/world/level/block/FireBlock setFlammable (Lnet/minecraft/world/level/block/Block;II)V
+accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity quickCheck Lnet/minecraft/world/item/crafting/RecipeManager$CachedCheck;
+accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity cookingProgress I
+accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity cookingTotalTime I
+accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity recipesUsed Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;
+accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity litTime I
+accessible field com/mojang/blaze3d/vertex/VertexFormat offsets Lit/unimi/dsi/fastutil/ints/IntList;
+mutable field net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase lightEmission I
+accessible field net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase lightEmission I
+accessible method net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacerType <init> (Lcom/mojang/serialization/Codec;)V

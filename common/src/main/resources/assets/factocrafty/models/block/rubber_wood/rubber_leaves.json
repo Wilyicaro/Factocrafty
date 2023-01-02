@@ -1,0 +1,6 @@
+{
+    "parent": "block/leaves",
+    "textures": {
+        "all": "factocrafty:block/rubber_wood/rubber_leaves"
+    }
+}

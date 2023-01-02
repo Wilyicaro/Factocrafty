@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north":	{ "model": "factocrafty:block/battery_box/hfc" },
+		"facing=south":	{ "model": "factocrafty:block/battery_box/hfc", "y": 180 },
+		"facing=west":	{ "model": "factocrafty:block/battery_box/hfc", "y": 270 },
+		"facing=east":	{ "model": "factocrafty:block/battery_box/hfc", "y": 90 },
+		"facing=up":	{ "model": "factocrafty:block/battery_box/hfc", "x": -90 },
+		"facing=down":	{ "model": "factocrafty:block/battery_box/hfc", "x": 90 }
+	}
+}

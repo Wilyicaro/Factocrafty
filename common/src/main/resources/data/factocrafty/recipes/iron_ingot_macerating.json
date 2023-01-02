@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:iron_ingot"
+  },
+  "result": "factocrafty:iron_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

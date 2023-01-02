@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "factocrafty:block/rubber_wood/rubber_sapling"
+    }
+}

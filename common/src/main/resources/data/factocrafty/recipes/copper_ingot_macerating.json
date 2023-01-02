@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:copper_ingot"
+  },
+  "result": "factocrafty:copper_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "factocrafty:bronze_block",
+    "factocrafty:tin_ore",
+    "factocrafty:deepslate_tin_ore",
+    "factocrafty:tin_block",
+    "factocrafty:raw_tin_block",
+    "factocrafty:silver_ore",
+    "factocrafty:deepslate_silver_ore",
+    "factocrafty:silver_block",
+    "factocrafty:raw_silver_block",
+    "factocrafty:lead_ore",
+    "factocrafty:deepslate_lead_ore",
+    "factocrafty:lead_block",
+    "factocrafty:raw_lead_block",
+    "factocrafty:deepslate_uranium_ore",
+    "factocrafty:uranium_block",
+    "factocrafty:machine_frame",
+    "factocrafty:advanced_machine_frame",
+    "factocrafty:iron_furnace",
+    "factocrafty:generator",
+    "factocrafty:geothermal_generator",
+    "factocrafty:electric_furnace",
+    "factocrafty:macerator"
+    ]
+}

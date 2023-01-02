@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/extruder_front_active",
+		"top": "factocrafty:block/machines/extruder_top",
+		"bottom": "factocrafty:block/machines/extruder_bottom",
+		"side": "factocrafty:block/machines/extruder_side"
+	}
+}

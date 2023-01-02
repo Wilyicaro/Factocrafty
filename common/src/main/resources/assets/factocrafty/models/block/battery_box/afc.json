@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "factocrafty:block/battery_box/afc_bottom",
+		"up": "factocrafty:block/battery_box/afc_top",
+		"north": "factocrafty:block/battery_box/afc_front",
+		"east": "factocrafty:block/battery_box/afc_leftright",
+		"south": "factocrafty:block/battery_box/afc_back",
+		"west": "factocrafty:block/battery_box/afc_leftright",
+		"particle": "factocrafty:block/battery_box/afc_leftright"
+	}
+}

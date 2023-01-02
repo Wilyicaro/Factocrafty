@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:gold_ore"
+  },
+  "result": "factocrafty:crushed_gold",
+  "experience": 0.2,
+  "processtime": 200
+}

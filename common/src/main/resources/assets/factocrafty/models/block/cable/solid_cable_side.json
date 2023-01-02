@@ -1,0 +1,51 @@
+{
+	"credit": "Made with Blockbench",
+	"textures":{
+		"particle": "#cable"
+	},
+	"elements": [
+		{
+			"name": "cable_conduter_inter",
+			"from": [7.2, 7.2, 4.8],
+			"to": [8.8, 8.8, 7.2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [12, 12, 16, 16], "texture": "#cable"},
+				"east": {"uv": [6, 10, 10, 16], "rotation": 270, "texture": "#fibre"},
+				"south": {"uv": [0, 12, 4, 16], "rotation": 90, "texture": "#cable"},
+				"west": {"uv": [6, 10, 10, 16], "rotation": 90, "texture": "#fibre"},
+				"up": {"uv": [6, 0, 10, 6], "texture": "#fibre"},
+				"down": {"uv": [6, 0, 10, 6], "rotation": 180, "texture": "#fibre"}
+			}
+		},
+		{
+			"name": "cable_conduter_side",
+			"from": [7.2, 7.2, 0],
+			"to": [8.8, 8.8, 4.8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 12, 4, 16], "texture": "#cable"},
+				"east": {"uv": [0, 6, 12, 10], "texture": "#fibre"},
+				"south": {"uv": [12, 0, 16, 4], "texture": "#cable"},
+				"west": {"uv": [0, 6, 12, 10], "texture": "#fibre"},
+				"up": {"uv": [0, 6, 12, 10], "rotation": 270, "texture": "#fibre"},
+				"down": {"uv": [16, 6, 4, 10], "rotation": 90, "texture": "#fibre"}
+			}
+		},
+		{
+			"name": "cable_side",
+			"from": [6, 6, 0],
+			"to": [10, 10, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [6, 6, 10, 10], "texture": "#cable"},
+				"east": {"uv": [10, 6, 16, 10], "texture": "#cable"},
+				"south": {"uv": [6, 6, 10, 10], "texture": "#cable"},
+				"west": {"uv": [0, 6, 6, 10], "texture": "#cable"},
+				"up": {"uv": [6, 10, 10, 16], "rotation": 180, "texture": "#cable"},
+				"down": {"uv": [6, 0, 10, 6], "rotation": 180, "texture": "#cable"}
+			}
+		}
+	],
+	"gui_light": "front"
+}

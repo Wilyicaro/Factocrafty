@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/compressor_front_active",
+		"top": "factocrafty:block/machines/compressor_top",
+		"bottom": "factocrafty:block/machines/compressor_bottom",
+		"side": "factocrafty:block/machines/compressor_side"
+	}
+}

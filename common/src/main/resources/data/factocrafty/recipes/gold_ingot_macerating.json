@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:gold_ingot"
+  },
+  "result": "factocrafty:gold_dust",
+  "experience": 0.45,
+  "processtime": 200
+}

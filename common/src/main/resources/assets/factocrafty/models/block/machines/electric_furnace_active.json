@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/electric_furnace_front_active",
+		"top": "factocrafty:block/machines/electric_furnace_top",
+		"bottom": "factocrafty:block/machines/electric_furnace_bottom",
+		"side": "factocrafty:block/machines/electric_furnace_side"
+	}
+}

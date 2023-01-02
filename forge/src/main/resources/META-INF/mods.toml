@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[41,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "factocrafty"
+version = "${version}"
+displayName = "Factocrfty"
+authors = "Wilyicaro"
+description = '''
+This is an example description! Tell everyone what your mod is about!
+'''
+#logoFile = ""
+
+[[dependencies.factocrafty]]
+modId = "forge"
+mandatory = true
+versionRange = "[41,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.factocrafty]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.factocrafty]]
+modId = "architectury"
+mandatory = true
+versionRange = "[5.7.28,)"
+ordering = "AFTER"
+side = "BOTH"

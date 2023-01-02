@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "factocrafty:platinum_ore",
+    "factocrafty:raw_platinum_block",
+    "factocrafty:platinum_block",
+    "factocrafty:ruby_ore",
+    "factocrafty:deepslate_ruby_ore",
+    "factocrafty:ruby_block"
+  ]
+}

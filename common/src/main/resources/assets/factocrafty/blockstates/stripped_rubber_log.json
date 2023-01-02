@@ -1,0 +1,94 @@
+{
+    "multipart": [
+      {
+        "when": {"axis":"x"},
+        "apply": {"model": "factocrafty:block/rubber_wood/stripped_rubber_log","x":90,"y":90}
+      },
+      {
+        "when": {"axis":"y"},
+        "apply": {"model": "factocrafty:block/rubber_wood/stripped_rubber_log"
+        } 
+      },
+      {
+        "when": {
+          "axis":"z"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log","x":90
+        }
+      },
+      {
+        "when": {
+          "cut": "true","axis":"x"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_cut","x":90,"y":90
+        }
+      },
+      {
+        "when": {
+          "cut": "true","axis":"y"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_cut"
+        }
+      },
+      {
+        "when": {
+          "cut": "true","axis":"z"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_cut","x":90
+        }
+      },
+      {
+        "when": {
+          "cut": "true","latex": "true","axis":"x"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_latex_cut","x":90,"y":90
+        }
+      },
+      {
+        "when": {
+          "cut": "true","latex": "true","axis":"y"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_latex_cut"
+        }
+      },
+      {
+        "when": {
+          "cut": "true","latex": "true","axis":"z"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_latex_cut","x": 90
+        }
+      },
+      {
+        "when": {
+          "cut": "false","latex": "true","axis":"x"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_latex","x":90,"y": 90
+        }
+      },
+      {
+        "when": {
+          "cut": "false","latex": "true","axis":"y"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_latex"
+        }
+      },
+      {
+        "when": {
+          "cut": "false","latex": "true","axis":"z"
+        },
+        "apply": {
+          "model": "factocrafty:block/rubber_wood/stripped_rubber_log_latex","x": 90
+        }
+      }
+      
+    ]
+  }

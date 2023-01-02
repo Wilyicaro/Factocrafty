@@ -1,0 +1,6 @@
+{
+	"parent": "factocrafty:block/cable/insulated_cable_side",
+	"textures": {
+		"cable": "factocrafty:block/cable/insulated_tin_cable"
+	}
+}

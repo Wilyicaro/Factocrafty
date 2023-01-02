@@ -1,0 +1,6 @@
+{
+	"parent": "factocrafty:block/cable/thin_cable_up",
+	"textures": {
+		"cable": "factocrafty:block/cable/gold_cable"
+	}
+}

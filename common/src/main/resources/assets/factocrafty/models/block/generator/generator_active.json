@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/generator/generator_front_active",
+		"top": "factocrafty:block/generator/generator_top",
+		"bottom": "factocrafty:block/generator/generator_bottom",
+		"side": "factocrafty:block/generator/generator_side"
+	}
+}

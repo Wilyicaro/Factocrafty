@@ -1,0 +1,10 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:rubber_log",
+    "count": 3
+  },
+  "result": "factocrafty:sticky_resin",
+  "experience": 0.2,
+  "processtime": 200
+}

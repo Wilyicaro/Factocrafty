@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/macerator_front",
+		"top": "factocrafty:block/machines/macerator_top",
+		"bottom": "factocrafty:block/machines/macerator_bottom",
+		"side": "factocrafty:block/machines/macerator_side"
+	}
+}

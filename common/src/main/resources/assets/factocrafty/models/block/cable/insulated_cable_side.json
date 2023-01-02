@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures":{
+		"particle": "#cable"
+	},
+	"elements": [
+		{
+			"name": "cable_side",
+			"from": [5.7, 0, 0],
+			"to": [10.3, 4.6, 6],
+			"color": 1,
+			"faces": {
+				"north": {"uv": [5, 0, 11, 6], "texture": "#cable"},
+				"east": {"uv": [0, 12, 6, 16], "texture": "#cable"},
+				"south": {"uv": [5, 5, 11, 11], "texture": "#cable"},
+				"west": {"uv": [6, 12, 12, 16], "texture": "#cable"},
+				"up": {"uv": [0, 0, 4, 6], "texture": "#cable"},
+				"down": {"uv": [0, 6, 4, 12], "texture": "#cable"}
+			}
+		}
+	]
+}

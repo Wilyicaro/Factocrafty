@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "factocrafty:item/crafting/electronic_circuit"
+  }
+}

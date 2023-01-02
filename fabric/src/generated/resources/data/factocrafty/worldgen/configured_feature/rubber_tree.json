@@ -1,0 +1,69 @@
+{
+  "type": "minecraft:tree",
+  "config": {
+    "decorators": [],
+    "dirt_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:dirt"
+      }
+    },
+    "foliage_placer": {
+      "type": "factocrafty:rubber_fancy_foliage_placer",
+      "height": 3,
+      "offset": 4,
+      "radius": 2
+    },
+    "foliage_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "factocrafty:rubber_leaves",
+        "Properties": {
+          "distance": "7",
+          "persistent": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "force_dirt": false,
+    "ignore_vines": true,
+    "minimum_size": {
+      "type": "minecraft:two_layers_feature_size",
+      "limit": 3,
+      "lower_size": 0,
+      "min_clipped_height": 2,
+      "upper_size": 2
+    },
+    "trunk_placer": {
+      "type": "minecraft:fancy_trunk_placer",
+      "base_height": 5,
+      "height_rand_a": 3,
+      "height_rand_b": 0
+    },
+    "trunk_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "factocrafty:rubber_log",
+            "Properties": {
+              "axis": "y",
+              "latex": "false"
+            }
+          },
+          "weight": 5
+        },
+        {
+          "data": {
+            "Name": "factocrafty:rubber_log",
+            "Properties": {
+              "axis": "y",
+              "latex": "true"
+            }
+          },
+          "weight": 2
+        }
+      ]
+    }
+  }
+}

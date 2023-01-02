@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:bronze_ingot"
+  },
+  "result": "factocrafty:bronze_dust",
+  "experience": 0.45,
+  "processtime": 200
+}

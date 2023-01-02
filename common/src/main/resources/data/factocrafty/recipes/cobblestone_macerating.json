@@ -1,0 +1,17 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "result": "minecraft:gravel",
+  "other_result": {
+    "result": "factocrafty:stone_dust",
+    "chance" : 0.15
+  },
+  "other_result1": {
+    "result": "minecraft:flint",
+    "chance" : 0.05
+  },
+  "experience": 0.2,
+  "processtime": 200
+}

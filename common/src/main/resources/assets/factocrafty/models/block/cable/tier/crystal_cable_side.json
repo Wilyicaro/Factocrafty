@@ -1,0 +1,7 @@
+{
+	"parent": "factocrafty:block/cable/solid_cable_side",
+	"textures": {
+		"cable": "factocrafty:block/cable/crystal_cable",
+		"fibre": "factocrafty:block/cable/crystal_fibre"
+	}
+}

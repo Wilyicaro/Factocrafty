@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"facing=north,lit=false":	{ "model": "factocrafty:block/machines/iron_furnace" },
+		"facing=south,lit=false":	{ "model": "factocrafty:block/machines/iron_furnace", "y": 180 },
+		"facing=west,lit=false":	{ "model": "factocrafty:block/machines/iron_furnace", "y": 270 },
+		"facing=east,lit=false":	{ "model": "factocrafty:block/machines/iron_furnace", "y": 90 },
+		"facing=north,lit=true":	{ "model": "factocrafty:block/machines/iron_furnace_active" },
+		"facing=south,lit=true":	{ "model": "factocrafty:block/machines/iron_furnace_active", "y": 180 },
+		"facing=west,lit=true":		{ "model": "factocrafty:block/machines/iron_furnace_active", "y": 270 },
+		"facing=east,lit=true":		{ "model": "factocrafty:block/machines/iron_furnace_active", "y": 90 }
+	}
+}

@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:tin_ore"
+  },
+  "result": "factocrafty:crushed_tin",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "factocrafty:block/machines/extractor_bottom",
+		"up": "factocrafty:block/machines/extractor_top_active",
+		"north": "factocrafty:block/machines/extractor_front_active",
+		"east": "factocrafty:block/machines/extractor_leftright_active",
+		"south": "factocrafty:block/machines/extractor_back",
+		"west": "factocrafty:block/machines/extractor_leftright_active",
+		"particle": "factocrafty:block/machines/extractor_leftright_active"
+	}
+}

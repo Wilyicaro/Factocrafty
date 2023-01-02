@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:platinum_ore"
+  },
+  "result": "factocrafty:crushed_platinum",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "block/slab",
+	"textures": {
+		"top": "factocrafty:block/generator/advanced_solar_panel_top",
+		"bottom": "factocrafty:block/advanced_machine_frame",
+		"side": "factocrafty:block/generator/advanced_solar_panel_side"
+	}
+}

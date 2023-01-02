@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north":	{ "model": "factocrafty:block/energy_converter/wooden_energy_converter" },
+		"facing=south":	{ "model": "factocrafty:block/energy_converter/wooden_energy_converter", "y": 180 },
+		"facing=west":	{ "model": "factocrafty:block/energy_converter/wooden_energy_converter", "y": 270 },
+		"facing=east":	{ "model": "factocrafty:block/energy_converter/wooden_energy_converter", "y": 90 },
+		"facing=up":	{ "model": "factocrafty:block/energy_converter/wooden_energy_converter", "x": -90 },
+		"facing=down":	{ "model": "factocrafty:block/energy_converter/wooden_energy_converter", "x": 90 }
+	}
+}

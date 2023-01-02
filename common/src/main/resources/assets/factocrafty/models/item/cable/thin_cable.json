@@ -1,0 +1,92 @@
+{
+	"credit": "Made with Blockbench",
+	"elements": [
+		{
+			"name": "cable_center",
+			"from": [6, 6.2, 6],
+			"to": [10, 10.2, 10],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 7.7, 8]},
+			"faces": {
+				"north": {"uv": [5, 0, 11, 6], "rotation": 180, "texture": "#cable"},
+				"east": {"uv": [5, 0, 11, 6], "rotation": 90, "texture": "#cable"},
+				"south": {"uv": [5, 0, 11, 6], "texture": "#cable"},
+				"west": {"uv": [5, 0, 11, 6], "rotation": 270, "texture": "#cable"},
+				"up": {"uv": [5, 0, 11, 6], "texture": "#cable"},
+				"down": {"uv": [5, 0, 11, 6], "rotation": 180, "texture": "#cable"}
+			}
+		},
+		{
+			"name": "cable_side",
+			"from": [6.4, -0.3, 6.4],
+			"to": [9.6, 6.2, 9.6],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 7.7, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 6], "rotation": 180, "texture": "#cable"},
+				"east": {"uv": [0, 12, 6, 16], "rotation": 90, "texture": "#cable"},
+				"south": {"uv": [0, 6, 4, 12], "texture": "#cable"},
+				"west": {"uv": [6, 12, 12, 16], "rotation": 270, "texture": "#cable"},
+				"up": {"uv": [5, 5, 11, 11], "texture": "#cable"},
+				"down": {"uv": [5, 0, 11, 6], "rotation": 180, "texture": "#cable"}
+			}
+		},
+		{
+			"name": "cable_side",
+			"from": [6.4, 10.2, 6.4],
+			"to": [9.6, 16.7, 9.6],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 7.7, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 6], "rotation": 180, "texture": "#cable"},
+				"east": {"uv": [0, 12, 6, 16], "rotation": 90, "texture": "#cable"},
+				"south": {"uv": [0, 6, 4, 12], "texture": "#cable"},
+				"west": {"uv": [6, 12, 12, 16], "rotation": 270, "texture": "#cable"},
+				"up": {"uv": [5, 0, 11, 6], "texture": "#cable"},
+				"down": {"uv": [5, 5, 11, 11], "rotation": 180, "texture": "#cable"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 1, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 1, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [15, 55, -10],
+			"translation": [0, 1, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [15, -125, 10],
+			"translation": [0, 1, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"head": {
+			"translation": [0, 14.5, 0]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "cable",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
+}

@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/alloy_smelter_front_active",
+		"top": "factocrafty:block/machines/alloy_smelter_top",
+		"bottom": "factocrafty:block/machines/alloy_smelter_bottom",
+		"side": "factocrafty:block/machines/alloy_smelter_side"
+	}
+}

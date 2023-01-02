@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "factocrafty:item/tool/painter/painter_light_blue"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:lead_ore"
+  },
+  "result": "factocrafty:crushed_lead",
+  "experience": 0.2,
+  "processtime": 200
+}

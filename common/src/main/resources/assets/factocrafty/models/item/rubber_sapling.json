@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "factocrafty:block/rubber_wood/rubber_sapling"
+  }
+}

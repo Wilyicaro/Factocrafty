@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:silver_ore"
+  },
+  "result": "factocrafty:crushed_silver",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "up": "factocrafty:block/rubber_wood/rubber_log_top",
+        "down": "factocrafty:block/rubber_wood/rubber_log_top",
+        "south": "factocrafty:block/rubber_wood/rubber_log",
+        "north": "factocrafty:block/rubber_wood/rubber_log",
+        "west": "factocrafty:block/rubber_wood/rubber_log",
+        "east": "factocrafty:block/rubber_wood/rubber_log_dry",
+        "particle": "factocrafty:block/rubber_wood/rubber_log"
+    }
+}

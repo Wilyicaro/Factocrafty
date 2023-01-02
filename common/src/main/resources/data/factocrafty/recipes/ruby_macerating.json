@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:ruby"
+  },
+  "result": "factocrafty:ruby_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

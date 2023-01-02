@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "factocrafty:item/battery/energy_crystal_0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 0.0
+      },
+      "model": "factocrafty:item/battery/energy_crystal_0"
+    },
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 0.25
+      },
+      "model": "factocrafty:item/battery/energy_crystal_1"
+    },
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 0.5
+      },
+      "model": "factocrafty:item/battery/energy_crystal_2"
+    },
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 0.75
+      },
+      "model": "factocrafty:item/battery/energy_crystal_3"
+    },
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 1.0
+      },
+      "model": "factocrafty:item/battery/energy_crystal_4"
+    }
+  ]
+}

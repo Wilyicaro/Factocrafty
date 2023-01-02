@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "wily.factocrafty.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "CameraFogInjector",
+    "FogRendererInjector",
+    "ItemRendererInjector",
+    "MixinTitleScreen"
+  ],
+  "mixins": [
+    "AxeItemRedirector",
+    "EntityInjector",
+    "LivingEntityInjector"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

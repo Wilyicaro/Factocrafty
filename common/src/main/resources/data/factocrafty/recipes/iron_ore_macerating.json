@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:iron_ore"
+  },
+  "result": "factocrafty:crushed_iron",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "factocrafty:block/rubber_wood/log_latex",
+    "textures": {
+        "side": "factocrafty:block/rubber_wood/stripped_rubber_log_latex"
+    }
+}

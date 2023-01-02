@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "factocrafty:block/rubber_wood/rubber_log",
+        "side": "factocrafty:block/rubber_wood/rubber_log"
+    }
+}

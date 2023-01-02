@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:copper_ore"
+  },
+  "result": "factocrafty:crushed_copper",
+  "experience": 0.2,
+  "processtime": 200
+}
