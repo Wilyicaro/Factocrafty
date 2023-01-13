@@ -16,10 +16,10 @@ public class Progress implements ITagSerializable<CompoundTag> {
         progress = new int[progressSize];
     }
     public void setInt(int ordinal, int value){
-        progress[ordinal] = Math.min(value, maxProgress);
+        progress[ordinal] = value;
     }
     public int getInt(int ordinal){
-        return Math.min(progress[ordinal], maxProgress);
+        return progress[ordinal];
     }
 
     public void set(int[] value){
