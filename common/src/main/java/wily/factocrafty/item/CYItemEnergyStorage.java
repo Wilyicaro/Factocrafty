@@ -38,11 +38,11 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
         this.container = stack;
         this.transportState = transportState;
     }
-    public CYItemEnergyStorage(ItemStack stack, int energy, int capacity, TransportState transportState, FactoryCapacityTiers supportableTier){
-        this(stack,energy,capacity, transportState,supportableTier,false);
+    public CYItemEnergyStorage(ItemStack stack, int initialEnergy, int capacity, TransportState transportState, FactoryCapacityTiers supportableTier){
+        this(stack,initialEnergy,capacity, transportState,supportableTier,false);
     }
-    public CYItemEnergyStorage(ItemStack stack, int energy, int capacity, int maxInOut, TransportState transportState, FactoryCapacityTiers supportableTier){
-        this(stack, energy, capacity, transportState, supportableTier);
+    public CYItemEnergyStorage(ItemStack stack, int initialEnergy, int capacity, int maxInOut, TransportState transportState, FactoryCapacityTiers supportableTier){
+        this(stack, initialEnergy, capacity, transportState, supportableTier);
         this.maxInOut = maxInOut;
     }
     private CompoundTag getEnergyCompound(){

@@ -1,16 +1,21 @@
 package wily.factocrafty.events;
 
+import dev.architectury.event.EventResult;
+import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.hooks.item.tool.AxeItemHooks;
 import dev.architectury.registry.fuel.FuelRegistry;
 import dev.architectury.registry.level.biome.BiomeModifications;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import wily.factocrafty.Factocrafty;
 import wily.factocrafty.datagen.FactocraftyWorldGenBootstrap;
 import wily.factocrafty.entity.CorruptedEnderMan;
 import wily.factocrafty.init.FlammableRegistry;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.ElectricArmorItem;
 
 import java.util.function.Predicate;
 
@@ -24,7 +29,16 @@ public class ModEvents {
         biomeLoadingEvent();
         EntityAttributeRegistry.register(Registration.CORRUPTED_ENDERMAN, CorruptedEnderMan::createAttributes);
 
-
+        EntityEvent.LIVING_HURT.register((l, s, f)-> {
+                    if (!s.isBypassArmor()) {
+                        l.getArmorSlots().forEach((i) -> {
+                            if (i.getItem() instanceof ElectricArmorItem item) item.getCraftyEnergy(i).consumeEnergy((int) Math.max( f * 140,1), false);
+                        });
+                        return EventResult.pass();
+                    }
+                    return EventResult.interruptTrue();
+                }
+        );
     }
 
 

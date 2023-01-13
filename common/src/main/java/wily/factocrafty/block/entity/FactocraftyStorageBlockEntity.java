@@ -5,25 +5,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.FactocraftyProgressType;
+import wily.factocrafty.Factocrafty;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
-import wily.factocrafty.util.registering.FactocraftyMenus;
+import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
 import wily.factoryapi.FactoryAPIPlatform;
+import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
 
 import java.util.HashMap;
@@ -40,8 +36,9 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
     }
 
 
-    protected int CHARGE_SLOT = 0;
-    protected int UNCHARGE_SLOT = 0;
+    protected int FILL_SLOT = 0;
+    protected int DRAIN_SLOT = 0;
+
 
 
 
@@ -144,7 +141,7 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
 
     public void tick() {
         getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)->{
-            int[] chargeSlots = new int[]{CHARGE_SLOT, UNCHARGE_SLOT};
+            int[] chargeSlots = new int[]{FILL_SLOT, DRAIN_SLOT};
             for (int charge : chargeSlots) {
                 if (getSlots(null).get(charge) instanceof FactocraftyCYItemSlot slot) {
                     ItemStack energyItem = inventory.getItem(charge);
@@ -152,6 +149,20 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
                         ICraftyEnergyStorage storage = cy.getCraftyEnergy(energyItem);
                         if (storage.getTransport().canInsert() && slot.transportState.canInsert()) transferEnergyTo(null,storage);
                         if (storage.getTransport().canExtract() && slot.transportState.canExtract()) transferEnergyFrom(null,storage);
+                    }
+                }
+            }
+        });
+        getTanks().forEach((tank)->{
+            int[] fluidSlots = new int[]{FILL_SLOT, DRAIN_SLOT};
+            for (int i : fluidSlots) {
+                if (getSlots(null).get(i) instanceof FactocraftyFluidItemSlot slot) {
+                    ItemStack stack = inventory.getItem(i);
+                    if (ItemContainerUtil.isFluidContainer(stack)) {
+                        ItemContainerUtil.ItemFluidContext context = null;
+                        if (slot.transportState.canInsert()) context = ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), stack);
+                        if (slot.transportState.canExtract()) tank.drain((context = ItemContainerUtil.fillItem(stack,tank.getFluidStack())).fluidStack(),false);
+                        if (context != null) inventory.setItem(i,context.container());
                     }
                 }
             }

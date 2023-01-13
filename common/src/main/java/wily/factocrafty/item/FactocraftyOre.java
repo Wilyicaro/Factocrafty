@@ -67,31 +67,31 @@ public class FactocraftyOre {
 
     public static OreDerivative normalOre(int averageXP,int count,int countPerChunk, int minY, int maxY) {return new OreDerivative(averageXP,count, countPerChunk, minY, maxY, true, false);}
 
-    public static List<Derivative> common = ImmutableList.of(DEFAULT_ORE, BLOCK, INGOT, NUGGET, RAW, DUST, CRUSHED, PLATE);
+    public static Derivative[] common = new Derivative[]{DEFAULT_ORE, BLOCK, INGOT, NUGGET, RAW, DUST, CRUSHED, PLATE};
 
-    public static List<Derivative> commonDerivatives(int count,int countPerChunk, int minY, int maxY){return ImmutableList.of(easyOre(count,countPerChunk,minY,maxY), BLOCK, INGOT, NUGGET, RAW, DUST, CRUSHED, PLATE);};
+    public static Derivative[] commonDerivatives(int count,int countPerChunk, int minY, int maxY){return new Derivative[]{easyOre(count,countPerChunk,minY,maxY), BLOCK, INGOT, NUGGET, RAW, DUST, CRUSHED, PLATE};};
 
 
     public enum Tier {
             TIN(MaterialColor.METAL, null, null, common),
-            BRONZE(MaterialColor.COLOR_ORANGE, FactocraftyArmorMaterials.BRONZE, FactocraftyTiers.BRONZE, ImmutableList.of(INGOT, NUGGET, BLOCK, DUST,PLATE)),
+            BRONZE(MaterialColor.COLOR_ORANGE, FactocraftyArmorMaterials.BRONZE, FactocraftyTiers.BRONZE, INGOT, NUGGET, BLOCK, DUST,PLATE),
             SILVER(MaterialColor.METAL, null, null, commonDerivatives(5,6,-64,  72)),
             LEAD(MaterialColor.METAL, null, null, commonDerivatives(8,8,-64,  50)),
-            PLATINUM(MaterialColor.COLOR_LIGHT_BLUE, FactocraftyArmorMaterials.PLATINUM, FactocraftyTiers.PLATINUM, ImmutableList.of(normalOre(0,10,14,20,80),BLOCK,INGOT,NUGGET,RAW,DUST,CRUSHED,PLATE)),
-            URANIUM(MaterialColor.COLOR_GREEN, null, null, ImmutableList.of(deepOre(4,4,8,-64,10),BLOCK,REFINED,NUGGET,DUST,COMMON_DROP, CRUSHED, PLATE)),
-            RUBY(MaterialColor.COLOR_RED, FactocraftyArmorMaterials.RUBY, FactocraftyTiers.RUBY, ImmutableList.of(new OreDerivative(5,6,5, -80,25,7, -50,90,true,true),BLOCK,NUGGET,DUST,COMMON_DROP, CRUSHED)),
-            COAL( ImmutableList.of(DUST, CRUSHED)),
-            COPPER( ImmutableList.of(DUST, CRUSHED,PLATE)),
-            IRON( ImmutableList.of(DUST,REFINED, CRUSHED,PLATE)),
-            GOLD( ImmutableList.of(DUST, CRUSHED,PLATE)),
-            DIAMOND( ImmutableList.of(DUST,NUGGET, CRUSHED)),
-            EMERALD( ImmutableList.of(DUST,NUGGET, CRUSHED)),
-            NETHERITE( ImmutableList.of(DUST,NUGGET)),
-            STONE( ImmutableList.of(DUST)),
-            DEEPSLATE(ImmutableList.of(DUST)),
-            RUBBER(null, FactocraftyArmorMaterials.RUBBER, null, ImmutableList.of(COMMON_DROP)),
-            SAWDUST(ImmutableList.of(COMMON_DROP)),
-            SILICON( ImmutableList.of(COMMON_DROP));
+            PLATINUM(MaterialColor.COLOR_LIGHT_BLUE, FactocraftyArmorMaterials.PLATINUM, FactocraftyTiers.PLATINUM, normalOre(0,10,14,20,80),BLOCK,INGOT,NUGGET,RAW,DUST,CRUSHED,PLATE),
+            URANIUM(MaterialColor.COLOR_GREEN, null, null, deepOre(4,4,8,-64,10),BLOCK,REFINED,NUGGET,DUST,COMMON_DROP, CRUSHED, PLATE),
+            RUBY(MaterialColor.COLOR_RED, FactocraftyArmorMaterials.RUBY, FactocraftyTiers.RUBY, new OreDerivative(5,6,5, -80,25,7, -50,90,true,true),BLOCK,NUGGET,DUST,COMMON_DROP, CRUSHED),
+            COAL(DUST, CRUSHED),
+            COPPER( DUST, CRUSHED,PLATE),
+            IRON(DUST,REFINED, CRUSHED,PLATE),
+            GOLD(DUST, CRUSHED,PLATE),
+            DIAMOND(DUST,NUGGET, CRUSHED),
+            EMERALD(DUST,NUGGET, CRUSHED),
+            NETHERITE(DUST,NUGGET),
+            STONE(DUST),
+            DEEPSLATE(DUST),
+            RUBBER(null, FactocraftyArmorMaterials.RUBBER, null, COMMON_DROP),
+            SAWDUST(COMMON_DROP),
+            SILICON(COMMON_DROP);
 
 
             private final MaterialColor color;
@@ -103,14 +103,14 @@ public class FactocraftyOre {
 
             public final List<Derivative> derivatives;
 
-            Tier(MaterialColor color, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, List<Derivative> derivatives) {
+            Tier(MaterialColor color, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, Derivative... derivatives) {
                 this.color = color;
                 this.armor = armor;
                 this.tier = tier;
-                this.derivatives = derivatives;
+                this.derivatives = List.of(derivatives);
 
             }
-        Tier(List<Derivative> derivatives) {
+        Tier(Derivative... derivatives) {
             this(null, null, null, derivatives);
         }
             public Optional<Derivative> getDerivative(Derivative derivative){

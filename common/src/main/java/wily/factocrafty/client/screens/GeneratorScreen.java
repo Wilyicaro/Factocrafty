@@ -19,11 +19,12 @@ public class GeneratorScreen extends FactocraftyMachineScreen<GeneratorBlockEnti
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/generator.png");}
 
     @Override
-    protected void renderBg(PoseStack poseStack, float f, int i, int j) {
-        super.renderBg(poseStack, f, i, j);
+    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
+        super.renderStorageSprites(poseStack, i, j);
         ProgressElementRenderUtil.renderDefaultProgress(poseStack,this,relX() + 56, relY() + 36, getProgressScaled(getMenu().be.burnTime.getInt(0), getMenu().be.burnTime.maxProgress, 14), FactocraftyProgressType.BURN_PROGRESS);
         ProgressElementRenderUtil.renderDefaultProgress(poseStack,this,relX() + 80, relY() + 39, getProgressScaled(getMenu().be.progress.get()[0],getMenu().be.progress.maxProgress, 22), FactocraftyProgressType.ENERGY_PROGRESS);
         ProgressElementRenderUtil.renderFluidTank(poseStack,this,relX() + 56, relY() + 14, getProgressScaled((int) getMenu().be.fluidTank.getFluidStack().getAmount(), (int) getMenu().be.fluidTank.getMaxFluid(), 19), FactocraftyProgressType.MINI_FLUID_TANK, getMenu().be.fluidTank.getFluidStack(), true);
 
     }
+
 }

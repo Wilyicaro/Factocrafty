@@ -111,7 +111,7 @@ public class FactocraftyClient {
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex_fall"),""));
         RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluidTanks.BASIC_FLUID_TANK.get());
-        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get());
+        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get());
         RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), CableTiers.CRYSTAL.getBlock());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.TREETAP_BLOCK_ENTITY.get(), TreeTapRenderer::new);
@@ -127,6 +127,7 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
         MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen::create);
         MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), BasicMachineScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.REFINER_MENU.get(), RefinerScreen::new);
 
 
         //ClientGuiEvent.DEBUG_TEXT_LEFT.register((e)-> e.);

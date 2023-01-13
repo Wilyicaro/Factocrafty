@@ -1,0 +1,10 @@
+{
+  "type": "factocrafty:refining_fluid",
+  "fluid_ingredient": {
+    "fluid": "factocrafty:latex",
+    "amount": 200
+  },
+  "result": "factocrafty:sticky_resin",
+  "experience": 0.3,
+  "processtime": 50
+}

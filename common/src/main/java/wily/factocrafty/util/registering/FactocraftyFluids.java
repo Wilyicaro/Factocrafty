@@ -4,7 +4,7 @@ import net.minecraft.world.level.material.Fluid;
 import wily.factocrafty.init.Registration;
 
 public enum FactocraftyFluids implements IFactocraftyLazyRegister<Fluid>{
-    COOLANT,FLOWING_COOLANT,LATEX,FLOWING_LATEX,PETROLEUM,FLOWING_PETROLEUM;
+    COOLANT,FLOWING_COOLANT,LATEX,FLOWING_LATEX,PETROLEUM,FLOWING_PETROLEUM,GASOLINE,FLOWING_GASOLINE;;
 
     @Override
     public Fluid get() {

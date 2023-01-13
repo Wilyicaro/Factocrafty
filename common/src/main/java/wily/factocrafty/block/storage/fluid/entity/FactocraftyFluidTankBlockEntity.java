@@ -30,8 +30,8 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
         replaceSidedStorage(BlockSide.TOP,fluidSides,  new FluidSide(fluidTank,TransportState.EXTRACT));
         replaceSidedStorage(BlockSide.BOTTOM,fluidSides, new FluidSide(fluidTank, TransportState.INSERT));
         fluidTank =  FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity() * capacityTier.capacityMultiplier * 8, this, (f)->true, SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
-        CHARGE_SLOT = 0;
-        UNCHARGE_SLOT = 1;
+        FILL_SLOT = 0;
+        DRAIN_SLOT = 1;
     }
     public long smoothFluidAmount = 0;
     private long oldFluidAmount = fluidTank.getFluidStack().getAmount();
@@ -80,7 +80,7 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
     @Override
     public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
 
-        slots.add(new FactocraftyFluidItemSlot(this,CHARGE_SLOT, 51,17, TransportState.INSERT));
-        slots.add(new FactocraftyFluidItemSlot(this,UNCHARGE_SLOT, 51,53, TransportState.EXTRACT));
+        slots.add(new FactocraftyFluidItemSlot(this,DRAIN_SLOT, 51,17,SlotsIdentifier.RED, TransportState.INSERT));
+        slots.add(new FactocraftyFluidItemSlot(this,FILL_SLOT, 51,53,SlotsIdentifier.BLUE, TransportState.EXTRACT));
     }
 }

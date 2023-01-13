@@ -20,10 +20,8 @@ public class ElectricFurnaceScreen extends FactocraftyMachineScreen<ElectricFurn
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/electric_furnace.png");}
 
     @Override
-    protected void renderBg(PoseStack poseStack, float f, int i, int j) {
-        super.renderBg(poseStack, f, i, j);
+    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
+        super.renderStorageSprites(poseStack, i, j);
         ProgressElementRenderUtil.renderDefaultProgress(poseStack,this,relX() + 79, relY() + 35, getProgressScaled(getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime(), 24), FactocraftyProgressType.PROGRESS);
-
-
     }
 }

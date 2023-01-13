@@ -1,8 +1,10 @@
 package wily.factocrafty.inventory;
 
+import com.google.common.base.Suppliers;
 import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,6 +23,9 @@ import wily.factocrafty.network.FactocraftySyncProgressPacket;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.IFactoryStorage;
 import wily.factoryapi.base.Storages;
+
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractContainerMenu {
     public IFactoryStorage storage;
@@ -122,15 +127,16 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
 
     @Override
     public void broadcastChanges() {
-        super.broadcastChanges();
         updateChanges();
+        super.broadcastChanges();
     }
+
     @Override
     public void sendAllDataToRemote() {
-        super.sendAllDataToRemote();
         updateChanges();
-
+        super.sendAllDataToRemote();
     }
+
     protected void updateChanges() {
         if (player instanceof ServerPlayer sp) {
             if (!storage.getTanks().isEmpty()) storage.getTanks().forEach((tank) -> {
@@ -145,9 +151,10 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
                  progressableStorage.itemSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),0,d.ordinal(),s.transportState, s.getSlotIndex(progressableStorage.getSlotsIdentifiers())))));
                 progressableStorage.energySides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),1,d.ordinal(),s,0))));
                 progressableStorage.fluidSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),2,d.ordinal(),s.transportState,s.fluidHandler.identifier().differential()))));
-            }
 
+            }
         }
+        if (storage instanceof FactocraftyProcessBlockEntity be) be.syncAdditionalMenuData(this, player);
     }
 @Override
 protected boolean moveItemStackTo(ItemStack itemStack, int i, int j, boolean bl) {

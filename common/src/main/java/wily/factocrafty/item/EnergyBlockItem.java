@@ -30,7 +30,7 @@ public class EnergyBlockItem extends BlockItem implements ICraftyEnergyItem<CYIt
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
-      list.add( StorageStringUtil.getEnergyTooltip("tooltip.factocrafty.energy_stored", getCraftyEnergy(itemStack)));
+      list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
     }
 
     @Override

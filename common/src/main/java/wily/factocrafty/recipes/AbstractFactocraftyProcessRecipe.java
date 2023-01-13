@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.FluidStackUtil;
+import wily.factoryapi.base.IPlatformFluidHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ import java.util.Map;
 public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Container> {
     protected final String name;
     protected final ResourceLocation id;
-    protected Ingredient ingredient;
+    protected Ingredient ingredient = Ingredient.EMPTY;
     protected int ingredientCount;
     protected FluidStack fluidIngredient;
     protected ItemStack result;
@@ -45,6 +46,10 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
             if (input.is(ingredient.getItems()[i].getItem()) && input.getCount() >= ingredientCount) return true;
         }
         return false;
+    }
+
+    public boolean matchesFluid(IPlatformFluidHandler tank, Level level) {
+        return hasFluidIngredient() && tank.getFluidStack().isFluidEqual(fluidIngredient) && tank.getFluidStack().getAmount() >= fluidIngredient.getAmount();
     }
     public int getIngredientCount(){
         return ingredientCount;
@@ -65,6 +70,9 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
     }
     public boolean hasFluidIngredient(){
         return false;
+    }
+    public FluidStack getFluidIngredient(){
+        return fluidIngredient;
     }
     protected void addIngredients(NonNullList<Ingredient> ingredients) {
         ingredients.add(ingredient);
@@ -117,9 +125,11 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
 
         public T fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
             T rcp = this.factory.create(resourceLocation);
-            rcp.ingredient = Ingredient.fromJson(jsonElement(jsonObject,"ingredient"));
-            rcp.ingredientCount = GsonHelper.getAsInt(jsonObject.getAsJsonObject("ingredient"),"count",1);
-            if (rcp.hasFluidIngredient()) rcp.fluidIngredient = FluidStackUtil.fromJson(jsonObject.getAsJsonObject("fluidIngredient"));
+            if (rcp.hasFluidIngredient()) rcp.fluidIngredient = FluidStackUtil.fromJson(jsonObject.getAsJsonObject("fluid_ingredient"));
+            else {
+                rcp.ingredient = Ingredient.fromJson(jsonElement(jsonObject,"ingredient"));
+                rcp.ingredientCount = GsonHelper.getAsInt(jsonObject.getAsJsonObject("ingredient"),"count",1);
+            }
             rcp.result = getJsonItem(jsonObject, "result");
             otherResultFromJson(jsonObject, rcp);
             rcp.experience = GsonHelper.getAsFloat(jsonObject, "experience", 0.0F);
@@ -128,7 +138,7 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
         }
         protected ItemStack getJsonItem(JsonObject jsonObject, String object) {
             if (jsonObject != null) {
-                String string2 = GsonHelper.getAsString(jsonObject, object);
+                String string2 = GsonHelper.getAsString(jsonObject, object, "minecraft:air");
                 ResourceLocation resourceLocation2 = new ResourceLocation(string2);
                 return new ItemStack(BuiltInRegistries.ITEM.getOptional(resourceLocation2).orElseThrow(() -> new IllegalStateException("Item: " + string2 + " does not exist")));
             }
@@ -143,8 +153,10 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
             rcp.experience = buf.readFloat();
             rcp.maxProcess = buf.readVarInt();
             if (rcp.hasFluidIngredient()) rcp.fluidIngredient = FluidStack.read(buf);
-            rcp.ingredientCount = buf.readVarInt();
-            rcp.ingredient = Ingredient.fromNetwork(buf);
+            else {
+                rcp.ingredientCount = buf.readVarInt();
+                rcp.ingredient = Ingredient.fromNetwork(buf);
+            }
             rcp.result = buf.readItem();
             otherResultFromNetwork(buf, rcp);
             return rcp;
@@ -157,8 +169,10 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
             friendlyByteBuf.writeFloat(recipe.experience);
             friendlyByteBuf.writeVarInt(recipe.maxProcess);
             if(recipe.hasFluidIngredient()) recipe.fluidIngredient.write(friendlyByteBuf);
-            friendlyByteBuf.writeVarInt(recipe.ingredientCount);
-            recipe.ingredient.toNetwork(friendlyByteBuf);
+            else {
+                friendlyByteBuf.writeVarInt(recipe.ingredientCount);
+                recipe.ingredient.toNetwork(friendlyByteBuf);
+            }
             friendlyByteBuf.writeItem(recipe.result);
             otherResultToNetwork(friendlyByteBuf, recipe);
         }

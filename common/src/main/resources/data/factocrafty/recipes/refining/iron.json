@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:refining_item",
+  "ingredient": {
+    "item": "minecraft:iron_ingot"
+  },
+  "result": "factocrafty:refined_iron",
+  "experience": 0.3,
+  "processtime": 200
+}

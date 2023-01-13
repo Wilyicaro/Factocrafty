@@ -9,5 +9,6 @@ import wily.factocrafty.fabriclike.FactocraftyFabricLike;
 public class FactocraftyFabric implements ModInitializer {
     @Override
     public void onInitialize() {
+
         FactocraftyFabricLike.init();}
 }

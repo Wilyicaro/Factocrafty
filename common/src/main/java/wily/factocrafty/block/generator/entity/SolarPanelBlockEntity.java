@@ -3,13 +3,11 @@ package wily.factocrafty.block.generator.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
@@ -32,8 +30,8 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
 
     public SolarPanelBlockEntity(SolarPanelTiers tier, BlockPos blockPos, BlockState blockState) {
         super(FactocraftyMenus.SOLAR_PANEL,tier.energyTier,tier.getBlockEntity(), blockPos, blockState);
-        CHARGE_SLOT = 0;
-        UNCHARGE_SLOT = 0;
+        FILL_SLOT = 0;
+        DRAIN_SLOT = 0;
         this.solarTier = tier;
         this.tickEnergy = new Progress(FactocraftyProgressType.SOLAR_GENERATING,1,(int) ((23 * solarTier.efficiency) * solarTier.energyTier.capacityMultiplier));
         this.energyStorage = new CYEnergyStorage(this, 0,tier.energyTier.energyCapacity, 2500,solarTier.energyTier);

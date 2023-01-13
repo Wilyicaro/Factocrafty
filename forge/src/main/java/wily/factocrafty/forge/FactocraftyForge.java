@@ -27,7 +27,6 @@ public class FactocraftyForge {
 
     public FactocraftyForge() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
         EventBuses.registerModEventBus(Factocrafty.MOD_ID, eventBus);
         Factocrafty.init();
 

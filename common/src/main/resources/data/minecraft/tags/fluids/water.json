@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "factocrafty:coolant",
-    "factocrafty:flowing_coolant"
+    "factocrafty:flowing_coolant",
+    "factocrafty:gasoline",
+    "factocrafty:flowing_gasoline"
   ]
 }

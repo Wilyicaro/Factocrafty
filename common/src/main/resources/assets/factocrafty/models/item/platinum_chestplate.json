@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "factocrafty:item/armor/nano_leggings"
+    "layer0": "factocrafty:item/armor/platinum_chestplate"
   }
 }

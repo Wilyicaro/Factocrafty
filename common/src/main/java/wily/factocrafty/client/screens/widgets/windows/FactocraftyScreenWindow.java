@@ -17,6 +17,7 @@ import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
+import wily.factocrafty.client.screens.IWindowWidget;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 
 import java.awt.*;
@@ -36,7 +37,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
 
     public boolean dragging = false;
 
-    float opacity = 1.0F;
+
 
     public FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent;
     public FactocraftyScreenWindow(FactocraftyConfigWidget config, int width, int height, int x, int y, int uvX, int uvY, FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent){
@@ -50,21 +51,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
 
     }
 
-    public Map<EasyButton, Boolean> configButtons() {
-        Map<EasyButton, Boolean> map = new HashMap<>();
-        addButtons(map);
-        return map;
-    }
-    public Map<EasyButton, Boolean> addButtons(Map<EasyButton, Boolean> map) {
-        map.put(byButtonType(ButtonTypes.SMALL,getX() + width - 18,getY() + 10,new EasyIcon(7,7,0,239), (b)-> onClose(), Component.translatable("tooltip.factocrafty.config.close")), false);
-        return map;
-    }
-    public EasyButton byButtonType(ButtonTypes type, int x, int y, EasyIcon iconId, Consumer<Integer> onPress, Component message){
-        return new EasyButton(x,y,type.width, type.height,type.uvX, type.uvY, iconId,null,onPress, message);
-    }
-    public EasyButton byButtonColor(ButtonTypes type, int x, int y,  Color color, Consumer<Integer> onPress, Component message){
-        return new EasyButton(x,y,type.width, type.height,type.uvX, type.uvY, null,color,onPress, message);
-    }
+
 
     @Override
     public boolean isVisible() {
@@ -78,11 +65,11 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         }
     }
     public void onClickWidget(){
-        opacity = 1.0F;
+        alpha = 1.0F;
         parent.setFocused(this);
     }
     public void onClickOutside(double mouseX, double mouseY){
-        opacity = 0.88F;
+        alpha = 0.88F;
     }
 
     @Override
@@ -103,24 +90,19 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        RenderSystem.setShaderColor(1,1,1,opacity);
+        RenderSystem.setShaderColor(1,1,1,alpha);
         blit(poseStack, getX(), getY(), uvX, uvY, width, height);
-        for (Map.Entry<EasyButton,Boolean> entry: configButtons().entrySet()) {
-            EasyButton button = entry.getKey();
-            entry.setValue(button.clicked(i,j));
-            if (button.color!= null) {
-                Color c = button.color;
-                if (entry.getValue()) c = c.brighter();
-                RenderSystem.setShaderColor((float)c.getRed() / 255, (float)c.getGreen() / 255, (float)c.getBlue()/ 255, opacity);
-            }
-            blit(poseStack, button.x, button.y, (entry.getValue() && button.color == null ? entry.getKey().width : 0), button.uvY, button.width, button.height);
-            RenderSystem.setShaderColor(1,1,1,opacity);
-            if (entry.getKey().icon != null) blit(poseStack, button.x +(button.width - button.icon.width) /2, button.y +(button.height - button.icon.height) / 2, button.icon.uvX(), button.icon.uvY,button.icon.width, button.icon.height);
-        }
+        renderButtons(poseStack,i,j);
         renderBg(poseStack,i,j);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         poseStack.popPose();
+    }
+
+    @Override
+    public Map<EasyButton, Boolean> addButtons(Map<EasyButton, Boolean> map) {
+        map.put(byButtonType(FactocraftyScreenWindow.ButtonTypes.SMALL,getX() + width - 18,getY() + 10,new FactocraftyScreenWindow.EasyIcon(7,7,0,239), (b)-> onClose(), Component.translatable("tooltip.factocrafty.config.close")), false);
+        return super.addButtons(map);
     }
 
     public void render(PoseStack poseStack, int i, int j, float f) {
@@ -134,18 +116,13 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
 
     }
     public void renderToolTip(PoseStack poseStack, int i, int j) {
-        for (Map.Entry<EasyButton,Boolean> entry: configButtons().entrySet()) {
-            if (entry.getKey().clicked(i,j) && !entry.getKey().message.getString().isEmpty()) parent.renderTooltip(poseStack,entry.getKey().message(), i,j);
-        }
+        renderButtonsTooltip(parent,poseStack,i,j);
     }
     @Override
     public boolean isMouseOver(double d, double e) {
         return isVisible() && FactocraftyProgressType.getMouseLimit(d,e,getX(),getY(),width,height);
     }
 
-    public void playDownSound(float grave) {
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, grave));
-    }
     public void updateActualMouse(double mouseX, double mouseY){
             actualMouseX = mouseX;
             actualMouseY = mouseY;
@@ -166,13 +143,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
                 updateActualMouse(d, e);
             }else  onClickOutside(d,e);
         }
-        for (EasyButton button: configButtons().keySet()) {
-            if (button.clicked(d, e)) {
-                playDownSound(1.5F);
-                button.onPress.accept(i);
-                return true;
-            }
-        }
+        mouseClickedButtons(d,e,i);
 
         return false;
     }
@@ -206,32 +177,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         }
         return false;
     }
-    enum ButtonTypes{
-        LARGE(0, 199, 16, 16),MEDIUM(0, 215,13,  13),SMALL(0,228, 11,  11);
-        public final int uvX;
-        public final int uvY;
-        public final int width;
-        public final int height;
-        ButtonTypes(int uvX,int uvY, int width, int height){
-            this.uvX = uvX;
-            this.uvY = uvY;
-            this.width = width;
-            this.height = height;
-        }
-    }
-    public record EasyIcon(int width, int height,int iconId, int uvY){
-        public int uvX() {
-            return iconId * width;
-        }
-    }
-    public record EasyButton(int x, int y, int width, int height, int uvX, int uvY, EasyIcon icon, Color color, Consumer<Integer> onPress, Component message){
-        public boolean clicked(double mouseX, double mouseY){
-            return FactocraftyProgressType.getMouseLimit(mouseX,mouseY, x,y, width,height);
-        }
-        EasyButton(int x, int y, int width, int height, int uvX, int uvY, EasyIcon icon, Color color, Consumer<Integer> onPress){
-            this(x,y,width,height,uvX,uvY,icon,color,onPress, Component.empty());
-        }
-    }
+
 
 
 }

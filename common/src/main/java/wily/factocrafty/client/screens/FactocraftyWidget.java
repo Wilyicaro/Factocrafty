@@ -5,7 +5,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 
-public class FactocraftyWidget extends AbstractWidget implements IWidget {
+public class FactocraftyWidget extends AbstractWidget implements IWindowWidget {
 
      public FactocraftyWidget(int i, int j, int k, int l, Component component) {
           super(i, j, k, l, component);

@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.FactocraftyExpectPlatform;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
@@ -42,7 +41,7 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
     public GeneratorBlockEntity(FactocraftyMenus menu,BlockEntityType blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(menu, FactoryCapacityTiers.BASIC, blockEntityType, blockPos, blockState);
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.NONE);
-        UNCHARGE_SLOT = CHARGE_SLOT = 1;
+        DRAIN_SLOT = FILL_SLOT = 1;
         fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> f.getFluid() == Fluids.WATER, SlotsIdentifier.WATER, TransportState.EXTRACT_INSERT);
     }
 
@@ -55,7 +54,7 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
                 return FuelRegistry.get(itemStack) > 0;
             }
         });
-        slots.add(new FactocraftyCYItemSlot(this, CHARGE_SLOT,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC){
+        slots.add(new FactocraftyCYItemSlot(this, FILL_SLOT,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC){
         });
     }
     protected void consumeFuel(){

@@ -7,13 +7,14 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import wily.factoryapi.base.FactoryCapacityTiers;
 
 import static wily.factocrafty.FactocraftyClient.GRAVITY_KEYMAPPING;
 
 
-public class QuantumArmor extends ArmorItem {
-    public QuantumArmor(ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Properties properties) {
-        super(armorMaterial, equipmentSlot, properties);
+public class QuantumArmorItem extends ElectricArmorItem{
+    public QuantumArmorItem(ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Properties properties) {
+        super(FactoryCapacityTiers.QUANTUM,2200,armorMaterial, equipmentSlot, properties);
     }
     public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int i, boolean bl) {
         if (entity instanceof ServerPlayer player && !player.isCreative()) {

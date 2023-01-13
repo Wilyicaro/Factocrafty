@@ -1,0 +1,16 @@
+{
+	"variants": {
+		"facing=north,active=false":	{ "model": "factocrafty:block/generator/organic_solar_panel","x": 90 },
+		"facing=south,active=false":	{ "model": "factocrafty:block/generator/organic_solar_panel", "x": -90 },
+		"facing=west,active=false":	{ "model": "factocrafty:block/generator/organic_solar_panel", "x": -90, "y": 90 },
+		"facing=east,active=false":	{ "model": "factocrafty:block/generator/organic_solar_panel", "x": 90, "y": 90 },
+		"facing=up,active=false":	{ "model": "factocrafty:block/generator/organic_solar_panel" },
+		"facing=down,active=false":	{ "model": "factocrafty:block/generator/organic_solar_panel", "x": 180 },
+		"facing=north,active=true":	{ "model": "factocrafty:block/generator/organic_solar_panel_active","x": 90 },
+		"facing=south,active=true":	{ "model": "factocrafty:block/generator/organic_solar_panel_active", "x": -90 },
+		"facing=west,active=true":	{ "model": "factocrafty:block/generator/organic_solar_panel_active", "x": -90, "y": 90 },
+		"facing=east,active=true":	{ "model": "factocrafty:block/generator/organic_solar_panel_active", "x": 90, "y": 90 },
+		"facing=up,active=true":	{ "model": "factocrafty:block/generator/organic_solar_panel_active" },
+		"facing=down,active=true":	{ "model": "factocrafty:block/generator/organic_solar_panel_active", "x": 180 }
+	}
+}

@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:refining_item",
+  "ingredient": {
+    "item": "factocrafty:uranium"
+  },
+  "result": "factocrafty:refined_uranium",
+  "experience": 0.3,
+  "processtime": 200
+}

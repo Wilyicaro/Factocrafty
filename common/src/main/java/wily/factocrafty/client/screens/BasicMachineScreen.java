@@ -29,8 +29,8 @@ public class BasicMachineScreen extends FactocraftyMachineScreen<FactocraftyMach
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/basic_machine.png");}
 
     @Override
-    protected void renderBg(PoseStack poseStack, float f, int i, int j) {
-        super.renderBg(poseStack, f, i, j);
+    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
+        super.renderStorageSprites(poseStack, i, j);
         ProgressElementRenderUtil.renderDefaultProgress(poseStack,this,relX() + 80, relY() + 40, getProgressScaled(getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime(), 21), FactocraftyProgressType.MACHINE_PROGRESS);
 
         if (hasAdditionalResultSlot) {
@@ -39,9 +39,5 @@ public class BasicMachineScreen extends FactocraftyMachineScreen<FactocraftyMach
         }else {
             blit(poseStack,relX() + 111 ,relY() + 30,196,0 ,26,26);
         }
-
     }
-
-
-
 }

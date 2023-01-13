@@ -11,8 +11,8 @@ public class FactocraftyFluidItemSlot extends FactoryItemSlot {
 
 
     public TransportState transportState;
-    public FactocraftyFluidItemSlot(FactocraftyProcessBlockEntity be, int i, int j, int k, TransportState canIE) {
-        super(be.inventory, SlotsIdentifier.GENERIC,canIE,i, j, k);
+    public FactocraftyFluidItemSlot(FactocraftyProcessBlockEntity be, int i, int j, int k,SlotsIdentifier identifier, TransportState canIE) {
+        super(be.inventory, identifier,canIE,i, j, k);
         transportState = canIE;
     }
 

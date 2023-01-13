@@ -11,8 +11,8 @@ public class FluidStackUtil {
 
     public static FluidStack fromJson(JsonObject jsonObject){
         if (jsonObject != null){
-            String string2 = GsonHelper.getAsString(jsonObject, "fluid");
-            long amount = GsonHelper.getAsLong(jsonObject, "amount");
+            String string2 = GsonHelper.getAsString(jsonObject, "fluid", "minecraft:empty");
+            long amount = GsonHelper.getAsLong(jsonObject, "amount", FluidStack.bucketAmount());
             return FluidStack.create(BuiltInRegistries.FLUID.get(new ResourceLocation(string2)),amount);
         }
         return FluidStack.empty();

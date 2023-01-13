@@ -47,6 +47,7 @@
   "block.factocrafty.macerator": "Macerator",
   "block.factocrafty.compressor": "Compressor",
   "block.factocrafty.extractor": "Extractor",
+  "block.factocrafty.refiner": "Refiner",
   "block.factocrafty.extruder": "Extruder",
   "block.factocrafty.sawmill": "Sawmill",
   "block.factocrafty.canning_machine": "Canning Machine",
@@ -168,6 +169,7 @@
   "item.factocrafty.silver_ingot": "Silver Ingot",
   "item.factocrafty.steel_ingot": "Steel Ingot",
   "item.factocrafty.lead_ingot": "Lead Ingot",
+  "item.factocrafty.refined_iron": "Refined Iron",
   "item.factocrafty.refined_uranium": "Refined Uranium",
   "item.factocrafty.mixed_metal_ingot": "Mixed Metal Ingot",
 
@@ -206,10 +208,34 @@
   "item.factocrafty.nightvision_goggles": "Night Vision Goggles",
   "item.factocrafty.rubber_boots": "Rubber Boots",
 
+
+  "item.factocrafty.ruby_helmet": "Ruby Helmet",
+  "item.factocrafty.ruby_chestplate": "Ruby Chestplate",
+  "item.factocrafty.ruby_leggings": "Ruby Leggings",
+  "item.factocrafty.ruby_boots": "Ruby Boots",
+
+  "item.factocrafty.ruby_sword": "Ruby Sword",
+  "item.factocrafty.ruby_pickaxe": "Ruby Pickaxe",
+  "item.factocrafty.ruby_axe": "Ruby Axe",
+  "item.factocrafty.ruby_shovel": "Ruby Shovel",
+  "item.factocrafty.ruby_hoe": "Ruby Hoe",
+
+  "item.factocrafty.platinum_helmet": "Platinum Helmet",
+  "item.factocrafty.platinum_chestplate": "Platinum Chestplate",
+  "item.factocrafty.platinum_leggings": "Platinum Leggings",
+  "item.factocrafty.platinum_boots": "Platinum Boots",
+
+  "item.factocrafty.platinum_sword": "Platinum Sword",
+  "item.factocrafty.platinum_pickaxe": "Platinum Pickaxe",
+  "item.factocrafty.platinum_axe": "Platinum Axe",
+  "item.factocrafty.platinum_shovel": "Platinum Shovel",
+  "item.factocrafty.platinum_hoe": "Platinum Hoe",
+
   "item.factocrafty.bronze_helmet": "Bronze Helmet",
   "item.factocrafty.bronze_chestplate": "Bronze Chestplate",
   "item.factocrafty.bronze_leggings": "Bronze Leggings",
   "item.factocrafty.bronze_boots": "Bronze Boots",
+
 
   "item.factocrafty.bronze_sword": "Bronze Sword",
   "item.factocrafty.bronze_pickaxe": "Bronze Pickaxe",
@@ -217,11 +243,11 @@
   "item.factocrafty.bronze_shovel": "Bronze Shovel",
   "item.factocrafty.bronze_hoe": "Bronze Hoe",
 
-  "item.factocrafty.nano_helmet": "Nano Helmet",
-  "item.factocrafty.nano_chestplate": "Nano Chestplate",
-  "item.factocrafty.nano_leggings": "Nano Leggings",
-  "item.factocrafty.nano_boots": "Nano Boots",
-  "item.factocrafty.nano_saber": "Nano Saber",
+  "item.factocrafty.grafano_helmet": "Grafano Helmet",
+  "item.factocrafty.grafano_chestplate": "Grafano Chestplate",
+  "item.factocrafty.grafano_leggings": "Grafano Leggings",
+  "item.factocrafty.grafano_boots": "Grafano Boots",
+  "item.factocrafty.grafano_saber": "Nano Saber",
 
   "item.factocrafty.energium_dust": "Energium Dust",
 
@@ -297,6 +323,7 @@
 
   "item.factocrafty.latex_bucket": "Latex Bucket",
   "item.factocrafty.petroleum_bucket": "Petroleum Bucket",
+  "item.factocrafty.gasoline_bucket": "Gasoline Bucket",
   "item.factocrafty.coolant_bucket": "Coolant Bucket",
 
 
@@ -335,6 +362,7 @@
   "block.factocrafty.petroleum": "Petroleum",
   "fluid.factocrafty.latex": "Latex",
   "fluid.factocrafty.petroleum": "Petroleum",
+  "fluid.factocrafty.gasoline": "Gasoline",
   "fluid.factocrafty.construction_foam": "Construction Foam",
   "fluid.factocrafty.reinforced_construction_foam": "Reinforced Construction Foam",
   "fluid.factocrafty.coolant": "Coolant",
@@ -347,6 +375,7 @@
   "block.factocrafty.high_fluid_tank": "High Fluid Tank",
   "block.factocrafty.ultimate_fluid_tank": "Ultimate Fluid Tank",
   "block.factocrafty.quantum_fluid_tank": "Quantum Fluid Tank",
+  "block.factocrafty.creative_fluid_tank": "Creative Fluid Tank",
 
   "_comment": "JEI",
   "jei.factocrafty.crushing": "Crushing",
@@ -354,6 +383,7 @@
   "jei.factocrafty.extracting": "Extracting",
   "jei.factocrafty.sawing": "Sawing",
   "jei.factocrafty.extruding": "Extruding",
+  "jei.factocrafty.refining": "Refining",
   "jei.factocrafty.alloy_smelting": "Alloy Smelting",
   "jei.factocrafty.recycling": "Recycling",
   "jei.factocrafty.scrap_box": "Scrap Box",
@@ -383,7 +413,7 @@
   "tooltip.factocrafty.accept": "Accept: %s",
   "tooltip.factocrafty.accept_output": "Accept: %s Output: %s",
   "tooltip.factocrafty.fluid_stored": "%s: %s/%s",
-  "tooltip.factocrafty.energy_stored": "Energy: %s/%s",
+  "tooltip.factory_api.energy_stored": "Energy: %s/%s",
   "tooltip.factocrafty.low": "Low power tier: %s",
   "tooltip.factocrafty.high": "High power tier: %s",
   "tooltip.factocrafty.cable_unisolated": "This cable can electrocute you!",
@@ -401,6 +431,9 @@
   "tooltip.factocrafty.config.south": "South",
   "tooltip.factocrafty.config.east": "East",
   "tooltip.factocrafty.config.west": "West",
+  "tooltip.factocrafty.config.refining": "Refiner Configs",
+  "tooltip.factocrafty.config.refining.item": "Refining Items",
+  "tooltip.factocrafty.config.refining.fluid": "Refining Fluids",
 
   "subtitles.factocrafty.macerator": "Macerator working",
 

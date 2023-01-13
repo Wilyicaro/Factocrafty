@@ -28,8 +28,9 @@ public class GeothermalGeneratorScreen extends GeneratorScreen {
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float f, int i, int j) {
-        super.renderBg(poseStack, f, i, j);
+    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
+        super.renderStorageSprites(poseStack, i, j);
         ProgressElementRenderUtil.renderFluidTank(poseStack,this,relX() + 17, relY() + 17, getProgressScaled((int) gBe.lavaTank.getFluidStack().getAmount(), (int) gBe.lavaTank.getMaxFluid(), 52), FactocraftyProgressType.FLUID_TANK, gBe.lavaTank.getFluidStack(), true);
     }
+
 }

@@ -22,8 +22,8 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlock
             replaceSidedStorage(side,energySides, TransportState.EXTRACT_INSERT);
         replaceSidedStorage(BlockSide.BACK,energySides, TransportState.EXTRACT);
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.INSERT);
-        CHARGE_SLOT = 0;
-        UNCHARGE_SLOT = 1;
+        FILL_SLOT = 0;
+        DRAIN_SLOT = 1;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlock
     @Override
     public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
 
-        slots.add(new FactocraftyCYItemSlot(this,CHARGE_SLOT, 61,17, TransportState.INSERT, FactoryCapacityTiers.BASIC));
-        slots.add(new FactocraftyCYItemSlot(this,UNCHARGE_SLOT, 61,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this, FILL_SLOT, 61,17, TransportState.INSERT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this, DRAIN_SLOT, 61,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
     }
 }

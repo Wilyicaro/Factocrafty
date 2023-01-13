@@ -7,16 +7,12 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.RegistrarManager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import wily.factocrafty.events.ModEvents;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.FluidCellItem;
-import wily.factocrafty.network.FactocraftyStateButtonPacket;
-import wily.factocrafty.network.FactocraftySyncEnergyPacket;
-import wily.factocrafty.network.FactocraftySyncFluidPacket;
-import wily.factocrafty.network.FactocraftySyncProgressPacket;
+import wily.factocrafty.network.*;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.ICraftyEnergyItem;
 
@@ -67,6 +63,7 @@ public class Factocrafty {
         NETWORK.register(FactocraftySyncEnergyPacket.class,FactocraftySyncEnergyPacket::encode,FactocraftySyncEnergyPacket::new, FactocraftySyncEnergyPacket::apply);
         NETWORK.register(FactocraftySyncProgressPacket.class,FactocraftySyncProgressPacket::encode,FactocraftySyncProgressPacket::new, FactocraftySyncProgressPacket::apply);
         NETWORK.register(FactocraftyStateButtonPacket.class,FactocraftyStateButtonPacket::encode,FactocraftyStateButtonPacket::new, FactocraftyStateButtonPacket::apply);
+        NETWORK.register(FactocraftySyncRefiningTypePacket.class, FactocraftySyncRefiningTypePacket::encode, FactocraftySyncRefiningTypePacket::new, FactocraftySyncRefiningTypePacket::apply);
         System.out.println(FactocraftyExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }
