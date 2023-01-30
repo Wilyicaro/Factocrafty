@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "factocrafty:item/armor/basic_hang_glider",
+    "layer1": "factocrafty:item/armor/basic_hang_glider_overlay"
+  }
+}
