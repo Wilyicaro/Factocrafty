@@ -1,6 +1,5 @@
 package wily.factocrafty.item;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MaterialColor;
@@ -91,7 +90,8 @@ public class FactocraftyOre {
             DEEPSLATE(DUST),
             RUBBER(null, FactocraftyArmorMaterials.RUBBER, null, COMMON_DROP),
             SAWDUST(COMMON_DROP),
-            SILICON(COMMON_DROP);
+            SILICON(COMMON_DROP),
+            GRAPHENE(INGOT, DUST);
 
 
             private final MaterialColor color;

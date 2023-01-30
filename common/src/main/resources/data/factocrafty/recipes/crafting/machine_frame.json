@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R#",
+    "R R",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:iron_plate"
+    },
+    "R": {
+      "item": "factocrafty:refined_iron"
+    }
+  },
+  "result": {
+    "item": "factocrafty:machine_frame"
+  }
+}

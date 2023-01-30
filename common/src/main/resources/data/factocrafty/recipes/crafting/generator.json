@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:battery"
+    },
+    {
+      "item": "factocrafty:machine_frame"
+    },
+    {
+      "item": "minecraft:furnace"
+    },
+    {
+      "item": "factocrafty:circuit_board"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:generator"
+  }
+}

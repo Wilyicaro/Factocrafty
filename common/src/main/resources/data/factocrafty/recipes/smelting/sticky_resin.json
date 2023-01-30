@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item" : "factocrafty:sticky_resin"
+  },
+  "result": "factocrafty:rubber",
+  "experience": 0.15,
+  "cookingtime": 200
+}

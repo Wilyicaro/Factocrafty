@@ -79,9 +79,10 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
         if (!level.isClientSide) {
             boolean wasBurning = isBurning();
 
+            boolean hasFluid = fluidTank.getFluidStack().getAmount() >= getPlatformFluidConsume(5);
             if(isBurning()) {
                 burnTime.get()[0]--;
-                if (energyStorage.getSpace() > 0)
+                if (energyStorage.getSpace() > 0 && hasFluid)
                     for (int i = 0; i < progress.get().length; i++) {
                         progress.get()[i]++;
                         energyStorage.receiveEnergy(new ICraftyEnergyStorage.EnergyTransaction(3, energyStorage.supportableTier), false);
@@ -90,12 +91,16 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
                             progress.get()[i] = 0;
                     }
                 }
-            } else for (int i = 0; i < progress.get().length; i++) { if (progress.get()[i]>0) progress.get()[i]--; else progress.get()[i] = 0;}
+            } else{
+                for (int i = 0; i < progress.get().length; i++) { if (progress.get()[i]>0) progress.get()[i]--; else progress.get()[i] = 0;}
 
-            if (fluidTank.getFluidStack().getAmount() >= getPlatformFluidConsume(5) && burnTime.getInt(0) == 0 && canConsumeFuel() && energyStorage.getSpace() > 0) {
-                consumeFuel();
-                burnTime.maxProgress = burnTime.getInt(0);
+                if (hasFluid && canConsumeFuel() && energyStorage.getSpace() > 0) {
+                    consumeFuel();
+                    burnTime.maxProgress = burnTime.getInt(0);
+                }
             }
+
+
             super.tick();
             for (Direction direction : Direction.values()) {
                 BlockPos pos = getBlockPos().relative(direction);

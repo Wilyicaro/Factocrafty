@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "PFP",
+    "PGP"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:copper_plate"
+    },
+    "F": {
+      "item": "minecraft:green_dye"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "factocrafty:circuit_board",
+    "count": 4
+  }
+}

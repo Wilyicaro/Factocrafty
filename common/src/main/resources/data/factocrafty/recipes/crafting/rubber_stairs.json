@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:rubber_planks"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_stairs",
+    "count": 4
+  }
+}

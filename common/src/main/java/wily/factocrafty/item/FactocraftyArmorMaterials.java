@@ -14,6 +14,7 @@ public enum FactocraftyArmorMaterials implements ArmorMaterial {
     BRONZE("bronze", 15, new int[]{3, 5, 6, 2}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.BRONZE_INGOT.get())),
     GRAFANO("grafano", 15, new int[]{4, 7, 8, 3}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
     QUANTUM("quantum", 15, new int[]{4, 7, 8, 3}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    JETPACK("jetpack", 1, new int[]{0, 1, 0, 0}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
     PLATINUM("platinum", 15, new int[]{3, 5, 7, 4}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 2.5F, () -> Ingredient.of(FactocraftyItems.PLATINUM_INGOT.get())),
     RUBY("ruby", 30, new int[]{3, 6, 7, 3}, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBY.get())),
     RUBBER("rubber", 8, new int[]{1, 2, 3, 1}, 13, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBBER.get()));

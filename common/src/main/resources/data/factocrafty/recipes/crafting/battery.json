@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "#R#",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:tin_plate"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "factocrafty:insulated_copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:battery"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "RFR",
+    "ICI"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "F": {
+      "item": "factocrafty:iron_furnace"
+    },
+    "C": {
+      "item": "factocrafty:circuit_board"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "I": {
+      "item": "factocrafty:copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:electric_furnace"
+  }
+}

@@ -3,6 +3,7 @@
   "package": "wily.factocrafty.forge.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "AddJetpackModel"
   ],
   "mixins": [
     "AddFactocraftyMachineCapability",

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:cutter"
+    },
+    {
+      "item": "factocrafty:silver_ingot"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:silver_cable",
+    "count": 2
+  }
+}

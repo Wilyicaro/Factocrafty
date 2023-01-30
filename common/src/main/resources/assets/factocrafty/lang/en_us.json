@@ -175,7 +175,13 @@
 
   "item.factocrafty.crushed_tin": "Crushed Tin",
   "item.factocrafty.crushed_copper": "Crushed Copper",
+  "item.factocrafty.crushed_emerald": "Crushed Emerald",
+  "item.factocrafty.crushed_coal": "Crushed Coal",
+  "item.factocrafty.crushed_platinum": "Crushed Platinum",
+  "item.factocrafty.crushed_uranium": "Crushed Uranium",
+  "item.factocrafty.crushed_diamond": "Crushed Diamond",
   "item.factocrafty.crushed_gold": "Crushed Gold",
+  "item.factocrafty.crushed_silver": "Crushed Silver",
   "item.factocrafty.crushed_iron": "Crushed Iron",
   "item.factocrafty.crushed_lead": "Crushed Lead",
 
@@ -184,20 +190,46 @@
   "item.factocrafty.iron_plate": "Iron Plate",
   "item.factocrafty.gold_plate": "Gold Plate",
   "item.factocrafty.lead_plate": "Lead Plate",
+  "item.factocrafty.uranium_plate": "Uranium Plate",
+  "item.factocrafty.platinum_plate": "Platinum Plate",
+  "item.factocrafty.silver_plate": "Silver Plate",
   "item.factocrafty.bronze_plate": "Bronze Plate",
   "item.factocrafty.steel_plate": "Steel Plate",
   "item.factocrafty.iridium_plate": "Iridium Plate",
 
+  "item.factocrafty.copper_nugget": "Copper Nugget",
+  "item.factocrafty.tin_nugget": "Tin Nugget",
+  "item.factocrafty.iron_nugget": "Iron Nugget",
+  "item.factocrafty.gold_nugget": "Gold Nugget",
+  "item.factocrafty.lead_nugget": "Lead Nugget",
+  "item.factocrafty.uranium_nugget": "Uranium Nugget",
+  "item.factocrafty.platinum_nugget": "Platinum Nugget",
+  "item.factocrafty.silver_nugget": "Silver Nugget",
+  "item.factocrafty.bronze_nugget": "Bronze Nugget",
+  "item.factocrafty.ruby_nugget": "Ruby Nugget",
+  "item.factocrafty.diamond_nugget": "Diamond Nugget",
+  "item.factocrafty.steel_nugget": "Steel Nugget",
+  "item.factocrafty.iridium_nugget": "Iridium Nugget",
+
   "item.factocrafty.coal_dust": "Coal Dust",
+  "item.factocrafty.iron_dust": "Iron Dust",
+  "item.factocrafty.gold_dust": "Gold Dust",
+  "item.factocrafty.emerald_dust": "Emerald Dust",
+  "item.factocrafty.platinum_dust": "Platinum Dust",
+  "item.factocrafty.ruby_dust": "Ruby Dust",
   "item.factocrafty.diamond_dust": "Diamond Dust",
   "item.factocrafty.silver_dust": "Silver Dust",
   "item.factocrafty.stone_dust": "Stone Dust",
   "item.factocrafty.deepslate_dust": "Deepslate Dust",
 
+
+
   "item.factocrafty.iron_rod": "Iron Rod",
 
   "item.factocrafty.electronic_circuit": "Electronic Circuit",
   "item.factocrafty.advanced_circuit": "Advanced Circuit",
+  "item.factocrafty.circuit_board": "Circuit Board",
+  "item.factocrafty.advanced_circuit_board": "Advanced Circuit Board",
 
   "item.factocrafty.carbon_fibers": "Carbon Fibers",
   "item.factocrafty.combined_carbon_fibers": "Combined Carbon Fibers",
@@ -205,8 +237,11 @@
 
   "item.factocrafty.advanced_alloy": "Advanced Alloy",
 
-  "item.factocrafty.nightvision_goggles": "Night Vision Goggles",
+  "item.factocrafty.rubber_helmet": "Containment Helmet",
+  "item.factocrafty.rubber_chestplate": "Containment Chestplate",
+  "item.factocrafty.rubber_leggings": "Containment Leggings",
   "item.factocrafty.rubber_boots": "Rubber Boots",
+
 
 
   "item.factocrafty.ruby_helmet": "Ruby Helmet",
@@ -243,11 +278,18 @@
   "item.factocrafty.bronze_shovel": "Bronze Shovel",
   "item.factocrafty.bronze_hoe": "Bronze Hoe",
 
+  "item.factocrafty.nightvision_goggles": "Night Vision Goggles",
   "item.factocrafty.grafano_helmet": "Grafano Helmet",
   "item.factocrafty.grafano_chestplate": "Grafano Chestplate",
   "item.factocrafty.grafano_leggings": "Grafano Leggings",
   "item.factocrafty.grafano_boots": "Grafano Boots",
-  "item.factocrafty.grafano_saber": "Nano Saber",
+  "item.factocrafty.grafano_saber": "Grafano Saber",
+
+
+  "item.factocrafty.basic_hang_glider": "Hang Glider",
+
+  "item.factocrafty.electric_jetpack": "Electric Jetpack",
+  "item.factocrafty.flex_jetpack": "Flex Jetpack",
 
   "item.factocrafty.energium_dust": "Energium Dust",
 
@@ -287,6 +329,7 @@
   "item.factocrafty.mining_drill": "Mining Drill",
   "item.factocrafty.diamond_drill": "Diamond Drill",
   "item.factocrafty.iridium_drill": "Iridium Drill",
+  "item.factocrafty.mining_laser": "Mining Laser",
   "item.factocrafty.electric_hoe": "Electric Hoe",
   "item.factocrafty.wind_meter": "Wind Meter",
   "item.factocrafty.ie_meter": "IE Meter",

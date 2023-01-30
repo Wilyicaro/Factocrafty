@@ -10,12 +10,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import wily.factocrafty.item.EnergyItem;
-import wily.factocrafty.item.FluidCellItem;
+import wily.factocrafty.item.*;
+import wily.factoryapi.base.ICraftyEnergyItem;
 import wily.factoryapi.forge.base.FactoryCapabilities;
 import wily.factoryapi.forge.base.ForgeItemFluidHandler;
 
-@Mixin(EnergyItem.class)
+@Mixin({EnergyItem.class, ElectricArmorItem.class, ElectricJetpackItem.class})
 public class AddEnergyItemCapability extends Item{
 
 
@@ -27,7 +27,7 @@ public class AddEnergyItemCapability extends Item{
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        EnergyItem cell = ((EnergyItem)(Object)this);
+        ICraftyEnergyItem<CYItemEnergyStorage> cell = ((ICraftyEnergyItem<CYItemEnergyStorage>)(Object)this);
         return new ICapabilityProvider() {
             @Override
             public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction arg) {

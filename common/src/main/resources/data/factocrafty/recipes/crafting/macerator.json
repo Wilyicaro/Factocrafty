@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "RFR",
+    "TCT"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "F": {
+      "item": "factocrafty:machine_frame"
+    },
+    "C": {
+      "item": "factocrafty:circuit_board"
+    },
+    "R": {
+      "item": "minecraft:cobblestone"
+    },
+    "T": {
+      "item": "factocrafty:copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:macerator"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:rubber_log"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_wood",
+    "count": 3
+  }
+}

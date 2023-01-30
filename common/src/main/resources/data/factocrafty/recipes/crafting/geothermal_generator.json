@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#F#",
+    "#F#",
+    "TGT"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass_pane"
+    },
+    "G": {
+      "item": "factocrafty:generator"
+    },
+    "F": {
+      "item": "factocrafty:fluid_cell"
+    },
+    "T": {
+      "item": "factocrafty:refined_iron"
+    }
+  },
+  "result": {
+    "item": "factocrafty:geothermal_generator"
+  }
+}

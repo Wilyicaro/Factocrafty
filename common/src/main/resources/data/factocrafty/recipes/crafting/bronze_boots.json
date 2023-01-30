@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:bronze_ingot"
+    }
+  },
+  "result": {
+    "item": "factocrafty:bronze_boots"
+  }
+}

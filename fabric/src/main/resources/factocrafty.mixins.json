@@ -6,6 +6,7 @@
     "AbstractContainerScreenInjector"
   ],
   "mixins": [
+    "HangGliderImplementer"
   ],
   "injectors": {
     "defaultRequire": 1

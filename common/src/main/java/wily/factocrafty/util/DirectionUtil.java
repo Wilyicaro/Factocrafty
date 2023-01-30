@@ -25,8 +25,11 @@ public class DirectionUtil {
 
     public static float rotationCyclic(float rotation){
         if (rotation> 180) return rotation - 360;
-        else if ( rotation < -180) return 360 + rotation;
+        else if ( rotation < 180) return 360 + rotation;
         return rotation;
+    }
+    public static float unCyclicRotation(float rotation){
+        return rotation < 0 ? 360 + rotation : rotation;
     }
 
     public static Quaternionf getRotation(Direction direction) {

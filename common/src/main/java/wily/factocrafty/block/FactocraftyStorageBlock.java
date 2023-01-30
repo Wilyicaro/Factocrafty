@@ -39,6 +39,7 @@ import wily.factocrafty.item.WrenchItem;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.IFactoryStorage;
+import wily.factoryapi.base.IPlatformFluidHandler;
 import wily.factoryapi.base.Storages;
 
 import java.util.ArrayList;
@@ -93,19 +94,20 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     }
     public InteractionResult interactFluidItem(IFactoryStorage storage, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-            storage.getTanks().forEach((tank) -> {
+            for(IPlatformFluidHandler tank : storage.getTanks()) {
                 FluidStack fluidStack = ItemContainerUtil.getFluid(player, hand);
                 if (tank.getTransport().canExtract() && fluidStack.isEmpty() && !tank.getFluidStack().isEmpty() && (!(stack.getItem() instanceof BucketItem) || ((stack.getItem() instanceof BucketItem) && tank.getFluidStack().getAmount() >= FluidStack.bucketAmount()))) {
                     tank.drain((int) ItemContainerUtil.fillItem(tank.getFluidStack(),player,hand), false);
-                    return;
+                    return InteractionResult.SUCCESS;
                 }
-                if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || (!fluidStack.isFluidEqual(tank.getFluidStack())) && !tank.getFluidStack().isEmpty() && !tank.getTransport().canInsert()) return;
+                if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || (!fluidStack.isFluidEqual(tank.getFluidStack())) && !tank.getFluidStack().isEmpty() && !tank.getTransport().canInsert()) continue;
                 if (tank.getTotalSpace() > 0 && !(stack.getItem() instanceof BucketItem) || tank.getTotalSpace() >= FluidStack.bucketAmount()) {
                     ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), player, hand);
+                    return InteractionResult.SUCCESS;
                 }
-            });
+            };
 
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
     }
 
     private void interactWith(Level world, BlockPos pos, Player player) {

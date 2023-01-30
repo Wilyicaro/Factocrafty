@@ -1,32 +1,19 @@
 package wily.factocrafty.init;
 
-import com.google.common.base.Suppliers;
 import dev.architectury.core.block.ArchitecturyLiquidBlock;
 import dev.architectury.core.fluid.ArchitecturyFlowingFluid;
 import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
 import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
-import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.data.worldgen.features.OreFeatures;
-import net.minecraft.data.worldgen.features.TreeFeatures;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -39,26 +26,11 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
-import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
-import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
-import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.*;
 import wily.factocrafty.block.cable.CableBlock;
 import wily.factocrafty.block.cable.CableTiers;
@@ -77,10 +49,7 @@ import wily.factocrafty.block.storage.energy.FactocraftyEnergyStorageBlock;
 import wily.factocrafty.block.storage.energy.entity.FactocraftyEnergyStorageBlockEntity;
 import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factocrafty.block.storage.fluid.entity.FactocraftyFluidTankBlockEntity;
-import wily.factocrafty.entity.CorruptedEnderMan;
-import wily.factocrafty.entity.FactocraftyBoat;
-import wily.factocrafty.entity.FactocraftyChestBoat;
-import wily.factocrafty.entity.IFactocraftyBoat;
+import wily.factocrafty.entity.*;
 import wily.factocrafty.gen.RubberTreeFoliagePlacer;
 import wily.factocrafty.gen.RubberTreeGrower;
 import wily.factocrafty.inventory.FactocraftyProcessMenu;
@@ -91,10 +60,10 @@ import wily.factocrafty.util.registering.*;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.TransportState;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.OptionalInt;
 import java.util.function.Supplier;
 
 import static wily.factocrafty.Factocrafty.MOD_ID;
@@ -159,11 +128,11 @@ public class Registration {
 
     public static final RegistrySupplier<Item> ELECTRONIC_CIRCUIT = registerFactocraftyItem("electronic_circuit");
 
-    public static final RegistrySupplier<Item> CIRCUIT_IMPRESS = registerFactocraftyItem("circuit_impress");
+    public static final RegistrySupplier<Item> CIRCUIT_BOARD = registerFactocraftyItem("circuit_board");
 
     public static final RegistrySupplier<Item> ADVANCED_CIRCUIT = registerFactocraftyItem("advanced_circuit");
 
-    public static final RegistrySupplier<Item> ADVANCED_CIRCUIT_IMPRESS = registerFactocraftyItem("advanced_circuit_impress");
+    public static final RegistrySupplier<Item> ADVANCED_CIRCUIT_IMPRESS = registerFactocraftyItem("advanced_circuit_board");
 
 
 
@@ -254,9 +223,9 @@ public class Registration {
 
     public static final RegistrySupplier<Item> WRENCH =  ITEMS.register("wrench", () -> new WrenchItem(defaultStackItemProperties()));
 
-    public static final RegistrySupplier<Item> CUTTER =  ITEMS.register("cutter", () -> new Item(defaultStackItemProperties().durability(300)));
+    public static final RegistrySupplier<Item> CUTTER =  ITEMS.register("cutter", () -> new CraftingToolItem(defaultStackItemProperties().durability(300)));
 
-    public static final RegistrySupplier<Item> HAMMER =  ITEMS.register("hammer", () -> new Item(defaultStackItemProperties().durability(375)));
+    public static final RegistrySupplier<Item> HAMMER =  ITEMS.register("hammer", () -> new CraftingToolItem(defaultStackItemProperties().durability(375)));
 
     public static final RegistrySupplier<Item> DRILL =  ITEMS.register("mining_drill", () -> new DrillItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
 
@@ -265,6 +234,8 @@ public class Registration {
     public static final RegistrySupplier<Item> CHAINSAW =  ITEMS.register("chainsaw", () -> new ChainsawItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
 
     public static final RegistrySupplier<Item> DIAMOND_CHAINSAW =  ITEMS.register("diamond_chainsaw", () -> new ChainsawItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
+
+    public static final RegistrySupplier<Item> MINING_LASER =  ITEMS.register("mining_laser", () -> new MiningLaserItem(FactoryCapacityTiers.HIGH,defaultStackItemProperties()));
 
     public static final RegistrySupplier<Item> BATTERY =  ITEMS.register("battery", () -> new BatteryItem(FactoryCapacityTiers.BASIC,1000,defaultStackItemProperties()));
 
@@ -333,6 +304,12 @@ public class Registration {
 
     public static final RegistrySupplier<Item> COMBINED_CARBON = registerFactocraftyItem( "combined_carbon_fibers");
 
+    public static final RegistrySupplier<Item> BASIC_HANG_GLIDER = ITEMS.register("basic_hang_glider", ()-> new HangGliderItem(defaultStackItemProperties()));
+
+    public static final RegistrySupplier<Item> ELECTRIC_JETPACK = ITEMS.register("electric_jetpack", ()-> new ElectricJetpackItem(FactoryCapacityTiers.ADVANCED,FactocraftyArmorMaterials.JETPACK,defaultStackItemProperties()));
+
+    public static final RegistrySupplier<Item> FLEX_JETPACK = ITEMS.register("flex_jetpack", ()-> new FlexJetpackItem(FactocraftyArmorMaterials.JETPACK,defaultStackItemProperties()));
+
     public static final RegistrySupplier<Item> RUBBER_BOAT_ITEM = ITEMS.register("rubber_boat", () -> new FactocraftyBoatItem(false,IFactocraftyBoat.Type.RUBBER, defaultStackItemProperties()));
 
     public static final RegistrySupplier<Item> RUBBER_CHEST_BOAT_ITEM = ITEMS.register("rubber_chest_boat", () -> new FactocraftyBoatItem(true, IFactocraftyBoat.Type.RUBBER, defaultStackItemProperties()) );
@@ -341,9 +318,11 @@ public class Registration {
 
     public static final RegistrySupplier<EntityType<FactocraftyBoat>> FACTOCRAFTY_BOAT = ENTITY_TYPES.register("factocrafty_boat", ()-> EntityType.Builder.<FactocraftyBoat>of(FactocraftyBoat::new,MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build(getModResource("factocrafty_boat").toString()));
 
-    public static final RegistrySupplier<EntityType<CorruptedEnderMan>> CORRUPTED_ENDERMAN = ENTITY_TYPES.register("corrupted_enderman", ()-> EntityType.Builder.<CorruptedEnderMan>of(CorruptedEnderMan::new,MobCategory.MONSTER).sized(0.6F, 2.9F).clientTrackingRange(6).build(getModResource("corrupted_enderman").toString()));
+    public static final RegistrySupplier<EntityType<CorruptedEnderMan>> CORRUPTED_ENDERMAN = ENTITY_TYPES.register("corrupted_enderman", ()-> EntityType.Builder.of(CorruptedEnderMan::new,MobCategory.MONSTER).sized(0.6F, 2.9F).clientTrackingRange(6).build(getModResource("corrupted_enderman").toString()));
 
     public static final RegistrySupplier<Item> CORRUPTED_ENDERMAN_SPAWN_EGG = ITEMS.register("corrupted_enderman_spawn_egg",()-> new ArchitecturySpawnEggItem(CORRUPTED_ENDERMAN,161816,280428,fullStackItemProperties()));
+
+    public static final RegistrySupplier<EntityType<LaserProjectile>> LASER = ENTITY_TYPES.register("laser", ()-> EntityType.Builder.<LaserProjectile>of((LaserProjectile::new),MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build(getModResource("laser").toString()));
 
     public static final RegistrySupplier<FoliagePlacerType<?>> RUBBER_TREE_FOLIAGE_PLACER = FOLIAGE_PLACERS.register("rubber_fancy_foliage_placer", ()-> new FoliagePlacerType(RubberTreeFoliagePlacer.CODEC));
 
@@ -475,10 +454,10 @@ public class Registration {
         SOUNDS.register();
         BLOCKS_ITEMS.register();
         BLOCKS_ITEMS.forEach((blockEntry) -> {ITEMS_REGISTRAR.register(blockEntry.getId(), () -> new BlockItem(blockEntry.get(), fullStackItemProperties()));});
-        registerFluid(FactocraftyFluids.PETROLEUM.getName(),10000,8000,15,0xFFFFFFFF, FactocraftyMaterials.PETROLEUM);
+        registerFluid(FactocraftyFluids.PETROLEUM.getName(),10000,8000,15,new Color(16, 16, 16).getRGB(), FactocraftyMaterials.PETROLEUM);
         registerFluid(FactocraftyFluids.LATEX.getName(),6000,6000,9,0xFFFFFFFF, FactocraftyMaterials.LATEX);
-        registerFluid(FactocraftyFluids.COOLANT.getName(),4000,4000,4,0xFFFFFFFF, Material.WATER);
-        registerFluid(FactocraftyFluids.GASOLINE.getName(),6000,4000,6,0xFFFFFFFF, FactocraftyMaterials.GASOLINE);
+        registerFluid(FactocraftyFluids.COOLANT.getName(),4000,4000,4,new Color(0, 89, 93).getRGB(), Material.WATER);
+        registerFluid(FactocraftyFluids.GASOLINE.getName(),6000,4000,6,new Color(140, 96, 0).getRGB(), FactocraftyMaterials.GASOLINE);
         MENUS.register();
         FLUIDS.register();
         BLOCKS.register();

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "RFR",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:insulated_copper_cable"
+    },
+    "F": {
+      "item": "factocrafty:refined_iron"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "factocrafty:electronic_circuit"
+  }
+}

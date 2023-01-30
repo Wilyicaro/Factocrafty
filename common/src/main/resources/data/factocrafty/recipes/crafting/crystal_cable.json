@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "RER",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass"
+    },
+    "E": {
+      "item": "factocrafty:energium_dust"
+    },
+    "R": {
+      "item": "factocrafty:graphene_ingot"
+    }
+  },
+  "result": {
+    "item": "factocrafty:crystal_cable",
+    "count": 3
+  }
+}

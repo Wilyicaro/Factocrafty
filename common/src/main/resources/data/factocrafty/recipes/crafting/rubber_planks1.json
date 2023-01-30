@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:stripped_rubber_log"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:rubber_planks",
+    "count": 4
+  }
+}

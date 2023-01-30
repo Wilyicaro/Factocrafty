@@ -6,7 +6,9 @@
     "CameraFogInjector",
     "FogRendererInjector",
     "ItemRendererInjector",
-    "MixinTitleScreen"
+    "MixinTitleScreen",
+    "PlayerModelInjector",
+    "PlayerRendererInjector"
   ],
   "mixins": [
     "AxeItemRedirector",

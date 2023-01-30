@@ -34,7 +34,7 @@ dependencies {
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
-    //modRuntimeOnly("curse.maven:jei-238222:3940099")
+    modRuntimeOnly("curse.maven:jei-238222:4346825")
     //modRuntimeOnly("curse.maven:mekanism-268560:3954410")
     modImplementation "maven.modrinth:factory_api:${factory_api_version}-forge"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

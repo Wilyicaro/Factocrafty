@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:carbon_fibers"
+    },
+    {
+      "item": "factocrafty:carbon_fibers"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:combined_carbon_fibers"
+  }
+}

@@ -64,6 +64,7 @@ public class Factocrafty {
         NETWORK.register(FactocraftySyncProgressPacket.class,FactocraftySyncProgressPacket::encode,FactocraftySyncProgressPacket::new, FactocraftySyncProgressPacket::apply);
         NETWORK.register(FactocraftyStateButtonPacket.class,FactocraftyStateButtonPacket::encode,FactocraftyStateButtonPacket::new, FactocraftyStateButtonPacket::apply);
         NETWORK.register(FactocraftySyncRefiningTypePacket.class, FactocraftySyncRefiningTypePacket::encode, FactocraftySyncRefiningTypePacket::new, FactocraftySyncRefiningTypePacket::apply);
+        NETWORK.register(FactocraftyJetpackUsePacket.class, FactocraftyJetpackUsePacket::encode, FactocraftyJetpackUsePacket::new, FactocraftyJetpackUsePacket::apply);
         System.out.println(FactocraftyExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }

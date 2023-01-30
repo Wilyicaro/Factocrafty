@@ -5,12 +5,17 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.level.entity.forge.EntityRendererRegistryImpl;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -55,6 +60,17 @@ public class FactocraftyForgeClient {
     @SubscribeEvent
     public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
         FactocraftyClient.registerEntityModelLayers(event::registerLayerDefinition);
+    }
+    @SubscribeEvent
+    public static void registerRenderLayer(EntityRenderersEvent.AddLayers event) {
+        FactocraftyClient.registerEntityRenderLayers(event::getRenderer, event.getEntityModels(), new FactocraftyClient.FactocraftyRenderLayerRegistry() {
+                    @Override
+                    public <T extends LivingEntity, M extends EntityModel<T>> void register(LivingEntityRenderer<T, M> renderer, RenderLayer<T, M> renderLayer) {
+                        renderer.addLayer(renderLayer);
+                        Factocrafty.LOGGER.info("EOQ");
+                    }
+                }
+        );
     }
     @SubscribeEvent
     public static void clientInit(ModelEvent.RegisterAdditional event){

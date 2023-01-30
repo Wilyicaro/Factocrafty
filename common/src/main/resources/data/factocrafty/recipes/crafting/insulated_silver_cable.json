@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:rubber"
+    },
+    {
+      "item": "factocrafty:silver_cable"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:insulated_silver_cable"
+  }
+}

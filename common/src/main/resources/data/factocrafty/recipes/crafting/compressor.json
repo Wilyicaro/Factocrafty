@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#A#",
+    "RFR",
+    "TCT"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stone"
+    },
+    "F": {
+      "item": "factocrafty:machine_frame"
+    },
+    "C": {
+      "item": "factocrafty:circuit_board"
+    },
+    "R": {
+      "item": "minecraft:glass_pane"
+    },
+    "A": {
+      "item": "minecraft:anvil"
+    },
+    "T": {
+      "item": "factocrafty:copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:compressor"
+  }
+}

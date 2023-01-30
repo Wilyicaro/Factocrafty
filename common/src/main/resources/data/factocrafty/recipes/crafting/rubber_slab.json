@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:rubber_planks"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_slab",
+    "count" : 6
+  }
+}

@@ -181,6 +181,8 @@
 
   "item.factocrafty.electronic_circuit": "Circuito eletrônico",
   "item.factocrafty.advanced_circuit": "Circuito eletrônico avançado",
+  "item.factocrafty.circuit_board": "Placa de circuito",
+  "item.factocrafty.advanced_circuit_board": "Placa avançada de circuito",
 
   "item.factocrafty.carbon_fibers": "Fibras de carbono",
   "item.factocrafty.combined_carbon_fibers": "Liga de fibras de carbono",
@@ -188,8 +190,32 @@
 
   "item.factocrafty.advanced_alloy": "Liga avançada",
 
-  "item.factocrafty.nightvision_goggles": "Óculos de visão norturna",
+  "item.factocrafty.rubber_helmet": "Capacete para contenção",
+  "item.factocrafty.rubber_chestplate": "Peitoral para contenção",
+  "item.factocrafty.rubber_leggings": "Calça para contenção",
   "item.factocrafty.rubber_boots": "Botas de borracha",
+
+  "item.factocrafty.ruby_helmet": "Capacete de rubi",
+  "item.factocrafty.ruby_chestplate": "Peitoral de rubi",
+  "item.factocrafty.ruby_leggings": "Calça de rubi",
+  "item.factocrafty.ruby_boots": "Botas de rubi",
+
+  "item.factocrafty.ruby_sword": "Espada de rubi",
+  "item.factocrafty.ruby_pickaxe": "Picareta de rubi",
+  "item.factocrafty.ruby_axe": "Machado de rubi",
+  "item.factocrafty.ruby_shovel": "Pá de rubi",
+  "item.factocrafty.ruby_hoe": "Enxada de rubi",
+
+  "item.factocrafty.platinum_helmet": "Capacete de platina",
+  "item.factocrafty.platinum_chestplate": "Peitoral de platina",
+  "item.factocrafty.platinum_leggings": "Calça de platina",
+  "item.factocrafty.platinum_boots": "Botas de platina",
+
+  "item.factocrafty.platinum_sword": "Espada de platina",
+  "item.factocrafty.platinum_pickaxe": "Picareta de platina",
+  "item.factocrafty.platinum_axe": "Machado de platina",
+  "item.factocrafty.platinum_shovel": "Pá de platina",
+  "item.factocrafty.platinum_hoe": "Enxada de platina",
 
   "item.factocrafty.bronze_helmet": "Capacete de bronze",
   "item.factocrafty.bronze_chestplate": "Peitoral de bronze",
@@ -202,11 +228,15 @@
   "item.factocrafty.bronze_shovel": "Pá de bronze",
   "item.factocrafty.bronze_hoe": "Enxada de Bronze",
 
+  "item.factocrafty.nightvision_goggles": "Óculos de visão norturna",
   "item.factocrafty.grafano_helmet": "Capacete Grafano",
   "item.factocrafty.grafano_chestplate": "Peitoral Grafano",
   "item.factocrafty.grafano_leggings": "Calças Grafano",
   "item.factocrafty.grafano_boots": "Botas Grafano",
   "item.factocrafty.grafano_saber": "Sabre Nano",
+
+  "item.factocrafty.electric_jetpack": "Mochila a jato elétrica",
+  "item.factocrafty.flex_jetpack": "Mochila a jato flex",
 
   "item.factocrafty.energium_dust": "Pó energético",
 

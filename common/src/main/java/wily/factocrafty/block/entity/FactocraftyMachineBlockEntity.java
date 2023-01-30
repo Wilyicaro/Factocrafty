@@ -144,7 +144,7 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
             } else {
                 ItemStack itemStack2 = inv.getItem(output);
                 boolean bl = resultTank != null;
-                if (itemStack2.isEmpty() || (bl && resultTank.getFluidStack().isEmpty())) {
+                if ((itemStack2.isEmpty() || itemStack.isEmpty()) && (rcp.getResultFluid().isEmpty() || bl && resultTank.getFluidStack().isEmpty())) {
                     return true;
                 } else if (!itemStack2.sameItem(itemStack) &&  (!bl || !resultTank.getFluidStack().isFluidEqual(rcp.getResultFluid()))) {
                     return false;

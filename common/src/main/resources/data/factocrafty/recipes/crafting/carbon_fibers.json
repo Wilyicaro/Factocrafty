@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:coal_dust"
+    }
+  },
+  "result": {
+    "item": "factocrafty:carbon_fibers"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:rubber_planks"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_chest_boat"
+  }
+}
