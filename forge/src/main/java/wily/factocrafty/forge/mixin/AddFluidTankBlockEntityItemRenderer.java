@@ -7,11 +7,11 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.spongepowered.asm.mixin.Mixin;
 import wily.factocrafty.client.renderer.block.FactocraftyBlockEntityWLRenderer;
-import wily.factocrafty.item.FluidBlockItem;
+import wily.factocrafty.item.FluidTankItem;
 
 import java.util.function.Consumer;
 
-@Mixin(FluidBlockItem.class)
+@Mixin(FluidTankItem.class)
 public class AddFluidTankBlockEntityItemRenderer extends Item {
     public AddFluidTankBlockEntityItemRenderer(Properties arg) {
         super(arg);

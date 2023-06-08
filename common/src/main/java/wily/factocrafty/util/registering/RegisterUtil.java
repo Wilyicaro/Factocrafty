@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterUtil {
+
     public static ResourceKey<ConfiguredFeature<?,?>> createConfiguredFeature(ResourceLocation resource){
         return ResourceKey.create(Registries.CONFIGURED_FEATURE, resource);
     }

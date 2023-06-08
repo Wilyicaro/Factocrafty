@@ -70,7 +70,7 @@ public class MiningLaserItem extends ProjectileWeaponItem implements ICraftyEner
     }
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(energyTier.getEnergyTierComponent());
+        list.add(energyTier.getEnergyTierComponent(false));
         list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
     }
     public int getBarColor(ItemStack itemStack) {

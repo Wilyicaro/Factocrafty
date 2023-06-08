@@ -80,30 +80,30 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
             ItemStack stack = player.getItemInHand(interactionHand);
             boolean fluidItem = ItemContainerUtil.isFluidContainer(stack);
             boolean isWrench = stack.is(Registration.WRENCH.get());
-
-            if( level.getBlockEntity(blockPos) instanceof IFactoryStorage be && (isWrench || fluidItem  && !be.getTanks().isEmpty())){
-                if (fluidItem)
-                    this.interactFluidItem(be,player,interactionHand);
-                else if (isWrench)
-                    return InteractionResult.FAIL;
-            }
-                else if (!level.isClientSide) this.interactWith(level, blockPos, player);
-            if (level.isClientSide) return InteractionResult.SUCCESS;
+            if (!level.isClientSide) {
+                if (!stack.isEmpty() && level.getBlockEntity(blockPos) instanceof IFactoryStorage be && (isWrench || fluidItem && !be.getTanks().isEmpty())) {
+                    if (fluidItem) {
+                        if (this.interactFluidItem(be, player, interactionHand).shouldSwing())
+                            return InteractionResult.SUCCESS;
+                    }else return InteractionResult.FAIL;
+                }
+                 this.interactWith(level, blockPos, player);
+            } else return InteractionResult.SUCCESS;
             return InteractionResult.CONSUME;
-
     }
     public InteractionResult interactFluidItem(IFactoryStorage storage, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
             for(IPlatformFluidHandler tank : storage.getTanks()) {
                 FluidStack fluidStack = ItemContainerUtil.getFluid(player, hand);
-                if (tank.getTransport().canExtract() && fluidStack.isEmpty() && !tank.getFluidStack().isEmpty() && (!(stack.getItem() instanceof BucketItem) || ((stack.getItem() instanceof BucketItem) && tank.getFluidStack().getAmount() >= FluidStack.bucketAmount()))) {
-                    tank.drain((int) ItemContainerUtil.fillItem(tank.getFluidStack(),player,hand), false);
-                    return InteractionResult.SUCCESS;
+                long a = 0;
+                if (tank.getTransport().canExtract() && !tank.getFluidStack().isEmpty() && (fluidStack.isEmpty() || fluidStack.isFluidEqual(tank.getFluidStack())) && (!(stack.getItem() instanceof BucketItem) || (tank.getFluidStack().getAmount() >= FluidStack.bucketAmount()))) {
+                    if (!tank.drain((int) ItemContainerUtil.fillItem(tank.getFluidStack(),player,hand), false).isEmpty())
+                        return InteractionResult.SUCCESS;
                 }
-                if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || (!fluidStack.isFluidEqual(tank.getFluidStack())) && !tank.getFluidStack().isEmpty() && !tank.getTransport().canInsert()) continue;
+                if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || !(fluidStack.isFluidEqual(tank.getFluidStack()) || tank.getFluidStack().isEmpty()) || !tank.getTransport().canInsert()) continue;
                 if (tank.getTotalSpace() > 0 && !(stack.getItem() instanceof BucketItem) || tank.getTotalSpace() >= FluidStack.bucketAmount()) {
-                    ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), player, hand);
-                    return InteractionResult.SUCCESS;
+                    if (!ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), player, hand).isEmpty())
+                        return InteractionResult.SUCCESS;
                 }
             };
 
@@ -125,7 +125,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
         if(capacityTier !=null)
-        list.add(capacityTier.getEnergyTierComponent());
+        list.add(capacityTier.getEnergyTierComponent(false));
     }
 
     @Override

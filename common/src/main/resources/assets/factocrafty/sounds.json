@@ -100,5 +100,13 @@
       }
 
     ]
+  },
+  "ambient.electric_shock": {
+    "sounds": [
+      {
+        "name": "factocrafty:electric_shock_1"
+      }
+
+    ]
   }
 }

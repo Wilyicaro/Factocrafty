@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item" : "factocrafty:raw_silver"
+  },
+  "result": "factocrafty:silver_ingot",
+  "experience": 0.15,
+  "cookingtime": 200
+}

@@ -4,6 +4,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import wily.factocrafty.util.registering.FactocraftyItems;
@@ -12,9 +13,10 @@ import java.util.function.Supplier;
 
 public enum FactocraftyArmorMaterials implements ArmorMaterial {
     BRONZE("bronze", 15, new int[]{3, 5, 6, 2}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.BRONZE_INGOT.get())),
-    GRAFANO("grafano", 15, new int[]{4, 7, 8, 3}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
-    QUANTUM("quantum", 15, new int[]{4, 7, 8, 3}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
-    JETPACK("jetpack", 1, new int[]{0, 1, 0, 0}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    GRAPHANO("graphano", 15, new int[]{3, 7, 8, 4}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    NIGHT_VISION("night_vision", 15, new int[]{2, 3, 4, 1}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    QUANTUM("quantum", 15, new int[]{6, 14, 16, 8}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    JETPACK("jetpack", 1, new int[]{0, 0, 2, 0}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
     PLATINUM("platinum", 15, new int[]{3, 5, 7, 4}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 2.5F, () -> Ingredient.of(FactocraftyItems.PLATINUM_INGOT.get())),
     RUBY("ruby", 30, new int[]{3, 6, 7, 3}, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBY.get())),
     RUBBER("rubber", 8, new int[]{1, 2, 3, 1}, 13, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBBER.get()));
@@ -40,12 +42,12 @@ public enum FactocraftyArmorMaterials implements ArmorMaterial {
         this.repairIngredient = new LazyLoadedValue<>(p_i231593_10_);
     }
 
-    public int getDurabilityForSlot(EquipmentSlot p_200896_1_) {
-        return HEALTH_PER_SLOT[p_200896_1_.getIndex()] * this.durabilityMultiplier;
+    public int getDurabilityForType(ArmorItem.Type p_200896_1_) {
+        return HEALTH_PER_SLOT[p_200896_1_.getSlot().getIndex()] * this.durabilityMultiplier;
     }
 
-    public int getDefenseForSlot(EquipmentSlot p_200902_1_) {
-        return this.slotProtections[p_200902_1_.getIndex()];
+    public int getDefenseForType(ArmorItem.Type p_200902_1_) {
+        return this.slotProtections[p_200902_1_.getSlot().getIndex()];
     }
 
     public int getEnchantmentValue() {

@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.CYEnergyStorage;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
@@ -17,13 +18,17 @@ import wily.factoryapi.base.*;
 public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlockEntity {
     public FactocraftyEnergyStorageBlockEntity(FactoryCapacityTiers energyTier, BlockPos blockPos, BlockState blockState) {
         super(FactocraftyMenus.ENERGY_CELL, energyTier, FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
-        this.energyStorage = new CYEnergyStorage(this, 0,energyTier.getStorageCapacity(), (int)(energyTier.energyCapacity * energyTier.getConductivity()), energyTier);
         for (BlockSide side : BlockSide.values())
             replaceSidedStorage(side,energySides, TransportState.EXTRACT_INSERT);
         replaceSidedStorage(BlockSide.BACK,energySides, TransportState.EXTRACT);
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.INSERT);
         FILL_SLOT = 0;
         DRAIN_SLOT = 1;
+    }
+
+    @Override
+    public int getInitialEnergyCapacity() {
+        return defaultEnergyTier.getStorageCapacity();
     }
 
     @Override
@@ -37,7 +42,7 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlock
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         String[] s = super.getDisplayName().getString().split(" ");
 
         return Component.literal(s[s.length -1].replaceAll("[()]","")).setStyle(super.getDisplayName().getStyle());

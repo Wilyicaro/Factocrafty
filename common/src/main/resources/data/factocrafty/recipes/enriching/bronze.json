@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "tin",
+    "count": 25
+  },
+  "ingredient": {
+    "item": "factocrafty:copper_dust"
+  },
+  "result": "factocrafty:bronze_dust",
+  "experience": 0.35,
+  "processtime": 125
+}

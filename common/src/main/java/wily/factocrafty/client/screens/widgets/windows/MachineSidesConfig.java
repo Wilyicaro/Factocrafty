@@ -3,19 +3,14 @@ package wily.factocrafty.client.screens.widgets.windows;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.FactocraftyMachineBlock;
-import wily.factocrafty.block.FactocraftyProgressType;
-import wily.factocrafty.block.IFactocraftyOrientableBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.network.FactocraftyStateButtonPacket;
-import wily.factocrafty.util.DirectionUtil;
 import wily.factoryapi.base.*;
 
 import java.util.ArrayList;
@@ -74,10 +69,7 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
         return  sidesType().get(next < sidesType().size() ?  next : 0);
     }
     public static Map<Direction, ?> getSideType(FactocraftyProcessBlockEntity be, int sideConfigState){
-        if (sideConfigState == 0) return be.itemSides;
-        else if (sideConfigState == 1) return be.energySides;
-        else if (sideConfigState == 2) return be.fluidSides;
-        return null;
+        return sideConfigState == 0 ? be.itemSides : sideConfigState == 1 ? be.energySides : sideConfigState == 2 ? be.fluidSides : null;
     }
     protected Map<Direction, ?> getSideType(){ return getSideType(be,sideConfigState);}
     protected List<?> getSlotsIdentifiers(){
@@ -112,18 +104,20 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
     }
 
     protected boolean clickedSideConfig(double mouseX, double mouseY){
-        return FactocraftyProgressType.getMouseLimit(mouseX,mouseY,getX() + 40, getY() + 12, 50,50);
+        return IFactoryDrawableType.getMouseLimit(mouseX,mouseY,getX() + 40, getY() + 12, 50,50);
     }
 
     Direction selectedDirection = Direction.NORTH;
 
+
+
     @Override
     public void renderBg(PoseStack poseStack, int i, int j) {
+        super.renderBg(poseStack,i,j);
         selectedDirection = nearestRotation(configBlockRotateX, configBlockRotateY,true);
         parent.renderGuiBlock(be,be.getBlockState(),getX() + width /2 - 8 ,getY() + 28, 2F,2F, configBlockRotateX, configBlockRotateY);
         //blit(poseStack, i, j, 0, 30, 30, baked.getQuads(state, selectedDirection, parent.getMenu().player.level.random).get(0).getSprite());
         minecraft.font.draw(poseStack, Component.translatable("tooltip.factocrafty.config.direction", Component.translatable("tooltip.factocrafty.config." +selectedDirection.getName()).getString()) ,getX() + 8,getY() + height - 16 , 4210752);
-
     }
 
 

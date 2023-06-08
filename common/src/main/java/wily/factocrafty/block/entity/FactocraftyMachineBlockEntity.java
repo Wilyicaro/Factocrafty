@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.inventory.FactocraftyResultSlot;
+import wily.factocrafty.item.UpgradeType;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.registering.FactocraftyMenus;
@@ -34,14 +36,13 @@ import java.util.*;
 
 import static net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.createExperience;
 
-public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity {
+public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends FactocraftyProcessBlockEntity {
 
 
-    protected RecipeType<? extends Recipe<Container>> recipeType;
-    public FactocraftyMachineBlockEntity(FactocraftyMenus menu, FactoryCapacityTiers tier, RecipeType<? extends Recipe<Container>> recipe, BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
+    public RecipeType<T> recipeType;
+    public FactocraftyMachineBlockEntity(FactocraftyMenus menu, FactoryCapacityTiers tier, RecipeType<T> recipe, BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
         super(menu,tier,blockEntity,blockPos, blockState);
         this.recipesUsed = new Object2IntOpenHashMap();
-
         this.recipeType = recipe;
         DRAIN_SLOT = FILL_SLOT = 1;
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.NONE);
@@ -56,30 +57,33 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
         return rcp != null && canMachineProcess(rcp);
     }
 
-    protected List<? extends Recipe<Container>> getRecipes(){
-        return Objects.requireNonNull(getLevel()).getRecipeManager().getAllRecipesFor(recipeType);
+    protected List<T> getRecipes(){
+        if (level == null) return List.of();
+        return level.getRecipeManager().getAllRecipesFor(recipeType).stream().sorted(Comparator.comparingInt( ca-> ca instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getDiff() : 0)).toList();
     }
 
     @Override
     public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-        slots.add(new FactoryItemSlot(this.inventory, SlotsIdentifier.BLUE,TransportState.INSERT,INPUT_SLOT, 56,17){
+        slots.add(new FactoryItemSlot(this.inventory, SlotsIdentifier.INPUT,TransportState.INSERT,INPUT_SLOT, 56,17){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
-                Recipe<Container> recipe =  getActualRecipe( itemStack, false);
+                T recipe =  getActualRecipe( itemStack, false);
                 return recipe != null;
             }
             @Override
             public boolean isActive() {
-                Recipe<Container> recipe =  getRecipes().get(0);
-                return recipe != null && (!(recipe instanceof AbstractFactocraftyProcessRecipe rcp) || !rcp.hasFluidIngredient()) ;
+                return isInputSlotActive() && !getRecipes().isEmpty() && getRecipes().get(0) != null ;
             }
         });
         slots.add(new FactocraftyCYItemSlot(this, DRAIN_SLOT, 56,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
-        slots.add(new FactocraftyResultSlot(this,player, OUTPUT_SLOT,116,35));
+        slots.add(new FactocraftyResultSlot(this,player, OUTPUT_SLOT,116,35).withType(FactoryItemSlot.Type.BIG));
+    }
+    public boolean isInputSlotActive(){
+        return true;
     }
     @Override
-    public void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    public void saveTag(CompoundTag compoundTag) {
+        super.saveTag(compoundTag);
         if (!recipesUsed.isEmpty()) {
             CompoundTag compoundTag2 = new CompoundTag();
             this.recipesUsed.forEach((resourceLocation, integer) -> {
@@ -117,7 +121,7 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
     protected static boolean canProcessItem(@Nullable Recipe<?> recipe, Container inv, int input, int output) {
         ItemStack inputStack = inv.getItem(input);
         if (!inputStack.isEmpty() && recipe != null) {
-            ItemStack itemStack = recipe.getResultItem();
+            ItemStack itemStack = recipe.getResultItem(RegistryAccess.EMPTY);
             if (itemStack.isEmpty()) {
                 return false;
             } else {
@@ -138,7 +142,7 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
     }
     protected static boolean canProcessFluid(@Nullable Recipe<?> recipe, IPlatformFluidHandler tank,@Nullable IPlatformFluidHandler resultTank,Container inv, int output) {
         if (!tank.getFluidStack().isEmpty() && recipe instanceof FactocraftyMachineRecipe rcp && rcp.hasFluidIngredient()) {
-            ItemStack itemStack = recipe.getResultItem();
+            ItemStack itemStack = recipe.getResultItem(RegistryAccess.EMPTY);
             if (itemStack.isEmpty() && (rcp.hasFluidResult() && rcp.getResultFluid().isEmpty())) {
                 return false;
             } else {
@@ -148,10 +152,10 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
                     return true;
                 } else if (!itemStack2.sameItem(itemStack) &&  (!bl || !resultTank.getFluidStack().isFluidEqual(rcp.getResultFluid()))) {
                     return false;
-                } else if ((itemStack2.getCount() < inv.getMaxStackSize() && itemStack2.getCount() < itemStack2.getMaxStackSize() && !itemStack.isEmpty()) ||( bl && resultTank.getTotalSpace() >= rcp.getResultFluid().getAmount())) {
+                } else if ((itemStack2.getCount() < inv.getMaxStackSize() && itemStack2.getCount() < itemStack2.getMaxStackSize() && !itemStack.isEmpty()) || ( bl && resultTank.getTotalSpace() >= rcp.getResultFluid().getAmount())) {
                     return true;
                 } else {
-                    return itemStack2.getCount() < itemStack.getMaxStackSize();
+                    return itemStack2.getCount() < itemStack.getMaxStackSize() && !itemStack.isEmpty();
                 }
             }
         } else {
@@ -162,14 +166,17 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
         return null;
     }
 
-    public Recipe<Container> getActualRecipe(@Nullable ItemStack input, boolean allowItemLimit){
+    public T getActualRecipe(@Nullable ItemStack input, boolean limitItemCount){
+        List<T> matchRecipes = getMatchRecipes(input, limitItemCount);
+        return matchRecipes.isEmpty()? null : matchRecipes.get(0);
+    }
+    public List<T> getMatchRecipes(@Nullable ItemStack input, boolean limitItemCount){
         Container container = new SimpleContainer( input == null ? inventory.getItem(INPUT_SLOT) : input);
-        for (Recipe<Container> a : getRecipes()){
+        return getRecipes().stream().filter((r)->{
             boolean itemMatches = false;
-            for (Ingredient i : a.getIngredients()) if (i.test(container.getItem(0))) itemMatches =true;
-            if (a instanceof AbstractFactocraftyProcessRecipe rcp && rcp.hasFluidIngredient() ?  rcp.matchesFluid(fluidTank,level) : allowItemLimit ? a.matches(container,level) : itemMatches ) return a;
-        }
-        return null;
+            for (Ingredient i : r.getIngredients()) if (i.test(container.getItem(0))) itemMatches =true;
+            return r instanceof AbstractFactocraftyProcessRecipe rcp && !isInputSlotActive() ?  rcp.matchesFluid(fluidTank,level) : limitItemCount ? r.matches(container,level) : itemMatches;
+        }).toList();
     }
     public void tick() {
         if (!level.isClientSide) {
@@ -180,14 +187,10 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
 
             super.tick();
 
-            if (getBlockState().getValue(FactocraftyMachineBlock.ACTIVE) != isProcessing()) {
-                level.setBlock(getBlockPos(), getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, this.isProcessing()), 3);
-                bl2 = true;
-            }
             boolean bl3 = isInputFree();
             if (this.isProcessing()) {
 
-                Recipe<? extends Container> recipe;
+                T recipe;
                 if (bl3) {
                     recipe = getActualRecipe(null,true);
                 } else {
@@ -206,9 +209,10 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
 
                         bl2 = true;
                     }
-                    if (energyStorage.getEnergyStored() > 0) {
+                    int energy = (recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getEnergyConsume() : 3 * (int)Math.pow(72,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK)));
+                    if (energyStorage.getEnergyStored() > energy) {
                         bl2 = true;
-                        energyStorage.consumeEnergy(new ICraftyEnergyStorage.EnergyTransaction(1, energyStorage.supportableTier), false);
+                        energyStorage.consumeEnergy(new ICraftyEnergyStorage.EnergyTransaction(energy, energyStorage.supportableTier), false);
                         ++this.progress.get()[0];
                     } else if (!isProcessing()){
                         this.progress.setInt(0, 0);
@@ -216,10 +220,11 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
                 } else if (this.progress.getInt(0) > 0) {
                     this.progress.setInt(0, Mth.clamp(this.progress.getInt(0) - 2, 0, this.progress.maxProgress));
                 }
-
             }
 
-
+            if (getBlockState().getValue(FactocraftyMachineBlock.ACTIVE) != bl2) {
+                level.setBlock(getBlockPos(), getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, this.isProcessing()), 3);
+            }
             if (bl2) {
                 this.setChanged();
             }
@@ -227,12 +232,13 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
 
     }
     public int getTotalProcessTime() {
-        if (level == null ) return progress.maxProgress;
+        double d = Math.pow(100,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK));
+        if (level == null ) return (int) (progress.maxProgress / d);
         Optional<? extends Recipe<Container>> optRcp = Optional.ofNullable(getActualRecipe(null,true));
         if (optRcp.isPresent())
-            if( optRcp.get() instanceof AbstractFactocraftyProcessRecipe rcp) {return rcp.getMaxProcess();}
-            else if( optRcp.get() instanceof AbstractCookingRecipe rcp) {return rcp.getCookingTime();}
-        return 200;
+            if( optRcp.get() instanceof AbstractFactocraftyProcessRecipe rcp) {return (int) (rcp.getMaxProcess() / d);}
+            else if( optRcp.get() instanceof AbstractCookingRecipe rcp) {return (int) (rcp.getCookingTime() / d);}
+        return (int) (200 / d);
     }
 
     @Override
@@ -247,7 +253,7 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
         }
 
     }
-    protected void setOtherResults(@Nullable Recipe<?> recipe, IPlatformItemHandler inv, int i) {
+    protected void setOtherResults( Recipe<?> recipe, IPlatformItemHandler inv, int i) {
     }
     protected void addOrSetItem(ItemStack result, Container inv, int index){
         ItemStack resultSlot = inv.getItem(index);
@@ -259,10 +265,9 @@ public class FactocraftyMachineBlockEntity extends FactocraftyProcessBlockEntity
     }
     protected boolean process(@Nullable Recipe<?> recipe) {
         if (recipe != null && canMachineProcess(recipe)) {
-            addOrSetItem(recipe.getResultItem(), inventory, OUTPUT_SLOT);
+            addOrSetItem(recipe.getResultItem(RegistryAccess.EMPTY), inventory, OUTPUT_SLOT);
             setOtherResults(recipe, inventory, inventory.getMaxStackSize());
-
-            if (recipe instanceof FactocraftyMachineRecipe rcp && rcp.hasFluidIngredient()) fluidTank.drain(rcp.getFluidIngredient(),false);
+            if (recipe instanceof FactocraftyMachineRecipe rcp && !isInputSlotActive() && rcp.hasFluidIngredient()) fluidTank.drain(rcp.getFluidIngredient(),false);
             else inventory.getItem(INPUT_SLOT).shrink(recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getIngredientCount() : 1);
 
             return true;

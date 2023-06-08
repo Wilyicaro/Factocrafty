@@ -1,0 +1,6 @@
+{
+    "parent": "factocrafty:item/bucket_fluid_template",
+    "textures": {
+        "texture": "factocrafty:item/bucket_background"
+    }
+}

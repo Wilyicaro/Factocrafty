@@ -5,14 +5,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import wily.factocrafty.block.FactocraftyProgressType;
-import wily.factocrafty.block.entity.IFactoryProcessableStorage;
+import wily.factoryapi.base.IFactoryProcessableStorage;
+import wily.factoryapi.base.Progress;
 
 import java.util.function.Supplier;
 
 public class FactocraftySyncProgressPacket {
 
-    private final FactocraftyProgressType.Identifier progressIdentifier;
+    private final int index;
     private final int[] progress;
 
     private final int maxProgress;
@@ -24,9 +24,9 @@ public class FactocraftySyncProgressPacket {
 
     }
 
-    public FactocraftySyncProgressPacket(BlockPos pos, int identifier, int[] progress, int maxProgress) {
+    public FactocraftySyncProgressPacket(BlockPos pos, int index, int[] progress, int maxProgress) {
         this.pos = pos;
-        this.progressIdentifier = FactocraftyProgressType.Identifier.values()[identifier];
+        this.index = index;
         this.progress = progress;
         this.maxProgress = maxProgress;
 
@@ -35,7 +35,7 @@ public class FactocraftySyncProgressPacket {
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeBlockPos(pos);
-        buf.writeInt(progressIdentifier.ordinal());
+        buf.writeInt(index);
         buf.writeVarIntArray(progress);
         buf.writeInt(maxProgress);
     }
@@ -46,8 +46,8 @@ public class FactocraftySyncProgressPacket {
             BlockEntity be = player.getLevel().getBlockEntity(pos);
             if (player.level.isLoaded(pos)) {
                 assert be != null;
-                ((IFactoryProcessableStorage)be).getProgressByType(progressIdentifier).set(progress);
-                ((IFactoryProcessableStorage)be).getProgressByType(progressIdentifier).maxProgress = maxProgress;
+                ((IFactoryProcessableStorage)be).getProgresses().get(index).set(progress);
+                ((IFactoryProcessableStorage)be).getProgresses().get(index).maxProgress = maxProgress;
                 be.setChanged();
             }
         });

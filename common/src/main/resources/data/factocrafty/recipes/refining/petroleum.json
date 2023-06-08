@@ -1,5 +1,5 @@
 {
-  "type": "factocrafty:refining_fluid",
+  "type": "factocrafty:refining",
   "fluid_ingredient": {
     "fluid": "factocrafty:petroleum",
     "amount": 500
@@ -8,6 +8,7 @@
     "fluid": "factocrafty:gasoline",
     "amount": 300
   },
+  "differential": 25,
   "experience": 0.3,
   "processtime": 200
 }

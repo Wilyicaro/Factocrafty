@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "result": "factocrafty:lapis_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

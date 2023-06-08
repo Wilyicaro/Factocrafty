@@ -1,7 +1,7 @@
 {
   "type": "factocrafty:macerating",
   "ingredient": {
-    "item": "minecraft:gold_ore"
+    "tag": "minecraft:gold_ores"
   },
   "result": "factocrafty:crushed_gold",
   "experience": 0.2,

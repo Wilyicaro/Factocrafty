@@ -7,10 +7,12 @@ import wily.factoryapi.base.ICraftyEnergyStorage;
 import wily.factoryapi.base.IStorageItem;
 import wily.factoryapi.base.TransportState;
 
+import static net.minecraft.world.item.BlockItem.BLOCK_ENTITY_TAG;
+
 public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
     private static final String KEY = "energy";
 
-    private static final String BETAG = "BlockEntityTag";
+
 
     private int capacity;
     private int maxInOut = 2000000;
@@ -25,13 +27,13 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
     public CYItemEnergyStorage(ItemStack stack, int energy, int capacity, TransportState transportState, FactoryCapacityTiers supportableTier, boolean isBlockItem){
         this.supportableTier = supportableTier;
         CompoundTag tag = stack.getOrCreateTag();
-        if (isBlockItem) tag = tag.getCompound(BETAG);
+        if (isBlockItem) tag = tag.getCompound(BLOCK_ENTITY_TAG);
         if (tag.getCompound("CYEnergy").isEmpty()){
             CompoundTag storage = new CompoundTag();
             storage.putInt(KEY,energy);
             storage.putInt("tier",storedTier.ordinal());
             tag.put("CYEnergy", storage);
-            if (isBlockItem) stack.getOrCreateTag().put(BETAG, tag);
+            if (isBlockItem) stack.getOrCreateTag().put(BLOCK_ENTITY_TAG, tag);
         }
         this.isBlockItem = isBlockItem;
         this.capacity = capacity;
@@ -47,7 +49,7 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
     }
     private CompoundTag getEnergyCompound(){
         CompoundTag tag = container.getOrCreateTag();
-        if (isBlockItem) return tag.getCompound(BETAG).getCompound("CYEnergy");
+        if (isBlockItem) return tag.getCompound(BLOCK_ENTITY_TAG).getCompound("CYEnergy");
         return tag.getCompound("CYEnergy");
     }
     @Override
@@ -120,7 +122,7 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
 
     @Override
     public void deserializeTag(CompoundTag nbt) {
-        this.container.setTag(nbt);
+        this.container.setTag((CompoundTag) nbt);
     }
 
     @Override
@@ -133,7 +135,7 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
     }
 
     @Override
-    public Object getHandler() {
+    public ICraftyEnergyStorage getHandler() {
         return this;
     }
 

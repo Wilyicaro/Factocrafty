@@ -1,20 +1,14 @@
 package wily.factocrafty.block.machines.entity;
 
-import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.network.FactocraftySyncRefiningTypePacket;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
@@ -22,70 +16,42 @@ import wily.factoryapi.base.*;
 
 import java.util.List;
 
-public class RefinerBlockEntity extends FactocraftyMachineBlockEntity {
+public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
 
-    public enum RefiningType{
-        FLUID,ITEM;
-        public boolean isFluid(){
-            return this == FLUID;
-        }
-        public boolean isItem(){
-            return this == ITEM;
-        }
-    }
+    public Bearer<Integer> recipeIndex = Bearer.of(0);
+    public Bearer<Integer> recipeSize = Bearer.of(0);
+    public Bearer<Integer> recipeHeat = Bearer.of(0);
 
-    public RefiningType refiningType  = RefiningType.FLUID;
     public RefinerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.REFINER, FactoryCapacityTiers.BASIC,Registration.REFINER_FLUID_RECIPE.get(),Registration.REFINER_BLOCK_ENTITY.get(), blockPos, blockState);
-        fluidTank = FactoryAPIPlatform.getFluidHandlerApi(6 * FluidStack.bucketAmount(), this, f -> {
-            for (Recipe<Container> recipe: getRecipes()){
-                if (recipe instanceof FactocraftyMachineRecipe rcp && rcp.getFluidIngredient().isFluidEqual(f)) return true;
-            }
-            return false;
-        }, SlotsIdentifier.BLUE, TransportState.EXTRACT_INSERT);
-
+        super(FactocraftyMenus.REFINER, Registration.REFINER_RECIPE.get(),Registration.REFINER_BLOCK_ENTITY.get(), blockPos, blockState);
+        inputType = InputType.FLUID;
+        resultTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.OUTPUT, TransportState.EXTRACT);
+        additionalSyncInt.add(recipeIndex);
+        additionalSyncInt.add(recipeSize);
+        additionalSyncInt.add(recipeHeat);
     }
 
     @Override
-    public void tick() {
-        recipeType = refiningType.isItem() ? Registration.REFINER_ITEM_RECIPE.get() : Registration.REFINER_FLUID_RECIPE.get();
-        super.tick();
-    }
-
-    @Override
-    public void syncAdditionalMenuData(AbstractContainerMenu menu, Player player) {
-        if (menu.getSlot(INPUT_SLOT) !=getSlots(player).get(INPUT_SLOT)) {
-            menu.slots.set(INPUT_SLOT,getSlots(player).get(INPUT_SLOT));
+    public FactocraftyMachineRecipe getActualRecipe(@Nullable ItemStack input, boolean limitItemCount) {
+        List<FactocraftyMachineRecipe> rcps = getMatchRecipes(input, limitItemCount);
+        recipeIndex.set(Math.max(recipeIndex.get(),0));
+        FactocraftyMachineRecipe r = rcps.isEmpty() ? null : rcps.get(Math.min(recipeIndex.get(),rcps.size() -1));
+        if (r!=null){
+            recipeSize.set(rcps.size());
+            recipeHeat.set(r.getDiff());
         }
-        if (player instanceof ServerPlayer sp)
-            Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftySyncRefiningTypePacket(worldPosition,refiningType));
+        return r;
     }
 
     @Override
-    public void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
-        compoundTag.putInt("refiningType",refiningType.ordinal());
+    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
+        addBasicSlots(slots, player);
     }
-
-    @Override
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
-        refiningType =  RefiningType.values()[compoundTag.getInt("refiningType")];
-    }
-
-    public IPlatformFluidHandler resultTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.RED, TransportState.EXTRACT_INSERT);
-
-
 
     @Override
     public void addTanks(List<IPlatformFluidHandler> list) {
-        list.add(fluidTank);
+        super.addTanks(list);
         list.add(resultTank);
-    }
-
-    @Override
-    protected boolean canMachineProcess(@Nullable Recipe<?> recipe) {
-        return refiningType.isFluid() ? FactocraftyMachineBlockEntity.canProcessFluid(recipe,fluidTank,resultTank,inventory,OUTPUT_SLOT) : super.canMachineProcess(recipe);
     }
 
     @Override
@@ -96,7 +62,7 @@ public class RefinerBlockEntity extends FactocraftyMachineBlockEntity {
     @Override
     protected void setOtherResults(@Nullable Recipe<?> recipe, IPlatformItemHandler inv, int i) {
         if (recipe instanceof FactocraftyMachineRecipe rcp){
-            if (rcp.hasFluidResult()) resultTank.fill(rcp.getResultFluid(),false);
+            if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty()) resultTank.fill(rcp.getResultFluid(),false);
         }
     }
 }

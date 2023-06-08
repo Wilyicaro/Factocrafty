@@ -4,7 +4,7 @@
     "tag": "minecraft:logs"
   },
   "result": "factocrafty:sawdust",
-  "other_result": {
+  "otherResults": {
     "result": "minecraft:stick",
     "chance" : 0.4
   },

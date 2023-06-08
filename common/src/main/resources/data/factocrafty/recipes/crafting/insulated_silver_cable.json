@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "factocrafty:rubber"
+      "tag": "factocrafty:rubber"
     },
     {
       "item": "factocrafty:silver_cable"

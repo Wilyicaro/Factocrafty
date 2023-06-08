@@ -1,7 +1,8 @@
 {
-  "type": "factocrafty:refining_item",
+  "type": "factocrafty:refining",
   "ingredient": {
-    "item": "factocrafty:uranium"
+    "item": "factocrafty:uranium",
+    "count": 2
   },
   "result": "factocrafty:refined_uranium",
   "experience": 0.3,

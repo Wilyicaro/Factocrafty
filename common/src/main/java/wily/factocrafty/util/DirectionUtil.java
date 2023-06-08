@@ -32,6 +32,20 @@ public class DirectionUtil {
         return rotation < 0 ? 360 + rotation : rotation;
     }
 
+    public static double rotateByCenter(Direction.Axis axis,double angle, double center, double centerXDistance,  double centerZDistance){
+        switch (axis){
+            default -> {return center;}
+            case X -> {return center + centerXDistance * Math.cos(angle) - centerZDistance * Math.sin(angle);}
+            case Z -> {return center + centerXDistance * Math.sin(angle) + centerZDistance * Math.cos(angle);}
+        }
+    }
+    public static double rotateZByCenter(double angle, double center, double centerXDistance,  double centerZDistance){
+        return rotateByCenter(Direction.Axis.Z, angle,center,centerXDistance, centerZDistance);
+    }
+    public static double rotateXByCenter(double angle, double center, double centerXDistance,  double centerZDistance){
+        return rotateByCenter(Direction.Axis.X, angle,center,centerXDistance, centerZDistance);
+    }
+
     public static Quaternionf getRotation(Direction direction) {
         switch (direction) {
             case DOWN -> {return Axis.XP.rotationDegrees(180.0F);}

@@ -1,11 +1,10 @@
 package wily.factocrafty.util.registering;
 
-import net.minecraft.world.level.block.Blocks;
 import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
-public enum FactocraftyFluidTanks implements IFactocraftyLazyRegister<FactocraftyFluidTankBlock>{
+public enum FactocraftyFluidTanks implements IFactocraftyLazyRegistry<FactocraftyFluidTankBlock> {
     BASIC_FLUID_TANK(FactoryCapacityTiers.BASIC),ADVANCED_FLUID_TANK(FactoryCapacityTiers.ADVANCED),
     HIGH_FLUID_TANK(FactoryCapacityTiers.HIGH),ULTIMATE_FLUID_TANK(FactoryCapacityTiers.ULTIMATE),
     QUANTUM_FLUID_TANK(FactoryCapacityTiers.QUANTUM);

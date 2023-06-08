@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RLR",
+    "G#G",
+    "RLR"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "L": {
+      "item": "factocrafty:lapis_dust"
+    },
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    }
+
+  },
+  "result": {
+    "item": "factocrafty:advanced_circuit"
+  }
+}

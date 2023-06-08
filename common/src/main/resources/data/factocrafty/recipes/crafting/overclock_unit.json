@@ -1,0 +1,27 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "FIF",
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:copper_cable"
+    },
+    "C": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "I": {
+      "item": "factocrafty:circuit_board"
+    },
+    "F":{
+      "item": "factocrafty:fluid_cell",
+      "fluidStack": {
+        "fluid": "factocrafty:coolant"
+      }
+    }
+},
+  "result": {
+    "item": "factocrafty:overclock_unit"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:refined_uranium"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:uranium_nugget",
+    "count": 9
+  }
+}

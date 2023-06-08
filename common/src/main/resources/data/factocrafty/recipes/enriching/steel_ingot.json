@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "coal",
+    "count": 40
+  },
+  "ingredient": {
+    "item": "factocrafty:refined_iron"
+  },
+  "result": "factocrafty:steel_ingot",
+  "experience": 0.35,
+  "processtime": 200
+}

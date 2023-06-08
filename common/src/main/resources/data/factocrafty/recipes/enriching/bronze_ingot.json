@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "tin",
+    "count": 25
+  },
+  "ingredient": {
+    "item": "minecraft:copper_ingot"
+  },
+  "result": "factocrafty:bronze_ingot",
+  "experience": 0.35,
+  "processtime": 150
+}

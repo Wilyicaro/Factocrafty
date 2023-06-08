@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:refining",
+  "ingredient": {
+    "item": "factocrafty:graphite_ingot"
+  },
+  "result": "factocrafty:graphene_dust",
+  "experience": 0.35,
+  "processtime": 250
+}

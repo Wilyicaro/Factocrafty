@@ -1,6 +1,7 @@
 package wily.factocrafty.block.entity;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.ICraftyEnergyStorage;
 import wily.factoryapi.base.TransportState;
@@ -16,7 +17,7 @@ public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
     }
 
     @Override
-    public Object getHandler() {
+    public ICraftyEnergyStorage getHandler() {
         return this;
     }
 
@@ -40,7 +41,7 @@ public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
 
     @Override
     public CompoundTag serializeTag() {
-        return energyStorage.serializeTag();
+        return (CompoundTag) energyStorage.serializeTag();
     }
 
     @Override

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:hammer"
+    },
+    {
+      "item": "factocrafty:platinum_ingot"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:platinum_plate"
+  }
+}

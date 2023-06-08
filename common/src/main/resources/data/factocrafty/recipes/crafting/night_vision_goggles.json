@@ -1,0 +1,31 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "T2T",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:carbon_plate"
+    },
+    "2": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable",
+          "factocrafty:battery",
+          "minecraft:redstone_lamp"
+        ]
+      }
+    },
+    "R": {
+      "item": "minecraft:glass_pane"
+    },
+    "T": {
+      "item": "factocrafty:insulated_tin_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:night_vision_goggles"
+  }
+}

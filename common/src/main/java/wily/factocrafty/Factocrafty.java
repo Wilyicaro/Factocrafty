@@ -3,8 +3,10 @@ package wily.factocrafty;
 import com.google.common.base.Suppliers;
 import dev.architectury.fluid.FluidStack;
 import dev.architectury.networking.NetworkChannel;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.RegistrarManager;
+import net.fabricmc.api.EnvType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -27,7 +29,7 @@ public class Factocrafty {
     public static final Supplier<RegistrarManager> REGISTRIES = Suppliers.memoize(() -> RegistrarManager.get(MOD_ID));
     // Registering a new creative tab
     public static final CreativeTabRegistry.TabSupplier FACTOCRAFTY_TAB = CreativeTabRegistry.create(new ResourceLocation( MOD_ID,"tab"), (b)-> b.icon(() -> new ItemStack(Registration.GENERATOR.get())).displayItems(
-            ((featureFlagSet, output,bool) -> {
+            ((bool,output) -> {
                 Iterator var2 = BuiltInRegistries.ITEM.iterator();
 
                 while(var2.hasNext()) {
@@ -63,8 +65,11 @@ public class Factocrafty {
         NETWORK.register(FactocraftySyncEnergyPacket.class,FactocraftySyncEnergyPacket::encode,FactocraftySyncEnergyPacket::new, FactocraftySyncEnergyPacket::apply);
         NETWORK.register(FactocraftySyncProgressPacket.class,FactocraftySyncProgressPacket::encode,FactocraftySyncProgressPacket::new, FactocraftySyncProgressPacket::apply);
         NETWORK.register(FactocraftyStateButtonPacket.class,FactocraftyStateButtonPacket::encode,FactocraftyStateButtonPacket::new, FactocraftyStateButtonPacket::apply);
-        NETWORK.register(FactocraftySyncRefiningTypePacket.class, FactocraftySyncRefiningTypePacket::encode, FactocraftySyncRefiningTypePacket::new, FactocraftySyncRefiningTypePacket::apply);
-        NETWORK.register(FactocraftyJetpackUsePacket.class, FactocraftyJetpackUsePacket::encode, FactocraftyJetpackUsePacket::new, FactocraftyJetpackUsePacket::apply);
-        System.out.println(FactocraftyExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
+        NETWORK.register(FactocraftySyncInputTypePacket.class, FactocraftySyncInputTypePacket::encode, FactocraftySyncInputTypePacket::new, FactocraftySyncInputTypePacket::apply);
+        NETWORK.register(FactocraftyJetpackLaunchPacket.class, FactocraftyJetpackLaunchPacket::encode, FactocraftyJetpackLaunchPacket::new, FactocraftyJetpackLaunchPacket::apply);
+        NETWORK.register(FactocraftySyncSelectedUpgradePacket.class, FactocraftySyncSelectedUpgradePacket::encode, FactocraftySyncSelectedUpgradePacket::new, FactocraftySyncSelectedUpgradePacket::apply);
+        NETWORK.register(FactocraftySyncIntegerBearerPacket.class, FactocraftySyncIntegerBearerPacket::encode, FactocraftySyncIntegerBearerPacket::new, FactocraftySyncIntegerBearerPacket::apply);
+        NETWORK.register(FactocraftyArmorFeaturePacket.class, FactocraftyArmorFeaturePacket::encode, FactocraftyArmorFeaturePacket::new, FactocraftyArmorFeaturePacket::apply);
+
     }
 }

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "factocrafty:block/fluid_tank/fluid_tank"
+      "model": "factocrafty:block/fluid_tank/ultimate_fluid_tank"
     }
   }
 }

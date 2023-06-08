@@ -17,18 +17,22 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import wily.factocrafty.block.RubberLog;
 import wily.factocrafty.gen.RubberTreeFoliagePlacer;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.FactocraftyOre;
+import wily.factocrafty.util.registering.FactocraftyFluids;
 import wily.factocrafty.util.registering.RegisterUtil;
 
 import java.util.ArrayList;
@@ -42,6 +46,8 @@ public class FactocraftyWorldGenBootstrap {
 
     public static ResourceKey<ConfiguredFeature<?,?>> RUBBER_TREE_CONFIGURED = RegisterUtil.createConfiguredFeature(getModResource("rubber_tree"));
 
+    public static ResourceKey<ConfiguredFeature<?,?>> PETROLEUM_LAKE_CONFIGURED = RegisterUtil.createConfiguredFeature(getModResource("petroleum_lake"));
+
     public static void configuredFeatures(BootstapContext<ConfiguredFeature<?, ?>> bootstapContext) {
         bootstapContext.register(RUBBER_TREE_CONFIGURED,new ConfiguredFeature<>(Feature.TREE,(
                 new TreeConfiguration.TreeConfigurationBuilder(
@@ -52,10 +58,11 @@ public class FactocraftyWorldGenBootstrap {
                         new RubberTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 3),
                         new TwoLayersFeatureSize(3, 0, 2, OptionalInt.of(2))
                 ).ignoreVines().build())));
+        bootstapContext.register(PETROLEUM_LAKE_CONFIGURED,new ConfiguredFeature<>(Feature.LAKE,(new LakeFeature.Configuration(BlockStateProvider.simple(FactocraftyFluids.PETROLEUM.getBlock()), new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(Blocks.STONE.defaultBlockState(), 5).add(Blocks.CALCITE.defaultBlockState(), 4))))));
 
-        for (FactocraftyOre.Tier oreTiers : FactocraftyOre.Tier.values()) {
+        for (FactocraftyOre.Material oreTiers : FactocraftyOre.Material.values()) {
             oreTiers.getDerivative("ore").ifPresent((e)-> {
-                if (e instanceof FactocraftyOre.Derivative.OreDerivative ore) {
+                if (e instanceof FactocraftyOre.OreDerivative ore) {
                     String feature = "overworld_ore_" + oreTiers.getName();
                     bootstapContext.register(RegisterUtil.createConfiguredFeature(getModResource(feature)), new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(commonOreReplacement(oreTiers.getOre(false),oreTiers.getOre(true)).get(),ore.count)));
                 }});
@@ -82,13 +89,20 @@ public class FactocraftyWorldGenBootstrap {
 
     public static ResourceKey<PlacedFeature> RUBBER_TREE = RegisterUtil.createPlacedFeature(getModResource("rubber_tree"));
 
-    public static void placedFeatures(BootstapContext<PlacedFeature> bootstapContext) {
-        HolderGetter<ConfiguredFeature<?,?>> getter = bootstapContext.lookup(Registries.CONFIGURED_FEATURE);
-        bootstapContext.register( RUBBER_TREE,new PlacedFeature(getter.getOrThrow(RUBBER_TREE_CONFIGURED) , List.of(PlacementUtils.countExtra(0, 0.2F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(RUBBER_TREE_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome())));
+    public static ResourceKey<PlacedFeature> PETROLEUM_LAKE = RegisterUtil.createPlacedFeature(getModResource("petroleum_lake"));
 
-        for (FactocraftyOre.Tier oreTiers : FactocraftyOre.Tier.values()) {
+    public static ResourceKey<PlacedFeature> PETROLEUM_UNDERGROUND_LAKE = RegisterUtil.createPlacedFeature(getModResource("petroleum_lake"));
+
+    public static void placedFeatures(BootstapContext<PlacedFeature> bootstapContext) {
+
+        HolderGetter<ConfiguredFeature<?,?>> getter = bootstapContext.lookup(Registries.CONFIGURED_FEATURE);
+        bootstapContext.register( RUBBER_TREE,new PlacedFeature(getter.getOrThrow(RUBBER_TREE_CONFIGURED) , List.of(PlacementUtils.countExtra(0, 0.2F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(RUBBER_TREE_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome())));
+        bootstapContext.register( PETROLEUM_LAKE,new PlacedFeature(getter.getOrThrow(PETROLEUM_LAKE_CONFIGURED) , List.of(RarityFilter.onAverageOnceEvery(6), InSquarePlacement.spread(), HeightRangePlacement.of(UniformHeight.of(VerticalAnchor.aboveBottom(15), VerticalAnchor.absolute((40)))), BiomeFilter.biome())));
+
+
+        for (FactocraftyOre.Material oreTiers : FactocraftyOre.Material.values()) {
             oreTiers.getDerivative("ore").ifPresent((e)-> {
-                if (e instanceof FactocraftyOre.Derivative.OreDerivative ore) {
+                if (e instanceof FactocraftyOre.OreDerivative ore) {
                     String feature = "overworld_ore_" + oreTiers.getName();
                     bootstapContext.register(RegisterUtil.createPlacedFeature(getModResource(feature + "_middle")), new PlacedFeature(getter.getOrThrow(RegisterUtil.createConfiguredFeature(getModResource(feature))), commonOrePlacementModifier(ore.countPerChunk, ore.minY + 30, ore.maxY, false)));
                     bootstapContext.register(RegisterUtil.createPlacedFeature(getModResource(feature + "_small")), new PlacedFeature(getter.getOrThrow(RegisterUtil.createConfiguredFeature(getModResource(feature))), commonOrePlacementModifier(ore.countPerChunk, ore.minY, ore.maxY + 16, true)));

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ROR",
+    "###",
+    "#G#"
+  ],
+  "key": {
+    "#": {
+      "tag": "factocrafty:rubber"
+    },
+    "O": {
+      "item": "minecraft:orange_dye"
+    },
+    "G": {
+      "item": "minecraft:tinted_glass"
+    },
+    "R": {
+      "item": "factocrafty:iron_rod"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_helmet"
+  }
+}

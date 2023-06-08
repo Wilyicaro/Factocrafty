@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "tag": "factocrafty:rubber"
+    },
+    "O": {
+      "item": "minecraft:orange_dye"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_leggings"
+  }
+}

@@ -31,7 +31,7 @@ public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
     @Override
     public void addSlots(NonNullList<FactoryItemSlot> slots, Player player) {
         super.addSlots(slots, player);
-        slots.set(0,new FactoryItemSlot(this.inventory, SlotsIdentifier.ORANGE,TransportState.EXTRACT_INSERT,0,56,53){
+        slots.set(0,new FactoryItemSlot(this.inventory, SlotsIdentifier.FUEL,TransportState.EXTRACT_INSERT,0,56,53){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
                 return lavaTank.isFluidValid(0, ItemContainerUtil.getFluid(itemStack)) || fluidTank.isFluidValid(0, ItemContainerUtil.getFluid(itemStack));

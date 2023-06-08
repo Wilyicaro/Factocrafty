@@ -1,19 +1,13 @@
 package wily.factocrafty.block.storage.fluid.entity;
 
-import dev.architectury.fluid.FluidStack;
-import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.FactocraftyExpectPlatform;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
@@ -33,6 +27,7 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
         FILL_SLOT = 0;
         DRAIN_SLOT = 1;
     }
+    public double unitHeight = 0;
     public long smoothFluidAmount = 0;
     private long oldFluidAmount = fluidTank.getFluidStack().getAmount();
 
@@ -45,21 +40,15 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
     @Override
     public void tick() {
         super.tick();
-        for  (Direction d : Direction.values()){
-            if (level.getBlockEntity(getBlockPos().relative(d)) instanceof IFactoryStorage storage) {
-            }
-        }
-
             if (smoothFluidAmount != fluidTank.getFluidStack().getAmount())
-                smoothFluidAmount = Mth.clamp((long) (smoothFluidAmount + FluidStack.bucketAmount() * Math.pow(oldFluidAmount, -0.02)), 0, oldFluidAmount);
+                smoothFluidAmount = (long) Mth.clamp((long) (smoothFluidAmount + Math.pow(oldFluidAmount, -0.02) * fluidTank.getMaxFluid() / 16), 0, oldFluidAmount);
             if (oldFluidAmount != fluidTank.getFluidStack().getAmount()){
                 oldFluidAmount = fluidTank.getFluidStack().getAmount();
                 BlockState blockState1 = getBlockState();
                 if (Platform.isFabric()) {
                     int i = ((FactocraftyFluidTankBlock) blockState1.getBlock()).getLightEmission(blockState1, level, worldPosition);
-                    if (blockState1.lightEmission != i) {
-                            blockState1.lightEmission = i;
-                            level.setBlockAndUpdate(getBlockPos(), blockState1);
+                    if (blockState1.getValue(FactocraftyFluidTankBlock.LIGHT_STATE) != i){
+                        level.setBlock(getBlockPos(),blockState1.setValue(FactocraftyFluidTankBlock.LIGHT_STATE,i),3);
                     }
                 }
                 level.sendBlockUpdated(getBlockPos(),getBlockState(),blockState1, Block.UPDATE_CLIENTS);
@@ -67,8 +56,6 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
                 level.getChunkSource().getLightEngine().checkBlock(worldPosition);
                 level.getProfiler().pop();
             }
-
-
 
     }
 
@@ -80,7 +67,7 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
     @Override
     public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
 
-        slots.add(new FactocraftyFluidItemSlot(this,DRAIN_SLOT, 51,17,SlotsIdentifier.RED, TransportState.INSERT));
-        slots.add(new FactocraftyFluidItemSlot(this,FILL_SLOT, 51,53,SlotsIdentifier.BLUE, TransportState.EXTRACT));
+        slots.add(new FactocraftyFluidItemSlot(this,DRAIN_SLOT, 51,17,SlotsIdentifier.OUTPUT, TransportState.INSERT));
+        slots.add(new FactocraftyFluidItemSlot(this,FILL_SLOT, 51,53,SlotsIdentifier.INPUT, TransportState.EXTRACT));
     }
 }

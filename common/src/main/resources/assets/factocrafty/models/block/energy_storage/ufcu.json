@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "factocrafty:block/energy_storage/ufcu_bottom",
+		"up": "factocrafty:block/energy_storage/ufcu_top",
+		"north": "factocrafty:block/energy_storage/ufcu_front",
+		"east": "factocrafty:block/energy_storage/ufcu_leftright",
+		"south": "factocrafty:block/energy_storage/ufcu_back",
+		"west": "factocrafty:block/energy_storage/ufcu_leftright",
+		"particle": "factocrafty:block/energy_storage/ufcu_leftright"
+	}
+}

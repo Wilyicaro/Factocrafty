@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:ruby_ore"
+  },
+  "result": "factocrafty:crushed_ruby",
+  "experience": 0.2,
+  "processtime": 200
+}

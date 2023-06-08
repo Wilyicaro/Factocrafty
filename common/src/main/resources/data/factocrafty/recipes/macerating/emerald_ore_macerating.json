@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "tag": "minecraft:emerald_ores"
+  },
+  "result": "factocrafty:crushed_emerald",
+  "experience": 0.2,
+  "processtime": 200
+}

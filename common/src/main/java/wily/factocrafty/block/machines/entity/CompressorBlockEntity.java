@@ -5,10 +5,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
-public class CompressorBlockEntity extends FactocraftyMachineBlockEntity {
+public class CompressorBlockEntity extends FactocraftyMachineBlockEntity<FactocraftyMachineRecipe> {
 
 
     public CompressorBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -16,7 +17,7 @@ public class CompressorBlockEntity extends FactocraftyMachineBlockEntity {
     }
     @Override
     protected SoundEvent getMachineSound() {
-        return Registration.MACERATOR_ACTIVE.get();
+        return Registration.COMPRESSOR_ACTIVE.get();
     }
 
 }

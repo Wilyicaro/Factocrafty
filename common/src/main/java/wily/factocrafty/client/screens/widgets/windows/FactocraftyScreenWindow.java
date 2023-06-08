@@ -3,27 +3,18 @@ package wily.factocrafty.client.screens.widgets.windows;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
-import wily.factocrafty.client.screens.IWindowWidget;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
+import wily.factoryapi.base.IFactoryDrawableType;
 
-import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     public final int uvX;
@@ -38,6 +29,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     public boolean dragging = false;
 
 
+    protected final ItemRenderer itemRenderer;
 
     public FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent;
     public FactocraftyScreenWindow(FactocraftyConfigWidget config, int width, int height, int x, int y, int uvX, int uvY, FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent){
@@ -48,7 +40,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         this.uvX = uvX;
         this.uvY = uvY;
         this.parent = parent;
-
+        itemRenderer = Minecraft.getInstance().getItemRenderer();
     }
 
 
@@ -82,9 +74,6 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         return false;
     }
     protected void renderBg(PoseStack poseStack, int i, int j) {
-
-    }
-    protected void renderBackground(PoseStack poseStack, int i, int j){
         poseStack.pushPose();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -93,7 +82,6 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         RenderSystem.setShaderColor(1,1,1,alpha);
         blit(poseStack, getX(), getY(), uvX, uvY, width, height);
         renderButtons(poseStack,i,j);
-        renderBg(poseStack,i,j);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         poseStack.popPose();
@@ -109,18 +97,23 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         if (!isVisible()) return;
         if (parent.getFocused() == config) parent.setFocused(this);
         poseStack.pushPose();
-        poseStack.translate(0D,0D, parent.getBlitOffset() + 450F);
-        renderBackground(poseStack,i,j);
+        poseStack.translate(0D,0D,  getBlitOffset());
+        renderBg(poseStack,i,j);
+        renderWidget(poseStack,i,j,f);
         renderToolTip(poseStack,i,j);
         poseStack.popPose();
 
     }
+    public float getBlitOffset(){
+        return 450F;
+    }
+
     public void renderToolTip(PoseStack poseStack, int i, int j) {
-        renderButtonsTooltip(parent,poseStack,i,j);
+        renderButtonsTooltip(parent::renderTooltip,poseStack,i,j);
     }
     @Override
     public boolean isMouseOver(double d, double e) {
-        return isVisible() && FactocraftyProgressType.getMouseLimit(d,e,getX(),getY(),width,height);
+        return isVisible() && IFactoryDrawableType.getMouseLimit(d,e,getX(),getY(),width,height);
     }
 
     public void updateActualMouse(double mouseX, double mouseY){
@@ -163,7 +156,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     int lastY;
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        changeFocus(true);
+        setFocused(true);
         if (!isVisible() || (parent.isDragging() && !dragging)) return false;
         if (i == 0 && ((isMouseOver(d,e) || dragging))) {
             double newX =  (lastX + d - actualMouseX);

@@ -12,7 +12,7 @@ dependencies {
     // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modImplementation "mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}"
-    modCompileOnly( "maven.modrinth:factory_api:${factory_api_version}-common")
+    modApi "wily.factory_api:factory_api-common:${minecraft_version}-${factory_api_version}"
 
 
 

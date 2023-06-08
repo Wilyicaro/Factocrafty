@@ -1,10 +1,10 @@
 {
 	"variants": {
-		"facing=north":	{ "model": "factocrafty:block/battery_box/afc" },
-		"facing=south":	{ "model": "factocrafty:block/battery_box/afc", "y": 180 },
-		"facing=west":	{ "model": "factocrafty:block/battery_box/afc", "y": 270 },
-		"facing=east":	{ "model": "factocrafty:block/battery_box/afc", "y": 90 },
-		"facing=up":	{ "model": "factocrafty:block/battery_box/afc", "x": -90 },
-		"facing=down":	{ "model": "factocrafty:block/battery_box/afc", "x": 90 }
+		"facing=north":	{ "model": "factocrafty:block/energy_storage/afc" },
+		"facing=south":	{ "model": "factocrafty:block/energy_storage/afc", "y": 180 },
+		"facing=west":	{ "model": "factocrafty:block/energy_storage/afc", "y": 270 },
+		"facing=east":	{ "model": "factocrafty:block/energy_storage/afc", "y": 90 },
+		"facing=up":	{ "model": "factocrafty:block/energy_storage/afc", "x": -90 },
+		"facing=down":	{ "model": "factocrafty:block/energy_storage/afc", "x": 90 }
 	}
 }

@@ -1,10 +1,13 @@
 package wily.factocrafty.recipes;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -15,29 +18,39 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.FluidStackUtil;
 import wily.factoryapi.base.IPlatformFluidHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+
+import static wily.factocrafty.util.JsonUtils.getJsonItem;
+import static wily.factocrafty.util.JsonUtils.jsonElement;
 
 
 public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Container> {
     protected final String name;
     protected final ResourceLocation id;
     protected Ingredient ingredient = Ingredient.EMPTY;
-    protected int ingredientCount;
-    protected FluidStack fluidIngredient;
+    protected int ingredientCount = 0;
+    protected FluidStack fluidIngredient = FluidStack.empty();
     protected ItemStack result;
     protected float experience;
     protected int maxProcess;
+    protected int energyConsume;
+    protected int diff;
 
+    protected HashMap<ItemStack, Float> otherResults = new HashMap<>();
 
     public AbstractFactocraftyProcessRecipe(String name, ResourceLocation resourceLocation) {
         this.id = resourceLocation;
         this.name = name;
+    }
+
+    public int getDiff() {
+        return diff;
     }
 
     public boolean matches(Container container, Level level) {
@@ -49,16 +62,16 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
     }
 
     public boolean matchesFluid(IPlatformFluidHandler tank, Level level) {
-        return hasFluidIngredient() && tank.getFluidStack().isFluidEqual(fluidIngredient) && tank.getFluidStack().getAmount() >= fluidIngredient.getAmount();
+        return hasFluidIngredient()  && !fluidIngredient.isEmpty()&& tank.getFluidStack().isFluidEqual(fluidIngredient) && tank.getFluidStack().getAmount() >= fluidIngredient.getAmount();
     }
     public int getIngredientCount(){
         return ingredientCount;
     }
 
-    public ItemStack assemble(Container container) {
+    @Override
+    public ItemStack assemble(Container container, RegistryAccess registryAccess) {
         return this.result.copy();
     }
-
     public boolean canCraftInDimensions(int i, int j) {
         return true;
     }
@@ -82,30 +95,32 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
         return this.experience;
     }
 
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess access) {
         return this.result;
     }
 
     public Map<ItemStack,Float> getOtherResults() {
-        HashMap<ItemStack, Float> map = new HashMap<>();
-        addOtherResults(map);
-        return map;
+        return ImmutableMap.copyOf(otherResults);
     }
-    protected void addOtherResults(Map<ItemStack,Float>  ingredients) {
 
-    }
+
 
 
     public int getMaxProcess() {
         return this.maxProcess;
     }
 
+    public int getEnergyConsume() {
+        return this.energyConsume;
+    }
+
+
     public ResourceLocation getId() {
         return this.id;
     }
 
     public RecipeType<?> getType() {
-        return Registration.RECIPES.getRegistrar().get(Registration.getModResource(name));
+        return Registration.RECIPE_TYPES.getRegistrar().get(Registration.getModResource(name));
     }
     @Override
     public RecipeSerializer<?> getSerializer() {
@@ -114,70 +129,84 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
     public static class Serializer<T extends AbstractFactocraftyProcessRecipe> implements RecipeSerializer<T>{
 
         private final int defaultProcess;
+        private int defaultDiff = 0;
         private final FactocraftySerializer<T> factory;
 
 
-        public Serializer(FactocraftySerializer<T> cookieBaker, int defaultProcess) {
+        public Serializer(FactocraftySerializer<T> cookieBaker, int defaultProcess, int defaultDiff) {
             this.defaultProcess = defaultProcess;
             this.factory = cookieBaker;
+            this.defaultDiff = defaultDiff;
         }
-        protected  JsonElement jsonElement(JsonObject jsonObject, String object){ return GsonHelper.isArrayNode(jsonObject, object) ? GsonHelper.getAsJsonArray(jsonObject, object,null) : GsonHelper.getAsJsonObject(jsonObject, object,null);}
+        public Serializer(FactocraftySerializer<T> cookieBaker, int defaultProcess) {
+            this(cookieBaker, defaultProcess, 0);
+        }
+
 
         public T fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
             T rcp = this.factory.create(resourceLocation);
-            if (rcp.hasFluidIngredient()) rcp.fluidIngredient = FluidStackUtil.fromJson(jsonObject.getAsJsonObject("fluid_ingredient"));
-            else {
-                rcp.ingredient = Ingredient.fromJson(jsonElement(jsonObject,"ingredient"));
-                rcp.ingredientCount = GsonHelper.getAsInt(jsonObject.getAsJsonObject("ingredient"),"count",1);
+            JsonElement ing = jsonElement(jsonObject,"ingredient");
+            if (ing!= null) {
+                rcp.ingredient = Ingredient.fromJson(jsonElement(jsonObject, "ingredient"));
+                rcp.ingredientCount = GsonHelper.getAsInt(jsonObject.getAsJsonObject("ingredient"), "count", 1);
             }
+            if (rcp.hasFluidIngredient() && rcp.ingredient.isEmpty()) rcp.fluidIngredient = FluidStackUtil.fromJson(jsonObject.getAsJsonObject("fluid_ingredient"));
             rcp.result = getJsonItem(jsonObject, "result");
-            otherResultFromJson(jsonObject, rcp);
+            otherResultsFromJson(jsonObject, rcp);
             rcp.experience = GsonHelper.getAsFloat(jsonObject, "experience", 0.0F);
             rcp.maxProcess = GsonHelper.getAsInt(jsonObject, "processtime", this.defaultProcess);
+            rcp.energyConsume = GsonHelper.getAsInt(jsonObject, "energyconsume",3);
+            rcp.diff = GsonHelper.getAsInt(jsonObject, "differential",defaultDiff);
             return rcp;
         }
-        protected ItemStack getJsonItem(JsonObject jsonObject, String object) {
-            if (jsonObject != null) {
-                String string2 = GsonHelper.getAsString(jsonObject, object, "minecraft:air");
-                ResourceLocation resourceLocation2 = new ResourceLocation(string2);
-                return new ItemStack(BuiltInRegistries.ITEM.getOptional(resourceLocation2).orElseThrow(() -> new IllegalStateException("Item: " + string2 + " does not exist")));
-            }
-            return ItemStack.EMPTY;
-        }
-        public void otherResultFromJson(JsonObject json, T recipe){
 
+        public void otherResultsFromJson(JsonObject json, T recipe){
+            JsonElement element = jsonElement(json,  "otherResults");
+            Consumer<JsonObject> c = obj-> recipe.otherResults.put(getJsonItem(obj,"result"), GsonHelper.convertToFloat(obj.get("chance"),"chance"));
+            if (element instanceof JsonArray a) a.forEach(j-> {
+                if (j instanceof JsonObject obj) c.accept(obj);
+            }); else {
+                if (element instanceof JsonObject obj)c.accept(obj);
+            }
         }
 
         public T fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buf) {
             T rcp = this.factory.create(resourceLocation);
             rcp.experience = buf.readFloat();
             rcp.maxProcess = buf.readVarInt();
-            if (rcp.hasFluidIngredient()) rcp.fluidIngredient = FluidStack.read(buf);
-            else {
-                rcp.ingredientCount = buf.readVarInt();
-                rcp.ingredient = Ingredient.fromNetwork(buf);
-            }
+            rcp.energyConsume = buf.readVarInt();
+            rcp.ingredientCount = buf.readVarInt();
+            rcp.ingredient = Ingredient.fromNetwork(buf);
+            if (rcp.hasFluidIngredient() && rcp.ingredient.isEmpty()) rcp.fluidIngredient = FluidStack.read(buf);
             rcp.result = buf.readItem();
-            otherResultFromNetwork(buf, rcp);
+            otherResultsFromNetwork(buf, rcp);
             return rcp;
         }
-        public void otherResultFromNetwork(FriendlyByteBuf friendlyByteBuf, T recipe){
-
+        public void otherResultsFromNetwork(FriendlyByteBuf friendlyByteBuf, T recipe){
+            int size = friendlyByteBuf.readVarInt();
+            for (int i = 0; i < size; i++) {
+                recipe.otherResults.put(friendlyByteBuf.readItem(),friendlyByteBuf.readFloat());
+            }
         }
 
         public void toNetwork(FriendlyByteBuf friendlyByteBuf, T recipe) {
             friendlyByteBuf.writeFloat(recipe.experience);
             friendlyByteBuf.writeVarInt(recipe.maxProcess);
-            if(recipe.hasFluidIngredient()) recipe.fluidIngredient.write(friendlyByteBuf);
-            else {
-                friendlyByteBuf.writeVarInt(recipe.ingredientCount);
-                recipe.ingredient.toNetwork(friendlyByteBuf);
-            }
+            friendlyByteBuf.writeVarInt(recipe.energyConsume);
+            friendlyByteBuf.writeVarInt(recipe.ingredientCount);
+            recipe.ingredient.toNetwork(friendlyByteBuf);
+            if(recipe.ingredient.isEmpty() && recipe.hasFluidIngredient()) recipe.fluidIngredient.write(friendlyByteBuf);
             friendlyByteBuf.writeItem(recipe.result);
-            otherResultToNetwork(friendlyByteBuf, recipe);
+            otherResultsToNetwork(friendlyByteBuf, recipe);
         }
-        public void otherResultToNetwork(FriendlyByteBuf friendlyByteBuf, T recipe){
-
+        public void otherResultsToNetwork(FriendlyByteBuf friendlyByteBuf, T recipe){
+            if (!recipe.otherResults.isEmpty()) {
+                friendlyByteBuf.writeVarInt(recipe.otherResults.size());
+                recipe.otherResults.forEach((i,f)->{
+                    friendlyByteBuf.writeItem(i);
+                    friendlyByteBuf.writeFloat(f);
+                });
+            }
         }
 
         public interface FactocraftySerializer<T extends AbstractFactocraftyProcessRecipe> {

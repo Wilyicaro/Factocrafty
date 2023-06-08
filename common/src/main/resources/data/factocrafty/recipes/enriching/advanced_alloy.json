@@ -1,0 +1,14 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "steel",
+    "count": 60
+  },
+  "ingredient": {
+    "item": "factocrafty:bronze_plate",
+    "count": 3
+  },
+  "result": "factocrafty:advanced_alloy",
+  "experience": 0.4,
+  "processtime": 250
+}

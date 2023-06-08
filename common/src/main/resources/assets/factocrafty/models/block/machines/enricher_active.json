@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/enricher_front_active",
+		"top": "factocrafty:block/machines/enricher_top",
+		"bottom": "factocrafty:block/machines/enricher_bottom",
+		"side": "factocrafty:block/machines/enricher_side"
+	}
+}

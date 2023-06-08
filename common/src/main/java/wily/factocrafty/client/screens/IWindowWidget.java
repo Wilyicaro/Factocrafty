@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
-import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.client.screens.widgets.windows.FactocraftyScreenWindow;
+import wily.factoryapi.base.IFactoryDrawableType;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public interface IWindowWidget {
     }
     record EasyButton(int x, int y, int width, int height, int uvX, int uvY, EasyIcon icon, Color color, Consumer<Integer> onPress, Component message){
         public boolean clicked(double mouseX, double mouseY){
-            return FactocraftyProgressType.getMouseLimit(mouseX,mouseY, x,y, width,height);
+            return IFactoryDrawableType.getMouseLimit(mouseX,mouseY, x,y, width,height);
         }
         EasyButton(int x, int y, int width, int height, int uvX, int uvY, EasyIcon icon, Color color, Consumer<Integer> onPress){
             this(x,y,width,height,uvX,uvY,icon,color,onPress, Component.empty());
@@ -78,9 +78,9 @@ public interface IWindowWidget {
             }
         }
     }
-    default void renderButtonsTooltip(Screen screen, PoseStack poseStack, int i, int j){
+    default void renderButtonsTooltip(onTooltip onTooltip, PoseStack poseStack, int i, int j){
         for (Map.Entry<EasyButton,Boolean> entry: configButtons().entrySet()) {
-            if (entry.getKey().clicked(i,j) && !entry.getKey().message().getString().isEmpty()) screen.renderTooltip(poseStack,entry.getKey().message(), i,j);
+            if (entry.getKey().clicked(i,j) && !entry.getKey().message().getString().isEmpty()) onTooltip.addTooltip(poseStack,entry.getKey().message(), i,j);
         }
     }
     default boolean mouseClickedButtons(double d, double e, int i) {
@@ -99,4 +99,7 @@ public interface IWindowWidget {
     Rect2i getBounds();
 
     boolean isVisible();
+    interface onTooltip{
+        void addTooltip( PoseStack poseStack, Component component, int i, int j);
+    }
 }

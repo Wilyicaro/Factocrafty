@@ -10,9 +10,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.phys.Vec3;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.generator.entity.SolarPanelBlockEntity;
+import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
+import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
+import wily.factocrafty.client.screens.widgets.windows.UpgradesWindow;
 import wily.factocrafty.inventory.FactocraftyProcessMenu;
-import wily.factoryapi.base.ProgressType;
-import wily.factoryapi.util.ProgressElementRenderUtil;
+import wily.factoryapi.base.IFactoryDrawableType;
 
 import static wily.factoryapi.util.StorageStringUtil.*;
 
@@ -27,7 +29,14 @@ public class SolarPanelScreen extends FactocraftyMachineScreen<SolarPanelBlockEn
     @Override
     protected void renderStorageTooltips(PoseStack poseStack, int i, int j) {
         super.renderStorageTooltips(poseStack, i, j);
-        if (ProgressType.getMouseLimit(i,j,78, 31, 20,20)) renderTooltip(poseStack, Component.translatable("tooltip.factocrafty.generating",  getStorageAmount(getMenu().be.tickEnergy.get()[0],false,"",kiloEnergy,energyMeasure)).withStyle(ChatFormatting.GRAY), i,j);
+        if (IFactoryDrawableType.getMouseLimit(i,j,78, 31, 20,20)) renderTooltip(poseStack, Component.translatable("tooltip.factocrafty.generating",  getStorageAmount(getMenu().be.tickEnergy.get(),false,"",kiloCY,CYMeasure)).withStyle(ChatFormatting.GRAY), i,j);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.addConfigToGui(new FactocraftyConfigWidget(relX() + imageWidth,  relY() + 46, true,Component.translatable("gui.factocrafty.window.equipment"), new FactocraftyConfigWidget.Icons(1), this::renderTooltip)
+                ,(config)-> new SlotsWindow(config,relX() + imageWidth + 21,relY(), this, menu.equipmentSlots));
     }
 
     @Override

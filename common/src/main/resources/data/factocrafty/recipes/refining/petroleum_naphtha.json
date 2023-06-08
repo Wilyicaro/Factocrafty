@@ -1,0 +1,14 @@
+{
+  "type": "factocrafty:refining",
+  "fluid_ingredient": {
+    "fluid": "factocrafty:petroleum",
+    "amount": 500
+  },
+  "fluid_result": {
+    "fluid": "factocrafty:naphtha",
+    "amount": 400
+  },
+  "differential": 60,
+  "experience": 0.3,
+  "processtime": 200
+}

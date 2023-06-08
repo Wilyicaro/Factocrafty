@@ -98,7 +98,7 @@ public class InsulatedCableBlock extends BaseEntityBlock implements IFactocrafty
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(cableTier.energyTier.getEnergyTierComponent());
+        list.add(cableTier.energyTier.getEnergyTierComponent(false));
     }
 
 

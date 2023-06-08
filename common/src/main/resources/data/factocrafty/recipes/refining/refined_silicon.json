@@ -1,0 +1,10 @@
+{
+  "type": "factocrafty:refining",
+  "ingredient": {
+    "item": "factocrafty:silicon",
+    "count" : 3
+  },
+  "result": "factocrafty:refined_silicon",
+  "experience": 0.2,
+  "processtime": 200
+}

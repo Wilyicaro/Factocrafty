@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:iridium"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:iridium_nugget",
+    "count": 9
+  }
+}

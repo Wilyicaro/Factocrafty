@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  I",
+    "RH ",
+    "#R "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:orange_dye"
+    },
+    "I": {
+      "item": "factocrafty:iron_rod"
+    },
+    "R": {
+      "tag": "factocrafty:rubber"
+    },
+    "H": {
+      "item": "factocrafty:heat_diffuser"
+    }
+  },
+  "result": {
+    "item": "factocrafty:soldering_iron"
+  }
+}

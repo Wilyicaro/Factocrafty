@@ -175,7 +175,12 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
     }
 
     @Override
+    public void load(CompoundTag compoundTag) {
+        loadTag(compoundTag);
+    }
+
+    @Override
     public void saveAdditional(CompoundTag compoundTag) {
-        IFactoryStorage.super.saveAdditional(compoundTag);
+        saveTag(compoundTag);
     }
 }

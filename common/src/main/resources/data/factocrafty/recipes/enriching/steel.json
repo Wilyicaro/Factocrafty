@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "coal",
+    "count": 50
+  },
+  "ingredient": {
+    "item": "factocrafty:iron_dust"
+  },
+  "result": "factocrafty:steel_dust",
+  "experience": 0.35,
+  "processtime": 150
+}

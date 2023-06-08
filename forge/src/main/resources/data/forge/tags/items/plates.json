@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "factocrafty:iron_plate",
+    "factocrafty:gold_plate",
+    "factocrafty:copper_plate",
+    "factocrafty:bronze_plate",
+    "factocrafty:silver_plate",
+    "factocrafty:platinum_plate",
+    "factocrafty:lead_plate",
+    "factocrafty:uranium_plate",
+    "factocrafty:iridium_plate",
+    "factocrafty:graphene"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:copper_dust"
+    },
+    {
+      "item": "factocrafty:tin_dust"
+    },
+    {
+      "item": "factocrafty:tin_dust"
+    },
+    {
+      "item": "factocrafty:tin_dust"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:bronze_dust"
+  }
+}

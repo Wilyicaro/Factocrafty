@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "tag": "minecraft:redstone_ores"
+  },
+  "result": "factocrafty:crushed_redstone",
+  "experience": 0.2,
+  "processtime": 200
+}

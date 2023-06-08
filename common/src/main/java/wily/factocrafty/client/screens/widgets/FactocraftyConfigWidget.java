@@ -12,11 +12,11 @@ public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
     protected final boolean invert;
     public boolean Pressed = false;
     public FactocraftyConfigWidget(int x, int y, boolean invert, Component component) {
-        super(x, y, 217, 21, component);
+        super(x, y, 217, 21, ()-> component);
         this.invert = invert;
     }
     public FactocraftyConfigWidget(int x, int y, boolean invert, Component component, Icons icon,onTooltip tooltip) {
-        super(x, y,  217, 21, component,icon,tooltip);
+        super(x, y,  invert ? 178 : 217, 21,()-> component,icon,tooltip);
         this.invert = invert;
 
     }
@@ -27,7 +27,7 @@ public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int i, int j, float f) {
+    public void renderWidget(@NotNull PoseStack poseStack, int i, int j, float f) {
         Minecraft minecraft = Minecraft.getInstance();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
@@ -37,12 +37,11 @@ public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        this.blit(poseStack, this.getX(), this.getY(), k, 87, m, this.height);
+        this.blit(poseStack, this.getX() - (invert && Pressed ?3 : 0), this.getY(), k, 87, m, this.height);
         if (icon != null)
-            this.blit(poseStack, this.getX() + (width - icon.width()) / 2, this.getY() + (height - icon.height()) / 2, icon.uvX(), icon.uvY(), icon.width(), icon.height());
-        this.renderBg(poseStack, minecraft, i, j);
-        if (isHoveredOrFocused())
-            this.renderToolTip(poseStack, i, j);
+            this.blit(poseStack, this.getX() + (width - (invert ?5 : 0) - icon.width()) / 2, this.getY() + (height - icon.height()) / 2, icon.uvX(), icon.uvY(), icon.width(), icon.height());
+        if (isHovered())
+            this.renderToolTips(poseStack, i, j);
     }
 
     @Override

@@ -1,0 +1,6 @@
+{
+	"parent": "factocrafty:block/fluid_tank/fluid_tank",
+	"textures": {
+		"tank": "factocrafty:block/fluid_tank/ultimate_fluid_tank"
+	}
+}

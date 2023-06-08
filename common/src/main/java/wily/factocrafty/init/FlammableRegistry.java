@@ -9,7 +9,6 @@ public class FlammableRegistry {
 
 
     public static void bootStrap(){
-
         FireBlock fireBlock = (FireBlock) Blocks.FIRE;
         fireBlock.setFlammable(Registration.RUBBER_LOG.get(), 5, 20);
         fireBlock.setFlammable(Registration.RUBBER_SLAB.get(), 5, 20);

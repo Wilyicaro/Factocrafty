@@ -15,23 +15,18 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class FactocraftyStorageBlockEntity extends BlockEntity implements IFactoryStorage {
 
     public FactocraftyStorageBlockEntity(BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
         super(blockEntity, blockPos, blockState);
-
 
     }
 
@@ -41,10 +36,7 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
 
 
 
-
-
-
-    public IPlatformFluidHandler fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> f.getFluid() == Fluids.WATER, SlotsIdentifier.WATER, TransportState.EXTRACT_INSERT);
+    public IPlatformFluidHandler<?> fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.INPUT, TransportState.INSERT);
 
     public IPlatformItemHandler inventory = FactoryAPIPlatform.getItemHandlerApi(getInvSize(), this);
 
@@ -129,14 +121,16 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
 
     }
 
-
     @Override
     public void saveAdditional(CompoundTag compoundTag) {
-        IFactoryStorage.super.saveAdditional(compoundTag);}
+        saveTag(compoundTag);
+    }
+
 
     @Override
     public void load(CompoundTag compoundTag) {
-        IFactoryStorage.super.load(compoundTag);}
+        loadTag(compoundTag);
+    }
 
 
     public void tick() {

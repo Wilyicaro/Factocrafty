@@ -1,0 +1,8 @@
+{
+    "parent": "factocrafty:block/generator/solar_panel",
+	"textures": {
+		"top": "factocrafty:block/generator/ultimate_solar_panel_top",
+		"bottom": "factocrafty:block/generator/ultimate_solar_panel_bottom",
+		"side": "factocrafty:block/generator/ultimate_solar_panel_side"
+	}
+}

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:lake",
+  "config": {
+    "barrier": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:stone"
+          },
+          "weight": 5
+        },
+        {
+          "data": {
+            "Name": "minecraft:calcite"
+          },
+          "weight": 4
+        }
+      ]
+    },
+    "fluid": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "factocrafty:petroleum",
+        "Properties": {
+          "level": "0"
+        }
+      }
+    }
+  }
+}

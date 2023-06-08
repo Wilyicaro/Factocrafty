@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "#c:iron_blocks",
+    "#c:gold_blocks",
+    "#c:diamond_blocks",
+    "#c:iron_blocks",
+    "#c:tin_blocks",
+    "#c:bronze_blocks",
+    "#c:silver_blocks",
+    "#c:platinum_blocks",
+    "#c:lead_blocks",
+    "#c:uranium_blocks"
+  ]
+}

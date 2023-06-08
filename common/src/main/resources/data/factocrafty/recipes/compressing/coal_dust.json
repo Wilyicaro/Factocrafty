@@ -1,0 +1,10 @@
+{
+  "type": "factocrafty:compressing",
+  "ingredient": {
+    "item": "factocrafty:coal_dust",
+    "count": 8
+  },
+  "result": "factocrafty:graphite_ingot",
+  "experience": 0.2,
+  "processtime": 300
+}

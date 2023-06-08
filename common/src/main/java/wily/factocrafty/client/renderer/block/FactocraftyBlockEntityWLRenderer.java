@@ -12,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,12 +33,13 @@ public class FactocraftyBlockEntityWLRenderer extends BlockEntityWithoutLevelRen
         this.blockEntityRenderDispatcher = blockEntityRenderDispatcher;
     }
 
-    private FactocraftyFluidTankBlockEntity getFluidTank(Direction dir,FactoryCapacityTiers capacityTier){
+
+    public static FactocraftyFluidTankBlockEntity getFluidTank(Direction dir,FactoryCapacityTiers capacityTier){
         return new FactocraftyFluidTankBlockEntity(capacityTier, BlockPos.ZERO, FactocraftyFluidTanks.getFromTier(capacityTier).defaultBlockState().setValue(BlockStateProperties.FACING, dir));
     }
 
     @Override
-    public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+    public void renderByItem(ItemStack itemStack, ItemDisplayContext transformType, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
 
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockItem) {

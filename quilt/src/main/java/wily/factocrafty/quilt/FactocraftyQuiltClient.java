@@ -2,10 +2,8 @@ package wily.factocrafty.quilt;
 
 
 import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import wily.factocrafty.fabriclike.FactocraftyFabricLike;
-import wily.factocrafty.fabriclike.FactocraftyFabricLikeClient;
+import wily.factocrafty.fabric.FactocraftyFabricLikeClient;
 
 public class FactocraftyQuiltClient implements ClientModInitializer {
 

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#2#",
+    "1R1"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:carbon_plate"
+    },
+    "1": {
+      "item": "factocrafty:graphene"
+    },
+    "2": {
+      "item": "factocrafty:energy_crystal"
+    },
+    "R": {
+      "item": "factocrafty:reinforced_glass_pane"
+    }
+  },
+  "result": {
+    "item": "factocrafty:graphano_helmet"
+  }
+}

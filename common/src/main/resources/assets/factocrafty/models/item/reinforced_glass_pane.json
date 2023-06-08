@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/template_glass_pane",
+	"textures": {
+		"particle": "factocrafty:block/reinforced_glass",
+		"pane": "factocrafty:block/reinforced_glass",
+		"edge": "factocrafty:block/reinforced_glass_pane"
+	}
+}

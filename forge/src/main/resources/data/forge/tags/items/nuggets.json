@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "factocrafty:diamond_nugget",
+    "factocrafty:emerald_nugget",
+    "factocrafty:netherite_nugget",
+    "factocrafty:tin_nugget",
+    "factocrafty:bronze_nugget",
+    "factocrafty:silver_nugget",
+    "factocrafty:platinum_nugget",
+    "factocrafty:lead_nugget",
+    "factocrafty:uranium_nugget",
+    "factocrafty:ruby_nugget",
+    "factocrafty:iridium_nugget"
+  ]
+}

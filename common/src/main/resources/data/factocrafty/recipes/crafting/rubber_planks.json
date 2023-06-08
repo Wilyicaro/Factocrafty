@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "factocrafty:rubber_log"
+      "tag": "factocrafty:rubber_logs"
     }
   ],
   "result": {

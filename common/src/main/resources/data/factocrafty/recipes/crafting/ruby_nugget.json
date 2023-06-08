@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:ruby"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:ruby_nugget",
+    "count": 9
+  }
+}

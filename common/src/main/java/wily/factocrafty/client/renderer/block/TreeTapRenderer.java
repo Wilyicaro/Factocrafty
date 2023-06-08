@@ -51,10 +51,12 @@ public class TreeTapRenderer implements BlockEntityRenderer<TreeTapBlockEntity> 
         if (hasFluid && be.getBlockState().getValue(FactocraftyStorageBlock.ACTIVE))
             dispatcher.getModelRenderer().renderModel(stack.last(),bufferSource.getBuffer(Sheets.translucentCullBlockSheet()),be.getBlockState(), latexFallModel,1,1,1,i,j);
         dispatcher.getModelRenderer().renderModel(stack.last(),bufferSource.getBuffer(Sheets.cutoutBlockSheet()),be.getBlockState(), treetap,1,1,1,i,j);
-        stack.scale(1F, be.fluidTank.getFluidStack().getAmount() / (float)be.fluidTank.getMaxFluid(),1F);
-        if (hasFluid)
-            dispatcher.getModelRenderer().renderModel(stack.last(),bufferSource.getBuffer(Sheets.translucentCullBlockSheet()),be.getBlockState(), latexModel,1,1,1,i,j);
-
+        if (hasFluid) {
+            stack.translate(0.5,0.0625,0.5);
+            stack.scale(1F, be.fluidTank.getFluidStack().getAmount() / (float)be.fluidTank.getMaxFluid(),1F);
+            stack.translate(-0.5,-0.0625,-0.5);
+            dispatcher.getModelRenderer().renderModel(stack.last(), bufferSource.getBuffer(Sheets.translucentCullBlockSheet()), be.getBlockState(), latexModel, 1, 1, 1, i, j);
+        }
 
 
         stack.popPose();

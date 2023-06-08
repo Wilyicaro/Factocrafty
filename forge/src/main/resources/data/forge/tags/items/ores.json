@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "factocrafty:tin_ore",
+    "factocrafty:deepslate_tin_ore",
+    "factocrafty:silver_ore",
+    "factocrafty:deepslate_silver_ore",
+    "factocrafty:platinum_ore",
+    "factocrafty:lead_ore",
+    "factocrafty:deepslate_lead_ore",
+    "factocrafty:deepslate_uranium_ore",
+    "factocrafty:ruby_ore",
+    "factocrafty:deepslate_ruby_ore"
+  ]
+}

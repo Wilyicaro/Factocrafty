@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item" : "factocrafty:gold_dust"
+  },
+  "result": "minecraft:gold_ingot",
+  "experience": 0.15,
+  "cookingtime": 200
+}

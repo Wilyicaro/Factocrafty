@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,15 +38,20 @@ public abstract class PlayerModelInjector {
 
     @Inject(method = ("setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"), at = @At("TAIL"))
     private void init(LivingEntity livingEntity, float f, float g, float h, float i, float j, CallbackInfo info){
-        if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Registration.BASIC_HANG_GLIDER.get())) {
-            if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS){
+        if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Registration.BASIC_HANG_GLIDER.get())  && !livingEntity.isSwimming()) {
+            if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS) {
                 this.rightArm.xRot = livingEntity.isFallFlying() ? Mth.clamp(this.head.xRot - 1.9198622F - (livingEntity.isCrouching() ? 0.2617994F : 0.0F), -2.4F, 3.0F) : -1.05F;
                 AnimationUtils.bobModelPart(this.rightArm, h + 0.2F, 1.0F);
             }
-
             if (this.leftArmPose != HumanoidModel.ArmPose.SPYGLASS){
                 this.leftArm.xRot = livingEntity.isFallFlying() ? Mth.clamp(this.head.xRot - 1.9198622F - (livingEntity.isCrouching() ? 0.2617994F : 0.0F), -2.4F, 3.0F) : -1.05F;
                 AnimationUtils.bobModelPart(this.leftArm,h + 0.2F, -1.0F);
+            }
+        }
+        if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA)) {
+            if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS && livingEntity.isCrouching()) {
+                this.rightArm.xRot = livingEntity.isFallFlying() ? Mth.clamp(this.head.xRot - 2.5F, -2.4F, 2.0F) : -1.05F;
+                AnimationUtils.bobModelPart(this.rightArm, h + 0.2F, 1.0F);
             }
         }
     }

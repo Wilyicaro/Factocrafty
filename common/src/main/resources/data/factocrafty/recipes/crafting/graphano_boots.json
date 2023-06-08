@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "121"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:carbon_plate"
+    },
+    "1": {
+      "item": "factocrafty:graphene"
+    },
+    "2": {
+      "item": "factocrafty:energy_crystal"
+    }
+  },
+  "result": {
+    "item": "factocrafty:graphano_boots"
+  }
+}

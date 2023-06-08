@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "tag": "minecraft:lapis_ores"
+  },
+  "result": "factocrafty:crushed_lapis",
+  "experience": 0.2,
+  "processtime": 200
+}

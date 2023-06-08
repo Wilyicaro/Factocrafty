@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "factocrafty:block/reinforced_stone_slab" },
+        "type=top": { "model": "factocrafty:block/reinforced_stone_slab_top" },
+        "type=double": { "model": "factocrafty:block/reinforced_stone" }
+    }
+}

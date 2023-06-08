@@ -45,7 +45,7 @@ public class EnergyDiggerItem extends EnergyItem implements Vanishable, Factocra
 
     @Override
     public boolean mineBlock(ItemStack itemStack, Level level, BlockState blockState, BlockPos blockPos, LivingEntity livingEntity) {
-        getCraftyEnergy(itemStack).consumeEnergy((int)blockState.getBlock().defaultDestroyTime(),false);
+        getCraftyEnergy(itemStack).consumeEnergy((int) Math.min(1, blockState.getBlock().defaultDestroyTime() *2),false);
         return super.mineBlock(itemStack, level, blockState, blockPos, livingEntity);
     }
 

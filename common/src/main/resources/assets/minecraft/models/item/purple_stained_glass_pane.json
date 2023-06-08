@@ -1,0 +1,8 @@
+{
+	"parent": "minecraft:item/template_glass_pane",
+	"textures": {
+		"particle": "block/purple_stained_glass",
+		"pane": "block/purple_stained_glass",
+		"edge": "block/purple_stained_glass_pane_top"
+	}
+}

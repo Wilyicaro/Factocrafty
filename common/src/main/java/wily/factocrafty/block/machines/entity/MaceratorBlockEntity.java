@@ -4,9 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 
-public class MaceratorBlockEntity extends CompoundResultMachineBlockEntity {
+public class MaceratorBlockEntity extends CompoundResultMachineBlockEntity<FactocraftyMachineRecipe> {
 
 
     public MaceratorBlockEntity(BlockPos blockPos, BlockState blockState) {

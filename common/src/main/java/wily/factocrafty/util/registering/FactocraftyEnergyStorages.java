@@ -4,7 +4,7 @@ import wily.factocrafty.block.storage.energy.FactocraftyEnergyStorageBlock;
 import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
-public enum FactocraftyEnergyStorages implements IFactocraftyLazyRegister<FactocraftyEnergyStorageBlock>{
+public enum FactocraftyEnergyStorages implements IFactocraftyLazyRegistry<FactocraftyEnergyStorageBlock> {
     BATTERY_BOX(FactoryCapacityTiers.BASIC),ADVANCED_FUNCTIONAL_STORAGE(FactoryCapacityTiers.ADVANCED),
     HIGH_FUNCTIONAL_STORAGE(FactoryCapacityTiers.HIGH),ULTIMATE_FUNCTIONAL_UNIT(FactoryCapacityTiers.ULTIMATE),
     QUANTUM_UNIT(FactoryCapacityTiers.QUANTUM);

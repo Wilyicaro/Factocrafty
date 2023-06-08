@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "minecraft:quartz"
+  },
+  "result": "factocrafty:silicon",
+  "experience": 0.2,
+  "processtime": 200
+}

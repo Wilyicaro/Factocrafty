@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:uranium_ore"
+  },
+  "result": "factocrafty:crushed_uranium",
+  "experience": 0.2,
+  "processtime": 200
+}

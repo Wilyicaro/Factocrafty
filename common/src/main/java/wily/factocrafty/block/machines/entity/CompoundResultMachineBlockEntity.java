@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyResultSlot;
+import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.FactoryCapacityTiers;
@@ -23,13 +24,13 @@ import wily.factoryapi.base.IPlatformItemHandler;
 import java.util.List;
 import java.util.Map;
 
-public class CompoundResultMachineBlockEntity extends FactocraftyMachineBlockEntity {
+public class CompoundResultMachineBlockEntity<T extends AbstractFactocraftyProcessRecipe> extends FactocraftyMachineBlockEntity<T> {
 
 
 
     protected static int OTHER_RESULT_SLOT = 3;
 
-    public CompoundResultMachineBlockEntity(FactocraftyMenus menu, RecipeType<? extends Recipe<Container>> recipe, BlockEntityType<? extends FactocraftyMachineBlockEntity> be, BlockPos blockPos, BlockState blockState) {
+    public CompoundResultMachineBlockEntity(FactocraftyMenus menu, RecipeType<T> recipe, BlockEntityType<? extends FactocraftyMachineBlockEntity<T>> be, BlockPos blockPos, BlockState blockState) {
         super(menu, FactoryCapacityTiers.BASIC,recipe,be, blockPos, blockState);
     }
 
@@ -37,10 +38,13 @@ public class CompoundResultMachineBlockEntity extends FactocraftyMachineBlockEnt
     @Override
     public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
         super.addSlots(slots,player);
-        slots.set(OUTPUT_SLOT, new FactocraftyResultSlot(this,player, OUTPUT_SLOT,129,35));
+        slots.set(OUTPUT_SLOT, new FactocraftyResultSlot(this,player, OUTPUT_SLOT,129,35).withType(FactoryItemSlot.Type.BIG));
         slots.add(new FactocraftyResultSlot(this, player, OTHER_RESULT_SLOT, 107,35));
     }
 
+    protected void addBasicSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
+        super.addSlots(slots,player);
+    }
     @Override
     protected SoundEvent getMachineSound() {
         return Registration.MACERATOR_ACTIVE.get();

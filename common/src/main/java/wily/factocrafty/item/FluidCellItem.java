@@ -26,7 +26,7 @@ import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class FluidCellItem extends Item implements IFluidItem<IPlatformFluidHandler> {
+public class FluidCellItem extends Item implements BucketLikeItem {
     public FluidCellItem(Properties properties) {
         super(properties);
 
@@ -42,29 +42,12 @@ public class FluidCellItem extends Item implements IFluidItem<IPlatformFluidHand
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(StorageStringUtil.getFluidTooltip("tooltip.factocrafty.fluid_stored", getFluidStorage(itemStack)));
+        list.add(StorageStringUtil.getFluidTooltip("tooltip.factory_api.fluid_stored", getFluidStorage(itemStack)));
     }
 
-
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        BlockHitResult hitResult = getPlayerPOVHitResult(level,player, ClipContext.Fluid.SOURCE_ONLY);
-        BlockState blockState = level.getBlockState(hitResult.getBlockPos());
-        if ( getFluidStorage(stack).getFluidStack().isEmpty() && level.mayInteract(player, hitResult.getBlockPos()) && blockState.getBlock() instanceof BucketPickup pick){
-            ItemStack filled = stack.copy();
-            filled.setCount(1);
-            ItemContainerUtil.fillItem(filled,FluidStack.create(((LiquidBlock)blockState.getBlock()).arch$getFluid(), FluidStack.bucketAmount()));
-            if (stack.getCount() > 1){
-                stack.shrink(1);
-                player.setItemInHand(hand, stack);
-                player.addItem(filled);
-            } else player.setItemInHand(hand,filled);
-            if (!player.isCreative()) level.setBlock(hitResult.getBlockPos(), Blocks.AIR.defaultBlockState(), 11);
-            pick.getPickupSound().ifPresent((p)-> player.playSound(p,1.0F,1.0F));
-            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
-        }
-            return InteractionResultHolder.fail(stack);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        return BucketLikeItem.super.use(level, player, interactionHand);
     }
 
     @Override
@@ -79,9 +62,8 @@ public class FluidCellItem extends Item implements IFluidItem<IPlatformFluidHand
     }
 
 
-
     @Override
-    public IPlatformFluidHandler getFluidStorage(ItemStack stack) {
-        return FactoryAPIPlatform.getFluidItemHandlerApi(capacity, stack, (a) -> true, TransportState.EXTRACT_INSERT);
+    public FluidStorageBuilder getFluidStorageBuilder(ItemStack stack) {
+        return new FluidStorageBuilder(capacity, (a) -> true, TransportState.EXTRACT_INSERT);
     }
 }

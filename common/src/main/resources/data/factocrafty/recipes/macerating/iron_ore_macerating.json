@@ -1,7 +1,7 @@
 {
   "type": "factocrafty:macerating",
   "ingredient": {
-    "item": "minecraft:iron_ore"
+    "tag": "minecraft:iron_ores"
   },
   "result": "factocrafty:crushed_iron",
   "experience": 0.2,

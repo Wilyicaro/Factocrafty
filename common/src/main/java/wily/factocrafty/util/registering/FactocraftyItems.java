@@ -1,6 +1,11 @@
 package wily.factocrafty.util.registering;
 
+import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import wily.factocrafty.init.Registration;
 
 public enum FactocraftyItems {
@@ -20,4 +25,5 @@ public enum FactocraftyItems {
     public String getName(){
         return name().toLowerCase();
     }
+
 }

@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenInjector {
 
@@ -20,6 +19,15 @@ public abstract class AbstractContainerScreenInjector {
             return false;
         }
         return flag;
+    }
+
+    @ModifyVariable(method = ("mouseClicked"), at = @At(value ="STORE", ordinal = 0), ordinal = 1)
+    private boolean injectMouseClicked(boolean flag1, double d, double e, int i){
+        Slot slot = findSlot(d, e);
+        if (slot != null){
+            return false;
+        }
+        return flag1;
     }
 
 }

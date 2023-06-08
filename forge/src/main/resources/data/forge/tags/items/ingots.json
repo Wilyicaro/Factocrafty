@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "factocrafty:tin_ingot",
+    "factocrafty:bronze_ingot",
+    "factocrafty:silver_ingot",
+    "factocrafty:platinum_ingot",
+    "factocrafty:lead_ingot",
+    "factocrafty:refined_iron",
+    "factocrafty:refined_uranium",
+    "factocrafty:graphite_ingot"
+  ]
+}

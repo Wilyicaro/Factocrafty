@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item" : "factocrafty:platinum_dust"
+  },
+  "result": "factocrafty:platinum_ingot",
+  "experience": 0.15,
+  "cookingtime": 200
+}

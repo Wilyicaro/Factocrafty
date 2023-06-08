@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#P#",
+    "P#P",
+    "#P#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass"
+    },
+    "P": {
+      "item": "factocrafty:advanced_alloy"
+    }
+  },
+  "result": {
+    "item": "factocrafty:reinforced_glass",
+    "count": 4
+  }
+}

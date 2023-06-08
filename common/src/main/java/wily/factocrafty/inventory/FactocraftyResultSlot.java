@@ -16,7 +16,7 @@ public class FactocraftyResultSlot extends FactoryItemSlot {
 
 
     public FactocraftyResultSlot(FactocraftyMachineBlockEntity be, @Nullable Player player, int i, int j, int k) {
-        super(be.inventory, SlotsIdentifier.RED, TransportState.EXTRACT,i, j, k);
+        super(be.inventory, SlotsIdentifier.OUTPUT, TransportState.EXTRACT,i, j, k);
         this.be = be;
 
         this.player = player;

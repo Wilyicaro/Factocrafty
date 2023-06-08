@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I",
+    "C#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:iron_plate"
+    },
+    "I": {
+      "item": "factocrafty:iron_rod"
+    },
+    "C": {
+      "item": "factocrafty:coil"
+    }
+  },
+  "result": {
+    "item": "factocrafty:electric_motor"
+  }
+}

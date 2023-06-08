@@ -1,7 +1,12 @@
 package wily.factocrafty;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.architectury.event.events.client.ClientGuiEvent;
+import dev.architectury.event.events.client.ClientTickEvent;
+import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.hooks.fluid.FluidStackHooks;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
@@ -9,8 +14,10 @@ import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.model.EntityModel;
@@ -26,11 +33,17 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import wily.factocrafty.block.FactocraftyWoodType;
 import wily.factocrafty.block.cable.CableTiers;
 import wily.factocrafty.block.cable.InsulatedCableBlock;
@@ -41,8 +54,11 @@ import wily.factocrafty.client.renderer.entity.*;
 import wily.factocrafty.client.screens.*;
 import wily.factocrafty.entity.IFactocraftyBoat;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.ArmorFeatures;
 import wily.factocrafty.item.BatteryItem;
+import wily.factocrafty.item.ElectricArmorItem;
 import wily.factocrafty.item.FluidCellItem;
+import wily.factocrafty.network.FactocraftyArmorFeaturePacket;
 import wily.factocrafty.util.registering.FactocraftyBlockEntities;
 import wily.factocrafty.util.registering.FactocraftyBlocks;
 import wily.factocrafty.util.registering.FactocraftyFluidTanks;
@@ -54,6 +70,8 @@ import java.util.function.Supplier;
 import static wily.factocrafty.Factocrafty.MOD_ID;
 
 public class FactocraftyClient {
+    public static boolean isHangGliderModelLayerLoaded;
+    private static final ResourceLocation NIGHT_VISION_LOCATION = new ResourceLocation(Factocrafty.MOD_ID,"textures/misc/nightvision.png");
 
     public static void LeavesColor() {
 
@@ -80,7 +98,25 @@ public class FactocraftyClient {
             "key." + MOD_ID + ".g", // The translation key of the name shown in the Controls screen
             InputConstants.Type.KEYSYM, // This key mapping is for Keyboards by default
             InputConstants.KEY_G, // The default keycode
-            "category." + MOD_ID + ".gravity" // The category translation key used to categorize in the Controls screen
+            "category." + MOD_ID + ".keyboard.armor_features"  // The category translation key used to categorize in the Controls screen
+    );
+    public static final KeyMapping VISION_KEYMAPPING = new KeyMapping(
+            "key." + MOD_ID + ".v", // The translation key of the name shown in the Controls screen
+            InputConstants.Type.KEYSYM,  // This key mapping is for Keyboards by default
+            InputConstants.KEY_V, // The default keycode
+            "category." + MOD_ID + ".keyboard.armor_features"  // The category translation key used to categorize in the Controls screen
+    );
+    public static final KeyMapping LEGGINGS_KEYMAPPING = new KeyMapping(
+            "key." + MOD_ID + ".l", // The translation key of the name shown in the Controls screen
+            InputConstants.Type.KEYSYM,  // This key mapping is for Keyboards by default
+            InputConstants.KEY_L, // The default keycode
+            "category." + MOD_ID + ".keyboard.armor_features"  // The category translation key used to categorize in the Controls screen
+    );
+    public static final KeyMapping BOOTS_KEYMAPPING = new KeyMapping(
+            "key." + MOD_ID + ".b", // The translation key of the name shown in the Controls screen
+            InputConstants.Type.KEYSYM,  // This key mapping is for Keyboards by default
+            InputConstants.KEY_B, // The default keycode
+            "category." + MOD_ID + ".keyboard.armor_features" // The category translation key used to categorize in the Controls screen
     );
 
     public interface FactocraftyEntityRendererRegistry {
@@ -96,7 +132,11 @@ public class FactocraftyClient {
 
     public static void registerEntityRenderers(FactocraftyEntityRendererRegistry event){
 
-        event.register(Registration.CORRUPTED_ENDERMAN, EndermanRenderer::new);
+        event.register(Registration.CORRUPTED_ENDERMAN, (c)-> new EndermanRenderer(c){
+            public ResourceLocation getTextureLocation(EnderMan enderMan) {
+                return Registration.getModResource("textures/entity/enderman/corrupted_enderman.png");
+            }
+        });
         event.register(Registration.FACTOCRAFTY_BOAT, (a)-> new FactocraftyBoatRenderer(a,false));
         event.register(Registration.FACTOCRAFTY_CHEST_BOAT, (a)-> new FactocraftyBoatRenderer(a,true));
         event.register(Registration.LASER,LaserRenderer::new);
@@ -109,6 +149,7 @@ public class FactocraftyClient {
         event.register(LaserModel.LAYER_LOCATION, LaserModel::createBodyLayer);
         event.register(JetpackModel.LAYER_LOCATION, JetpackModel::createBodyLayer);
         event.register(HangGliderModel.LAYER_LOCATION, HangGliderModel::createBodyLayer);
+        isHangGliderModelLayerLoaded = true;
     }
     public static void registerEntityRenderLayers(Function<EntityType<? extends LivingEntity>, EntityRenderer<?>> function, EntityModelSet entityModelSet, FactocraftyRenderLayerRegistry event) {
         if (function.apply(EntityType.ARMOR_STAND) instanceof ArmorStandRenderer r)
@@ -117,17 +158,56 @@ public class FactocraftyClient {
     public static void init(){
         Factocrafty.LOGGER.info("Initializing Client Side...");
         KeyMappingRegistry.register(GRAVITY_KEYMAPPING);
+        KeyMappingRegistry.register(VISION_KEYMAPPING);
+        KeyMappingRegistry.register(LEGGINGS_KEYMAPPING);
+        KeyMappingRegistry.register(BOOTS_KEYMAPPING);
+    }
+    public static void enqueueInit(){
+        ClientGuiEvent.RENDER_HUD.register((p,i)->{
+            Minecraft minecraft = Minecraft.getInstance();
+            Gui gui = minecraft.gui;
+            if (minecraft.options.getCameraType().isFirstPerson()) {
+                if (!minecraft.player.isScoping()) {
+                    gui.scopeScale =0.5F;
+                    if (minecraft.player.getItemBySlot(EquipmentSlot.HEAD).is(Registration.NIGHT_VISION_GOGGLES.get())) {
+                        if (Platform.isFabric())RenderSystem.enableBlend();
+                        gui.renderTextureOverlay(p, NIGHT_VISION_LOCATION, 1.0F);
+                    }
+                }
+            }
+        });
+        ClientTickEvent.CLIENT_LEVEL_POST.register(m->{
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.player != null) {
+                ItemStack h = minecraft.player.getItemBySlot(EquipmentSlot.HEAD);
+                ItemStack c = minecraft.player.getItemBySlot(EquipmentSlot.CHEST);
+                ItemStack l = minecraft.player.getItemBySlot(EquipmentSlot.LEGS);
+                ItemStack f = minecraft.player.getItemBySlot(EquipmentSlot.FEET);
+                if (h.getItem() instanceof ElectricArmorItem e) {
+                    if (VISION_KEYMAPPING.consumeClick() && e.hasFeature(ArmorFeatures.NIGHT_VISION, h, false)) Factocrafty.NETWORK.sendToServer(new FactocraftyArmorFeaturePacket(ArmorFeatures.NIGHT_VISION, EquipmentSlot.HEAD, !ArmorFeatures.NIGHT_VISION.isActive(h.getOrCreateTag())));
+                }
+                if (c.getItem() instanceof ElectricArmorItem e)
+                    if (GRAVITY_KEYMAPPING.consumeClick() && e.hasFeature(ArmorFeatures.GRAVITY_0, c, false))
+                        Factocrafty.NETWORK.sendToServer(new FactocraftyArmorFeaturePacket(ArmorFeatures.GRAVITY_0, EquipmentSlot.CHEST, !ArmorFeatures.GRAVITY_0.isActive(c.getOrCreateTag())));
+                if (l.getItem() instanceof ElectricArmorItem e)
+                    if (LEGGINGS_KEYMAPPING.consumeClick() && e.hasFeature(ArmorFeatures.SUPER_SPEED, l, false))
+                        Factocrafty.NETWORK.sendToServer(new FactocraftyArmorFeaturePacket(ArmorFeatures.SUPER_SPEED, EquipmentSlot.LEGS, !ArmorFeatures.SUPER_SPEED.isActive(l.getOrCreateTag())));
+                if (f.getItem() instanceof ElectricArmorItem e)
+                    if (BOOTS_KEYMAPPING.consumeClick() && e.hasFeature(ArmorFeatures.SUPER_JUMP, f, false))
+                        Factocrafty.NETWORK.sendToServer(new FactocraftyArmorFeaturePacket(ArmorFeatures.SUPER_JUMP, EquipmentSlot.FEET, !ArmorFeatures.SUPER_JUMP.isActive(f.getOrCreateTag())));
+            }
+        });
         FactocraftyWoodType.addWoodType(FactocraftyWoodType.RUBBER);
         for (Block a : Registration.BLOCKS.getRegistrar())
             if (a instanceof InsulatedCableBlock cable && cable.asItem() != null) {
                 FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + BuiltInRegistries.BLOCK.getKey(a).getPath() + "_in_hand"),"inventory"));
             }
-        FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation( "factocrafty:fluid_tank"),""));
+
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:fluid_model"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_bowl"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex_fall"),""));
-        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluidTanks.BASIC_FLUID_TANK.get());
+        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get());
         RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get());
         RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), CableTiers.CRYSTAL.getBlock());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
@@ -143,8 +223,9 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.FLUID_TANK_MENU.get(), FluidTankScreen::new);
         MenuRegistry.registerScreenFactory(Registration.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
         MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen::create);
-        MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), BasicMachineScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), ChangeableInputMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.REFINER_MENU.get(), RefinerScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.ENRICHER_MENU.get(), EnricherScreen::new);
 
 
         //ClientGuiEvent.DEBUG_TEXT_LEFT.register((e)-> e.);

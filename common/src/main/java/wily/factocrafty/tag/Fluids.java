@@ -11,4 +11,8 @@ import static wily.factocrafty.Factocrafty.MOD_ID;
 public class Fluids {
     public static final TagKey<Fluid> PETROLEUM = TagKey.create(Registries.FLUID,new ResourceLocation(MOD_ID,"petroleum"));
     public static final TagKey<Fluid> LATEX = TagKey.create(Registries.FLUID,new ResourceLocation(MOD_ID,"latex"));
+
+    public static final TagKey<Fluid> GASOLINE = TagKey.create(Registries.FLUID,new ResourceLocation(MOD_ID,"gasoline"));
+    
+    
 }

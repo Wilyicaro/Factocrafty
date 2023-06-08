@@ -26,7 +26,7 @@ public class FlexJetpackItem extends JetpackItem implements IFluidItem<IPlatform
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(StorageStringUtil.getFluidTooltip("tooltip.factocrafty.fluid_stored", getFluidStorage(itemStack)));
+        list.add(StorageStringUtil.getFluidTooltip("tooltip.factory_api.fluid_stored", getFluidStorage(itemStack)));
     }
 
     @Override
@@ -52,9 +52,8 @@ public class FlexJetpackItem extends JetpackItem implements IFluidItem<IPlatform
     }
 
 
-
     @Override
-    public IPlatformFluidHandler getFluidStorage(ItemStack stack) {
-        return FactoryAPIPlatform.getFluidItemHandlerApi(2*FluidStack.bucketAmount(), stack, (a) -> a.getFluid().isSame(FactocraftyFluids.GASOLINE.get()), TransportState.EXTRACT_INSERT);
+    public FluidStorageBuilder getFluidStorageBuilder(ItemStack stack) {
+        return new FluidStorageBuilder(2*FluidStack.bucketAmount(), (a) -> a.getFluid().isSame(FactocraftyFluids.GASOLINE.get()), TransportState.EXTRACT_INSERT);
     }
 }

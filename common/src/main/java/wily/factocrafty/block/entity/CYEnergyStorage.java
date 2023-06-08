@@ -1,6 +1,7 @@
 package wily.factocrafty.block.entity;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factoryapi.base.FactoryCapacityTiers;
@@ -11,10 +12,10 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
     private static final String KEY = "energy";
     private int energy;
-    private final int capacity;
+    public int capacity;
     private int maxInOut = 1000000;
 
-    public final FactoryCapacityTiers supportableTier;
+    public FactoryCapacityTiers supportableTier;
 
     public FactoryCapacityTiers storedTier = FactoryCapacityTiers.BASIC;
 
@@ -83,6 +84,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
     @Override
     public int getEnergyStored() {
+        if (energy> getMaxEnergyStored()) energy = getMaxEnergyStored();
         return energy;
     }
 
@@ -105,16 +107,16 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     }
 
     @Override
-    public void deserializeTag(CompoundTag nbt) {
-        this.energy = nbt.getInt(KEY);
-        this.storedTier = FactoryCapacityTiers.values()[nbt.getInt("tier")];
+    public void deserializeTag(CompoundTag compoundTag) {
+        this.energy = compoundTag.getInt(KEY);
+        this.storedTier = FactoryCapacityTiers.values()[compoundTag.getInt("tier")];
     }
     public int getMaxConsume(){
-        return Math.min(getEnergyStored(),maxInOut);
+        return Math.min(getEnergyStored(),getTransport().canExtract() ? maxInOut : 0);
     }
 
     @Override
-    public Object getHandler() {
+    public ICraftyEnergyStorage getHandler() {
         return this;
     }
 

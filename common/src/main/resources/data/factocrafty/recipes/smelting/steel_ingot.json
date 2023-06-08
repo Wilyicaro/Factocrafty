@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item" : "factocrafty:steel_dust"
+  },
+  "result": "factocrafty:steel_ingot",
+  "experience": 0.15,
+  "cookingtime": 200
+}

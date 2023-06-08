@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
 import java.util.List;
@@ -97,7 +98,7 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return null;
+        return Registration.BLOCK_ENTITIES.getRegistrar().get(blockState.getBlock().arch$registryName()).create(blockPos,blockState);
     }
 
     @Override

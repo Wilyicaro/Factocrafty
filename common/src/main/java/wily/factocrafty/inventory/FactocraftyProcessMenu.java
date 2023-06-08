@@ -1,10 +1,8 @@
 package wily.factocrafty.inventory;
 
-import com.google.common.base.Suppliers;
 import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -13,19 +11,20 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.apache.commons.lang3.ArrayUtils;
 import wily.factocrafty.Factocrafty;
+import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
-import wily.factocrafty.block.entity.IFactoryProcessableStorage;
+import wily.factocrafty.block.machines.entity.EnricherBlockEntity;
+import wily.factocrafty.block.storage.energy.FactocraftyEnergyStorageBlock;
 import wily.factocrafty.network.FactocraftyStateButtonPacket;
 import wily.factocrafty.network.FactocraftySyncEnergyPacket;
 import wily.factocrafty.network.FactocraftySyncFluidPacket;
 import wily.factocrafty.network.FactocraftySyncProgressPacket;
 import wily.factocrafty.util.registering.FactocraftyMenus;
+import wily.factoryapi.base.IFactoryProcessableStorage;
 import wily.factoryapi.base.IFactoryStorage;
 import wily.factoryapi.base.Storages;
-
-import java.util.Objects;
-import java.util.function.Supplier;
 
 public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractContainerMenu {
     public IFactoryStorage storage;
@@ -34,7 +33,8 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
 
     public  Player player;
 
-
+    public int[] equipmentSlots;
+    public int upgradeSlot;
 
     public FactocraftyProcessMenu(FactocraftyMenus menu, int containerId, BlockPos pos, Player player) {
     this(FactocraftyMenus.getMachine(menu), containerId, pos, player);
@@ -56,22 +56,32 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
         for (Slot slot : storage.getSlots(player)){
             addSlot(slot);
         }
+        upgradeSlot = slots.size();
+        if (be instanceof FactocraftyProcessBlockEntity pBe)
+            addSlot(new FactocraftyUpgradeSlot(pBe,0,9,9));
         addInventorySlots(inventory);
-
     }
 
-    public void addInventorySlots(  Inventory inventory){
-
+    public void addInventorySlots(Inventory inventory){
+        int addH = 0;
+        if (be instanceof EnricherBlockEntity e) addH += 5;
         int j;
         for(j = 0; j < 3; ++j) {
             for(int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(inventory, k + j * 9 + 9, 8 + k * 18, 84 + j * 18));
+                this.addSlot(new Slot(inventory, k + j * 9 + 9, 8 + k * 18, 84 + addH + j * 18));
             }
         }
 
         for(j = 0; j < 9; ++j) {
-            this.addSlot(new Slot(inventory, j, 8 + j * 18, 142));
+            this.addSlot(new Slot(inventory, j, 8 + j * 18, 142 + addH));
         }
+        if (be.getBlockState().getBlock() instanceof IFactocraftyCYEnergyBlock b && (b.produceEnergy() || b instanceof FactocraftyEnergyStorageBlock))
+            for(int i = 0; i < 5; ++i) {
+                Slot s = player.inventoryMenu.getSlot(i == 0? 45 : 4+i);
+                int finalI = i;
+                this.addSlot(new FactocraftySlotWrapper(s, s.index,9, finalI == 0 ? 85 : 9 + 18* (finalI - 1)));
+                equipmentSlots= ArrayUtils.add(equipmentSlots, slots.size() - 1);
+            }
     }
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
@@ -146,15 +156,15 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
             storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)-> Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncEnergyPacket(be.getBlockPos(), e.getEnergyStored(), e.getStoredTier())));
             if (storage instanceof IFactoryProcessableStorage progressableStorage){
                  progressableStorage.getProgresses().forEach((p) -> {
-                    Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncProgressPacket(be.getBlockPos(), p.progressType.identifier.ordinal(), p.get(),p.maxProgress));
+                    Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncProgressPacket(be.getBlockPos(), progressableStorage.getProgresses().indexOf(p), p.get(),p.maxProgress));
                 });
                  progressableStorage.itemSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),0,d.ordinal(),s.transportState, s.getSlotIndex(progressableStorage.getSlotsIdentifiers())))));
-                progressableStorage.energySides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),1,d.ordinal(),s,0))));
-                progressableStorage.fluidSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),2,d.ordinal(),s.transportState,s.fluidHandler.identifier().differential()))));
+                 progressableStorage.energySides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),1,d.ordinal(),s,0))));
+                 progressableStorage.fluidSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),2,d.ordinal(),s.transportState,s.fluidHandler.identifier().differential()))));
 
             }
+            if (storage instanceof FactocraftyProcessBlockEntity be) be.syncAdditionalMenuData(this, sp);
         }
-        if (storage instanceof FactocraftyProcessBlockEntity be) be.syncAdditionalMenuData(this, player);
     }
 @Override
 protected boolean moveItemStackTo(ItemStack itemStack, int i, int j, boolean bl) {

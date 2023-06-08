@@ -9,13 +9,14 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import wily.factocrafty.item.FlexJetpackItem;
 import wily.factocrafty.item.FluidCellItem;
+import wily.factocrafty.item.FluidTankItem;
 import wily.factoryapi.base.IFluidItem;
 import wily.factoryapi.base.IPlatformFluidHandler;
 import wily.factoryapi.forge.base.ForgeItemFluidHandler;
 
 import java.util.function.Consumer;
 
-@Mixin({FluidCellItem.class, FlexJetpackItem.class})
+@Mixin({FluidCellItem.class, FlexJetpackItem.class, FluidTankItem.class})
 public class AddFluidItemCapability extends Item{
 
 

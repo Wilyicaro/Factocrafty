@@ -2,7 +2,9 @@ package wily.factocrafty.entity;
 
 import dev.architectury.platform.Platform;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -76,7 +78,7 @@ public class LaserProjectile extends ThrowableProjectile {
             else {
                 RecipeManager.CachedCheck<Container, ? extends AbstractCookingRecipe> quickCheck = RecipeManager.createCheck(RecipeType.SMELTING);
                 Optional<? extends AbstractCookingRecipe> rcp = quickCheck.getRecipeFor(new SimpleContainer(new ItemStack(blockState.getBlock())), level);
-                rcp.ifPresent(abstractCookingRecipe -> level.addFreshEntity(new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), abstractCookingRecipe.getResultItem())));
+                rcp.ifPresent(abstractCookingRecipe -> level.addFreshEntity(new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), abstractCookingRecipe.getResultItem(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)))));
                 level.destroyBlock(blockHitResult.getBlockPos(), rcp.isEmpty(), this);
 
             }
@@ -104,7 +106,7 @@ public class LaserProjectile extends ThrowableProjectile {
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        entity.hurt(DamageSource.thrown(this, this.getOwner()), 4.5F);
+        entity.hurt(level.damageSources().thrown(this, this.getOwner()), 4.5F);
         entity.setSecondsOnFire(3);
         this.level.broadcastEntityEvent(this, (byte)3);
 

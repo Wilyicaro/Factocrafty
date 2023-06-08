@@ -45,13 +45,14 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
-    modApi "maven.modrinth:factory_api:${factory_api_version}-fabric"
+    modApi "wily.factory_api:factory_api-fabric:${minecraft_version}-${factory_api_version}"
     //modRuntimeOnly("curse.maven:jei-238222:4087656")
+
+    modCompileOnlyApi "mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
-    common(project(path: ":fabric-like", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":fabric-like", configuration: "transformProductionFabric")) { transitive false }
 }
 
 processResources {

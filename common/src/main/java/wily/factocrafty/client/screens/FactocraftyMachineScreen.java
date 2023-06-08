@@ -5,12 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.architectury.platform.Platform;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
@@ -18,28 +18,35 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.block.IFactocraftyOrientableBlock;
 import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.client.screens.widgets.windows.FactocraftyScreenWindow;
 import wily.factocrafty.client.screens.widgets.windows.MachineSidesConfig;
+import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
+import wily.factocrafty.client.screens.widgets.windows.UpgradesWindow;
 import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftySlotWrapper;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
-import wily.factoryapi.base.ProgressType;
+import wily.factocrafty.util.ScreenUtil;
+import wily.factoryapi.base.FactoryItemSlot;
+import wily.factoryapi.base.IFactoryDrawableType;
 import wily.factoryapi.base.Storages;
-import wily.factoryapi.util.ProgressElementRenderUtil;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -47,7 +54,7 @@ import static wily.factoryapi.util.StorageStringUtil.getCompleteEnergyTooltip;
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 
 
-public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractContainerScreen<FactocraftyProcessMenu<T>> implements IWindowWidget {
+public class FactocraftyMachineScreen<T extends FactocraftyProcessBlockEntity> extends AbstractContainerScreen<FactocraftyProcessMenu<T>> implements IWindowWidget {
     public FactocraftyMachineScreen(FactocraftyProcessMenu<T> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
 
@@ -59,11 +66,11 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
 
     protected int energyCellPosX = 112;
     protected int[] fluidTankPos = new int[]{56,14};
-    protected ProgressType energyCellType = FactocraftyProgressType.ENERGY_CELL;
+    protected IFactoryDrawableType.DrawableProgress energyCellType = FactocraftyDrawables.ENERGY_CELL;
 
-    protected ProgressType fluidTankType = FactocraftyProgressType.MINI_FLUID_TANK;
+    protected IFactoryDrawableType.DrawableProgress fluidTankType = FactocraftyDrawables.MINI_FLUID_TANK;
 
-    protected FactocraftyScreenWindow configWindow;
+    protected MachineSidesConfig configWindow;
 
 
 
@@ -71,17 +78,26 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
     @Override
     protected void init() {
         super.init();
-
-        if (getMenu().be instanceof FactocraftyProcessBlockEntity)
-            this.addConfigToGui(new FactocraftyConfigWidget(relX() - 18,  relY() + 20, true,Component.literal("Config Block Sides Transport"), new FactocraftyConfigWidget.Icons(3), this::renderTooltip)
-                ,(config)-> configWindow = new MachineSidesConfig(config,relX() + imageWidth / 2 - 65,relY(), (FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity>) this));
+            this.addConfigToGui(new FactocraftyConfigWidget(relX() - 18,  relY() + 20, false,Component.translatable("gui.factocrafty.window.transport"), new FactocraftyConfigWidget.Icons(3), this::renderTooltip)
+                ,(config)-> configWindow = new MachineSidesConfig(config,relX() + imageWidth / 2 - 65,relY(), this));
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+        this.addConfigToGui(new FactocraftyConfigWidget(relX() + imageWidth,  relY() + 20, true,Component.translatable("gui.factocrafty.window.upgrade"), new FactocraftyConfigWidget.Icons(0), this::renderTooltip)
+                ,(config)-> new UpgradesWindow(config,relX() + imageWidth + 21,relY(), this, new int[]{menu.upgradeSlot}));
+    }
 
+    @Override
+    protected void renderSlot(PoseStack poseStack, Slot slot) {
+        boolean b = slot instanceof FactocraftySlotWrapper s && s.blitOffset != 0;
+        float blit = b ? ((FactocraftySlotWrapper)slot).blitOffset : 0;
+        poseStack.pushPose();
+        if (b) poseStack.translate(0F,0F,blit);
+        super.renderSlot(poseStack, slot);
+        poseStack.popPose();
     }
 
     @Override
     public void render(PoseStack poseStack, int i, int j, float f) {
-        if (getMenu().storage instanceof FactocraftyProcessBlockEntity be) be.syncAdditionalMenuData(getMenu(), menu.player);
+        //if (getMenu().storage instanceof FactocraftyProcessBlockEntity be) be.syncAdditionalMenuData(getMenu(), menu.player);
         renderBackground(poseStack);
         super.render(poseStack, i, j, f);
         if (!configWindow.dragging)
@@ -96,8 +112,6 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
         poseStack.translate(relX(),relY(), 0.0F);
         renderStorageTooltips(poseStack,i - relX(), j - relY());
         poseStack.popPose();
-        renderButtons(poseStack,i,j);
-        renderButtonsTooltip(this,poseStack,i,j);
 
     }
 
@@ -114,12 +128,17 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
 
     @Override
     public void renderTooltip(PoseStack poseStack, List<Component> list, Optional<TooltipComponent> optional, int i, int j) {
-        if (!configWindow.isMouseOver(i,j) || !configWindow.isVisible()) super.renderTooltip(poseStack, list, optional, i, j);
+        if (getChildAt(i,j).isEmpty() || getChildAt(i,j).get() instanceof FactocraftyScreenWindow w && (!w.isVisible() || (!(w instanceof SlotsWindow s) || s.hasSlotAt(i,j)))){
+            poseStack.pushPose();
+            if (getChildAt(i,j).orElse(null) instanceof SlotsWindow s && s.hasSlotAt(i,j)) poseStack.translate(0F,0F, s.getBlitOffset());
+            super.renderTooltip(poseStack, list, optional, i, j);
+            poseStack.popPose();
+        }
     }
 
     @Override
     public boolean shouldCloseOnEsc() {
-        if (configWindow.isVisible() && getFocused() == configWindow) return false;
+        if (getFocused() instanceof FactocraftyScreenWindow w && w.isVisible()) return false;
         return super.shouldCloseOnEsc();
     }
 
@@ -139,15 +158,11 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
 
     protected void renderStorageTooltips(PoseStack poseStack, int i, int j){
         if (!getMenu().storage.getTanks().isEmpty() && fluidTankType.inMouseLimit(i,j,  fluidTankPos[0], fluidTankPos[1])) renderTooltip(poseStack, getFluidTooltip("tooltip.factory_api.fluid_stored", getMenu().storage.getTanks().get(0)),i, j);
-        if (getMenu().storage.getStorage(Storages.CRAFTY_ENERGY).isPresent() && energyCellType.inMouseLimit(i,j,  energyCellPosX,  17)) renderComponentTooltip(poseStack, getCompleteEnergyTooltip("tooltip.factory_api.energy_stored", getMenu().storage.getStorage(Storages.CRAFTY_ENERGY).get()),i, j);
+        getMenu().storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent(e->{if (energyCellType.inMouseLimit(i, j, energyCellPosX, 17)) renderComponentTooltip(poseStack, getCompleteEnergyTooltip("tooltip.factory_api.energy_stored", Component.translatable("tier.factocrafty.burned.note"),e), i, j);});
     }
 
-    @Override
-    protected void renderLabels(PoseStack poseStack, int i, int j) {
-        super.renderLabels(poseStack, i, j);
-    }
 
-    public int getProgressScaled(int min, int max, int pixels) {
+    public static int getProgressScaled(int min, int max, int pixels) {
         return max != 0 && min != 0 ? Math.round(min * (float)pixels / max) : 0;
     }
 
@@ -161,10 +176,16 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
     public boolean mouseReleased(double d, double e, int i) {
         if (Platform.isFabric()){
             this.setDragging(false);
+
             this.getChildAt(d, e).filter((guiEventListener) -> guiEventListener.mouseReleased(d, e, i));
         }
-        if (mouseClickedButtons(d,e,i)) return true;
         return super.mouseReleased(d, e, i);
+    }
+
+    @Override
+    public boolean mouseClicked(double d, double e, int i) {
+        if (mouseClickedButtons(d,e,i)) return true;
+        return super.mouseClicked(d, e, i);
     }
 
     @Override
@@ -173,10 +194,26 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
         RenderSystem.setShaderTexture(0, GUI());
         this.blit(poseStack, relX(), relY(), 0, 0, imageWidth, imageHeight);
         renderStorageSprites(poseStack,i,j);
+        renderButtons(poseStack,i,j);
+        renderButtonsTooltip(this::renderTooltip,poseStack,i,j);
     }
     protected void renderStorageSprites(PoseStack poseStack, int i, int j){
-        getMenu().storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)-> ProgressElementRenderUtil.renderDefaultProgress(poseStack,this,relX() + energyCellPosX, relY() + 17, getProgressScaled(e.getEnergyStored(),e.getMaxEnergyStored(), 52), energyCellType));
-        getMenu().storage.getStorage(Storages.FLUID).ifPresent((g)-> {if (!(getMenu().be instanceof FactocraftyMachineBlockEntity be) || (be.getActualRecipe(null,true) instanceof AbstractFactocraftyProcessRecipe re && re.hasFluidIngredient()))ProgressElementRenderUtil.renderFluidTank(poseStack,this,relX() + fluidTankPos[0], relY() + fluidTankPos[1], getProgressScaled((int) g.getFluidStack().getAmount(), (int) g.getMaxFluid(), fluidTankType.sizeY), fluidTankType, g.getFluidStack(), true);});
+        getMenu().storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)-> energyCellType.drawProgress(poseStack,relX() + energyCellPosX, relY() + 17, getProgressScaled(e.getEnergyStored(),e.getMaxEnergyStored(), 52)));
+        getMenu().storage.getStorage(Storages.FLUID).ifPresent((g)-> {if (!(getMenu().be instanceof FactocraftyMachineBlockEntity be) || !be.isInputSlotActive())fluidTankType.drawAsFluidTank(poseStack,relX() + fluidTankPos[0], relY() + fluidTankPos[1], getProgressScaled((int) g.getFluidStack().getAmount(), (int) g.getMaxFluid(), fluidTankType.height()), g.getFluidStack(), true);});
+        getMenu().slots.forEach((slot)-> {
+            if (slot instanceof FactoryItemSlot s && s.isActive()) {
+                IFactoryDrawableType drawSlot = s.getType() == FactoryItemSlot.Type.BIG ? FactocraftyDrawables.BIG_SLOT : FactocraftyDrawables.SLOT;
+                drawSlot.draw(poseStack, s.getType().getOutPos(relX() + s.x), s.getType().getOutPos(relY() + s.y));
+                if (configWindow.isVisible()) {
+                    IFactoryDrawableType drawOut = s.getType() == FactoryItemSlot.Type.BIG ? FactocraftyDrawables.BIG_SLOT_OUTLINE : FactocraftyDrawables.SLOT_OUTLINE;
+                    int c = Objects.requireNonNullElse(s.identifier().color().getColor(), 0xFFFFF);
+                    RenderSystem.setShaderColor(ScreenUtil.getRed(c), ScreenUtil.getGreen(c), ScreenUtil.getBlue(c), 1.0F);
+                    drawOut.draw(poseStack, s.getType().getOutPos(relX() + s.x), s.getType().getOutPos(relY() + s.y));
+                    RenderSystem.setShaderColor(1.0F,1.0F,1.0F, 1.0F);
+                }
+            }
+        });
+
     }
 
     public BakedModel getItemStackModel(ItemStack stack){
@@ -185,12 +222,13 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
 
     public void renderGuiBlock(@Nullable BlockEntity be, BlockState state, int i, int j, float scaleX, float scaleY, float rotateX, float rotateY) {
         minecraft.getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
+
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         PoseStack poseStack = RenderSystem.getModelViewStack();
         poseStack.pushPose();
-        poseStack.translate(i, j, 500.0F + this.getBlitOffset());
+        poseStack.translate(i, j, 500.0F );
         poseStack.translate(8.0, 8.0, 0.0);
         poseStack.scale(1.0F, -1.0F, 1.0F);
         poseStack.scale(16.0F, 16.0F, 16.0F);
@@ -214,7 +252,7 @@ public class FactocraftyMachineScreen<T extends BlockEntity> extends AbstractCon
                 stack.setTag( tag);
             }
         } else bakedModel = minecraft.getBlockRenderer().getBlockModel(state);
-        itemRenderer.render(stack, ItemTransforms.TransformType.NONE, false, poseStack2, bufferSource, 15728880, OverlayTexture.NO_OVERLAY, bakedModel);
+        itemRenderer.render(stack, ItemDisplayContext.NONE, false, poseStack2, bufferSource, 15728880, OverlayTexture.NO_OVERLAY, bakedModel);
         bufferSource.endBatch();
         RenderSystem.enableDepthTest();
 

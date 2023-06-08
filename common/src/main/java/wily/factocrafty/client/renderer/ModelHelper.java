@@ -25,10 +25,10 @@ public class ModelHelper {
 
     public static final BlockModel BLOCK_MODEL = loadBlockModelFromJson(new ResourceLocation("minecraft:models/block/cube_all"));
 
-    public static final BlockModel FLUID_MODEL = ModelHelper.loadBlockModelFromJson(new ResourceLocation( "factocrafty:models/block/fluid_tank/fluid_tank"));
+    public static final BlockModel FLUID_MODEL = ModelHelper.loadBlockModelFromJson(new ResourceLocation( "factocrafty:models/block/fluid_tank/fluid_model"));
     public static final BlockModel TREETAP_LATEX_MODEL = ModelHelper.loadBlockModelFromJson(new ResourceLocation("factocrafty:models/block/treetap/treetap_latex"));
     public static final BlockModel TREETAP_LATEX_FALL_MODEL = ModelHelper.loadBlockModelFromJson(new ResourceLocation("factocrafty:models/block/treetap/treetap_latex_fall"));
-    public static final BlockModel FLUID_TANK_MODEL = ModelHelper.loadBlockModelFromJson(new ResourceLocation("factocrafty:models/block/fluid_tank/fluid_model"));
+
     public static BlockModel loadBlockModelFromJson(ResourceLocation location) {
         try {
 

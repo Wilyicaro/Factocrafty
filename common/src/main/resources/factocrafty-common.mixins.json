@@ -3,15 +3,20 @@
   "package": "wily.factocrafty.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "CameraFogInjector",
+    "CameraInjector",
     "FogRendererInjector",
+    "GameRendererInjector",
     "ItemRendererInjector",
-    "MixinTitleScreen",
+    "LightTextureInjector",
+    "LocalPlayerInjector",
+    "MinecraftInjector",
+    "MixinSpriteContents",
     "PlayerModelInjector",
     "PlayerRendererInjector"
   ],
   "mixins": [
     "AxeItemRedirector",
+    "ClientLivingEntityInjector",
     "EntityInjector",
     "LivingEntityInjector"
   ],

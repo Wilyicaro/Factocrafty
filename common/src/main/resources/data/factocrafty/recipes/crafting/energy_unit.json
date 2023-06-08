@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CIC",
+    "#B#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:gold_cable"
+    },
+    "C": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "I": {
+      "item": "factocrafty:advanced_circuit_board"
+    },
+    "B":{
+      "item": "factocrafty:battery"
+    }
+},
+  "result": {
+    "item": "factocrafty:crafty_unit"
+  }
+}

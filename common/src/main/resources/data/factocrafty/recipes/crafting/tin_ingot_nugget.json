@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:tin_nugget"
+    }
+  },
+  "result": {
+    "item": "factocrafty:tin_ingot"
+  }
+}

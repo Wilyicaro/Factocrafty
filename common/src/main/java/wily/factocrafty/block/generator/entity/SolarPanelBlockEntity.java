@@ -9,12 +9,9 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
-import wily.factocrafty.block.FactocraftyProgressType;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factocrafty.block.cable.InsulatedCableBlock;
-import wily.factocrafty.block.entity.CYEnergyStorage;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
-import wily.factocrafty.block.entity.Progress;
 import wily.factocrafty.block.generator.SolarPanelTiers;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.util.registering.FactocraftyMenus;
@@ -26,16 +23,21 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
 
 
     public SolarPanelTiers solarTier;
-    public Progress tickEnergy;
+    public Bearer<Integer> tickEnergy;
 
     public SolarPanelBlockEntity(SolarPanelTiers tier, BlockPos blockPos, BlockState blockState) {
         super(FactocraftyMenus.SOLAR_PANEL,tier.energyTier,tier.getBlockEntity(), blockPos, blockState);
         FILL_SLOT = 0;
         DRAIN_SLOT = 0;
         this.solarTier = tier;
-        this.tickEnergy = new Progress(FactocraftyProgressType.SOLAR_GENERATING,1,(int) ((23 * solarTier.efficiency) * solarTier.energyTier.capacityMultiplier));
-        this.energyStorage = new CYEnergyStorage(this, 0,tier.energyTier.energyCapacity, 2500,solarTier.energyTier);
+        this.tickEnergy = Bearer.of(0);
+        this.additionalSyncInt.add(tickEnergy);
         if (blockState.isFaceSturdy(level,blockPos,Direction.UP)) energySides.replace(Direction.UP, TransportState.NONE);
+    }
+
+    @Override
+    public int getInitialEnergyCapacity() {
+        return defaultEnergyTier.energyCapacity;
     }
 
     @Override
@@ -43,10 +45,6 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
         slots.add(new FactocraftyCYItemSlot(this,0,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC));
     }
 
-    @Override
-    public void addProgresses(List<Progress> list) {
-        list.add(tickEnergy);
-    }
 
     @Override
     public List<Direction> getBlockedSides() {
@@ -61,14 +59,14 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
             f += (f1 - f) * 0.2F;
             i = Math.round((float)i * Mth.cos(f));
         }
-        i = Mth.clamp(i * tickEnergy.maxProgress / 15, 0, tickEnergy.maxProgress);
+        int max = (int) ((23 * solarTier.efficiency) * solarTier.energyTier.capacityMultiplier);
+        i = Mth.clamp(i * max / 15, 0, max);
 
         return i;
     }
     public void tick() {
         if (!level.isClientSide) {
-
-            tickEnergy.setInt(0,energyStorage.receiveEnergy(new ICraftyEnergyStorage.EnergyTransaction(getEnergyPerTick(),solarTier.energyTier), false).energy);
+            tickEnergy.set(energyStorage.receiveEnergy(new ICraftyEnergyStorage.EnergyTransaction(getEnergyPerTick(),solarTier.energyTier), false).energy);
             super.tick();
             for (Direction direction : Direction.values()) {
                 BlockPos pos = getBlockPos().relative(direction);
@@ -78,7 +76,7 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
                         CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(direction, e));
                 }
             }
-            if ( tickEnergy.getInt(0) > 0 != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)) level.setBlock(worldPosition,getBlockState().setValue(FactocraftyMachineBlock.ACTIVE,tickEnergy.getInt(0) > 0),3);
+            if ( tickEnergy.get() > 0 != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)) level.setBlock(worldPosition,getBlockState().setValue(FactocraftyMachineBlock.ACTIVE,tickEnergy.get() > 0),3);
         }
     }
 

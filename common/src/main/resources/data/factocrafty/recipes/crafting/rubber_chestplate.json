@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#O#",
+    "#R#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "factocrafty:rubber"
+    },
+    "O": {
+      "item": "minecraft:orange_dye"
+    },
+    "R": {
+      "item": "factocrafty:iron_plate"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rubber_chestplate"
+  }
+}

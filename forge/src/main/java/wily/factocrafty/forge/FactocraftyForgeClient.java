@@ -1,43 +1,30 @@
 package wily.factocrafty.forge;
 
-import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
-import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
-import dev.architectury.registry.client.level.entity.forge.EntityRendererRegistryImpl;
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.ChestBoatModel;
+import dev.architectury.event.events.client.ClientLifecycleEvent;
+import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.FactocraftyClient;
-import wily.factocrafty.block.cable.InsulatedCableBlock;
-import wily.factocrafty.client.renderer.entity.FactocraftyBoatRenderer;
-import wily.factocrafty.entity.IFactocraftyBoat;
-import wily.factocrafty.init.Registration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
+
 
 @Mod.EventBusSubscriber(modid = Factocrafty.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FactocraftyForgeClient {
@@ -45,9 +32,7 @@ public class FactocraftyForgeClient {
     public static List<ResourceLocation> REGISTER_MODELS = new ArrayList<>();
 
     @SubscribeEvent
-    public static void clientInit(FMLClientSetupEvent event){
-        event.enqueueWork(FactocraftyClient::init);
-    }
+    public static void clientInit(FMLClientSetupEvent event){event.enqueueWork(FactocraftyClient::enqueueInit);}
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event){
         FactocraftyClient.registerEntityRenderers(new FactocraftyClient.FactocraftyEntityRendererRegistry() {
@@ -57,7 +42,7 @@ public class FactocraftyForgeClient {
             }
         });
     }
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
         FactocraftyClient.registerEntityModelLayers(event::registerLayerDefinition);
     }
@@ -67,7 +52,6 @@ public class FactocraftyForgeClient {
                     @Override
                     public <T extends LivingEntity, M extends EntityModel<T>> void register(LivingEntityRenderer<T, M> renderer, RenderLayer<T, M> renderLayer) {
                         renderer.addLayer(renderLayer);
-                        Factocrafty.LOGGER.info("EOQ");
                     }
                 }
         );

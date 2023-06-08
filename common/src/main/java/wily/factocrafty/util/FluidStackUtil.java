@@ -13,11 +13,12 @@ public class FluidStackUtil {
     public static FluidStack fromJson(JsonObject jsonObject){
         if (jsonObject != null){
             String string2 = GsonHelper.getAsString(jsonObject, "fluid", "minecraft:empty");
-            long amount = getPlatformFluidAmount(GsonHelper.getAsLong(jsonObject, "amount", FluidStack.bucketAmount()));
+            long amount = getPlatformFluidAmount(GsonHelper.getAsLong(jsonObject, "amount", 1000));
             return FluidStack.create(BuiltInRegistries.FLUID.get(new ResourceLocation(string2)),amount);
         }
         return FluidStack.empty();
     }
+
     public static long getPlatformFluidAmount(long amount){
         return (long) (((float)amount / 1000) * FluidStack.bucketAmount());
     }

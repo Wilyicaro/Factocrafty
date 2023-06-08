@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:compressing",
+  "ingredient": {
+    "item": "factocrafty:graphene_dust"
+  },
+  "result": "factocrafty:graphene",
+  "experience": 0.2,
+  "processtime": 400
+}

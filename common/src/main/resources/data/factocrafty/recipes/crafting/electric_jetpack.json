@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RCR",
+    "#B#",
+    " E "
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:iron_plate"
+    },
+    "R": {
+      "item": "factocrafty:refined_iron"
+    },
+    "B": {
+      "item": "factocrafty:battery_box"
+    },
+    "E": {
+      "item": "factocrafty:electric_motor"
+    },
+    "C": {
+      "item": "factocrafty:advanced_circuit"
+    }
+  },
+  "result": {
+    "item": "factocrafty:electric_jetpack"
+  }
+}

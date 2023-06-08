@@ -1,5 +1,5 @@
 {
-  "type": "factocrafty:refining_item",
+  "type": "factocrafty:refining",
   "ingredient": {
     "item": "minecraft:iron_ingot"
   },
