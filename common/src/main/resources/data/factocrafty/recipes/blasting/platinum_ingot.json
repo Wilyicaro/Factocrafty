@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item" : "factocrafty:raw_platinum"
+  },
+  "result": "factocrafty:platinum_ingot",
+  "experience": 0.15
+}

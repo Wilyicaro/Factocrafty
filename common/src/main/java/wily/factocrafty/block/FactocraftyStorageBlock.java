@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
@@ -37,10 +38,7 @@ import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.WrenchItem;
 import wily.factoryapi.ItemContainerUtil;
-import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.IFactoryStorage;
-import wily.factoryapi.base.IPlatformFluidHandler;
-import wily.factoryapi.base.Storages;
+import wily.factoryapi.base.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,28 +91,26 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     }
     public InteractionResult interactFluidItem(IFactoryStorage storage, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-            for(IPlatformFluidHandler tank : storage.getTanks()) {
-                FluidStack fluidStack = ItemContainerUtil.getFluid(player, hand);
-                long a = 0;
-                if (tank.getTransport().canExtract() && !tank.getFluidStack().isEmpty() && (fluidStack.isEmpty() || fluidStack.isFluidEqual(tank.getFluidStack())) && (!(stack.getItem() instanceof BucketItem) || (tank.getFluidStack().getAmount() >= FluidStack.bucketAmount()))) {
-                    if (!tank.drain((int) ItemContainerUtil.fillItem(tank.getFluidStack(),player,hand), false).isEmpty())
-                        return InteractionResult.SUCCESS;
-                }
-                if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || !(fluidStack.isFluidEqual(tank.getFluidStack()) || tank.getFluidStack().isEmpty()) || !tank.getTransport().canInsert()) continue;
-                if (tank.getTotalSpace() > 0 && !(stack.getItem() instanceof BucketItem) || tank.getTotalSpace() >= FluidStack.bucketAmount()) {
-                    if (!ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), player, hand).isEmpty())
-                        return InteractionResult.SUCCESS;
-                }
-            };
+        for(IPlatformFluidHandler tank : storage.getTanks()) {
+            FluidStack fluidStack = ItemContainerUtil.getFluid(player, hand);
+            if (tank.getTransport().canExtract() && !tank.getFluidStack().isEmpty() && (fluidStack.isEmpty() || fluidStack.isFluidEqual(tank.getFluidStack())) && (!(stack.getItem() instanceof BucketItem) || (tank.getFluidStack().getAmount() >= FluidStack.bucketAmount()))) {
+                if (!tank.drain((int) ItemContainerUtil.fillItem(tank.getFluidStack(),player,hand), false).isEmpty())
+                    return InteractionResult.SUCCESS;
+            }
+            if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || !(fluidStack.isFluidEqual(tank.getFluidStack()) || tank.getFluidStack().isEmpty()) || !tank.getTransport().canInsert()) continue;
+            if (tank.getTotalSpace() > 0 && !(stack.getItem() instanceof BucketItem) || tank.getTotalSpace() >= FluidStack.bucketAmount()) {
+                if (!ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), player, hand).isEmpty())
+                    return InteractionResult.SUCCESS;
+            }
+        }
 
-            return InteractionResult.CONSUME;
+        return InteractionResult.CONSUME;
     }
 
     private void interactWith(Level world, BlockPos pos, Player player) {
         BlockEntity be = world.getBlockEntity(pos);
-        if (be instanceof MenuProvider) {
+        if (be instanceof ExtendedMenuProvider) {
             MenuRegistry.openExtendedMenu((ServerPlayer) player, (ExtendedMenuProvider) be);
-            //player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }
     @Override
@@ -122,25 +118,17 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
-    @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-        if(capacityTier !=null)
-        list.add(capacityTier.getEnergyTierComponent(false));
-    }
 
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
 
         List<ItemStack> list = new ArrayList<>();
         ItemStack itself = new ItemStack(asItem());
         ItemStack tool = builder.getParameter(LootContextParams.TOOL);
 
-
             if (builder.getParameter(LootContextParams.BLOCK_ENTITY) instanceof FactocraftyProcessBlockEntity be)
                 if (( tool.getItem() instanceof WrenchItem || (EnchantmentHelper.getEnchantments(tool).containsKey(Enchantments.SILK_TOUCH) && tool.isCorrectToolForDrops(blockState)) || be.getLevel().random.nextFloat() <= 0.5)) {
-                CompoundTag tag = new CompoundTag();
-                tag.put("BlockEntityTag", be.getUpdateTag());
-                itself.setTag(tag);
+                be.saveToItem(itself);
                 list.add(itself);
             }else list.add(new ItemStack(Registration.MACHINE_FRAME_BASE.get()));
             else list.add(itself);
@@ -158,8 +146,8 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
         return(level1, pos, blockState1, be) -> {
-            if (be instanceof FactocraftyStorageBlockEntity factocraftyMachineBlockEntity)
-                factocraftyMachineBlockEntity.tick();
+            if (be instanceof FactocraftyStorageBlockEntity blockEntity)
+                blockEntity.tick();
 
         };
     }

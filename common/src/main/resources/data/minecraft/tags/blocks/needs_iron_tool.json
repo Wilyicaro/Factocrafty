@@ -6,6 +6,12 @@
     "factocrafty:platinum_block",
     "factocrafty:ruby_ore",
     "factocrafty:deepslate_ruby_ore",
-    "factocrafty:ruby_block"
+    "factocrafty:ruby_block",
+    "factocrafty:silver_ore",
+    "factocrafty:deepslate_silver_ore",
+    "factocrafty:silver_block",
+    "factocrafty:raw_silver_block",
+    "factocrafty:deepslate_uranium_ore",
+    "factocrafty:uranium_block"
   ]
 }

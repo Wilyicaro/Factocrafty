@@ -4,12 +4,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.ICraftyEnergyStorage;
-import wily.factoryapi.base.IStorageItem;
 import wily.factoryapi.base.TransportState;
 
 import static net.minecraft.world.item.BlockItem.BLOCK_ENTITY_TAG;
 
-public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
+public class CYItemEnergyStorage implements ICraftyEnergyStorage {
     private static final String KEY = "energy";
 
 
@@ -58,7 +57,7 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
         int energyReceived = Math.min(getSpace(), Math.min(this.maxInOut, transaction.energy));
         int energy = getEnergyStored();
         if (!simulate) {
-            if ( transaction.tier.supportTier(supportableTier)) setStoredTier(transaction.tier);
+            if ( supportableTier.supportTier(transaction.tier)) setStoredTier(transaction.tier);
             else {
                 return EnergyTransaction.EMPTY;
             }
@@ -122,13 +121,9 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage, IStorageItem {
 
     @Override
     public void deserializeTag(CompoundTag nbt) {
-        this.container.setTag((CompoundTag) nbt);
+        this.container.setTag(nbt);
     }
 
-    @Override
-    public ItemStack getContainer() {
-        return container;
-    }
 
     public int getMaxConsume(){
         return Math.min(getEnergyStored(),maxInOut);

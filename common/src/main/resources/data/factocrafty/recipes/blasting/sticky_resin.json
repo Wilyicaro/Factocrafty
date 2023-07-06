@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item" : "factocrafty:sticky_resin"
+  },
+  "result": "factocrafty:rubber",
+  "experience": 0.15
+}

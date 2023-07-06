@@ -51,18 +51,19 @@ public class CompoundResultMachineBlockEntity<T extends AbstractFactocraftyProce
     }
 
     @Override
-    protected void setOtherResults(@Nullable Recipe<?> recipe, IPlatformItemHandler inv, int i) {
-        assert recipe != null;
-        Map<ItemStack,Float> map = ((FactocraftyMachineRecipe)recipe).getOtherResults();
-        for (int j = 0; j < map.size(); j++) {
-            List<Map.Entry<ItemStack, Float>> list = map.entrySet().stream().sorted(Map.Entry.comparingByValue()).toList();
-            ItemStack result = list.get(j).getKey();
-            ItemStack resultSlot = inv.getItem(OTHER_RESULT_SLOT);
-            if(level.random.nextFloat() <= map.entrySet().stream().toList().get(j).getValue() &&  !result.isEmpty() && (result.is(resultSlot.getItem()) || resultSlot.isEmpty())){
-                addOrSetItem( result,inv,OTHER_RESULT_SLOT);
-                return;
+    protected void setOtherResults(T recipe, IPlatformItemHandler inv, int i) {
+        if (recipe.hasFluidIngredient()) fluidTank.drain(recipe.getFluidIngredient(),false);
+        if (recipe.hasItemIngredient()) {
+            Map<ItemStack, Float> map = recipe.getOtherResults();
+            for (int j = 0; j < map.size(); j++) {
+                List<Map.Entry<ItemStack, Float>> list = map.entrySet().stream().sorted(Map.Entry.comparingByValue()).toList();
+                ItemStack result = list.get(j).getKey();
+                ItemStack resultSlot = inv.getItem(OTHER_RESULT_SLOT);
+                if (level.random.nextFloat() <= map.entrySet().stream().toList().get(j).getValue() && !result.isEmpty() && (result.is(resultSlot.getItem()) || resultSlot.isEmpty())) {
+                    addOrSetItem(result, inv, OTHER_RESULT_SLOT);
+                    return;
+                }
             }
         }
     }
-
 }

@@ -19,19 +19,15 @@ import wily.factocrafty.Factocrafty;
 import wily.factocrafty.inventory.FactocraftyProcessMenu;
 import wily.factocrafty.inventory.UpgradeList;
 import wily.factocrafty.item.UpgradeType;
-import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
 import wily.factocrafty.network.FactocraftySyncSelectedUpgradePacket;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FactocraftyProcessBlockEntity extends FactocraftyStorageBlockEntity implements ExtendedMenuProvider, IFactoryProcessableStorage {
     private final FactocraftyMenus menu;
     protected final FactoryCapacityTiers defaultEnergyTier;
-
-    public final List<Bearer<Integer>> additionalSyncInt = new ArrayList<>();
     public FactocraftyProcessBlockEntity(FactocraftyMenus menu, FactoryCapacityTiers energyTier, BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
         super(blockEntity, blockPos, blockState);
         this.menu = menu;
@@ -43,7 +39,7 @@ public class FactocraftyProcessBlockEntity extends FactocraftyStorageBlockEntity
     public int selectedUpgrade = -1;
 
     public int getInitialEnergyCapacity(){
-        return defaultEnergyTier.getDefaultCapacity();
+        return defaultEnergyTier.getDefaultCapacity() / 2;
     }
     public int getProgress() {
         return 1;
@@ -64,27 +60,25 @@ public class FactocraftyProcessBlockEntity extends FactocraftyStorageBlockEntity
     }
 
     @Override
-    public void saveTag(CompoundTag compoundTag) {
-        IFactoryProcessableStorage.super.saveTag(compoundTag);
+    public void saveAdditional(CompoundTag compoundTag) {
+        super.saveAdditional(compoundTag);
         ListTag upgradeItems = new ListTag();
         storedUpgrades.forEach((i)-> upgradeItems.add(i.save(new CompoundTag())));
         compoundTag.putInt("selectedUpgrade",Math.min(storedUpgrades.size() - 1,selectedUpgrade));
         compoundTag.put("StoredUpgrades", upgradeItems);
-        if (!additionalSyncInt.isEmpty()) compoundTag.putIntArray("additionalInt", additionalSyncInt.stream().map(Bearer::get).toList());
+
     }
 
     public void syncAdditionalMenuData(AbstractContainerMenu menu, ServerPlayer player){
         Factocrafty.NETWORK.sendToPlayer(player,new FactocraftySyncSelectedUpgradePacket(getBlockPos(),selectedUpgrade));
-        for (Bearer<Integer> b : additionalSyncInt) Factocrafty.NETWORK.sendToPlayer(player,new FactocraftySyncIntegerBearerPacket(getBlockPos(), b.get(),additionalSyncInt.indexOf(b)));
+        super.syncAdditionalMenuData(menu,player);
     }
 
     @Override
     public void load(CompoundTag compoundTag) {
-        IFactoryProcessableStorage.super.loadTag(compoundTag);
-        compoundTag.getList("StoredUpgrades",10).forEach((t ->{if (t instanceof CompoundTag cT && storedUpgrades.stream().noneMatch(i-> i.sameItem(ItemStack.of(cT))))storedUpgrades.add(ItemStack.of(cT));}));
+        super.load(compoundTag);
+        compoundTag.getList("StoredUpgrades",10).forEach((t ->{if (t instanceof CompoundTag cT && storedUpgrades.stream().noneMatch(i-> ItemStack.isSameItem(i,ItemStack.of(cT))))storedUpgrades.add(ItemStack.of(cT));}));
         this.selectedUpgrade = Math.min(storedUpgrades.size() - 1,compoundTag.getInt("selectedUpgrade"));
-        int[] ar = compoundTag.getIntArray("additionalInt");
-        for (int i = 0; i < ar.length; i++) additionalSyncInt.get(i).set(ar[i]);
     }
 
     @Override

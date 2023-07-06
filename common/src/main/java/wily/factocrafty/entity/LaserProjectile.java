@@ -71,23 +71,23 @@ public class LaserProjectile extends ThrowableProjectile {
     protected void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
         BlockPos blockPos = blockHitResult.getBlockPos();
-        BlockState blockState =  level.getBlockState(blockPos);
+        BlockState blockState =  level().getBlockState(blockPos);
 
         if (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.BASE_STONE_OVERWORLD) || blockState.is(BlockTags.STONE_ORE_REPLACEABLES)|| blockState.is(BlockTags.SAND) || blockState.getBlock().asItem().builtInRegistryHolder().is(ore)){
-            if (level.random.nextFloat() >= 0.25 )level.destroyBlock(blockHitResult.getBlockPos(),true,this);
+            if (level().random.nextFloat() >= 0.25 )level().destroyBlock(blockHitResult.getBlockPos(),true,this);
             else {
                 RecipeManager.CachedCheck<Container, ? extends AbstractCookingRecipe> quickCheck = RecipeManager.createCheck(RecipeType.SMELTING);
-                Optional<? extends AbstractCookingRecipe> rcp = quickCheck.getRecipeFor(new SimpleContainer(new ItemStack(blockState.getBlock())), level);
-                rcp.ifPresent(abstractCookingRecipe -> level.addFreshEntity(new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), abstractCookingRecipe.getResultItem(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)))));
-                level.destroyBlock(blockHitResult.getBlockPos(), rcp.isEmpty(), this);
+                Optional<? extends AbstractCookingRecipe> rcp = quickCheck.getRecipeFor(new SimpleContainer(new ItemStack(blockState.getBlock())), level());
+                rcp.ifPresent(abstractCookingRecipe -> level().addFreshEntity(new ItemEntity(level(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), abstractCookingRecipe.getResultItem(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)))));
+                level().destroyBlock(blockHitResult.getBlockPos(), rcp.isEmpty(), this);
 
             }
         }
-        else if(blockState.is(BlockTags.LEAVES) || blockState.is(BlockTags.REPLACEABLE_PLANTS) || blockState.is(BlockTags.LOGS_THAT_BURN)) {
-        if (level.random.nextFloat() >= 0.5) level.destroyBlock(blockPos,true,this);
-        else level.setBlock(blockPos, Blocks.FIRE.defaultBlockState(),3);
+        else if(blockState.is(BlockTags.LEAVES) || blockState.is(BlockTags.REPLACEABLE) || blockState.is(BlockTags.LOGS_THAT_BURN)) {
+        if (level().random.nextFloat() >= 0.5) level().destroyBlock(blockPos,true,this);
+        else level().setBlock(blockPos, Blocks.FIRE.defaultBlockState(),3);
         }else{
-                this.level.broadcastEntityEvent(this, (byte)3);
+                this.level().broadcastEntityEvent(this, (byte)3);
                 this.discard();
             }
 
@@ -97,7 +97,7 @@ public class LaserProjectile extends ThrowableProjectile {
         if (b == 3) {
 
             for(int i = 0; i < 8; ++i) {
-                this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
             }
         }
 
@@ -106,11 +106,11 @@ public class LaserProjectile extends ThrowableProjectile {
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        entity.hurt(level.damageSources().thrown(this, this.getOwner()), 4.5F);
+        entity.hurt(level().damageSources().thrown(this, this.getOwner()), 4.5F);
         entity.setSecondsOnFire(3);
-        this.level.broadcastEntityEvent(this, (byte)3);
+        this.level().broadcastEntityEvent(this, (byte)3);
 
-        if (level.random.nextFloat() >= 0.2) discard();
+        if (level().random.nextFloat() >= 0.2) discard();
         else entity.setSecondsOnFire(3);
     }
 

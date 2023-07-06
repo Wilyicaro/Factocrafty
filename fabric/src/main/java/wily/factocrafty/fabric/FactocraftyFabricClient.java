@@ -38,7 +38,8 @@ public class FactocraftyFabricClient implements ClientModInitializer {
                 }
             });
         });
-        ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> new JetpackModel<>(contextModel, Minecraft.getInstance().getEntityModels().bakeLayer(JetpackModel.LAYER_LOCATION)).renderToBuffer(matrices,vertexConsumers.getBuffer(RenderType.entityCutout(JetpackModel.getTexture())), light, OverlayTexture.NO_OVERLAY,1.0F,1.0F,1.0F, 1.0F),Registration.ELECTRIC_JETPACK.get());
+        ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> new JetpackModel<>(contextModel, Minecraft.getInstance().getEntityModels().bakeLayer(JetpackModel.LAYER_LOCATION)).renderToBuffer(matrices,vertexConsumers.getBuffer(RenderType.entityCutout(JetpackModel.geteElectricTexture())), light, OverlayTexture.NO_OVERLAY,1.0F,1.0F,1.0F, 1.0F),Registration.ELECTRIC_JETPACK.get());
+        ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> new JetpackModel<>(contextModel, Minecraft.getInstance().getEntityModels().bakeLayer(JetpackModel.LAYER_LOCATION)).renderToBuffer(matrices,vertexConsumers.getBuffer(RenderType.entityCutout(JetpackModel.geteFlexTexture())), light, OverlayTexture.NO_OVERLAY,1.0F,1.0F,1.0F, 1.0F),Registration.FLEX_JETPACK.get());
 
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
             out.accept(new ModelResourceLocation(new ResourceLocation(Factocrafty.MOD_ID, "fluid_cell_base"), "inventory"));

@@ -1,0 +1,17 @@
+{
+  "type": "factocrafty:gaseous_infusion",
+  "fluid_ingredient": {
+    "fluid": "factocrafty:methane",
+    "amount": 500
+  },
+  "extra_fluid": {
+    "fluid": "factocrafty:naphtha",
+    "amount": 500
+  },
+  "fluid_result": {
+    "fluid": "factocrafty:isoprene",
+    "amount": 600
+  },
+  "experience": 0.4,
+  "processtime": 250
+}

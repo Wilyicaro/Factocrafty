@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " II",
+    "#CI",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "I": {
+      "item": "factocrafty:iron_plate"
+    },
+    "C": {
+      "item": "factocrafty:power_unit"
+    }
+  },
+  "result": {
+    "item": "factocrafty:mining_drill"
+  }
+}

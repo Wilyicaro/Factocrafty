@@ -2,6 +2,7 @@ package wily.factocrafty.client.screens;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,7 +17,6 @@ public class BasicMachineScreen extends FactocraftyMachineScreen<FactocraftyMach
 
     public BasicMachineScreen(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
-        energyCellPosX = 20;
 
     }
     public static BasicMachineScreen create(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
@@ -26,8 +26,8 @@ public class BasicMachineScreen extends FactocraftyMachineScreen<FactocraftyMach
     public ResourceLocation GUI() {return BACKGROUND_LOCATION;}
 
     @Override
-    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
-        super.renderStorageSprites(poseStack, i, j);
-        FactocraftyDrawables.MACHINE_PROGRESS.drawProgress(poseStack,relX() + 80, relY() + 40, getProgressScaled(getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime(), 21));
+    protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
+        super.renderStorageSprites(graphics, i, j);
+        FactocraftyDrawables.MACHINE_PROGRESS.drawProgress(graphics,leftPos + 80, topPos + 40, getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime());
     }
 }

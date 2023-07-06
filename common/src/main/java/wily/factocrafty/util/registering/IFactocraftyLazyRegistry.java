@@ -1,6 +1,8 @@
 package wily.factocrafty.util.registering;
 
-public interface IFactocraftyLazyRegistry<T> {
+import java.util.function.Supplier;
+
+public interface IFactocraftyLazyRegistry<T> extends Supplier<T> {
 
     T get();
 

@@ -54,6 +54,7 @@ public class ChangeableInputMachineBlockEntity extends CompoundResultMachineBloc
         }, SlotsIdentifier.INPUT, TransportState.INSERT);
 
     }
+
     public ChangeableInputMachineBlockEntity(BlockPos blockPos, BlockState blockState){
         this(FactocraftyMenus.EXTRACTOR,Registration.EXTRACTOR_RECIPE.get(),Registration.EXTRACTOR_BLOCK_ENTITY.get(), blockPos, blockState);
     }

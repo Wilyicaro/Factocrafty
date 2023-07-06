@@ -12,11 +12,11 @@
     "MinecraftInjector",
     "MixinSpriteContents",
     "PlayerModelInjector",
-    "PlayerRendererInjector"
+    "PlayerRendererInjector",
+    "ClientLivingEntityInjector"
   ],
   "mixins": [
     "AxeItemRedirector",
-    "ClientLivingEntityInjector",
     "EntityInjector",
     "LivingEntityInjector"
   ],

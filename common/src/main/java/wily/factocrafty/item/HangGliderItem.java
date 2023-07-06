@@ -31,7 +31,7 @@ public class HangGliderItem extends ElytraItem implements ItemExtension,DyeableL
     }
     public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
 
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             int nextFlightTick = flightTicks + 1;
             if (nextFlightTick % 10 == 0) {
                 if (nextFlightTick % 30 == 0) {
@@ -67,8 +67,8 @@ public class HangGliderItem extends ElytraItem implements ItemExtension,DyeableL
     @Override
     public void tickArmor(ItemStack stack, Player entity) {
         int nextRoll = entity.getFallFlyingTicks() + 1;
-        if (entity.isOnGround() && !entity.isFallFlying()) entity.setSpeed(0.03F);
-        if (!entity.level.isClientSide && nextRoll % 10 == 0) {
+        if (entity.onGround() && !entity.isFallFlying()) entity.setSpeed(0.03F);
+        if (!entity.level().isClientSide && nextRoll % 10 == 0) {
             if ((nextRoll / 10) % 3 == 0) {
                 entity.gameEvent(GameEvent.ELYTRA_GLIDE);
             }

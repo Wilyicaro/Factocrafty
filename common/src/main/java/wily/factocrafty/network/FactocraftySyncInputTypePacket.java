@@ -36,8 +36,8 @@ public class FactocraftySyncInputTypePacket {
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
-            BlockEntity te = player.getLevel().getBlockEntity(pos);
-            if (player.level.isLoaded(pos)) {
+            BlockEntity te = player.level().getBlockEntity(pos);
+            if (player.level().isLoaded(pos)) {
                 if (te instanceof ChangeableInputMachineBlockEntity fs) {
                     if (inputType != fs.inputType) fs.inputType = inputType;
                 }

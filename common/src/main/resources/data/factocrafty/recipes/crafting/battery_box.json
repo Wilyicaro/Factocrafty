@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#C#",
+    "BBB",
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "B": {
+      "item": "factocrafty:battery"
+    },
+    "C": {
+      "item": "factocrafty:insulated_copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:battery_box"
+  }
+}

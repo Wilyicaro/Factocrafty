@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item" : "factocrafty:steel_dust"
+  },
+  "result": "factocrafty:steel_ingot",
+  "experience": 0.15
+}

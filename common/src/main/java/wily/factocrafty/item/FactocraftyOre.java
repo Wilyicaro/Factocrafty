@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.init.Registration;
@@ -156,37 +156,37 @@ public class FactocraftyOre {
     }
 
     public enum Material {
-        EMPTY(MaterialColor.NONE),
+        EMPTY(MapColor.NONE),
 
-        COAL(MaterialColor.COLOR_BLACK,List.of(BLOCK,COMMON_DROP,ORE), DUST, CRUSHED),
-        COPPER(MaterialColor.COLOR_ORANGE,List.of(BLOCK,INGOT,ORE),DUST, CRUSHED,PLATE,NUGGET),
-        IRON(MaterialColor.METAL,List.of(BLOCK,INGOT,NUGGET,ORE),DUST,REFINED,CRUSHED,PLATE,ROD),
-        GOLD(MaterialColor.GOLD,List.of(BLOCK,INGOT,NUGGET,ORE),DUST, CRUSHED, PLATE),
-        DIAMOND(MaterialColor.DIAMOND,List.of(BLOCK,COMMON_DROP,ORE),DUST, NUGGET, CRUSHED),
-        REDSTONE(MaterialColor.COLOR_RED,List.of(BLOCK,COMMON_DROP,ORE),CRUSHED),
-        LAPIS(MaterialColor.LAPIS,List.of(BLOCK,new Derivative("common_drop","","lazuli"),ORE),CRUSHED,DUST),
-        EMERALD(MaterialColor.EMERALD,List.of(BLOCK,COMMON_DROP,ORE),DUST, NUGGET, CRUSHED),
-        NETHERITE(MaterialColor.COLOR_BLACK,List.of(INGOT),DUST, NUGGET),
-        TIN(MaterialColor.METAL, null, null, common),
-        BRONZE(MaterialColor.COLOR_ORANGE, FactocraftyArmorMaterials.BRONZE, FactocraftyTiers.BRONZE, INGOT, NUGGET, BLOCK, DUST, PLATE),
-        SILVER(MaterialColor.METAL, null, null, commonDerivatives(5, 6, -64, 72)),
-        LEAD(MaterialColor.METAL, null, null, commonDerivatives(8, 8, -64, 50)),
-        PLATINUM(MaterialColor.COLOR_LIGHT_BLUE, FactocraftyArmorMaterials.PLATINUM, FactocraftyTiers.PLATINUM, normalOre(0, 10, 14, 20, 80), BLOCK, INGOT, NUGGET, RAW, DUST, CRUSHED, PLATE),
-        URANIUM(MaterialColor.COLOR_LIGHT_GREEN,  deepOre(4, 4, 8, -64, 10), BLOCK, REFINED, NUGGET, DUST, COMMON_DROP, CRUSHED, PLATE),
-        RUBY(MaterialColor.COLOR_RED, FactocraftyArmorMaterials.RUBY, FactocraftyTiers.RUBY, new OreDerivative(5, 6, 5, -80, 25, 7, -50, 90, true, true), BLOCK, NUGGET, DUST, COMMON_DROP, CRUSHED),
-        STONE(MaterialColor.STONE,DUST),
-        DEEPSLATE(MaterialColor.DEEPSLATE,DUST),
-        RUBBER(MaterialColor.COLOR_BLACK, FactocraftyArmorMaterials.RUBBER, null,COMMON_DROP),
-        SYNTHETIC_RUBBER(MaterialColor.COLOR_BLACK, COMMON_DROP),
-        WOOD(MaterialColor.WOOD,DUST.withCustomName("sawdust")),
-        SILICON(MaterialColor.COLOR_LIGHT_GRAY,COMMON_DROP,REFINED,PLATE),
-        GRAPHENE(MaterialColor.COLOR_GRAY,COMMON_DROP, DUST),
-        GRAPHITE(MaterialColor.COLOR_BLACK,INGOT),
-        IRIDIUM(MaterialColor.TERRACOTTA_WHITE,COMMON_DROP, PLATE, NUGGET),
-        STEEL(MaterialColor.COLOR_GRAY,BLOCK,INGOT,PLATE,NUGGET,DUST);
+        COAL(MapColor.COLOR_BLACK,List.of(BLOCK,COMMON_DROP,ORE), DUST, CRUSHED),
+        COPPER(MapColor.COLOR_ORANGE,List.of(BLOCK,INGOT,ORE),DUST, CRUSHED,PLATE,NUGGET),
+        IRON(MapColor.METAL,List.of(BLOCK,INGOT,NUGGET,ORE),DUST,REFINED,CRUSHED,PLATE,ROD),
+        GOLD(MapColor.GOLD,List.of(BLOCK,INGOT,NUGGET,ORE),DUST, CRUSHED, PLATE),
+        DIAMOND(MapColor.DIAMOND,List.of(BLOCK,COMMON_DROP,ORE),DUST, NUGGET, CRUSHED),
+        REDSTONE(MapColor.COLOR_RED,List.of(BLOCK,COMMON_DROP,ORE),CRUSHED),
+        LAPIS(MapColor.LAPIS,List.of(BLOCK,new Derivative("common_drop","","lazuli"),ORE),CRUSHED,DUST),
+        EMERALD(MapColor.EMERALD,List.of(BLOCK,COMMON_DROP,ORE),DUST, NUGGET, CRUSHED),
+        NETHERITE(MapColor.COLOR_BLACK,List.of(INGOT),DUST, NUGGET),
+        TIN(MapColor.METAL, null, null, common),
+        BRONZE(MapColor.COLOR_ORANGE, FactocraftyArmorMaterials.BRONZE, FactocraftyTiers.BRONZE, INGOT, NUGGET, BLOCK, DUST, PLATE),
+        SILVER(MapColor.METAL, null, null, commonDerivatives(5, 6, -64, 72)),
+        LEAD(MapColor.METAL, null, null, commonDerivatives(8, 8, -64, 50)),
+        PLATINUM(MapColor.COLOR_LIGHT_BLUE, FactocraftyArmorMaterials.PLATINUM, FactocraftyTiers.PLATINUM, normalOre(0, 6, 10, 20, 80), BLOCK, INGOT, NUGGET, RAW, DUST, CRUSHED, PLATE),
+        URANIUM(MapColor.COLOR_LIGHT_GREEN,  deepOre(4, 4, 8, -64, 10), BLOCK, REFINED, NUGGET, DUST, COMMON_DROP, CRUSHED, PLATE),
+        RUBY(MapColor.COLOR_RED, FactocraftyArmorMaterials.RUBY, FactocraftyTiers.RUBY, new OreDerivative(5, 5, 3, -80, 25, 5, -50, 90, true, true), BLOCK, NUGGET, DUST, COMMON_DROP, CRUSHED),
+        STONE(MapColor.STONE,DUST),
+        DEEPSLATE(MapColor.DEEPSLATE,DUST),
+        RUBBER(MapColor.COLOR_BLACK, FactocraftyArmorMaterials.RUBBER, null,COMMON_DROP),
+        SYNTHETIC_RUBBER(MapColor.COLOR_BLACK, COMMON_DROP),
+        WOOD(MapColor.WOOD,DUST.withCustomName("sawdust")),
+        SILICON(MapColor.COLOR_LIGHT_GRAY,COMMON_DROP,REFINED,PLATE),
+        GRAPHENE(MapColor.COLOR_GRAY,COMMON_DROP, DUST),
+        GRAPHITE(MapColor.COLOR_BLACK,INGOT),
+        IRIDIUM(MapColor.TERRACOTTA_WHITE,COMMON_DROP, PLATE, NUGGET),
+        STEEL(MapColor.COLOR_GRAY,BLOCK,INGOT,PLATE,NUGGET,DUST);
 
 
-        private final MaterialColor color;
+        private final MapColor color;
         private final ArmorMaterial armor;
         private final net.minecraft.world.item.Tier tier;
 
@@ -197,7 +197,7 @@ public class FactocraftyOre {
                 return key.getIngredient();
             }
         });;
-        Material(MaterialColor color, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, Derivative... derivatives) {
+        Material(MapColor color, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, Derivative... derivatives) {
             this.color = color;
             this.armor = armor;
             this.tier = tier;
@@ -206,10 +206,10 @@ public class FactocraftyOre {
         }
 
 
-        Material(MaterialColor color, Derivative... derivatives) {
+        Material(MapColor color, Derivative... derivatives) {
             this(color, null, null, derivatives);
         }
-        Material(MaterialColor color, List<Derivative> registeredDerivatives,Derivative... derivatives) {
+        Material(MapColor color, List<Derivative> registeredDerivatives,Derivative... derivatives) {
             this(color, derivatives);
             this.registeredDerivatives = registeredDerivatives;
 
@@ -262,7 +262,7 @@ public class FactocraftyOre {
             return getIngredient(this);
         }
 
-        public MaterialColor getColor() {
+        public MapColor getColor() {
             return this.color;
         }
 

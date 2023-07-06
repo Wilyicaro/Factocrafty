@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.IronFurnaceBlockEntity;
 import wily.factocrafty.init.Registration;
@@ -23,7 +24,7 @@ import java.util.Objects;
 
 public class IronFurnace extends FurnaceBlock {
     public IronFurnace(Properties properties) {
-        super(properties);
+        super(properties.lightLevel((blockState -> blockState.getValue(LIT)? 14 : 0)));
     }
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new IronFurnaceBlockEntity(blockPos, blockState);
@@ -38,7 +39,7 @@ public class IronFurnace extends FurnaceBlock {
 
     }
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         return ImmutableList.of(new ItemStack(asItem()));
     }
     @Nullable

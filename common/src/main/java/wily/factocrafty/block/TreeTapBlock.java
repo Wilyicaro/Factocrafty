@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -45,7 +46,7 @@ public class TreeTapBlock extends FactocraftyStorageBlock implements IFactocraft
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         List<ItemStack> list = new ArrayList<>();
         Level level = builder.getLevel();
         if (level.random.nextFloat() < 0.9){

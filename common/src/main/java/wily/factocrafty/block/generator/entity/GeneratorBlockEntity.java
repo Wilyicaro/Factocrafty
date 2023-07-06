@@ -58,6 +58,12 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
         slots.add(new FactocraftyCYItemSlot(this, FILL_SLOT,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC){
         });
     }
+
+    @Override
+    public int getInitialEnergyCapacity() {
+        return super.getInitialEnergyCapacity() / 2;
+    }
+
     protected void consumeFuel(){
         ItemStack fuel = inventory.getItem(FUEL_SLOT);
         burnTime.setInt(0,FuelRegistry.get(fuel));
@@ -113,7 +119,7 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
                         CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(direction, e));
                 }
             }
-            if (wasBurning != isBurning()) level.setBlock(getBlockPos(),getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, burnTime.getInt(0) > 0), 3);
+            if (wasBurning != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)) level.setBlock(getBlockPos(),getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, burnTime.getInt(0) > 0), 3);
 
         }
     }

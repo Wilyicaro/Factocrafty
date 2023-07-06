@@ -45,11 +45,12 @@ public class ModEvents {
 
 
     private static void biomeLoadingEvent(){
-        Predicate<BiomeModifications.BiomeContext> RUBBER_BIOMES = (ctx) -> ctx.hasTag(BiomeTags.IS_TAIGA) || ctx.hasTag(BiomeTags.HAS_SWAMP_HUT);
+        Predicate<BiomeModifications.BiomeContext> RUBBER_BIOMES = (ctx) -> ctx.hasTag(BiomeTags.IS_TAIGA) || ctx.hasTag(BiomeTags.HAS_SWAMP_HUT) || ctx.hasTag(BiomeTags.HAS_WOODLAND_MANSION);
         BiomeModifications.addProperties(RUBBER_BIOMES, ((biomeContext, mutable) -> mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, FactocraftyWorldGenBootstrap.RUBBER_TREE)));
 
         Predicate<BiomeModifications.BiomeContext> PETROLEUM_LAKE_BIOMES = (ctx) -> ctx.hasTag(BiomeTags.IS_BEACH) || ctx.hasTag(BiomeTags.IS_OCEAN) || ctx.hasTag(BiomeTags.IS_RIVER)|| ctx.hasTag(BiomeTags.IS_SAVANNA) | ctx.hasTag(BiomeTags.HAS_DESERT_PYRAMID);
         BiomeModifications.addProperties(PETROLEUM_LAKE_BIOMES, ((biomeContext, mutable) -> mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.LAKES, FactocraftyWorldGenBootstrap.PETROLEUM_LAKE)));
+        BiomeModifications.addProperties(PETROLEUM_LAKE_BIOMES, ((biomeContext, mutable) -> mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.LAKES, FactocraftyWorldGenBootstrap.GASEOUS_PETROLEUM_BASIN)));
         for (FactocraftyOre.Material oreTiers : FactocraftyOre.Material.values()) {
             oreTiers.getDerivative("ore").ifPresent((e)-> {
                 if (e instanceof FactocraftyOre.OreDerivative) {

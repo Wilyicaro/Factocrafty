@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I",
+    "C#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:copper_plate"
+    },
+    "I": {
+      "item": "factocrafty:iron_plate"
+    },
+    "C": {
+      "item": "factocrafty:battery"
+    }
+  },
+  "result": {
+    "item": "factocrafty:power_unit"
+  }
+}

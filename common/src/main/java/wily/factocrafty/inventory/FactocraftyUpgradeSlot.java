@@ -22,7 +22,7 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
                         return;
                     }
                 }
-                if (pBe.storedUpgrades.stream().noneMatch(i-> i.sameItem(itemStack))){
+                if (pBe.storedUpgrades.stream().noneMatch(i->ItemStack.isSameItem(i,itemStack))){
                     if (itemStack.isEmpty()) pBe.storedUpgrades.removeIf(i-> {
                         //Factocrafty.LOGGER.info("HERE 2");
                         boolean b = pBe.storedUpgrades.indexOf(i) == pBe.selectedUpgrade;
@@ -78,7 +78,7 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
 
             @Override
             public boolean mayPlace(ItemStack itemStack) {
-                return itemStack.getItem() instanceof FactocraftyUpgradeItem upg && upg.isValid(pBe) && pBe.storedUpgrades.stream().noneMatch(i-> i.sameItem(itemStack)) || pBe.storedUpgrades.stream().anyMatch(i-> i.sameItem(itemStack)&& (!i.hasTag() ||i.getTag() == itemStack.getOrCreateTag()) && getMaxStackSize(i) - i.getCount() >= itemStack.getCount());
+                return itemStack.getItem() instanceof FactocraftyUpgradeItem upg && upg.isValid(pBe) && pBe.storedUpgrades.stream().noneMatch(i->ItemStack.isSameItem(i,itemStack)) || pBe.storedUpgrades.stream().anyMatch(i-> ItemStack.isSameItemSameTags(i,itemStack) && getMaxStackSize(i) - i.getCount() >= itemStack.getCount());
             }
 
             @Override

@@ -20,7 +20,7 @@ public interface IFactocraftyOrientableBlock {
         return this instanceof Block block ? block.defaultBlockState().setValue(getFacingProperty(), facing.getOpposite()) : ctx.getPlayer().getBlockStateOn();
     }
     default BlockState rotate(BlockState p_185499_1_, Rotation p_185499_2_) {
-        return (BlockState)p_185499_1_.setValue(getFacingProperty(), p_185499_2_.rotate((Direction)p_185499_1_.getValue(getFacingProperty())));
+        return p_185499_1_.setValue(getFacingProperty(), p_185499_2_.rotate(p_185499_1_.getValue(getFacingProperty())));
     }
 
     default BlockState mirror(BlockState p_185471_1_, Mirror p_185471_2_) {

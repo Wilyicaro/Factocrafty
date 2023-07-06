@@ -23,13 +23,13 @@ side = "BOTH"
 [[dependencies.factocrafty]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19,)"
+versionRange = "[1.20,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.factocrafty]]
 modId = "architectury"
 mandatory = true
-versionRange = "[5.7.28,)"
+versionRange = "[9.0.7,)"
 ordering = "AFTER"
 side = "BOTH"

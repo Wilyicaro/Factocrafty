@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item" : "factocrafty:raw_lead"
+  },
+  "result": "factocrafty:lead_ingot",
+  "experience": 0.15
+}

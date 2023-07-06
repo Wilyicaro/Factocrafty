@@ -26,8 +26,8 @@ public class IronFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
     }
     @Override
     public void setItem(int i, ItemStack itemStack) {
-        ItemStack itemStack2 = (ItemStack)this.items.get(i);
-        boolean bl = !itemStack.isEmpty() && itemStack.sameItem(itemStack2) && ItemStack.tagMatches(itemStack, itemStack2);
+        ItemStack itemStack2 = this.items.get(i);
+        boolean bl = !itemStack.isEmpty() && ItemStack.isSameItemSameTags(itemStack,itemStack2);
         this.items.set(i, itemStack);
         if (itemStack.getCount() > this.getMaxStackSize()) {
             itemStack.setCount(this.getMaxStackSize());

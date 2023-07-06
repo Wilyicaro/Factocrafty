@@ -3,11 +3,14 @@ package wily.factocrafty.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -64,6 +67,11 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
             be.energyStorage.setEnergyStored(0);
             be.setChanged();
         }
+    }
+    @Override
+    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
+        if(capacityTier !=null)
+            list.add(capacityTier.getEnergyTierComponent(false));
     }
     public DirectionProperty getFacingProperty() {
         return BlockStateProperties.HORIZONTAL_FACING;

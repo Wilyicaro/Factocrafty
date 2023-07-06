@@ -3,9 +3,11 @@ package wily.factocrafty.network;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -31,11 +33,12 @@ public class FactocraftySyncIntegerBearerPacket {
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
-            BlockEntity be = player.getLevel().getBlockEntity(pos);
-            if (player.level.isLoaded(pos)) {
-                if (be instanceof FactocraftyProcessBlockEntity s) {
+            BlockEntity be = player.level().getBlockEntity(pos);
+            if (player.level().isLoaded(pos)) {
+                if (be instanceof FactocraftyStorageBlockEntity s) {
                     s.additionalSyncInt.get(index).set(value);
                 be.setChanged();
+                player.level().sendBlockUpdated(pos,be.getBlockState(),be.getBlockState(),3);
                 }
             }
         });

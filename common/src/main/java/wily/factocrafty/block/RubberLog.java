@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class RubberLog extends RotatedPillarBlock {
 
 
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         return ImmutableList.of(new ItemStack(asItem()));
     }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

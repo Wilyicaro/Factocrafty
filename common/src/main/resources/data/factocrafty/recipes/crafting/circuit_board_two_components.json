@@ -1,0 +1,14 @@
+{
+  "type": "factocrafty:soldering_crafting",
+  "principalInput": {
+    "item": "factocrafty:circuit_board"
+  },
+  "otherInputs": [
+    {
+      "tag": "factocrafty:board_components"
+    },
+    {
+      "tag": "factocrafty:board_components"
+    }
+  ]
+}

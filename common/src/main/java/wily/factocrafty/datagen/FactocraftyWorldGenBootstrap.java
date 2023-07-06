@@ -2,6 +2,7 @@ package wily.factocrafty.datagen;
 
 import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -13,6 +14,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -29,6 +31,7 @@ import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import wily.factocrafty.block.RubberLog;
+import wily.factocrafty.gen.BasinFeature;
 import wily.factocrafty.gen.RubberTreeFoliagePlacer;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.FactocraftyOre;
@@ -48,18 +51,20 @@ public class FactocraftyWorldGenBootstrap {
 
     public static ResourceKey<ConfiguredFeature<?,?>> PETROLEUM_LAKE_CONFIGURED = RegisterUtil.createConfiguredFeature(getModResource("petroleum_lake"));
 
+    public static ResourceKey<ConfiguredFeature<?,?>> GASEOUS_PETROLEUM_BASIN_CONFIGURED = RegisterUtil.createConfiguredFeature(getModResource("gaseous_petroleum_basin"));
+
     public static void configuredFeatures(BootstapContext<ConfiguredFeature<?, ?>> bootstapContext) {
         bootstapContext.register(RUBBER_TREE_CONFIGURED,new ConfiguredFeature<>(Feature.TREE,(
                 new TreeConfiguration.TreeConfigurationBuilder(
-
-                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(RUBBER_LOG.get().defaultBlockState(), 5).add(RUBBER_LOG.get().defaultBlockState().setValue(RubberLog.LATEX_STATE,true), 2)),
+                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(RUBBER_LOG.get().defaultBlockState(), 7).add(RUBBER_LOG.get().defaultBlockState().setValue(RubberLog.LATEX_STATE,true), 2)),
                         new FancyTrunkPlacer(5, 3, 0),
                         SimpleStateProvider.simple(Registration.RUBBER_LEAVES.get().defaultBlockState()),
                         new RubberTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 3),
                         new TwoLayersFeatureSize(3, 0, 2, OptionalInt.of(2))
                 ).ignoreVines().build())));
-        bootstapContext.register(PETROLEUM_LAKE_CONFIGURED,new ConfiguredFeature<>(Feature.LAKE,(new LakeFeature.Configuration(BlockStateProvider.simple(FactocraftyFluids.PETROLEUM.getBlock()), new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(Blocks.STONE.defaultBlockState(), 5).add(Blocks.CALCITE.defaultBlockState(), 4))))));
 
+        bootstapContext.register(PETROLEUM_LAKE_CONFIGURED,new ConfiguredFeature<>(Feature.LAKE,(new LakeFeature.Configuration(BlockStateProvider.simple(FactocraftyFluids.PETROLEUM.getBlock()), new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(Blocks.STONE.defaultBlockState(), 5).add(Blocks.CALCITE.defaultBlockState(), 4))))));
+        bootstapContext.register(GASEOUS_PETROLEUM_BASIN_CONFIGURED,new ConfiguredFeature<>(BASIN_FEATURE.get(),(new BasinFeature.Configuration(BlockStateProvider.simple(FactocraftyFluids.PETROLEUM.getBlock()),BlockStateProvider.simple(FactocraftyFluids.METHANE.getBlock()), new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(Blocks.STONE.defaultBlockState(), 5).add(Blocks.CALCITE.defaultBlockState(), 4))))));
         for (FactocraftyOre.Material oreTiers : FactocraftyOre.Material.values()) {
             oreTiers.getDerivative("ore").ifPresent((e)-> {
                 if (e instanceof FactocraftyOre.OreDerivative ore) {
@@ -91,13 +96,14 @@ public class FactocraftyWorldGenBootstrap {
 
     public static ResourceKey<PlacedFeature> PETROLEUM_LAKE = RegisterUtil.createPlacedFeature(getModResource("petroleum_lake"));
 
-    public static ResourceKey<PlacedFeature> PETROLEUM_UNDERGROUND_LAKE = RegisterUtil.createPlacedFeature(getModResource("petroleum_lake"));
+    public static ResourceKey<PlacedFeature> GASEOUS_PETROLEUM_BASIN = RegisterUtil.createPlacedFeature(getModResource("gaseous_petroleum_basin"));
 
     public static void placedFeatures(BootstapContext<PlacedFeature> bootstapContext) {
 
         HolderGetter<ConfiguredFeature<?,?>> getter = bootstapContext.lookup(Registries.CONFIGURED_FEATURE);
         bootstapContext.register( RUBBER_TREE,new PlacedFeature(getter.getOrThrow(RUBBER_TREE_CONFIGURED) , List.of(PlacementUtils.countExtra(0, 0.2F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(RUBBER_TREE_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome())));
-        bootstapContext.register( PETROLEUM_LAKE,new PlacedFeature(getter.getOrThrow(PETROLEUM_LAKE_CONFIGURED) , List.of(RarityFilter.onAverageOnceEvery(6), InSquarePlacement.spread(), HeightRangePlacement.of(UniformHeight.of(VerticalAnchor.aboveBottom(15), VerticalAnchor.absolute((40)))), BiomeFilter.biome())));
+        bootstapContext.register( PETROLEUM_LAKE,new PlacedFeature(getter.getOrThrow(PETROLEUM_LAKE_CONFIGURED) , List.of(RarityFilter.onAverageOnceEvery(6), InSquarePlacement.spread(), HeightRangePlacement.of(UniformHeight.of(VerticalAnchor.aboveBottom(15), VerticalAnchor.absolute((40)))),EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.allOf(BlockPredicate.not(BlockPredicate.ONLY_IN_AIR_PREDICATE), BlockPredicate.insideWorld(new BlockPos(0, -5, 0))), 32), SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -5), BiomeFilter.biome())));
+        bootstapContext.register(GASEOUS_PETROLEUM_BASIN,new PlacedFeature(getter.getOrThrow(GASEOUS_PETROLEUM_BASIN_CONFIGURED) , List.of(RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), HeightRangePlacement.of(UniformHeight.of(VerticalAnchor.aboveBottom(20), VerticalAnchor.absolute((40)))), BiomeFilter.biome())));
 
 
         for (FactocraftyOre.Material oreTiers : FactocraftyOre.Material.values()) {

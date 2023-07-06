@@ -37,8 +37,8 @@ public class FactocraftySyncSelectedUpgradePacket {
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
-            BlockEntity te = player.getLevel().getBlockEntity(pos);
-            if (player.level.isLoaded(pos)) {
+            BlockEntity te = player.level().getBlockEntity(pos);
+            if (player.level().isLoaded(pos)) {
                 if (te instanceof FactocraftyProcessBlockEntity fs) {
                     if (selectedUpgrade != fs.selectedUpgrade) fs.selectedUpgrade = selectedUpgrade;
                 }

@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -153,11 +154,12 @@ public class InsulatedCableBlock extends BaseEntityBlock implements IFactocrafty
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         List<ItemStack> list = new ArrayList<>();
         list.add(new ItemStack(asItem()));
         return list;
     }
+
 
     @Override
     public FactoryCapacityTiers getEnergyTier() {

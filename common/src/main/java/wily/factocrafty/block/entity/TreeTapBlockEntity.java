@@ -9,12 +9,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import wily.factocrafty.block.FactocraftyStorageBlock;
 import wily.factocrafty.block.StrippedRubberLog;
 import wily.factocrafty.init.Registration;
+import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.FluidSide;
+import wily.factoryapi.base.SlotsIdentifier;
 import wily.factoryapi.base.TransportState;
 
 public class TreeTapBlockEntity extends StrippedRubberLogBlockEntity {
     public TreeTapBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.TREETAP_BLOCK_ENTITY.get(), blockPos, blockState);
+        fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.INPUT, TransportState.EXTRACT);
         for (Direction d : Direction.values()) fluidSides.put(d, new FluidSide(fluidTank,TransportState.EXTRACT));
     }
     private int latexExtraction;

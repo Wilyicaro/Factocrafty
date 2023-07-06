@@ -18,41 +18,38 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import wily.factocrafty.block.IFactocraftyOrientableBlock;
 import wily.factocrafty.block.cable.entity.SolidCableBlockEntity;
+import wily.factoryapi.base.SimpleFluidLoggedBlock;
 import wily.factoryapi.util.VoxelShapeUtil;
 
-public class SolidCableBlock extends InsulatedCableBlock implements SimpleWaterloggedBlock {
+public class SolidCableBlock extends InsulatedCableBlock implements SimpleFluidLoggedBlock {
 
     public static final EnumProperty<CableSide> UP = EnumProperty.create("up", CableSide.class);
     public static final EnumProperty<CableSide> DOWN = EnumProperty.create("down", CableSide.class);
 
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape SHAPE_CUBE = Block.box(6, 6, 6, 10, 10, 10);
 
     public SolidCableBlock(CableTiers tier, Properties properties) {super(tier, properties);}
     @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return SimpleFluidLoggedBlock.super.getStateForPlacement(defaultBlockState(),ctx);
     }
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return SimpleFluidLoggedBlock.super.getFluidState(state);
+    }
+
     @Override
     protected void setDefaultState() {
         super.setDefaultState();
-        registerDefaultState(defaultBlockState().setValue(UP, CableSide.NONE).setValue(DOWN,CableSide.NONE).setValue(WATERLOGGED, false));
+        registerDefaultState(defaultBlockState().setValue(UP, CableSide.NONE).setValue(DOWN,CableSide.NONE).setValue(FLUIDLOGGED(), 0));
         PROPERTY_BY_DIRECTION.put(Direction.UP,UP);
         PROPERTY_BY_DIRECTION.put(Direction.DOWN,DOWN);
     }
 
-    @Override
-    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return super.getShape(blockState, blockGetter, blockPos, collisionContext);
-    }
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        boolean flag = ctx.getLevel().getFluidState(ctx.getClickedPos()).getType() == Fluids.WATER;;
-        return this.defaultBlockState().setValue(WATERLOGGED, flag);
-    }
     protected VoxelShape calculateShape(BlockState blockState) {
         VoxelShape voxelShape = SHAPE_CUBE;
 
@@ -72,7 +69,7 @@ public class SolidCableBlock extends InsulatedCableBlock implements SimpleWaterl
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(UP,DOWN,WATERLOGGED);
+        builder.add(UP,DOWN,FLUIDLOGGED());
     }
 
     @Nullable

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item" : "factocrafty:netherite_dust"
+  },
+  "result": "minecraft:netherite_ingot",
+  "experience": 0.15
+}

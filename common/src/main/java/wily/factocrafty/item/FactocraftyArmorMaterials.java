@@ -13,12 +13,12 @@ import java.util.function.Supplier;
 
 public enum FactocraftyArmorMaterials implements ArmorMaterial {
     BRONZE("bronze", 15, new int[]{3, 5, 6, 2}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.BRONZE_INGOT.get())),
-    GRAPHANO("graphano", 15, new int[]{3, 7, 8, 4}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
-    NIGHT_VISION("night_vision", 15, new int[]{2, 3, 4, 1}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
-    QUANTUM("quantum", 15, new int[]{6, 14, 16, 8}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 1.0F, 1.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    GRAPHANO("graphano", 15, new int[]{3, 7, 8, 4}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.5F, 0.8F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    NIGHT_VISION("night_vision", 15, new int[]{2, 3, 4, 1}, 9, SoundEvents.ARMOR_EQUIP_TURTLE, 0.1F, 0.2F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
+    QUANTUM("quantum", 15, new int[]{6, 14, 16, 8}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.2F, 1.4F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
     JETPACK("jetpack", 1, new int[]{0, 0, 2, 0}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.CARBON_PLATE.get())),
-    PLATINUM("platinum", 15, new int[]{3, 5, 7, 4}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 2.5F, () -> Ingredient.of(FactocraftyItems.PLATINUM_INGOT.get())),
-    RUBY("ruby", 30, new int[]{3, 6, 7, 3}, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBY.get())),
+    PLATINUM("platinum", 15, new int[]{3, 5, 7, 4}, 9, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.1F, () -> Ingredient.of(FactocraftyItems.PLATINUM_INGOT.get())),
+    RUBY("ruby", 30, new int[]{3, 6, 7, 3}, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 0.5F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBY.get())),
     RUBBER("rubber", 8, new int[]{1, 2, 3, 1}, 13, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(FactocraftyItems.RUBBER.get()));
 
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};

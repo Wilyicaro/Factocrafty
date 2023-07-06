@@ -3,11 +3,14 @@
   "pattern": [
     " C ",
     "#R#",
-    "#R#"
+    "PRP"
   ],
   "key": {
     "#": {
       "item": "factocrafty:tin_plate"
+    },
+    "P": {
+      "item": "factocrafty:platinum_plate"
     },
     "R": {
       "item": "minecraft:redstone"

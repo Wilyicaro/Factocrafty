@@ -1,0 +1,18 @@
+{
+  "type": "factocrafty:gaseous_infusion",
+  "fluid_ingredient": {
+    "fluid": "minecraft:water",
+    "amount": 600
+  },
+  "extra_fluid": {
+    "fluid": "factocrafty:oxygen",
+    "amount": 200
+  },
+  "fluid_result": {
+    "fluid": "factocrafty:hydrogen",
+    "amount": 400
+  },
+  "experience": 0.25,
+  "processtime": 250,
+  "differential": 1
+}

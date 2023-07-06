@@ -14,7 +14,7 @@ public class FactocraftyCYItemSlot extends FactoryItemSlot {
 
 
     private final FactoryCapacityTiers energyTier;
-    public static ResourceLocation CRAFTY_SLOT_EMPTY = Registration.getModResource("item/crafty");
+    public static ResourceLocation CRAFTY_SLOT_EMPTY = Registration.getModResource("item/crafty_slot");
 
     public FactocraftyCYItemSlot(FactocraftyProcessBlockEntity be, int i, int j, int k, TransportState canIE, FactoryCapacityTiers energyTier) {
         super(be.inventory, SlotsIdentifier.ENERGY,canIE,i, j, k);
@@ -23,7 +23,7 @@ public class FactocraftyCYItemSlot extends FactoryItemSlot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return (stack.getItem() instanceof ICraftyEnergyItem<?> cy && (cy.getCraftyEnergy(stack).getTransport().canExtract() && transportState.canExtract()|| cy.getCraftyEnergy(stack).getTransport().canInsert() && transportState.canInsert())) && energyTier.supportTier(cy.getEnergyTier()) && super.mayPlace(stack);
+        return (stack.getItem() instanceof ICraftyEnergyItem<?> cy && (cy.getCraftyEnergy(stack).getTransport().canExtract() && transportState.canExtract()|| cy.getCraftyEnergy(stack).getTransport().canInsert() && transportState.canInsert())) && cy.getEnergyTier().supportTier(energyTier) && super.mayPlace(stack);
     }
 
     @Nullable

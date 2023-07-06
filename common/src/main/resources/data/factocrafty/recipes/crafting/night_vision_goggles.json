@@ -14,7 +14,7 @@
         "Components": [
           "factocrafty:tin_cable",
           "factocrafty:battery",
-          "minecraft:redstone_lamp"
+          "factocrafty:led_panel"
         ]
       }
     },

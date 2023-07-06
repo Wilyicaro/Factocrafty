@@ -1,6 +1,11 @@
 package wily.factocrafty.block.generator;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -18,13 +23,20 @@ import wily.factoryapi.util.VoxelShapeUtil;
 
 public class FlexibleSolarPanelBlock extends SolarPanelBlock implements IFactocraftyOrientableBlock {
 
+    final LoadingCache<Pair<Direction,VoxelShape>, VoxelShape> cache;
     public FlexibleSolarPanelBlock(SolarPanelTiers tier, Properties properties) {
         super(tier,properties);
+        cache = CacheBuilder.newBuilder().maximumSize(12).build(new CacheLoader<>() {
+            @Override
+            public VoxelShape load(Pair<Direction, VoxelShape> key) {
+                return VoxelShapeUtil.rotate(key.value(), key.key());
+            }
+        });
     }
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return VoxelShapeUtil.rotate(super.getShape(blockState, blockGetter, blockPos, collisionContext), blockState.getValue(BlockStateProperties.FACING).getOpposite());
+        return cache.getUnchecked(Pair.of(blockState.getValue(BlockStateProperties.FACING).getOpposite(),super.getShape(blockState, blockGetter, blockPos, collisionContext)));
     }
 
     @Override

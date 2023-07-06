@@ -354,11 +354,12 @@
   "fluid.factocrafty.biogas": "Biogás",
 
   "_comment": "Fluid Tank",
-  "block.factocrafty.basic_fluid_tank": "Tanque de Fluído Básico",
-  "block.factocrafty.advanced_fluid_tank": "Tanque de Fluído Avançado",
-  "block.factocrafty.high_fluid_tank": "Tanque de Fluído Aprimorado",
-  "block.factocrafty.ultimate_fluid_tank": "Tanque de Fluído Ultimate",
-  "block.factocrafty.quantum_fluid_tank": "Tanque de Fluído Quântico",
+  "block.factocrafty.basic_fluid_tank": "Tanque de líquido básico",
+  "block.factocrafty.advanced_fluid_tank": "Tanque de líquido avançado",
+  "block.factocrafty.high_fluid_tank": "Tanque de líquido aprimorado",
+  "block.factocrafty.ultimate_fluid_tank": "Tanque de líquido ultimate",
+  "block.factocrafty.quantum_fluid_tank": "Tanque de líquido quântico",
+  "block.factocrafty.creative_fluid_tank": "Tanque de líquido criativo",
 
 
   "jei.factocrafty.chance": "Chance: %s",

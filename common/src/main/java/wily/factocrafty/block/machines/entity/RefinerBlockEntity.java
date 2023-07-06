@@ -60,9 +60,8 @@ public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    protected void setOtherResults(@Nullable Recipe<?> recipe, IPlatformItemHandler inv, int i) {
-        if (recipe instanceof FactocraftyMachineRecipe rcp){
-            if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty()) resultTank.fill(rcp.getResultFluid(),false);
-        }
+    protected void setOtherResults(FactocraftyMachineRecipe rcp, IPlatformItemHandler inv, int i) {
+        super.setOtherResults(rcp,inv,i);
+        if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty()) resultTank.fill(rcp.getResultFluid(),false);
     }
 }

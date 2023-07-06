@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:reinforced_stone"
+    }
+  },
+  "result": {
+    "item": "factocrafty:reinforced_stone_stairs",
+    "count": 4
+  }
+}

@@ -9,6 +9,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -29,12 +30,11 @@ public class FactocraftyExpectPlatform {
      */
     @ExpectPlatform
     public static Path getConfigDirectory() {
-
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static CreativeModeTab.Builder CreativeTabBuilder(ResourceLocation resource) {
+    public static boolean isGas(Fluid fluid) {
         throw new AssertionError();
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import wily.factocrafty.block.entity.RubberSignBlockEntity;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class RubberSign extends StandingSignBlock {
         return new RubberSignBlockEntity(blockPos, blockState);
     }
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         return ImmutableList.of(new ItemStack(asItem()));
     }
 }

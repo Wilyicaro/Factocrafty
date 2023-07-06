@@ -1,9 +1,12 @@
 package wily.factocrafty.item;
 
 import dev.architectury.fluid.FluidStack;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -27,8 +30,9 @@ public interface BucketLikeItem extends IFluidItem<IPlatformFluidHandler> {
         if (getFluidStorage(stack).getTotalSpace() >= FluidStack.bucketAmount() && level.mayInteract(player, hitResult.getBlockPos()) && blockState.getBlock() instanceof BucketPickup pick){
             ItemContainerUtil.fillItem(FluidStack.create(((LiquidBlock)blockState.getBlock()).arch$getFluid(), FluidStack.bucketAmount()), player, hand);
             if (!player.isCreative()) level.setBlock(hitResult.getBlockPos(), Blocks.AIR.defaultBlockState(), 11);
-            pick.getPickupSound().ifPresent((p)-> player.playSound(p,1.0F,1.0F));
-            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+           // pick.getPickupSound().ifPresent((p)-> player.playSound(p,1.0F,1.0F));
+            if (this instanceof Item i)player.awardStat(Stats.ITEM_USED.get(i));
+            return InteractionResultHolder.sidedSuccess( player.getItemInHand(hand), level.isClientSide());
         }
         return InteractionResultHolder.fail(stack);
     }

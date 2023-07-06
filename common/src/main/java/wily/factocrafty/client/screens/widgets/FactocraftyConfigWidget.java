@@ -3,10 +3,12 @@ package wily.factocrafty.client.screens.widgets;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import wily.factoryapi.base.IFactoryDrawableType;
 
 public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
     protected final boolean invert;
@@ -15,8 +17,8 @@ public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
         super(x, y, 217, 21, ()-> component);
         this.invert = invert;
     }
-    public FactocraftyConfigWidget(int x, int y, boolean invert, Component component, Icons icon,onTooltip tooltip) {
-        super(x, y,  invert ? 178 : 217, 21,()-> component,icon,tooltip);
+    public FactocraftyConfigWidget(int x, int y, boolean invert, Component component, IFactoryDrawableType icon) {
+        super(x, y,  invert ? 178 : 217, 21,()-> component,icon);
         this.invert = invert;
 
     }
@@ -27,21 +29,19 @@ public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
     }
 
     @Override
-    public void renderWidget(@NotNull PoseStack poseStack, int i, int j, float f) {
-        Minecraft minecraft = Minecraft.getInstance();
+    public void renderWidget(@NotNull GuiGraphics graphics, int i, int j, float f) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         int k = uvX + (Pressed ? 0 : width);
         int m = this.width - (Pressed ? 0 :3);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        this.blit(poseStack, this.getX() - (invert && Pressed ?3 : 0), this.getY(), k, 87, m, this.height);
+        graphics.blit(WIDGETS_LOCATION, this.getX() - (invert && Pressed ?3 : 0), this.getY(), k, 87, m, this.height);
         if (icon != null)
-            this.blit(poseStack, this.getX() + (width - (invert ?5 : 0) - icon.width()) / 2, this.getY() + (height - icon.height()) / 2, icon.uvX(), icon.uvY(), icon.width(), icon.height());
+            graphics.blit(WIDGETS_LOCATION, this.getX() + (width - (invert ?5 : 0) - icon.width()) / 2, this.getY() + (height - icon.height()) / 2, icon.uvX(), icon.uvY(), icon.width(), icon.height());
         if (isHovered())
-            this.renderToolTips(poseStack, i, j);
+            this.renderToolTips(font,graphics, i, j);
     }
 
     @Override

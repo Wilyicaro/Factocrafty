@@ -49,10 +49,14 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
         if (!simulate && energyReceived != 0) {
 
-            if ( transaction.tier.supportTier(supportableTier)) {
-                if (transaction.tier.supportTier(storedTier))transaction.tier = storedTier;
-                else storedTier = transaction.tier;
-                // transaction.tier.convertEnergyTo(energyReceived, supportableTier);
+            if ( supportableTier.supportTier(transaction.tier)) {
+                if (storedTier.supportTier(transaction.tier)){
+                    energyReceived = transaction.tier.convertEnergyTo(energyReceived, storedTier);
+                    transaction.tier = storedTier;
+                } else {
+                    setEnergyStored(storedTier.convertEnergyTo(getEnergyStored(), transaction.tier));
+                    storedTier = transaction.tier;
+                }
             }
             else {
                 if (be.getLevel().random.nextFloat() >= 0.9 && energyReceived > 0) {

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "#P#",
+    "RGB"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:iron_plate"
+    },
+    "P": {
+      "item": "factocrafty:battery"
+    },
+    "C": {
+      "item": "factocrafty:insulated_copper_cable"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "G": {
+      "item": "minecraft:green_dye"
+    },
+    "B": {
+      "item": "minecraft:blue_dye"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rgb_led_controller"
+  }
+}

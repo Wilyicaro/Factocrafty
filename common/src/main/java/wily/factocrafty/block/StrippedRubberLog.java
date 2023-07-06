@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
@@ -58,7 +59,7 @@ public class StrippedRubberLog extends RubberLog implements EntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         ItemStack stack = new ItemStack(asItem());
         CompoundTag tag = stack.getOrCreateTag();
         CompoundTag blockStateTag = new CompoundTag();

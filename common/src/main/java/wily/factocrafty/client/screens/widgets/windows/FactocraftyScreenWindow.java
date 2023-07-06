@@ -1,20 +1,23 @@
 package wily.factocrafty.client.screens.widgets.windows;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.client.screens.FactocraftyDrawableButton;
+import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
+import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.IFactoryDrawableType;
 
-import java.util.Map;
+import java.util.List;
 
 public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     public final int uvX;
@@ -27,6 +30,8 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     private double actualMouseY;
 
     public boolean dragging = false;
+
+    public boolean useGeneratedBackground;
 
 
     protected final ItemRenderer itemRenderer;
@@ -61,6 +66,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         parent.setFocused(this);
     }
     public void onClickOutside(double mouseX, double mouseY){
+        setFocused(false);
         alpha = 0.88F;
     }
 
@@ -73,43 +79,44 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
 
         return false;
     }
-    protected void renderBg(PoseStack poseStack, int i, int j) {
-        poseStack.pushPose();
+
+    protected void renderBg(GuiGraphics graphics, int i, int j) {
+        graphics.pose().pushPose();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
         RenderSystem.setShaderColor(1,1,1,alpha);
-        blit(poseStack, getX(), getY(), uvX, uvY, width, height);
-        renderButtons(poseStack,i,j);
+        if (useGeneratedBackground) ScreenUtil.drawGUIBackground(graphics, getX(), getY(), width, height);
+            else graphics.blit(WIDGETS_LOCATION, getX(), getY(), uvX, uvY, width, height);
+        renderButtons(graphics,i,j);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
-        poseStack.popPose();
+        graphics.pose().popPose();
     }
 
     @Override
-    public Map<EasyButton, Boolean> addButtons(Map<EasyButton, Boolean> map) {
-        map.put(byButtonType(FactocraftyScreenWindow.ButtonTypes.SMALL,getX() + width - 18,getY() + 10,new FactocraftyScreenWindow.EasyIcon(7,7,0,239), (b)-> onClose(), Component.translatable("tooltip.factocrafty.config.close")), false);
-        return super.addButtons(map);
+    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
+        list.add(new FactocraftyDrawableButton(getX() + width - 18,getY() + 10, (b)-> onClose(), Component.translatable("tooltip.factocrafty.config.close"), FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(0)));
+        return super.addButtons(list);
     }
 
-    public void render(PoseStack poseStack, int i, int j, float f) {
+    public void render(GuiGraphics graphics, int i, int j, float f) {
         if (!isVisible()) return;
         if (parent.getFocused() == config) parent.setFocused(this);
-        poseStack.pushPose();
-        poseStack.translate(0D,0D,  getBlitOffset());
-        renderBg(poseStack,i,j);
-        renderWidget(poseStack,i,j,f);
-        renderToolTip(poseStack,i,j);
-        poseStack.popPose();
+        graphics.pose().pushPose();
+        graphics.pose().translate(0D,0D,  getBlitOffset());
+        renderBg(graphics,i,j);
+        renderWidget(graphics,i,j,f);
+        renderToolTip(graphics,i,j);
+        graphics.pose().popPose();
 
     }
     public float getBlitOffset(){
         return 450F;
     }
 
-    public void renderToolTip(PoseStack poseStack, int i, int j) {
-        renderButtonsTooltip(parent::renderTooltip,poseStack,i,j);
+    public void renderToolTip(GuiGraphics graphics, int i, int j) {
+        renderButtonsTooltip(font,graphics,i,j);
     }
     @Override
     public boolean isMouseOver(double d, double e) {
@@ -133,7 +140,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
         if (i == 0) {
             if (isMouseOver(d,e) || config.isMouseOver(d,e)) {
                 onClickWidget();
-                updateActualMouse(d, e);
+                if (isMouseOver(d,e))updateActualMouse(d, e);
             }else  onClickOutside(d,e);
         }
         mouseClickedButtons(d,e,i);
@@ -145,10 +152,10 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
 
     @Override
     public boolean mouseReleased(double d, double e, int i) {
-
         if (dragging) {
             parent.setDragging(dragging = false);;
             updateLastMouse(getX(),getY());
+            return true;
         }
         return false;
     }
@@ -156,8 +163,7 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     int lastY;
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        setFocused(true);
-        if (!isVisible() || (parent.isDragging() && !dragging)) return false;
+        if (!isVisible() || ((parent.isDragging() && !dragging))) return false;
         if (i == 0 && ((isMouseOver(d,e) || dragging))) {
             double newX =  (lastX + d - actualMouseX);
             double newY = (lastY + e - actualMouseY);

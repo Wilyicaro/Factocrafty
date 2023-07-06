@@ -6,6 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
 import java.util.function.Supplier;
@@ -37,9 +38,9 @@ public class FactocraftySyncEnergyPacket {
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
-            BlockEntity te = player.getLevel().getBlockEntity(pos);
-            if (player.level.isLoaded(pos)) {
-                    if (te instanceof FactocraftyProcessBlockEntity fs) {
+            BlockEntity te = player.level().getBlockEntity(pos);
+            if (player.level().isLoaded(pos)) {
+                    if (te instanceof FactocraftyStorageBlockEntity fs) {
                     fs.energyStorage.setEnergyStored(energy);
                     fs.energyStorage.setStoredTier(energyTier);
                 }

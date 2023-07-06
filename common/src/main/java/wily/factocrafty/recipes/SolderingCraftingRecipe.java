@@ -1,5 +1,6 @@
 package wily.factocrafty.recipes;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,9 +17,13 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
+import wily.factoryapi.base.Bearer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static wily.factocrafty.util.JsonUtils.jsonElement;
 
@@ -34,7 +39,9 @@ public class SolderingCraftingRecipe extends ElectricCraftingRecipe {
         this.actualResult = getFactocraftyStack(principalInput);
     }
 
-
+    public List<Ingredient> getAdditionalInputs() {
+        return additionalInputs;
+    }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
@@ -57,13 +64,27 @@ public class SolderingCraftingRecipe extends ElectricCraftingRecipe {
         return i.getItems()[0];
     }
     @Override
-    public @NotNull ItemStack getResultItem(ItemStack inputResult) {
+    public @NotNull ItemStack getResultItem(List<ItemStack> additionalInputs,ItemStack inputResult) {
         ItemStack result = inputResult.copy();
         CompoundTag tag = result.getOrCreateTag();
         ListTag components = tag.getList("Components",8);
-        additionalInputs.forEach((i)-> components.add(StringTag.valueOf(getFactocraftyStack(i).getItem().arch$registryName().toString())));
+        additionalInputs.forEach((i)-> components.add(StringTag.valueOf(i.getItem().arch$registryName().toString())));
         tag.put("Components", components);
         return result;
+    }
+    public @NotNull List<ItemStack> getResultItems(ItemStack inputResult) {
+        return getResultItems(additionalInputs,inputResult);
+    }
+    public @NotNull List<ItemStack> getResultItems(List<Ingredient> additionalInputs,ItemStack inputResult) {
+        List<ItemStack> stacks = new ArrayList<>();
+        //Lists.cartesianProduct(additionalInputs.stream().map(ingredient -> List.of(ingredient.getItems())).toList()).forEach(i-> stacks.add(getResultItem(i,inputResult)));
+        Supplier<Stream<List<ItemStack>>> inputs = ()-> additionalInputs.stream().map(ingredient -> List.of(ingredient.getItems()));
+        List<ItemStack> list = inputs.get().max(Comparator.comparingInt(List::size)).orElse(List.of());
+        for (int i = 0; i < list.size(); i++) {
+            int finalI = i;
+            stacks.add(getResultItem(inputs.get().map(l-> l.get((finalI + 1 > l.size()) ? (finalI + 1) % l.size() : finalI)).toList(),inputResult));
+        }
+        return stacks;
     }
     public static class SimpleSerializer<T extends SolderingCraftingRecipe> implements RecipeSerializer<T> {
         private final SimpleSerializer.Factory<T> constructor;
@@ -83,7 +104,7 @@ public class SolderingCraftingRecipe extends ElectricCraftingRecipe {
                 Ingredient ing = Ingredient.fromJson(element);
                 if (!ing.isEmpty())ings.add(ing);
             }
-            return this.constructor.create(resourceLocation, CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(jsonObject, "category", (String) null), CraftingBookCategory.MISC),principalItem, ings.toArray(new Ingredient[0]));
+            return this.constructor.create(resourceLocation, CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(jsonObject, "category", null), CraftingBookCategory.MISC),principalItem, ings.toArray(new Ingredient[0]));
         }
 
         public T fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf friendlyByteBuf) {

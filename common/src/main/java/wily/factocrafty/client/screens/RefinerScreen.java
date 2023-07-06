@@ -1,6 +1,7 @@
 package wily.factocrafty.client.screens;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenAxis;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -11,7 +12,10 @@ import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.block.machines.entity.RefinerBlockEntity;
 import wily.factocrafty.inventory.FactocraftyProcessMenu;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
+import wily.factocrafty.network.FactocraftySyncProgressPacket;
+import wily.factoryapi.base.IFactoryDrawableType;
 
+import java.util.List;
 import java.util.Map;
 
 import static wily.factocrafty.util.ScreenUtil.renderScaled;
@@ -28,29 +32,36 @@ public class RefinerScreen extends ChangeableInputMachineScreen {
     RefinerBlockEntity rBe = (RefinerBlockEntity) getMenu().be;
 
     public ResourceLocation GUI() {return BACKGROUND_LOCATION;}
+    private IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> resultTank;
 
     @Override
-    public Map<EasyButton, Boolean> addButtons(Map<EasyButton, Boolean> map) {
-        map.put(byButtonType(ButtonTypes.SMALL, relX() + 85,relY() + 26,new EasyIcon(7,7,3,239),(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.min(rBe.recipeIndex.get() + 1,rBe.recipeSize.get() - 1),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),Component.literal("Heat up")),false);
-        map.put(byButtonType(ButtonTypes.SMALL, relX() + 85,relY() + 48,new EasyIcon(7,7,4,239),(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.max(rBe.recipeIndex.get() - 1,0),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),Component.literal("Heat down")),false);
-        return super.addButtons(map);
+    protected void init() {
+        super.init();
+        resultTank = FactocraftyDrawables.FLUID_TANK.createStatic(leftPos + 138, topPos + 17);
     }
 
     @Override
-    protected void renderLabels(PoseStack poseStack, int i, int j) {
-        super.renderLabels(poseStack,i,j);
+    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
+        list.add(new FactocraftyDrawableButton(leftPos + 85,topPos + 26,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.min(rBe.recipeIndex.get() + 1,rBe.recipeSize.get() - 1),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(3)));
+        list.add(new FactocraftyDrawableButton( leftPos + 85,topPos + 48,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.max(rBe.recipeIndex.get() - 1,0),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),Component.literal("Heat down"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(4)));
+        return super.addButtons(list);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int i, int j) {
+        super.renderLabels(graphics,i,j);
         String s = I18n.get("gui.factocrafty.heat",rBe.recipeHeat.get());
-        renderScaled(poseStack,s,  (imageWidth - (font.width(s) / 2)) / 2 + 4, 18,0.5F,0xFF9933,true);
+        renderScaled(graphics.pose(),s,  (imageWidth - (font.width(s) / 2)) / 2 + 4, 18,0.5F,0xFF9933,true);
     }
 
     @Override
-    protected void renderStorageTooltips(PoseStack poseStack, int i, int j) {
-        super.renderStorageTooltips(poseStack,i,j);
-        if (FactocraftyDrawables.FLUID_TANK.inMouseLimit(i,j,   138,  17)) renderTooltip(poseStack, getFluidTooltip("tooltip.factory_api.fluid_stored", rBe.resultTank),i, j);
+    protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
+        super.renderStorageTooltips(graphics,i,j);
+        if (resultTank.inMouseLimit(i,j)) graphics.renderTooltip(font, getFluidTooltip("tooltip.factory_api.fluid_stored", rBe.resultTank),i, j);
     }
     @Override
-    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
-        super.renderStorageSprites(poseStack, i, j);
-        FactocraftyDrawables.FLUID_TANK.drawAsFluidTank(poseStack,relX() + 138, relY() + 17, getProgressScaled((int) rBe.resultTank.getFluidStack().getAmount(), (int) rBe.resultTank.getMaxFluid(), 52), rBe.resultTank.getFluidStack(), true);
+    protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
+        super.renderStorageSprites(graphics, i, j);
+        resultTank.drawAsFluidTank(graphics, rBe.resultTank.getFluidStack(), (int) rBe.resultTank.getMaxFluid(),true);
     }
 }

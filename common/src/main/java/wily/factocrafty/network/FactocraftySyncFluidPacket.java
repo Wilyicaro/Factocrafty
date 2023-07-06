@@ -36,8 +36,8 @@ public class FactocraftySyncFluidPacket {
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
-            BlockEntity te = player.getLevel().getBlockEntity(pos);
-            if (player.level.isLoaded(pos)) {
+            BlockEntity te = player.level().getBlockEntity(pos);
+            if (player.level().isLoaded(pos)) {
                 ((IFactoryStorage)te).getTanks().get(tankIdentifier).setFluid(stack);
                 te.setChanged();
             }

@@ -1,0 +1,16 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "coal",
+    "count": 80
+  },
+  "fluid_ingredient": {
+    "fluid": "factocrafty:naphtha",
+    "amount": 300
+  },
+  "result": {
+    "item": "factocrafty:rubber_polymer"
+  },
+  "experience": 0.35,
+  "processtime": 150
+}

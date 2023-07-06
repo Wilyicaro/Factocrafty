@@ -8,6 +8,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -68,12 +69,17 @@ public class FogRendererInjector {
     @Inject(at= @At("HEAD"), method = ("setupFog"), cancellable = true)
     private static void returnFogType(Camera camera, FogRenderer.FogMode fogMode, float f, boolean bl, float g, CallbackInfo info){
         FogRenderer.FogData fogData = new FogRenderer.FogData(fogMode);
+        Entity entity = camera.getEntity();
         if (camera.isInitialized() && camera.getFluidInCamera() == null){
-            if (camera.getEntity() instanceof LocalPlayer player ) {
-                FluidState fluidState = player.level.getFluidState(camera.getBlockPosition());
-                    if ( fluidState.getType() instanceof FactocraftyFlowingFluid fluid && fluid.isValidToGetFog(fluidState) && camera.getBlockPosition().getY() < (double) ((float) camera.getBlockPosition().getY() + fluidState.getHeight(player.clientLevel, camera.getBlockPosition()))) {
-                        fogData.start = 0.25F;
-                        fogData.end = 1.0F;
+                FluidState fluidState = entity.level().getFluidState(camera.getBlockPosition());
+                    if (fluidState.getType() instanceof FactocraftyFlowingFluid fluid && fluid.isValidToGetFog(fluidState) && camera.getBlockPosition().getY() < (double) ((float) camera.getBlockPosition().getY() + fluidState.getHeight(entity.level(), camera.getBlockPosition()))) {
+                        if (entity.isSpectator()) {
+                            fogData.start = -8.0f;
+                            fogData.end = f * 0.5f;
+                        }else {
+                            fogData.start = 0.25F;
+                            fogData.end = 1.0F;
+                        }
                         fogData.shape = FogShape.CYLINDER;
                         RenderSystem.setShaderFogStart(fogData.start);
                         RenderSystem.setShaderFogEnd(fogData.end);
@@ -83,9 +89,6 @@ public class FogRendererInjector {
 
             }
 
-
-
-        }
     }
 
 }

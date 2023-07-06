@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "RLB",
+    " M "
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:red_stained_glass"
+    },
+    "G": {
+      "item": "minecraft:green_stained_glass"
+    },
+    "B": {
+      "item": "minecraft:blue_stained_glass"
+    },
+    "M": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "L": {
+      "item": "factocrafty:led_block"
+    }
+  },
+  "result": {
+    "item": "factocrafty:rgb_led_block"
+  }
+}

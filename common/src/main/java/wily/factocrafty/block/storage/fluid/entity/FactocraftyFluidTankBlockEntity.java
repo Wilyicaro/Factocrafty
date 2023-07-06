@@ -8,6 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import wily.factocrafty.FactocraftyExpectPlatform;
+import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
@@ -23,7 +25,7 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
         super(FactocraftyMenus.FLUID_TANK, capacityTier, FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
         replaceSidedStorage(BlockSide.TOP,fluidSides,  new FluidSide(fluidTank,TransportState.EXTRACT));
         replaceSidedStorage(BlockSide.BOTTOM,fluidSides, new FluidSide(fluidTank, TransportState.INSERT));
-        fluidTank =  FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity() * capacityTier.capacityMultiplier * 8, this, (f)->true, SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
+        fluidTank =  FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity() * capacityTier.capacityMultiplier * 8, this, (f)-> !FactocraftyExpectPlatform.isGas(f.getFluid()), SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
         FILL_SLOT = 0;
         DRAIN_SLOT = 1;
     }
@@ -47,8 +49,8 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
                 BlockState blockState1 = getBlockState();
                 if (Platform.isFabric()) {
                     int i = ((FactocraftyFluidTankBlock) blockState1.getBlock()).getLightEmission(blockState1, level, worldPosition);
-                    if (blockState1.getValue(FactocraftyFluidTankBlock.LIGHT_STATE) != i){
-                        level.setBlock(getBlockPos(),blockState1.setValue(FactocraftyFluidTankBlock.LIGHT_STATE,i),3);
+                    if (blockState1.getValue(FactocraftyLedBlock.LIGHT_VALUE) != i){
+                        level.setBlock(getBlockPos(),blockState1.setValue(FactocraftyLedBlock.LIGHT_VALUE,i),3);
                     }
                 }
                 level.sendBlockUpdated(getBlockPos(),getBlockState(),blockState1, Block.UPDATE_CLIENTS);

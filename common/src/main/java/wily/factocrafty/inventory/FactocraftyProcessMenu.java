@@ -15,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factocrafty.block.machines.entity.EnricherBlockEntity;
 import wily.factocrafty.block.storage.energy.FactocraftyEnergyStorageBlock;
 import wily.factocrafty.network.FactocraftyStateButtonPacket;
@@ -43,7 +44,7 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
 
     protected FactocraftyProcessMenu(MenuType<?> menuType, int containerId, BlockPos pos, Player player) {
         super(menuType, containerId);
-        Level level = player.getLevel();
+        Level level = player.level();
         Inventory inventory = player.getInventory();
 
         this.player = player;
@@ -163,7 +164,7 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
                  progressableStorage.fluidSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),2,d.ordinal(),s.transportState,s.fluidHandler.identifier().differential()))));
 
             }
-            if (storage instanceof FactocraftyProcessBlockEntity be) be.syncAdditionalMenuData(this, sp);
+            if (storage instanceof FactocraftyStorageBlockEntity be) be.syncAdditionalMenuData(this, sp);
         }
     }
 @Override

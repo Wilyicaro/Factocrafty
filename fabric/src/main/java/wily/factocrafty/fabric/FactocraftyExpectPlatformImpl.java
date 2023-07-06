@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -17,7 +19,9 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import wily.factocrafty.FactocraftyExpectPlatform;
+import wily.factocrafty.tag.Fluids;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -35,9 +39,6 @@ public class FactocraftyExpectPlatformImpl {
         return FabricLoader.getInstance().getConfigDir();
     }
 
-    public static CreativeModeTab.Builder CreativeTabBuilder(ResourceLocation resource) {
-        return  FabricItemGroup.builder(resource);
-    }
 
     public static boolean platformCorrectDiggerToolForDrops(Tier tier, TagKey<Block> tag, BlockState blockState) {
         int i = tier.getLevel();
@@ -67,5 +68,9 @@ public class FactocraftyExpectPlatformImpl {
         // Divide by 4 because we want the int offset
         var index = DefaultVertexFormat.BLOCK.getElements().indexOf(element);
         return index < 0 ? -1 : DefaultVertexFormat.BLOCK.offsets.getInt(index) / 4;
+    }
+
+    public static boolean isGas(Fluid fluid) {
+        return fluid.is(Fluids.GAS) || FluidVariantAttributes.isLighterThanAir(FluidVariant.of(fluid));
     }
 }

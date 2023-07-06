@@ -5,11 +5,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -34,7 +32,7 @@ public class FactocraftyBlockEntityWLRenderer extends BlockEntityWithoutLevelRen
     }
 
 
-    public static FactocraftyFluidTankBlockEntity getFluidTank(Direction dir,FactoryCapacityTiers capacityTier){
+    public static FactocraftyFluidTankBlockEntity getFluidTank(Direction dir, FactoryCapacityTiers capacityTier){
         return new FactocraftyFluidTankBlockEntity(capacityTier, BlockPos.ZERO, FactocraftyFluidTanks.getFromTier(capacityTier).defaultBlockState().setValue(BlockStateProperties.FACING, dir));
     }
 

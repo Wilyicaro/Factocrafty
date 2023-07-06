@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
-import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
@@ -39,30 +38,27 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.FoliageColor;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyWoodType;
 import wily.factocrafty.block.cable.CableTiers;
 import wily.factocrafty.block.cable.InsulatedCableBlock;
-import wily.factocrafty.client.renderer.block.FactocraftyFluidTankRenderer;
+import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
+import wily.factocrafty.client.renderer.block.FactocraftyLiquidTankRenderer;
+import wily.factocrafty.client.renderer.block.RubberHangingSignRenderer;
 import wily.factocrafty.client.renderer.block.TreeTapRenderer;
 import wily.factocrafty.client.renderer.block.RubberSignRenderer;
 import wily.factocrafty.client.renderer.entity.*;
 import wily.factocrafty.client.screens.*;
 import wily.factocrafty.entity.IFactocraftyBoat;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.item.ArmorFeatures;
-import wily.factocrafty.item.BatteryItem;
-import wily.factocrafty.item.ElectricArmorItem;
-import wily.factocrafty.item.FluidCellItem;
+import wily.factocrafty.item.*;
 import wily.factocrafty.network.FactocraftyArmorFeaturePacket;
 import wily.factocrafty.util.registering.FactocraftyBlockEntities;
 import wily.factocrafty.util.registering.FactocraftyBlocks;
 import wily.factocrafty.util.registering.FactocraftyFluidTanks;
 import wily.factocrafty.util.registering.FactocraftyFluids;
+import wily.factoryapi.ItemContainerUtil;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -73,19 +69,31 @@ public class FactocraftyClient {
     public static boolean isHangGliderModelLayerLoaded;
     private static final ResourceLocation NIGHT_VISION_LOCATION = new ResourceLocation(Factocrafty.MOD_ID,"textures/misc/nightvision.png");
 
-    public static void LeavesColor() {
+    public static void leavesColor() {
 
         BlockColor blockColors = (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageFoliageColor(blockAndTintGetter, blockPos) : FoliageColor.getEvergreenColor();
         ItemColor itemColors = (a, e) -> FoliageColor.getEvergreenColor();
         ColorHandlerRegistry.registerBlockColors(blockColors, Registration.RUBBER_LEAVES.get());
         ColorHandlerRegistry.registerItemColors(itemColors, Registration.RUBBER_LEAVES.get().asItem());
 
+
+    }
+    public static void ledColor() {
+        BlockColor blockColors = (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null && blockAndTintGetter.getBlockEntity(blockPos) instanceof FactocraftyLedBlockEntity be && blockState.getValue(FactocraftyLedBlock.LIGHT_VALUE) > 0 && i == 0 ? be.actualRgb.get() : 0xFFFFFF;
+        ColorHandlerRegistry.registerBlockColors(blockColors, Registration.RGB_LED_BLOCK.get());
+        ColorHandlerRegistry.registerBlockColors(blockColors, Registration.RGB_LED_PANEL.get());
+
+    }
+    public static boolean clientPlayerHasNightGoogles() {
+        Minecraft minecraft = Minecraft.getInstance();
+        return minecraft.player != null && minecraft.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ElectricArmorItem e && e.hasActiveFeature(ArmorFeatures.NIGHT_VISION,minecraft.player.getItemBySlot(EquipmentSlot.HEAD), true);
+
     }
 
     public static void fluidItemBlocksColor() {
 
-        ItemColor itemColors = (a, e) -> (e != 0) ? FluidStackHooks.getColor(((FluidCellItem) a.getItem()).getFluidStorage(a).getFluidStack()) : 0xFFFFFF;
-        ColorHandlerRegistry.registerItemColors(itemColors, Registration.FLUID_CELL.get());
+        ItemColor itemColors = (a, e) -> (e != 0) ? FluidStackHooks.getColor((ItemContainerUtil.getFluid(a))) : 0xFFFFFF;
+        ColorHandlerRegistry.registerItemColors(itemColors, Registration.FLUID_CELL.get(),FactocraftyFluids.NAPHTHA.get().getBucket(),FactocraftyFluids.GASOLINE.get().getBucket(),FactocraftyFluids.COOLANT.get().getBucket());
 
     }
     public static void dyeItemsColor() {
@@ -207,14 +215,13 @@ public class FactocraftyClient {
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_bowl"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex_fall"),""));
-        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get());
-        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get());
-        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), CableTiers.CRYSTAL.getBlock());
+        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get());
+        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), CableTiers.CRYSTAL.getBlock());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
+        BlockEntityRendererRegistry.register(Registration.RUBBER_HANGING_SIGN_BLOCK_ENTITY.get(), RubberHangingSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.TREETAP_BLOCK_ENTITY.get(), TreeTapRenderer::new);
-
         for (FactocraftyFluidTanks tank : FactocraftyFluidTanks.values())
-            BlockEntityRendererRegistry.register(FactocraftyBlockEntities.ofBlock(tank.get()), FactocraftyFluidTankRenderer::new);
+            BlockEntityRendererRegistry.register(FactocraftyBlockEntities.ofBlock(tank.get()), FactocraftyLiquidTankRenderer::new);
         MenuRegistry.registerScreenFactory(Registration.GENERATOR_MENU.get(), GeneratorScreen::new);
         MenuRegistry.registerScreenFactory(Registration.GEOTHERMAL_GENERATOR_MENU.get(), GeothermalGeneratorScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
@@ -226,17 +233,27 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), ChangeableInputMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.REFINER_MENU.get(), RefinerScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ENRICHER_MENU.get(), EnricherScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.GAS_INFUSER_MENU.get(), GasInfuserScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.RGB_MENU.get(), RGBControllerScreen::new);
 
 
         //ClientGuiEvent.DEBUG_TEXT_LEFT.register((e)-> e.);
         fluidItemBlocksColor();
         dyeItemsColor();
-        LeavesColor();
-        for (ItemLike item : Registration.ITEMS.getRegistrar())
+        leavesColor();
+        ledColor();
+
+        Registration.ITEMS.forEach(item->{
             if (item instanceof BatteryItem)
-                ItemPropertiesRegistry.register(item, new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> {
+                ItemPropertiesRegistry.register(item.get(), new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> {
                     if (itemStack.getItem() instanceof BatteryItem battery) return battery.getChargedLevel(itemStack);
                     return 0;
                 });
+            if (item instanceof RGBControllerItem)
+                ItemPropertiesRegistry.register(item.get(), new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> {
+                    if (itemStack.getItem() instanceof BatteryItem battery) return battery.getChargedLevel(itemStack);
+                    return 0;
+                });
+        });
     }
 }

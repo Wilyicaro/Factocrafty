@@ -32,10 +32,10 @@ public abstract class LivingEntityInjector extends Entity {
         for (ItemStack i : getArmorSlots()) if (i.getItem() instanceof ArmorItem item && item.getMaterial().equals(FactocraftyArmorMaterials.RUBBER) && item.getEquipmentSlot() == EquipmentSlot.FEET) fallDistance /= 1.4;
     }
     @Inject(method = ("getJumpBoostPower"), at = @At(value = "RETURN"), cancellable = true)
-    private void injectJumpBoost(CallbackInfoReturnable<Double> info) {
+    private void injectJumpBoost(CallbackInfoReturnable<Float> info) {
         if ((Object)this instanceof Player p) {
             ItemStack s = p.getItemBySlot(EquipmentSlot.FEET);
-            if (s.getItem() instanceof ElectricArmorItem e && e.hasActiveFeature(ArmorFeatures.SUPER_JUMP,s,true)) info.setReturnValue(0.4+ info.getReturnValue());
+            if (s.getItem() instanceof ElectricArmorItem e && e.hasActiveFeature(ArmorFeatures.SUPER_JUMP,s,true)) info.setReturnValue(0.4F+ info.getReturnValue());
         }
     }
 }

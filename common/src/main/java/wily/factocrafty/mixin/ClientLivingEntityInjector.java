@@ -3,6 +3,7 @@ package wily.factocrafty.mixin;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
@@ -40,19 +40,9 @@ public abstract class ClientLivingEntityInjector extends Entity {
     }
     @Inject(method = ("baseTick"), at = @At(value = "HEAD"))
     private void tick(CallbackInfo info) {
-        if ((Object) this instanceof AbstractClientPlayer p && (lastHeadItemStack== null || lastHeadItemStack != p.getItemBySlot(EquipmentSlot.HEAD))){
+        if ((Object) this instanceof LocalPlayer p && (lastHeadItemStack== null || lastHeadItemStack != p.getItemBySlot(EquipmentSlot.HEAD))){
             gameRenderer.checkEntityPostEffect(p);
             lastHeadItemStack = p.getItemBySlot(EquipmentSlot.HEAD);
-        }
-    }
-    @Inject(method = ("onEquipItem"), at = @At(value = "HEAD"))
-    private void onEquipItem(EquipmentSlot slot,ItemStack s, ItemStack s2,  CallbackInfo info) {
-        boolean bl = s2.isEmpty() && s.isEmpty();
-        if (!bl && !ItemStack.isSameItemSameTags(s, s2) && !this.firstTick) {
-            if ((Object) this instanceof AbstractClientPlayer p) {
-                Factocrafty.LOGGER.info(s2.getDisplayName().getString());
-                ((GameRendererM)gameRenderer).loadArmorEffects(p, s2,true);
-            }
         }
     }
 

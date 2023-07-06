@@ -13,10 +13,12 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.QuadTransformers;
 import net.minecraftforge.common.TierSortingRegistry;
 import wily.factocrafty.FactocraftyExpectPlatform;
 import net.minecraftforge.fml.loading.FMLPaths;
+import wily.factocrafty.tag.Fluids;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -49,5 +51,9 @@ public class FactocraftyExpectPlatformImpl {
     public static void setQuadsEmission(List<BakedQuad> quads) {
 
         QuadTransformers.settingMaxEmissivity().processInPlace(quads);
+    }
+
+    public static boolean isGas(Fluid fluid) {
+        return fluid.is(Fluids.GAS) || fluid.getFluidType().isLighterThanAir();
     }
 }

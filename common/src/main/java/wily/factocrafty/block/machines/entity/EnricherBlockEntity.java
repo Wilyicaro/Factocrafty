@@ -117,7 +117,7 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    protected void setOtherResults(Recipe<?> recipe, IPlatformItemHandler inv, int i) {
+    protected void setOtherResults(FactocraftyMachineRecipe recipe, IPlatformItemHandler inv, int i) {
         if (recipe instanceof EnricherRecipe rcp){
             if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty()) resultTank.fill(rcp.getResultFluid(),false);
             matterAmount.setInt(0, matterAmount.getInt(0) - rcp.getMatter().second);

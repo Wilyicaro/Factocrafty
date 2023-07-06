@@ -2,7 +2,7 @@
   "type": "factocrafty:enriching",
   "matter": {
     "material": "tin",
-    "count": 25
+    "count": 20
   },
   "ingredient": {
     "item": "factocrafty:copper_dust"

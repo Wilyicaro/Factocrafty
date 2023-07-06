@@ -4,6 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.context.UseOnContext;
@@ -47,6 +48,7 @@ public abstract class AxeItemRedirector {
                 level.addDestroyBlockEffect(blockPos,optional.get());
             optional4 = optional;
             level.playSound(player, blockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 0.5F, 1.0F);
+            if (level.random.nextFloat() >= 0.65) level.addFreshEntity(new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(), Registration.STICKY_RESIN.get().getDefaultInstance()));
         }
         return optional4;
     }

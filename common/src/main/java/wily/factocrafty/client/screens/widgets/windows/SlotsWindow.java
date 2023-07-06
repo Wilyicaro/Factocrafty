@@ -1,12 +1,16 @@
 package wily.factocrafty.client.screens.widgets.windows;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.inventory.FactocraftySlotWrapper;
 import wily.factoryapi.base.IFactoryDrawableType;
 
+import java.util.List;
 import java.util.Map;
 
 public class SlotsWindow extends FactocraftyScreenWindow{
@@ -30,20 +34,27 @@ public class SlotsWindow extends FactocraftyScreenWindow{
     }
 
     @Override
-    public void render(PoseStack poseStack, int i, int j, float f) {
-        super.render(poseStack, i, j, f);
+    public void render(GuiGraphics graphics, int i, int j, float f) {
+        super.render(graphics, i, j, f);
+        graphics.pose().pushPose();
+        graphics.pose().translate(parent.getBounds().getX(), parent.getBounds().getY(),getBlitOffset());
         for (int k : slots) {
             if (parent.getMenu().slots.get(k) instanceof FactocraftySlotWrapper s) {
                 s.x = getX() + s.initialX - parent.getBounds().getX();
                 s.y = getY() + s.initialY - parent.getBounds().getY();
-                s.active = isVisible();
-                s.blitOffset = getBlitOffset();
+                if (s.active = isVisible()) {
+                    parent.renderWindowSlot(graphics, s);
+                    if (parent.isHovering(s,i,j) && s.isHighlightable()){
+                        AbstractContainerScreen.renderSlotHighlight(graphics,s.x,s.y,0);
+                    }
+                }
             };
         }
+        graphics.pose().popPose();
     }
 
     @Override
-    public Map<EasyButton, Boolean> addButtons(Map<EasyButton, Boolean> map) {
-        return Map.of();
+    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
+        return list;
     }
 }

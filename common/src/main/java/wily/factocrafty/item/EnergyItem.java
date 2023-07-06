@@ -25,7 +25,7 @@ public class EnergyItem extends Item implements ICraftyEnergyItem<CYItemEnergySt
     public TransportState energyState;
 
 
-    public int capacity = 1000;
+    public int capacity;
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {

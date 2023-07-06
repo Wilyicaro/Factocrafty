@@ -1,6 +1,7 @@
 package wily.factocrafty.client.screens;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,15 +21,15 @@ public class GeothermalGeneratorScreen extends GeneratorScreen {
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/geothermal_generator.png");}
 
     @Override
-    protected void renderStorageTooltips(PoseStack poseStack, int i, int j) {
-        super.renderStorageTooltips(poseStack, i, j);
-        if (!getMenu().storage.getTanks().isEmpty() && FactocraftyDrawables.FLUID_TANK.inMouseLimit(i,j,   17,  17)) renderTooltip(poseStack, getFluidTooltip("tooltip.factory_api.fluid_stored", gBe.lavaTank),i, j);
+    protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
+        super.renderStorageTooltips(graphics, i, j);
+        if (!getMenu().storage.getTanks().isEmpty() && FactocraftyDrawables.FLUID_TANK.inMouseLimit(i,j,   17,  17)) graphics.renderTooltip(font, getFluidTooltip("tooltip.factory_api.fluid_stored", gBe.lavaTank),i, j);
     }
 
     @Override
-    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
-        super.renderStorageSprites(poseStack, i, j);
-        FactocraftyDrawables.FLUID_TANK.drawAsFluidTank(poseStack,relX() + 17, relY() + 17, getProgressScaled((int) gBe.lavaTank.getFluidStack().getAmount(), (int) gBe.lavaTank.getMaxFluid(), 52), gBe.lavaTank.getFluidStack(), true);
+    protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
+        super.renderStorageSprites(graphics, i, j);
+        FactocraftyDrawables.FLUID_TANK.drawAsFluidTank(graphics,leftPos + 17, topPos + 17, gBe.lavaTank.getFluidStack(),(int) gBe.lavaTank.getMaxFluid(), true);
     }
 
 }

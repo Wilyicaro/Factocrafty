@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.DaylightDetectorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
@@ -32,6 +33,7 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
         this.solarTier = tier;
         this.tickEnergy = Bearer.of(0);
         this.additionalSyncInt.add(tickEnergy);
+
         if (blockState.isFaceSturdy(level,blockPos,Direction.UP)) energySides.replace(Direction.UP, TransportState.NONE);
     }
 
@@ -61,7 +63,6 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
         }
         int max = (int) ((23 * solarTier.efficiency) * solarTier.energyTier.capacityMultiplier);
         i = Mth.clamp(i * max / 15, 0, max);
-
         return i;
     }
     public void tick() {

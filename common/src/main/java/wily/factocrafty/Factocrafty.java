@@ -8,7 +8,9 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.RegistrarManager;
 import net.fabricmc.api.EnvType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import wily.factocrafty.events.ModEvents;
@@ -25,34 +27,7 @@ import java.util.logging.Logger;
 
 public class Factocrafty {
     public static final String MOD_ID = "factocrafty";
-    // We can use this if we don't want to use DeferredRegister
     public static final Supplier<RegistrarManager> REGISTRIES = Suppliers.memoize(() -> RegistrarManager.get(MOD_ID));
-    // Registering a new creative tab
-    public static final CreativeTabRegistry.TabSupplier FACTOCRAFTY_TAB = CreativeTabRegistry.create(new ResourceLocation( MOD_ID,"tab"), (b)-> b.icon(() -> new ItemStack(Registration.GENERATOR.get())).displayItems(
-            ((bool,output) -> {
-                Iterator var2 = BuiltInRegistries.ITEM.iterator();
-
-                while(var2.hasNext()) {
-
-                    Item item = (Item)var2.next();
-                    if (item.arch$registryName().getNamespace().equals(MOD_ID))
-                        output.accept(item);
-                    if (item instanceof ICraftyEnergyItem<?> energyItem){
-                        ItemStack charged = new ItemStack(item);
-                        energyItem.getCraftyEnergy(charged).receiveEnergy(energyItem.getCraftyEnergy(charged).getMaxEnergyStored(), false);
-                        output.accept(charged);
-                    } else if (item instanceof FluidCellItem cell) {
-                        Registration.FLUIDS.getRegistrar().forEach((f)->{
-                                if (f.isSource(null)) {
-                                    ItemContainerUtil.ItemFluidContext context = ItemContainerUtil.fillItem(new ItemStack(cell), FluidStack.create(f, FluidStack.bucketAmount()));
-                                    output.accept(context.container());
-                                }
-                                }
-                        );
-                    }
-                }
-            })));
-
 
     public static final Logger LOGGER = Logger.getLogger(MOD_ID);
     public static final NetworkChannel NETWORK = NetworkChannel.create(new ResourceLocation(MOD_ID, "main"));

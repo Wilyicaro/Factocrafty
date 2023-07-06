@@ -1,0 +1,31 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "G#G",
+    "#B#",
+    "GMG"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "M": {
+      "item": "factocrafty:machine_frame"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "B": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable"
+        ]
+      }
+    }
+  },
+  "result": {
+    "item": "factocrafty:led_block",
+    "count" : 2
+  }
+}

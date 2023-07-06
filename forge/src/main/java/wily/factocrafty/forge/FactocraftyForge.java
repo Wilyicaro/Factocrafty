@@ -35,10 +35,10 @@ public class FactocraftyForge {
 
     @SubscribeEvent
     public static void addDataGen(GatherDataEvent event){
-        RegistrySetBuilder registrySetBuilder=  new RegistrySetBuilder();
-        registrySetBuilder.add(Registries.CONFIGURED_FEATURE, FactocraftyWorldGenBootstrap::configuredFeatures);
-        registrySetBuilder.add(Registries.PLACED_FEATURE, FactocraftyWorldGenBootstrap::placedFeatures);
-        event.getGenerator().addProvider(true, new DatapackBuiltinEntriesProvider(event.getGenerator().getPackOutput(),event.getLookupProvider(), Collections.singleton(Factocrafty.MOD_ID)));
+        RegistrySetBuilder registrySetBuilder=  new RegistrySetBuilder()
+                .add(Registries.CONFIGURED_FEATURE, FactocraftyWorldGenBootstrap::configuredFeatures)
+                .add(Registries.PLACED_FEATURE, FactocraftyWorldGenBootstrap::placedFeatures);
+        event.getGenerator().addProvider(true, new DatapackBuiltinEntriesProvider(event.getGenerator().getPackOutput(),event.getLookupProvider(),registrySetBuilder, Collections.singleton(Factocrafty.MOD_ID)));
     }
 
 }

@@ -5,9 +5,11 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
@@ -27,8 +29,13 @@ import wily.factocrafty.init.Registration;
 import wily.factocrafty.recipes.ShapedTagRecipe;
 import wily.factocrafty.recipes.ShapelessTagRecipe;
 import wily.factocrafty.recipes.SolderingCraftingRecipe;
+import wily.factoryapi.base.ICraftyEnergyItem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static wily.factocrafty.compat.FactocraftyJeiUtils.getRecipes;
 import static wily.factocrafty.init.Registration.getModResource;
@@ -48,8 +55,15 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
         registration.getCraftingCategory().addCategoryExtension(SolderingCraftingRecipe.class,(s)-> (builder, craftingGridHelper, focuses) -> {
-            craftingGridHelper.createAndSetInputs(builder, s.getIngredients().stream().map((i)->List.of(i.getItems())).toList(),0,0);
-            craftingGridHelper.createAndSetOutputs(builder, List.of(s.getResultItem(s.getFactocraftyStack(s.getPrincipalInput()))));
+            craftingGridHelper.createAndSetInputs(builder, s.getIngredients().stream().map((i)->Arrays.stream(i.getItems()).peek((stack-> {if (stack.getItem() instanceof ICraftyEnergyItem<?> e) e.getCraftyEnergy(stack).receiveEnergy(e.getCraftyEnergy(stack).getMaxEnergyStored(),false);})).toList()).toList(),0,0);
+            Ingredient ing = Ingredient.of(focuses.getItemStackFocuses(RecipeIngredientRole.INPUT).map(f-> f.getTypedValue().getIngredient()));
+            List<Ingredient> inputs = new ArrayList<>(s.getAdditionalInputs());
+            if (!ing.isEmpty())
+                inputs.replaceAll((i)-> {
+                    if (Arrays.stream(ing.getItems()).allMatch(i)) return ing;
+                    return i;
+                });
+            craftingGridHelper.createAndSetOutputs(builder, Arrays.stream(s.getPrincipalInput().getItems()).map(i-> s.getResultItems(inputs,i)).flatMap(Collection::stream).collect(Collectors.toList()));
         });
         registration.getCraftingCategory().addCategoryExtension(ShapelessTagRecipe.class,(s)-> (builder, craftingGridHelper, focuses) -> {
             craftingGridHelper.createAndSetInputs(builder, s.getIngredientsStack(),0,0);

@@ -7,13 +7,14 @@
   ],
   "key": {
     "#": {
-      "item": "factocrafty:tin_plate"
+      "item": "factocrafty:platinum_plate"
     },
     "G": {
       "item": "minecraft:glass_pane"
     }
   },
   "result": {
-    "item": "factocrafty:fluid_cell"
+    "item": "factocrafty:fluid_cell",
+    "count": 4
   }
 }

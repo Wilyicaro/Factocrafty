@@ -81,6 +81,9 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
         addIngredients(nonNullList);
         return nonNullList;
     }
+    public boolean hasItemIngredient(){
+        return true;
+    }
     public boolean hasFluidIngredient(){
         return false;
     }
@@ -146,7 +149,7 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
         public T fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
             T rcp = this.factory.create(resourceLocation);
             JsonElement ing = jsonElement(jsonObject,"ingredient");
-            if (ing!= null) {
+            if (ing!= null && rcp.hasItemIngredient()) {
                 rcp.ingredient = Ingredient.fromJson(jsonElement(jsonObject, "ingredient"));
                 rcp.ingredientCount = GsonHelper.getAsInt(jsonObject.getAsJsonObject("ingredient"), "count", 1);
             }
@@ -175,9 +178,11 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
             rcp.experience = buf.readFloat();
             rcp.maxProcess = buf.readVarInt();
             rcp.energyConsume = buf.readVarInt();
-            rcp.ingredientCount = buf.readVarInt();
-            rcp.ingredient = Ingredient.fromNetwork(buf);
-            if (rcp.hasFluidIngredient() && rcp.ingredient.isEmpty()) rcp.fluidIngredient = FluidStack.read(buf);
+            if (rcp.hasItemIngredient()) {
+                rcp.ingredientCount = buf.readVarInt();
+                rcp.ingredient = Ingredient.fromNetwork(buf);
+            }
+            rcp.fluidIngredient = FluidStack.read(buf);
             rcp.result = buf.readItem();
             otherResultsFromNetwork(buf, rcp);
             return rcp;
@@ -193,20 +198,20 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
             friendlyByteBuf.writeFloat(recipe.experience);
             friendlyByteBuf.writeVarInt(recipe.maxProcess);
             friendlyByteBuf.writeVarInt(recipe.energyConsume);
-            friendlyByteBuf.writeVarInt(recipe.ingredientCount);
-            recipe.ingredient.toNetwork(friendlyByteBuf);
-            if(recipe.ingredient.isEmpty() && recipe.hasFluidIngredient()) recipe.fluidIngredient.write(friendlyByteBuf);
+            if (recipe.hasItemIngredient()) {
+                friendlyByteBuf.writeVarInt(recipe.ingredientCount);
+                recipe.ingredient.toNetwork(friendlyByteBuf);
+            }
+            recipe.fluidIngredient.write(friendlyByteBuf);
             friendlyByteBuf.writeItem(recipe.result);
             otherResultsToNetwork(friendlyByteBuf, recipe);
         }
         public void otherResultsToNetwork(FriendlyByteBuf friendlyByteBuf, T recipe){
-            if (!recipe.otherResults.isEmpty()) {
                 friendlyByteBuf.writeVarInt(recipe.otherResults.size());
                 recipe.otherResults.forEach((i,f)->{
                     friendlyByteBuf.writeItem(i);
                     friendlyByteBuf.writeFloat(f);
                 });
-            }
         }
 
         public interface FactocraftySerializer<T extends AbstractFactocraftyProcessRecipe> {

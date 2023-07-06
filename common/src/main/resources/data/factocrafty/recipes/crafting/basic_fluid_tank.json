@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RMR",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass"
+    },
+    "M": {
+      "item": "factocrafty:machine_frame"
+    },
+    "R": {
+      "tag": "factocrafty:rubber"
+    },
+    "C": {
+      "item": "factocrafty:electronic_circuit"
+    }
+  },
+  "result": {
+    "item": "factocrafty:basic_fluid_tank"
+  }
+}

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factocrafty.init.Registration;
 
 public class WrenchItem extends Item {
@@ -27,14 +28,14 @@ public class WrenchItem extends Item {
         Level level = useOnContext.getLevel();
         BlockPos pos = useOnContext.getClickedPos();
         Player player = useOnContext.getPlayer();
-        if (level.getBlockEntity(pos) instanceof FactocraftyProcessBlockEntity be){
+        if (level.getBlockEntity(pos) instanceof FactocraftyStorageBlockEntity be){
             level.playSound(player,pos, Registration.WRENCH_TIGHT.get(), SoundSource.PLAYERS,1.0F,1.0F);
             BlockState blockState = be.getBlockState();
             FluidState fluidState = level.getFluidState(pos);
             if (player.isShiftKeyDown()) {
-                    BlockEntity blockEntity = blockState.hasBlockEntity() ? be : null;
-                    blockState.getBlock().dropResources(blockState, level, pos, blockEntity, player, useOnContext.getItemInHand());
-                    be.inventory.clearContent();
+                BlockEntity blockEntity = blockState.hasBlockEntity() ? be : null;
+                blockState.getBlock().dropResources(blockState, level, pos, blockEntity, player, useOnContext.getItemInHand());
+                if (be.hasInventory()) be.inventory.clearContent();
                 boolean bl2 = level.setBlock(pos, fluidState.createLegacyBlock(), 3);
                 if (bl2) {
                     level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, blockState));

@@ -1,16 +1,19 @@
 package wily.factocrafty.client.screens.widgets.windows;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.client.screens.FactocraftyDrawableButton;
+import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.network.FactocraftyStateButtonPacket;
+import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.*;
 
 import java.util.ArrayList;
@@ -22,7 +25,6 @@ import static wily.factocrafty.util.DirectionUtil.nearestRotation;
 import static wily.factocrafty.util.DirectionUtil.rotationCyclic;
 
 public class MachineSidesConfig extends FactocraftyScreenWindow{
-    Minecraft minecraft = Minecraft.getInstance();
 
     boolean blockSidesDragged = false;
     float configBlockRotateX = 30;
@@ -38,11 +40,11 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
     }
 
     @Override
-    public Map<EasyButton, Boolean> addButtons(Map<EasyButton, Boolean> map) {
-        map.put(byButtonType(ButtonTypes.LARGE,getX() + 7,getY() + 11,new EasyIcon(10,10,sideConfigState, 246), (b)-> sideConfigState = getNextSide(), getSidesConfigTooltip()), false);
-        map.put(byButtonColor(ButtonTypes.LARGE,getX() + 7,getY() + 30,getSideIdentifier().getColor(),(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : ((ISideType) getSideType().get(selectedDirection)).nextSlotIndex(getSlotsIdentifiers()))), getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank"))), false);
-        map.put(byButtonType(ButtonTypes.LARGE,getX() + 7,getY() + 49,new EasyIcon(10,10,getStateSide(getSideType(),selectedDirection).ordinal() + 4, 246), (b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().nextStateSide(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers()))),getStateSide().getTooltip()), false);
-        return super.addButtons(map);
+    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
+        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 11, (b)-> sideConfigState = getNextSide(), getSidesConfigTooltip(),FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(sideConfigState)));
+        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 30,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : ((ISideType) getSideType().get(selectedDirection)).nextSlotIndex(getSlotsIdentifiers()))), getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank")),FactocraftyDrawables.LARGE_BUTTON).color(getSideIdentifier().getColor()));
+        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 49, (b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().nextStateSide(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers()))),getStateSide().getTooltip(), FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getStateSide(getSideType(),selectedDirection).ordinal() + 4)));
+        return super.addButtons(list);
     }
     public static TransportState getStateSide(Map<Direction, ?> map, Direction d){
         if (map.get(d) instanceof ItemSide item) return item.transportState;
@@ -82,9 +84,15 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
         if (getSideType().get(selectedDirection) instanceof IHasIdentifier iden) return iden.identifier();
         else return SlotsIdentifier.GENERIC;
     }
+
+    @Override
+    public float getBlitOffset() {
+        return 500F;
+    }
+
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        if (isVisible() && (i == 0 || i == 1) && (clickedSideConfig(d,e) || blockSidesDragged) && !dragging) {
+        if (isVisible() && (i == 0 || i == 1) && (clickedSideConfig(d,e) || blockSidesDragged) && !dragging && isFocused()) {
             configBlockRotateY += ((d - (getX() + (float)width/2)) / (getY() + (float)width/2)) * 50;
             configBlockRotateX += ((e - (getY() + (float)height/2)) / (getY() + (float)height/2)) * 50;
             configBlockRotateX = rotationCyclic(configBlockRotateX);
@@ -112,12 +120,12 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
 
 
     @Override
-    public void renderBg(PoseStack poseStack, int i, int j) {
-        super.renderBg(poseStack,i,j);
+    public void renderBg(GuiGraphics graphics, int i, int j) {
+        super.renderBg(graphics,i,j);
         selectedDirection = nearestRotation(configBlockRotateX, configBlockRotateY,true);
-        parent.renderGuiBlock(be,be.getBlockState(),getX() + width /2 - 8 ,getY() + 28, 2F,2F, configBlockRotateX, configBlockRotateY);
+        parent.renderGuiBlock(graphics,be,be.getBlockState(),getX() + width /2 - 8 ,getY() + 28, 2F,2F, configBlockRotateX, configBlockRotateY);
         //blit(poseStack, i, j, 0, 30, 30, baked.getQuads(state, selectedDirection, parent.getMenu().player.level.random).get(0).getSprite());
-        minecraft.font.draw(poseStack, Component.translatable("tooltip.factocrafty.config.direction", Component.translatable("tooltip.factocrafty.config." +selectedDirection.getName()).getString()) ,getX() + 8,getY() + height - 16 , 4210752);
+        ScreenUtil.drawString(graphics.pose(),I18n.get("tooltip.factocrafty.config.direction", I18n.get("tooltip.factocrafty.config." + selectedDirection.getName())) ,getX() + 8,getY() + height - 16 , 4210752,false);
     }
 
 

@@ -13,16 +13,15 @@ import wily.factocrafty.inventory.FactocraftyProcessMenu;
 public class EnergyCellScreen extends FactocraftyMachineScreen<FactocraftyEnergyStorageBlockEntity> {
     public EnergyCellScreen(FactocraftyProcessMenu<FactocraftyEnergyStorageBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
-        energyCellPosX = 91;
-        energyCellType = FactocraftyDrawables.BIG_ENERGY_CELL;
-
     }
 
     @Override
     protected void init() {
         super.init();
-        this.addConfigToGui(new FactocraftyConfigWidget(relX() + imageWidth,  relY() + 46, true,Component.translatable("gui.factocrafty.window.equipment"), new FactocraftyConfigWidget.Icons(1), this::renderTooltip)
-                ,(config)-> new SlotsWindow(config,relX() + imageWidth + 21,relY(), this, menu.equipmentSlots));
+        energyCellType.posX = leftPos + 91;
+        energyCellType.drawable = FactocraftyDrawables.BIG_ENERGY_CELL;
+        this.addConfigToGui(new FactocraftyConfigWidget(leftPos + imageWidth,  topPos + 46, true,Component.translatable("gui.factocrafty.window.equipment"), FactocraftyDrawables.getInfoIcon(1))
+                ,(config)-> new SlotsWindow(config,leftPos + imageWidth + 21,topPos, this, menu.equipmentSlots));
     }
 
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/energy_cell.png");}

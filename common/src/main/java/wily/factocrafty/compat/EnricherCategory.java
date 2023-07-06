@@ -12,6 +12,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import wily.factocrafty.client.screens.EnricherScreen;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
@@ -32,11 +33,11 @@ public class EnricherCategory extends FactocraftyProgressCategory<EnricherRecipe
     }
 
     @Override
-    public void draw(EnricherRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
+    public void draw(EnricherRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
         int c = recipe.getMatter().first.getColor().col;
         RenderSystem.setShaderColor(ScreenUtil.getRed(c),ScreenUtil.getGreen(c),ScreenUtil.getBlue(c),1.0F);
-        FactocraftyDrawables.MATTER_PROGRESS.drawProgress(stack, 2, 63, getProgressScaled(recipe.getMatter().second, 200,135));
+        FactocraftyDrawables.MATTER_PROGRESS.drawProgress(graphics, 2, 63, recipe.getMatter().second, 200);
         RenderSystem.setShaderColor(1.0F,1.0F,1.0F,1.0F);
     }
 

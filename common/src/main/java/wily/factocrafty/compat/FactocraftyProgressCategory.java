@@ -17,6 +17,8 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +29,7 @@ import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.recipes.SolderingCraftingRecipe;
+import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.IFactoryDrawableType;
 
 import java.util.ArrayList;
@@ -39,6 +42,8 @@ import static wily.factocrafty.util.ScreenUtil.renderScaled;
 import static wily.factoryapi.util.StorageStringUtil.*;
 
 public class FactocraftyProgressCategory<T extends Recipe<Container>> implements IRecipeCategory<T> {
+
+
 
     private final Component title;
     private final IDrawable background;
@@ -89,22 +94,21 @@ public class FactocraftyProgressCategory<T extends Recipe<Container>> implements
     }
 
     @Override
-    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         boolean b = !(recipe instanceof AbstractFactocraftyProcessRecipe rcp) || rcp.getOtherResults().isEmpty();
         int max = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getMaxProcess() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getCookingTime():200;
         float exp = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getExperience() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getExperience():0;
-        renderScaled(stack, (float) max / 20 + "s", 62, 52, 1f, 0x7E7E7E, false);
-        if (exp > 0)renderScaled(stack,  Component.translatable("gui.jei.category.smelting.experience", exp).getString(), 62, 2, 1f, 0x7E7E7E, false);
-        if (!b) recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT).forEach((r)-> r.getDisplayedItemStack().ifPresent((i-> {if (((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().containsKey(i) && !i.isEmpty())  renderScaled(stack, Math.round(((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().get(i) * 100) + "%",92,42,0.5F,0x7E7E7E,false);})));
+        renderScaled(graphics.pose(), (float) max / 20 + "s", 62, 52, 1f, 0x7E7E7E, false);
+        if (exp > 0)renderScaled(graphics.pose(),  Component.translatable("gui.jei.category.smelting.experience", exp).getString(), 62, 2, 1f, 0x7E7E7E, false);
+        if (!b) recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT).forEach((r)-> r.getDisplayedItemStack().ifPresent((i-> {if (((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().containsKey(i) && !i.isEmpty())  renderScaled(graphics.pose(), Math.round(((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().get(i) * 100) + "%",92,42,0.5F,0x7E7E7E,false);})));
         IDrawableAnimated cache = cachedProgressAnim.getUnchecked(max);
-        cache.draw(stack, type== FactocraftyDrawables.PROGRESS ? 61 : 62, type.equals(FactocraftyDrawables.PROGRESS) ? 23 : 29);
-        energyCell.draw(stack,2,6);
-        IDrawableStatic slot = guiHelper.createDrawable(WIDGETS,178,0,18,18);
-        guiHelper.createDrawable(WIDGETS,196,0,26,26).draw(stack,b ? 93 : 106, 19);
+        cache.draw(graphics, type== FactocraftyDrawables.PROGRESS ? 61 : 62, type.equals(FactocraftyDrawables.PROGRESS) ? 23 : 29);
+        energyCell.draw(graphics,2,6);
+        ScreenUtil.drawGUISlot(graphics, b ? 93 : 106, 19,26,26);
         if (recipe instanceof FactocraftyMachineRecipe rcp){
-            if (!b)slot.draw(stack,88, 23);
-            if (rcp.hasFluidIngredient() && !rcp.getFluidIngredient().isEmpty()) guiHelper.createDrawable(WIDGETS,178,107,18,21).draw(stack,37, 2);
-                else slot.draw(stack,37, 5);
+            if (!b)ScreenUtil.drawGUISlot(graphics,88, 23, 18,18);
+            if (rcp.hasFluidIngredient() && !rcp.getFluidIngredient().isEmpty()) ScreenUtil.drawGUIFluidSlot(graphics, 37,2,18,21);
+            else ScreenUtil.drawGUISlot(graphics,37, 5, 18, 18);
         }
     }
 

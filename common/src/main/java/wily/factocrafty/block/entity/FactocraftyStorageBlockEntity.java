@@ -8,15 +8,20 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
+import wily.factocrafty.Factocrafty;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
+import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
+import wily.factocrafty.network.FactocraftySyncSelectedUpgradePacket;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
@@ -25,6 +30,8 @@ import java.util.*;
 
 public class FactocraftyStorageBlockEntity extends BlockEntity implements IFactoryStorage {
 
+
+    public final List<Bearer<Integer>> additionalSyncInt = new ArrayList<>();
     public FactocraftyStorageBlockEntity(BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
         super(blockEntity, blockPos, blockState);
 
@@ -124,12 +131,17 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
     @Override
     public void saveAdditional(CompoundTag compoundTag) {
         saveTag(compoundTag);
+        if (!additionalSyncInt.isEmpty()) compoundTag.putIntArray("additionalInt", additionalSyncInt.stream().map(Bearer::get).toList());
     }
 
-
+    public void syncAdditionalMenuData(AbstractContainerMenu menu, ServerPlayer player){
+        for (Bearer<Integer> b : additionalSyncInt) Factocrafty.NETWORK.sendToPlayer(player,new FactocraftySyncIntegerBearerPacket(getBlockPos(), b.get(),additionalSyncInt.indexOf(b)));
+    }
     @Override
     public void load(CompoundTag compoundTag) {
         loadTag(compoundTag);
+        int[] ar = compoundTag.getIntArray("additionalInt");
+        for (int i = 0; i < ar.length; i++) additionalSyncInt.get(i).set(ar[i]);
     }
 
 

@@ -13,6 +13,8 @@ public class Fluids {
     public static final TagKey<Fluid> LATEX = TagKey.create(Registries.FLUID,new ResourceLocation(MOD_ID,"latex"));
 
     public static final TagKey<Fluid> GASOLINE = TagKey.create(Registries.FLUID,new ResourceLocation(MOD_ID,"gasoline"));
+
+    public static final TagKey<Fluid> GAS = TagKey.create(Registries.FLUID,new ResourceLocation(MOD_ID,"gas"));
     
     
 }

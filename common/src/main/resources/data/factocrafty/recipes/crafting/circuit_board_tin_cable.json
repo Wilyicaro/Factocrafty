@@ -1,9 +1,0 @@
-{
-  "type": "factocrafty:soldering_crafting",
-  "principalInput": {
-    "item": "factocrafty:circuit_board"
-  },
-  "otherInputs": {
-    "item": "factocrafty:tin_cable"
-  }
-}

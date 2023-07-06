@@ -36,6 +36,6 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "architectury": ">=6.2.43",
-    "factory_api": ">=0.0.1"
+    "factory_api": ">=0.1.7"
   }
 }

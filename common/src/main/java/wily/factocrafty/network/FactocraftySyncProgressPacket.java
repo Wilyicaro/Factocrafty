@@ -43,8 +43,8 @@ public class FactocraftySyncProgressPacket {
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
-            BlockEntity be = player.getLevel().getBlockEntity(pos);
-            if (player.level.isLoaded(pos)) {
+            BlockEntity be = player.level().getBlockEntity(pos);
+            if (player.level().isLoaded(pos)) {
                 assert be != null;
                 ((IFactoryProcessableStorage)be).getProgresses().get(index).set(progress);
                 ((IFactoryProcessableStorage)be).getProgresses().get(index).maxProgress = maxProgress;

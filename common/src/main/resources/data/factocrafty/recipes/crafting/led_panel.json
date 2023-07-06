@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "factocrafty:led_block"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:led_panel",
+    "count": 3
+  }
+}

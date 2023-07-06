@@ -1,8 +1,8 @@
 package wily.factocrafty.client.screens;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,20 +24,20 @@ public class GeneratorScreen extends FactocraftyMachineScreen<GeneratorBlockEnti
     @Override
     protected void init() {
         super.init();
-        this.addConfigToGui(new FactocraftyConfigWidget(relX() + imageWidth,  relY() + 46, true,Component.translatable("gui.factocrafty.window.equipment"), new FactocraftyConfigWidget.Icons(1), this::renderTooltip)
-                ,(config)-> new SlotsWindow(config,relX() + imageWidth + 21,relY(), this, menu.equipmentSlots));
-        addWidget(new FactocraftyInfoWidget(relX() + imageWidth,  relY() +  100,238 , 18,()->Component.translatable("tooltip.factocrafty.generating",  getStorageAmount(getMenu().be.energyTick.get(),false,"",kiloCY,CYMeasure)).withStyle(ChatFormatting.GRAY), new FactocraftyConfigWidget.Icons(4), this::renderTooltip));
+        energyCellType.posX = leftPos + 112;
+        this.addConfigToGui(new FactocraftyConfigWidget(leftPos + imageWidth,  topPos + 46, true,Component.translatable("gui.factocrafty.window.equipment"), FactocraftyDrawables.getInfoIcon(1))
+                ,(config)-> new SlotsWindow(config,leftPos + imageWidth + 21,topPos, this, menu.equipmentSlots));
+        addWidget(new FactocraftyInfoWidget(leftPos + imageWidth,  topPos +  100,238 , 18,()->Component.translatable("tooltip.factocrafty.generating",  getStorageAmount(getMenu().be.energyTick.get(),false,"",kiloCY,CYMeasure)).withStyle(ChatFormatting.GRAY), FactocraftyDrawables.getInfoIcon(4)));
     }
 
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/generator.png");}
 
     @Override
-    protected void renderStorageSprites(PoseStack poseStack, int i, int j) {
-        super.renderStorageSprites(poseStack, i, j);
-        FactocraftyDrawables.BURN_PROGRESS.drawProgress(poseStack,relX() + 56, relY() + 36, getProgressScaled(getMenu().be.burnTime.getInt(0), getMenu().be.burnTime.maxProgress, 14));
-        FactocraftyDrawables.ENERGY_PROGRESS.drawProgress(poseStack,relX() + 80, relY() + 39, getProgressScaled(getMenu().be.progress.get()[0],getMenu().be.progress.maxProgress, 22));
-        FactocraftyDrawables.MINI_FLUID_TANK.drawAsFluidTank(poseStack,relX() + 56, relY() + 14, getProgressScaled((int) getMenu().be.fluidTank.getFluidStack().getAmount(), (int) getMenu().be.fluidTank.getMaxFluid(), 19), getMenu().be.fluidTank.getFluidStack(), true);
-
+    protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
+        super.renderStorageSprites(graphics, i, j);
+        FactocraftyDrawables.BURN_PROGRESS.drawProgress(graphics,leftPos + 56, topPos + 36,getMenu().be.burnTime.getInt(0), getMenu().be.burnTime.maxProgress);
+        FactocraftyDrawables.ENERGY_PROGRESS.drawProgress(graphics,leftPos + 80, topPos + 39, getMenu().be.progress.get()[0],getMenu().be.progress.maxProgress);
+        FactocraftyDrawables.MINI_FLUID_TANK.drawAsFluidTank(graphics,leftPos + 56, topPos + 14, getMenu().be.fluidTank.getFluidStack(),(int) getMenu().be.fluidTank.getMaxFluid(), true);
     }
 
 }

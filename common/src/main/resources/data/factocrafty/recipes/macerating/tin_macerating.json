@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:tin_ingot"
+  },
+  "result": "factocrafty:tin_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

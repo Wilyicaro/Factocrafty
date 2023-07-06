@@ -1,6 +1,0 @@
-{
-    "parent": "factocrafty:item/fluid_cell_window_template",
-    "textures": {
-        "texture": "factocrafty:item/fluid_cell_background"
-    }
-}

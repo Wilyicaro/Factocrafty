@@ -4,7 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
-import com.ibm.icu.impl.Pair;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,11 +18,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.CompoundTagUtils;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class ShapedTagRecipe extends CustomRecipe {
     final int width;
@@ -59,13 +59,13 @@ public class ShapedTagRecipe extends CustomRecipe {
     }
 
     public NonNullList<Ingredient> getIngredients() {
-        return new NonNullList<>(this.recipeItems.stream().map((p)-> p.first).toList(),Ingredient.EMPTY);
+        return new NonNullList<>(this.recipeItems.stream().map(Pair::first).toList(),Ingredient.EMPTY);
     }
     public List<List<ItemStack>> getIngredientsStack(){
         List<List<ItemStack>> list = new ArrayList<>();
         recipeItems.forEach((i)->{
-            List<ItemStack> s= List.of(i.first.getItems());
-            if (!i.second.isEmpty()) s.forEach((stack)-> stack.setTag(i.second));
+            List<ItemStack> s= List.of(i.first().getItems());
+            if (!i.second().isEmpty()) s.forEach((stack)-> stack.setTag(i.second()));
             list.add(s);
         });
         return list;
@@ -108,9 +108,9 @@ public class ShapedTagRecipe extends CustomRecipe {
                         index = m + n * this.width;
                     }
                 }
-                Ingredient ing = recipeItems.get(index).first;
+                Ingredient ing = recipeItems.get(index).first();
                 ItemStack stack = craftingContainer.getItem(k + l * craftingContainer.getWidth()).copy();
-                if (!ing.test(stack) || !(recipeItems.get(index).second.isEmpty() || CompoundTagUtils.compoundContains(recipeItems.get(index).second, stack.getOrCreateTag()))) {
+                if (!ing.test(stack) || !(recipeItems.get(index).second().isEmpty() || CompoundTagUtils.compoundContains(recipeItems.get(index).second(), stack.getOrCreateTag()))) {
                     return false;
                 }
             }
@@ -138,8 +138,8 @@ public class ShapedTagRecipe extends CustomRecipe {
         for(int k = 0; k < strings.length; ++k) {
             for(int l = 0; l < strings[k].length(); ++l) {
                 String string = strings[k].substring(l, l + 1);
-                Ingredient ing = map.get(string).first;
-                CompoundTag tag = map.get(string).second;
+                Ingredient ing = map.get(string).first();
+                CompoundTag tag = map.get(string).second();
                 if (ing == null) {
                     throw new JsonSyntaxException("Pattern references symbol '" + string + "' but it's not defined in the key");
                 }
@@ -281,7 +281,7 @@ public class ShapedTagRecipe extends CustomRecipe {
     public static class Serializer implements RecipeSerializer<ShapedTagRecipe> {
         public ShapedTagRecipe fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
             String string = GsonHelper.getAsString(jsonObject, "group", "");
-            CraftingBookCategory craftingBookCategory = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(jsonObject, "category", (String)null), CraftingBookCategory.MISC);
+            CraftingBookCategory craftingBookCategory = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(jsonObject, "category", null), CraftingBookCategory.MISC);
             Map<String, Pair<Ingredient,CompoundTag>> map = ShapedTagRecipe.keyFromJson(GsonHelper.getAsJsonObject(jsonObject, "key"));
             String[] strings = ShapedTagRecipe.shrink(ShapedTagRecipe.patternFromJson(GsonHelper.getAsJsonArray(jsonObject, "pattern")));
             int i = strings[0].length();
@@ -299,9 +299,10 @@ public class ShapedTagRecipe extends CustomRecipe {
             CraftingBookCategory craftingBookCategory = friendlyByteBuf.readEnum(CraftingBookCategory.class);
             NonNullList<Pair<Ingredient,CompoundTag>> nonNullList = NonNullList.withSize(i * j, Pair.of(Ingredient.EMPTY,new CompoundTag()));
 
-            for(int k = 0; k < nonNullList.size(); ++k) {
-                nonNullList.set(k, Pair.of(Ingredient.fromNetwork(friendlyByteBuf), friendlyByteBuf.readNbt()));
-            }
+            nonNullList.replaceAll(ignored -> {
+                Factocrafty.LOGGER.warning("a" + i * j);
+                return Pair.of(Ingredient.fromNetwork(friendlyByteBuf), friendlyByteBuf.readNbt());
+            });
 
             ItemStack itemStack = friendlyByteBuf.readItem();
             boolean bl = friendlyByteBuf.readBoolean();
@@ -314,8 +315,8 @@ public class ShapedTagRecipe extends CustomRecipe {
             friendlyByteBuf.writeUtf(rcp.group);
             friendlyByteBuf.writeEnum(rcp.category());
             rcp.recipeItems.forEach((p)->{
-                p.first.toNetwork(friendlyByteBuf);
-                friendlyByteBuf.writeNbt(p.second);
+                p.first().toNetwork(friendlyByteBuf);
+                friendlyByteBuf.writeNbt(p.second());
             });
             friendlyByteBuf.writeItem(rcp.result);
             friendlyByteBuf.writeBoolean(rcp.showNotification);

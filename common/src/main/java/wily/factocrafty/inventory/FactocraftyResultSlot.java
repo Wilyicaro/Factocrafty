@@ -42,7 +42,7 @@ public class FactocraftyResultSlot extends FactoryItemSlot {
 
     protected void checkTakeAchievements(ItemStack itemStack) {
         if (player != null) {
-            itemStack.onCraftedBy(this.player.level, this.player, this.removeCount);
+            itemStack.onCraftedBy(this.player.level(), this.player, this.removeCount);
             if (this.player instanceof ServerPlayer && this.be != null) {
                 be.awardUsedRecipesAndPopExperience((ServerPlayer) this.player);
             }
