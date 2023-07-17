@@ -9,14 +9,6 @@ public class BatteryItem extends EnergyItem{
         super(tier, TransportState.EXTRACT_INSERT, properties.stacksTo(64));
         capacity = Capacity;
     }
-    public float getChargedLevel(ItemStack stack){
-        int e = getCraftyEnergy(stack).getEnergyStored();
-        if (e > 0 ) {
-            return e /(float)capacity;
-        }
-        return 0;
-    }
-
     @Override
     public boolean isBarVisible(ItemStack itemStack) {
         return capacity > FactoryCapacityTiers.HIGH.energyCapacity && super.isBarVisible(itemStack);

@@ -345,7 +345,7 @@ public class Registration {
 
     public static final RegistrySupplier<Item> SOLDERING_IRON =  ITEMS.register("soldering_iron", () -> new ElectricCraftingToolItem(FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
 
-    public static final RegistrySupplier<Item> RGB_CONTROLLER =  ITEMS.register("rgb_led_controller", () -> new RGBControllerItem(defaultStackItemProperties()));
+    public static final RegistrySupplier<RGBControllerItem> RGB_CONTROLLER =  ITEMS.register("rgb_led_controller", () -> new RGBControllerItem(defaultStackItemProperties()));
 
     public static final RegistrySupplier<Item> DRILL =  ITEMS.register("mining_drill", () -> new DrillItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
 
@@ -545,8 +545,9 @@ public class Registration {
     }
     private static BlockBehaviour.Properties cableBehaviour(){return  BlockBehaviour.Properties.of().sound(CABLE);}
 
-    private static void registerFluid(String name, int viscosity, int density, int tick, int color,boolean colorInLevel,  BlockBehaviour.Properties properties, FactocraftyFlowingFluid.whenSpreadToFluid whenSpreadToFluid, boolean isGas){
-        ArchitecturyFluidAttributes FLUID_ATTRIBUTE = FactocraftyFluidAttributes.of(()-> getRegistrarFluidEntry("flowing_" + name), ()-> getRegistrarFluidEntry(name)).colorInLevel(color,colorInLevel).lighterThanAir(isGas).blockSupplier(()-> (RegistrySupplier<? extends LiquidBlock>) GENERIC_BLOCKS_REGISTRAR.delegate(getModResource(name))).bucketItem(() -> Optional.ofNullable(isGas ? null : ITEMS_REGISTRAR.get(getModResource(name + "_bucket")))).viscosity(viscosity).density(density).flowingTexture(new ResourceLocation(MOD_ID,"block/fluid/" + (isGas? "generic_gas":  name)+ "_flow")).sourceTexture(new ResourceLocation(MOD_ID, "block/fluid/" + (isGas? "generic_gas":  name) + "_still")).overlayTexture(new ResourceLocation(MOD_ID, "block/fluid/" + name + "_still")).tickDelay(tick);
+    private static void registerFluid(String name, int viscosity, int density, int tick, int color,boolean colorInLevel,  BlockBehaviour.Properties properties, FactocraftyFlowingFluid.whenSpreadToFluid whenSpreadToFluid){
+        boolean isGas = density <= 0;
+        ArchitecturyFluidAttributes FLUID_ATTRIBUTE = FactocraftyFluidAttributes.of(()-> getRegistrarFluidEntry("flowing_" + name), ()-> getRegistrarFluidEntry(name)).colorInLevel(color,colorInLevel).lighterThanAir(isGas).blockSupplier(()-> (RegistrySupplier<? extends LiquidBlock>) GENERIC_BLOCKS_REGISTRAR.delegate(getModResource(name))).bucketItem(() -> Optional.ofNullable(isGas ? null : ITEMS_REGISTRAR.get(getModResource(name + "_bucket")))).viscosity(viscosity).density(density).flowingTexture(new ResourceLocation(MOD_ID,"block/fluid/" + (isGas? "generic_gas":  name)+ "_flow")).sourceTexture(new ResourceLocation(MOD_ID, "block/fluid/" + (isGas? "generic_gas":  name) + "_still")).overlayTexture(new ResourceLocation(MOD_ID, "block/fluid/" + (isGas? "generic_gas":  name) + "_still")).tickDelay(tick);
 
         FLUIDS.getRegistrar().register(getModResource(name),() -> new FactocraftySourceFluid(FLUID_ATTRIBUTE, whenSpreadToFluid, isGas));
         FLUIDS.getRegistrar().register(getModResource("flowing_" + name),() -> new FactocraftyFlowingFluid(FLUID_ATTRIBUTE, whenSpreadToFluid,isGas));
@@ -555,12 +556,8 @@ public class Registration {
 
     }
     private static void registerFluid(String name, int viscosity, int density, int tick, int color, BlockBehaviour.Properties properties){
-       registerFluid(name, viscosity, density, tick, color, true, properties, null,false);
+       registerFluid(name, viscosity, density, tick, color, true, properties, null);
     }
-    private static void registerFluid(String name, int viscosity, int density, int tick, int color, boolean colorInLevel,  BlockBehaviour.Properties properties,FactocraftyFlowingFluid.whenSpreadToFluid whenSpreadToFluid){
-        registerFluid(name, viscosity, density, tick, color, colorInLevel, properties, whenSpreadToFluid,false);
-    }
-
     private static RegistrySupplier<Block>  registrarFactocraftyBlockItem(Supplier<Block> block, String name){
         RegistrarBlockItems.add(getModResource(name));
         return registrarFactocraftyBlock(block,name);
@@ -611,11 +608,11 @@ public class Registration {
         registerFluid(FactocraftyFluids.COOLANT.getName(),4000,4000,4,new Color(0, 89, 93).getRGB(), FactocraftyBlockProperties.COOLANT);
         registerFluid(FactocraftyFluids.GASOLINE.getName(),6000,4000,6,new Color(140, 96, 0).getRGB(),true, FactocraftyBlockProperties.GASOLINE, spreadFlammable);
         registerFluid(FactocraftyFluids.NAPHTHA.getName(),4000,3000,6,new Color(155, 96, 0).getRGB(),true, FactocraftyBlockProperties.GASOLINE, spreadFlammable);
-        registerFluid(FactocraftyFluids.METHANE.getName(),4000,0,2,new Color(132, 176, 255).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), spreadFlammable,true);
-        registerFluid(FactocraftyFluids.WATER_VAPOR.getName(),4000,0,2,new Color(176, 176, 176).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), null,true);
-        registerFluid(FactocraftyFluids.ISOPRENE.getName(),2000,0,2,new Color(206, 206, 206).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), null,true);
-        registerFluid(FactocraftyFluids.OXYGEN.getName(),2000,0,2,new Color(190, 190, 210).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), null,true);
-        registerFluid(FactocraftyFluids.HYDROGEN.getName(),3000,0,2,new Color(132, 146, 234).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), spreadFlammable,true);
+        registerFluid(FactocraftyFluids.ISOPRENE.getName(),3000,2000,2,new Color(206, 206, 206).getRGB(), FactocraftyBlockProperties.getLiquidProperties());
+        registerFluid(FactocraftyFluids.METHANE.getName(),4000,0,2,new Color(132, 176, 255).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), spreadFlammable);
+        registerFluid(FactocraftyFluids.WATER_VAPOR.getName(),4000,0,2,new Color(140, 145, 176).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), null);
+        registerFluid(FactocraftyFluids.OXYGEN.getName(),2000,0,2,new Color(125, 190, 210).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), null);
+        registerFluid(FactocraftyFluids.HYDROGEN.getName(),3000,0,2,new Color(132, 146, 234).getRGB(),true, FactocraftyBlockProperties.getGasProperties(), spreadFlammable);
         MENUS.register();
         FLUIDS.register();
         BLOCKS.register();

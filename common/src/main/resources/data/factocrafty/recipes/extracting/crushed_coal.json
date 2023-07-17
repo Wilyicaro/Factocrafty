@@ -1,0 +1,21 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_coal"
+  },
+  "result": {
+    "item": "minecraft:coal",
+    "count" : 2
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "minecraft:coal",
+        "count" : 1
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,28 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_lapis"
+  },
+  "result": {
+    "item": "minecraft:lapis_lazuli",
+    "count" : 8
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "minecraft:lapis_lazuli",
+        "count" : 7
+      },
+      "chance": 0.5
+    },
+    {
+      "result": {
+        "item": "minecraft:lapis_lazuli",
+        "count" : 5
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

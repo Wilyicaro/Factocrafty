@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "PPP",
+    "CCC"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:circuit_board"
+    },
+    "P": {
+      "item": "factocrafty:gold_plate"
+    },
+    "C": {
+      "item": "factocrafty:gold_cable"
+    }
+
+  },
+  "result": {
+    "item": "factocrafty:advanced_circuit_board",
+    "count": 3
+  }
+}

@@ -207,15 +207,15 @@ public class FactocraftyClient {
         });
         FactocraftyWoodType.addWoodType(FactocraftyWoodType.RUBBER);
         for (Block a : Registration.BLOCKS.getRegistrar())
-            if (a instanceof InsulatedCableBlock cable && cable.asItem() != null) {
+            if (a instanceof InsulatedCableBlock)
                 FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + BuiltInRegistries.BLOCK.getKey(a).getPath() + "_in_hand"),"inventory"));
-            }
+
 
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:fluid_model"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_bowl"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex_fall"),""));
-        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get());
+        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get(),FactocraftyFluids.OXYGEN.get(),FactocraftyFluids.FLOWING_OXYGEN.get(),FactocraftyFluids.HYDROGEN.get(),FactocraftyFluids.FLOWING_HYDROGEN.get());
         RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), CableTiers.CRYSTAL.getBlock());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.RUBBER_HANGING_SIGN_BLOCK_ENTITY.get(), RubberHangingSignRenderer::new);
@@ -229,7 +229,7 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.ENERGY_CELL_MENU.get(), EnergyCellScreen::new);
         MenuRegistry.registerScreenFactory(Registration.FLUID_TANK_MENU.get(), FluidTankScreen::new);
         MenuRegistry.registerScreenFactory(Registration.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen::create);
+        MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), ChangeableInputMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.REFINER_MENU.get(), RefinerScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ENRICHER_MENU.get(), EnricherScreen::new);
@@ -244,16 +244,9 @@ public class FactocraftyClient {
         ledColor();
 
         Registration.ITEMS.forEach(item->{
-            if (item instanceof BatteryItem)
-                ItemPropertiesRegistry.register(item.get(), new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> {
-                    if (itemStack.getItem() instanceof BatteryItem battery) return battery.getChargedLevel(itemStack);
-                    return 0;
-                });
-            if (item instanceof RGBControllerItem)
-                ItemPropertiesRegistry.register(item.get(), new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> {
-                    if (itemStack.getItem() instanceof BatteryItem battery) return battery.getChargedLevel(itemStack);
-                    return 0;
-                });
+            if (item.get() instanceof BatteryItem battery)
+                ItemPropertiesRegistry.register(item.get(), new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> battery.getChargedLevel(itemStack));
         });
+        ItemPropertiesRegistry.register(Registration.RGB_CONTROLLER.get(), new ResourceLocation(MOD_ID, "charge_ratio"), (itemStack, clientLevel, livingEntity, i) -> Registration.RGB_CONTROLLER.get().getChargedLevel(itemStack));
     }
 }

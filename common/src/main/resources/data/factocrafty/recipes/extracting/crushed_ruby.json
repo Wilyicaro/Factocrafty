@@ -1,0 +1,21 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_ruby"
+  },
+  "result": {
+    "item": "factocrafty:ruby",
+    "count" : 2
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "factocrafty:ruby",
+        "count" : 1
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "factocrafty:crafting_shaped",
   "pattern": [
     " # ",
     "RFR",
@@ -13,7 +13,12 @@
       "item": "factocrafty:iron_furnace"
     },
     "C": {
-      "item": "factocrafty:circuit_board"
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable"
+        ]
+      }
     },
     "R": {
       "item": "minecraft:redstone"

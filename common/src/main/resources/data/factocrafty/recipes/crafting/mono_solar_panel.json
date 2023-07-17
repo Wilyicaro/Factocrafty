@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "L#L",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:refined_silicon"
+    },
+    "L": {
+      "item": "factocrafty:carbon_fibers"
+    }
+  },
+  "result": {
+    "item": "factocrafty:mono_solar_panel"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#L#",
+    "L#L",
+    "#L#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:silicon_fragment"
+    },
+    "L": {
+      "item": "factocrafty:lapis_dust"
+    }
+  },
+  "result": {
+    "item": "factocrafty:poly_solar_panel"
+  }
+}

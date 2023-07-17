@@ -1,0 +1,17 @@
+{
+  "type": "factocrafty:enriching",
+  "matter": {
+    "material": "coal",
+    "count": 100
+  },
+  "fluid_ingredient": {
+    "fluid": "factocrafty:isoprene",
+    "amount": 400
+  },
+  "result": {
+    "item": "factocrafty:synthetic_rubber",
+    "count" : 8
+  },
+  "experience": 0.35,
+  "processtime": 250
+}

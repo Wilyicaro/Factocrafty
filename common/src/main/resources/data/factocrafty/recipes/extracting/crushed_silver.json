@@ -1,0 +1,22 @@
+
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_silver"
+  },
+  "result": {
+    "item": "factocrafty:raw_silver",
+    "count" : 2
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "factocrafty:raw_silver",
+        "count" : 1
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

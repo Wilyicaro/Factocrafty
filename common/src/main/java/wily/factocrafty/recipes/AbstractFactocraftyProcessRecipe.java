@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static wily.factocrafty.util.JsonUtils.getJsonItem;
+import static wily.factocrafty.util.JsonUtils.getJsonItemStack;
 import static wily.factocrafty.util.JsonUtils.jsonElement;
 
 
@@ -62,7 +61,10 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
     }
 
     public boolean matchesFluid(IPlatformFluidHandler tank, Level level) {
-        return hasFluidIngredient()  && !fluidIngredient.isEmpty()&& tank.getFluidStack().isFluidEqual(fluidIngredient) && tank.getFluidStack().getAmount() >= fluidIngredient.getAmount();
+        return hasFluidIngredient()  && matchesFluid(fluidIngredient,tank.getFluidStack());
+    }
+    public static boolean matchesFluid(FluidStack fluidIngredient, FluidStack stack) {
+        return !fluidIngredient.isEmpty()&& stack.isFluidEqual(fluidIngredient) && stack.getAmount() >= fluidIngredient.getAmount();
     }
     public int getIngredientCount(){
         return ingredientCount;
@@ -154,7 +156,8 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
                 rcp.ingredientCount = GsonHelper.getAsInt(jsonObject.getAsJsonObject("ingredient"), "count", 1);
             }
             if (rcp.hasFluidIngredient() && rcp.ingredient.isEmpty()) rcp.fluidIngredient = FluidStackUtil.fromJson(jsonObject.getAsJsonObject("fluid_ingredient"));
-            rcp.result = getJsonItem(jsonObject, "result");
+
+            rcp.result = getJsonItemStack(jsonObject, "result");
             otherResultsFromJson(jsonObject, rcp);
             rcp.experience = GsonHelper.getAsFloat(jsonObject, "experience", 0.0F);
             rcp.maxProcess = GsonHelper.getAsInt(jsonObject, "processtime", this.defaultProcess);
@@ -165,7 +168,7 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
 
         public void otherResultsFromJson(JsonObject json, T recipe){
             JsonElement element = jsonElement(json,  "otherResults");
-            Consumer<JsonObject> c = obj-> recipe.otherResults.put(getJsonItem(obj,"result"), GsonHelper.convertToFloat(obj.get("chance"),"chance"));
+            Consumer<JsonObject> c = obj-> recipe.otherResults.put(getJsonItemStack(obj,"result"), GsonHelper.convertToFloat(obj.get("chance"),"chance"));
             if (element instanceof JsonArray a) a.forEach(j-> {
                 if (j instanceof JsonObject obj) c.accept(obj);
             }); else {

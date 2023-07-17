@@ -25,7 +25,7 @@ public class ChangeableInputMachineScreen extends BasicMachineScreen {
     ChangeableInputMachineBlockEntity rBe = (ChangeableInputMachineBlockEntity) getMenu().be;
 
     protected String getRecipeTypeName(){
-        String s = Registration.RECIPE_TYPES.getRegistrar().getId(rBe.recipeType).getPath();
+        String s = Registration.RECIPE_TYPES.getRegistrar().getId(rBe.getRecipeType()).getPath();
         return s.contains("_") ? s.split("_")[0] : s;
     }
     @Override

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "#R#",
-    "R R",
+    "RHR",
     "#R#"
   ],
   "key": {
@@ -11,6 +11,9 @@
     },
     "R": {
       "item": "factocrafty:refined_iron"
+    },
+    "H": {
+      "item": "factocrafty:hammer"
     }
   },
   "result": {

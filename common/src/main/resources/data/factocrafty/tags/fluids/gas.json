@@ -1,5 +1,8 @@
 {
   "values": [
-    "factocrafty:methane"
+    "factocrafty:methane",
+    "factocrafty:hydrogen",
+    "factocrafty:oxygen",
+    "factocrafty:water_vapor"
   ]
 }

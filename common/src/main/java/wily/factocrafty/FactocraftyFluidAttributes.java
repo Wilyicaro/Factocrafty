@@ -30,6 +30,6 @@ public class FactocraftyFluidAttributes extends SimpleArchitecturyFluidAttribute
 
     @Override
     public int getColor(@Nullable FluidStack stack, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos) {
-        return inLevel ? super.getColor(stack, level, pos) : 0xFFFFFF;
+        return inLevel ? super.getColor(stack, level, pos) : 0xFFFFFFFF;
     }
 }

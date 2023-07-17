@@ -27,8 +27,7 @@ public interface BucketLikeItem extends IFluidItem<IPlatformFluidHandler> {
         ItemStack stack = player.getItemInHand(hand);
         BlockHitResult hitResult = getPlayerPOVHitResult(level,player, ClipContext.Fluid.SOURCE_ONLY);
         BlockState blockState = level.getBlockState(hitResult.getBlockPos());
-        if (getFluidStorage(stack).getTotalSpace() >= FluidStack.bucketAmount() && level.mayInteract(player, hitResult.getBlockPos()) && blockState.getBlock() instanceof BucketPickup pick){
-            ItemContainerUtil.fillItem(FluidStack.create(((LiquidBlock)blockState.getBlock()).arch$getFluid(), FluidStack.bucketAmount()), player, hand);
+        if (getFluidStorage(stack).getTotalSpace() >= FluidStack.bucketAmount() && level.mayInteract(player, hitResult.getBlockPos()) && blockState.getBlock() instanceof BucketPickup pick && blockState.getFluidState().isSource() && ItemContainerUtil.fillItem(FluidStack.create(((LiquidBlock)blockState.getBlock()).arch$getFluid(), FluidStack.bucketAmount()), player, hand) > 0){;
             if (!player.isCreative()) level.setBlock(hitResult.getBlockPos(), Blocks.AIR.defaultBlockState(), 11);
            // pick.getPickupSound().ifPresent((p)-> player.playSound(p,1.0F,1.0F));
             if (this instanceof Item i)player.awardStat(Stats.ITEM_USED.get(i));

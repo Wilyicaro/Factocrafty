@@ -1,0 +1,22 @@
+
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_platinum"
+  },
+  "result": {
+    "item": "factocrafty:raw_platinum",
+    "count" : 2
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "factocrafty:raw_platinum",
+        "count" : 1
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

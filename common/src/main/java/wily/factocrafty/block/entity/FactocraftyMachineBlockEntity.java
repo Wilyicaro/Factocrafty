@@ -29,6 +29,7 @@ import wily.factocrafty.inventory.FactocraftyResultSlot;
 import wily.factocrafty.item.UpgradeType;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
+import wily.factocrafty.util.SoundUtil;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.*;
 
@@ -39,7 +40,8 @@ import static net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.
 public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends FactocraftyProcessBlockEntity {
 
 
-    public RecipeType<T> recipeType;
+    protected RecipeType<T> recipeType;
+
     public FactocraftyMachineBlockEntity(FactocraftyMenus menu, FactoryCapacityTiers tier, RecipeType<T> recipe, BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
         super(menu,tier,blockEntity,blockPos, blockState);
         this.recipesUsed = new Object2IntOpenHashMap();
@@ -55,6 +57,10 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
     protected boolean isInputFree(){
         Recipe<Container> rcp = getActualRecipe(null,true);
         return rcp != null && canMachineProcess(rcp);
+    }
+
+    public RecipeType<T> getRecipeType() {
+        return recipeType;
     }
 
     protected List<T> getRecipes(){
@@ -178,6 +184,7 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
             return r instanceof AbstractFactocraftyProcessRecipe rcp && !isInputSlotActive() ?  rcp.matchesFluid(fluidTank,level) : limitItemCount ? r.matches(container,level) : itemMatches;
         }).toList();
     }
+
     public void tick() {
         if (!level.isClientSide) {
             boolean bl2 = false;
@@ -209,7 +216,7 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
 
                         bl2 = true;
                     }
-                    int energy = (recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getEnergyConsume() : 3 * (int)Math.pow(72,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK)));
+                    int energy = (recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getEnergyConsume() : 3) * (int)Math.pow(72,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK));
                     if (energyStorage.getEnergyStored() > energy) {
                         bl2 = true;
                         energyStorage.consumeEnergy(new ICraftyEnergyStorage.EnergyTransaction(energy, energyStorage.supportableTier), false);
@@ -255,18 +262,31 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
     }
     protected void setOtherResults( T recipe, IPlatformItemHandler inv, int i) {
     }
-    protected void addOrSetItem(ItemStack result, Container inv, int index){
-        ItemStack resultSlot = inv.getItem(index);
-        if (resultSlot.isEmpty()) {
-            inv.setItem(index, result.copy());
-        } else if (resultSlot.is(result.getItem()) && resultSlot.getCount() < inv.getMaxStackSize()) {
-            resultSlot.grow(1);
+    protected int addOrSetItem(ItemStack stack, Container inv, int index){
+        ItemStack slotStack = inv.getItem(index);
+
+        if (slotStack.isEmpty()) {
+            inv.setItem(index, stack.copy());
+            return Math.min(inv.getMaxStackSize(),stack.getCount());
+        } else {
+            int resultCount =  slotStack.getCount() + stack.getCount();
+            int maxStack = Math.min(inv.getMaxStackSize(),slotStack.getMaxStackSize());
+            if (slotStack.is(stack.getItem()) && slotStack.getCount() < maxStack) {
+                if (resultCount <= maxStack) {
+                    slotStack.grow(Math.max(stack.getCount(), 1));
+                    return Math.max(stack.getCount(), 1);
+                }
+                int count = maxStack - slotStack.getCount();
+                slotStack.setCount(maxStack);
+                return count;
+            }
         }
+        return 0;
     }
     protected boolean process(@Nullable T recipe) {
         if (recipe != null && canMachineProcess(recipe)) {
+            addOrSetItem(recipe.getResultItem(RegistryAccess.EMPTY), inventory, OUTPUT_SLOT);
             if (isInputSlotActive()) {
-                addOrSetItem(recipe.getResultItem(RegistryAccess.EMPTY), inventory, OUTPUT_SLOT);
                 inventory.getItem(INPUT_SLOT).shrink(recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getIngredientCount() : 1);
             }
             setOtherResults(recipe, inventory, inventory.getMaxStackSize());

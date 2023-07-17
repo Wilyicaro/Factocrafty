@@ -16,6 +16,8 @@
   "gui.factocrafty.heat": "Output Heat: %s",
   "gui.factocrafty.armour": "Armour",
   "gui.factocrafty.waste": "Waste: %s",
+  "gui.factocrafty.heat_up": "Heat up",
+  "gui.factocrafty.heat_down": "Heat down",
   "gui.factocrafty.window.transport": "Transport Sides",
   "gui.factocrafty.window.upgrade": "Upgrade Storage",
   "gui.factocrafty.window.upgrade.efficiency": "Total Efficiency: %s",
@@ -228,6 +230,8 @@
   "item.factocrafty.iridium_nugget": "Iridium Nugget",
   "item.factocrafty.netherite_nugget": "Netherite Nugget",
 
+  "item.factocrafty.silicon_fragment": "Silicon Fragment",
+
   "item.factocrafty.coal_dust": "Coal Dust",
   "item.factocrafty.copper_dust": "Copper Dust",
   "item.factocrafty.iron_dust": "Iron Dust",
@@ -400,6 +404,7 @@
   "item.factocrafty.gasoline_bucket": "Gasoline Bucket",
   "item.factocrafty.naphtha_bucket": "Naphtha Bucket",
   "item.factocrafty.coolant_bucket": "Coolant Bucket",
+  "item.factocrafty.isoprene_bucket": "Isoprene Bucket",
 
 
 
@@ -505,15 +510,15 @@
   "tooltip.factocrafty.config": "%s Configs",
   "tooltip.factocrafty.config.input_type.item": "%s Items",
   "tooltip.factocrafty.config.input_type.fluid": "%s Fluids",
-  "tooltip.factocrafty.config.infusion_mode.mixer": "%s mixing",
-  "tooltip.factocrafty.config.infusion_mode.electrolyzer": "%s electrolyzing",
+  "tooltip.factocrafty.config.infusion_mode.mixer": "%s Mixing",
+  "tooltip.factocrafty.config.infusion_mode.electrolyzer": "%s Electrolyzing",
   "tooltip.factocrafty.upgrade_right_click": "Right-click in the machine to upgrade",
   "tooltip.factocrafty.upgrade.overclock": "Improves machine speed up to 100x, but increases CY consume",
   "tooltip.factocrafty.upgrade.transformer": "Increases machine supported Energy tier",
   "tooltip.factocrafty.upgrade.energy": "Increases machine CY Energy capacity",
-  "tooltip.factory_api.config.identifier.gas": "Gas %s",
-  "tooltip.factory_api.config.identifier.io": "Input/Output %s",
-  "tooltip.factory_api.config.identifier.oi": "Output/Input %s",
+  "tooltip.factory_api.config.identifier.gas": "Gas",
+  "tooltip.factory_api.config.identifier.io": "Input/Output",
+  "tooltip.factory_api.config.identifier.oi": "Output/Input",
 
   "_comment": "Category",
   "category.factocrafty.recipe.macerating": "Macerating",
@@ -526,9 +531,9 @@
   "category.factocrafty.keyboard.armor_features" :  "Factocrafty Armor Features",
 
   "key.factocrafty.v" : "Vision change",
-  "key.factocrafty.b" : "(Des)active Boots features",
-  "key.factocrafty.l" : "(Des)active Leggings features",
-  "key.factocrafty.g" : "(Des)active Gravity 0 feature",
+  "key.factocrafty.b" : "Boots features",
+  "key.factocrafty.l" : "Leggings features",
+  "key.factocrafty.g" : "Gravity 0 feature",
 
   "subtitles.factocrafty.macerator": "Macerator working",
   "subtitles.factocrafty.extractor": "Extractor working",

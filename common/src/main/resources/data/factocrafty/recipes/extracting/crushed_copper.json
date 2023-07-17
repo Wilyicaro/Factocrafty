@@ -1,0 +1,22 @@
+
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_copper"
+  },
+  "result": {
+    "item": "minecraft:raw_copper",
+    "count" : 3
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "minecraft:raw_copper",
+        "count" : 2
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

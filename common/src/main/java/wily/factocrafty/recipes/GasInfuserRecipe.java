@@ -24,7 +24,7 @@ public class GasInfuserRecipe extends FactocraftyMachineRecipe{
         return super.getFluidIngredient();
     }
     public boolean matchesOtherFluid(IPlatformFluidHandler tank, Level level) {
-        return  tank.getFluidStack().isFluidEqual(otherFluid) && tank.getFluidStack().getAmount() >= fluidIngredient.getAmount();
+        return  matchesFluid(otherFluid,tank.getFluidStack());
     }
     public FluidStack getOtherFluid() {
         return otherFluid;

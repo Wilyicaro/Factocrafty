@@ -16,10 +16,14 @@ public class ElectricFurnaceScreen extends FactocraftyMachineScreen<ElectricFurn
     }
     public static ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/electric_furnace.png");
     public ResourceLocation GUI() {return BACKGROUND_LOCATION;}
-
+    @Override
+    protected void init() {
+        super.init();
+        machineProgress = FactocraftyDrawables.PROGRESS.createStatic(leftPos + 79, topPos + 35);
+    }
     @Override
     protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
         super.renderStorageSprites(graphics, i, j);
-        FactocraftyDrawables.PROGRESS.drawProgress(graphics,leftPos + 79, topPos + 35, getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime());
+        machineProgress.drawProgress(graphics, getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime());
     }
 }

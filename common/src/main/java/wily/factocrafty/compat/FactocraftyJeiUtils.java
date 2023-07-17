@@ -7,6 +7,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.IFactoryDrawableType;
 import java.util.Collection;
 import java.util.List;
@@ -19,5 +20,8 @@ public class FactocraftyJeiUtils {
     }
     public static IDrawableBuilder fromProgress(IGuiHelper helper, IFactoryDrawableType type){
         return helper.drawableBuilder(type.texture(), type.uvX(), type.uvY(), type.width(), type.height());
+    }
+    public  static mezz.jei.api.recipe.RecipeType<?> fromVanillaRecipeType(RecipeType<?> recipeType){
+        return FactocraftyJeiRecipeTypes.recipeTypes.get(Registration.RECIPE_TYPES.getRegistrar().getId(recipeType).getPath());
     }
 }

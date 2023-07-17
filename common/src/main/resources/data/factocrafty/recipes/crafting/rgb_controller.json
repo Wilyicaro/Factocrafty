@@ -13,7 +13,12 @@
       "item": "factocrafty:battery"
     },
     "C": {
-      "item": "factocrafty:insulated_copper_cable"
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable"
+        ]
+      }
     },
     "R": {
       "item": "minecraft:red_dye"

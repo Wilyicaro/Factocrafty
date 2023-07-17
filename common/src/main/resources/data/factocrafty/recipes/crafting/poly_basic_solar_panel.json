@@ -1,0 +1,31 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "###",
+    "RBR",
+    "PPP"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:poly_solar_panel"
+    },
+    "B": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable",
+          "factocrafty:battery"
+        ]
+      }
+    },
+    "P": {
+        "item": "factocrafty:iron_plate"
+    },
+    "R": {
+      "item": "factocrafty:refined_iron"
+    }
+  },
+  "result": {
+    "item": "factocrafty:poly_basic_solar_panel"
+  }
+}

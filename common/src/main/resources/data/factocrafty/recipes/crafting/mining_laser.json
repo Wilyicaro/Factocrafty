@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ECL",
+    "C#I",
+    " A "
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:energy_crystal"
+    },
+    "E": {
+      "item": "factocrafty:energium_dust"
+    },
+    "A": {
+      "item": "factocrafty:advanced_alloy"
+    },
+    "I": {
+      "item": "factocrafty:advanced_circuit"
+    },
+    "L": {
+      "item": "factocrafty:lapis_dust"
+    },
+    "C": {
+      "item": "factocrafty:carbon_plate"
+    }
+  },
+  "result": {
+    "item": "factocrafty:mining_laser"
+  }
+}

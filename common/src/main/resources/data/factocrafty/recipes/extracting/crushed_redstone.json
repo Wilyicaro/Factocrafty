@@ -1,0 +1,28 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_redstone"
+  },
+  "result": {
+    "item": "minecraft:redstone",
+    "count" : 4
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "minecraft:redstone",
+        "count": 6
+      },
+      "chance": 0.5
+    },
+    {
+      "result": {
+        "item": "minecraft:redstone",
+        "count": 4
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "factocrafty:refined_uranium"
+  },
+  "result": "factocrafty:uranium_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

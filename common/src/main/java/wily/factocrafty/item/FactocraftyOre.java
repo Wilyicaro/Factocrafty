@@ -179,7 +179,7 @@ public class FactocraftyOre {
         RUBBER(MapColor.COLOR_BLACK, FactocraftyArmorMaterials.RUBBER, null,COMMON_DROP),
         SYNTHETIC_RUBBER(MapColor.COLOR_BLACK, COMMON_DROP),
         WOOD(MapColor.WOOD,DUST.withCustomName("sawdust")),
-        SILICON(MapColor.COLOR_LIGHT_GRAY,COMMON_DROP,REFINED,PLATE),
+        SILICON(MapColor.COLOR_LIGHT_GRAY,COMMON_DROP,REFINED,NUGGET.withSuffix("fragment")),
         GRAPHENE(MapColor.COLOR_GRAY,COMMON_DROP, DUST),
         GRAPHITE(MapColor.COLOR_BLACK,INGOT),
         IRIDIUM(MapColor.TERRACOTTA_WHITE,COMMON_DROP, PLATE, NUGGET),

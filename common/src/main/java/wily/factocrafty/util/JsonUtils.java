@@ -5,15 +5,21 @@ import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class JsonUtils {
 
-    public static ItemStack getJsonItem(JsonObject jsonObject, String object) {
+    public static ItemStack getJsonItemStack(JsonObject jsonObject, String object) {
         if (jsonObject != null) {
-            String string2 = GsonHelper.getAsString(jsonObject, object, "minecraft:air");
-            ResourceLocation resourceLocation2 = new ResourceLocation(string2);
-            return new ItemStack(BuiltInRegistries.ITEM.getOptional(resourceLocation2).orElseThrow(() -> new IllegalStateException("Item: " + string2 + " does not exist")));
+            Item item;
+            int count = 1;
+            if (jsonObject.get(object) instanceof JsonObject result) {
+                item = GsonHelper.getAsItem(result, "item");
+                count = GsonHelper.getAsInt(result, "count",1);
+            } else item = GsonHelper.getAsItem(jsonObject,object, Items.AIR);
+            return new ItemStack(item, count);
         }
         return ItemStack.EMPTY;
     }

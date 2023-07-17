@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R#",
+    "FEF",
+    "TCT"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "R": {
+      "item": "factocrafty:rubber"
+    },
+    "E": {
+      "item": "factocrafty:electric_furnace"
+    },
+    "C": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "F": {
+      "item": "factocrafty:fluid_cell"
+    },
+    "T": {
+      "item": "factocrafty:copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:refiner"
+  }
+}

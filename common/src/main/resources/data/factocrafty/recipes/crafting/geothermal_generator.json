@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#F#",
-    "#F#",
+    "FTF",
+    "#H#",
     "TGT"
   ],
   "key": {
@@ -11,6 +11,9 @@
     },
     "G": {
       "item": "factocrafty:generator"
+    },
+    "H": {
+      "item": "factocrafty:heat_diffuser"
     },
     "F": {
       "item": "factocrafty:fluid_cell"

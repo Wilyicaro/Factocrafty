@@ -1,0 +1,22 @@
+
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_gold"
+  },
+  "result": {
+    "item": "minecraft:raw_gold",
+    "count" : 2
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "minecraft:raw_gold",
+        "count" : 1
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -26,11 +26,11 @@ public class GasInfuserScreen extends BasicMachineScreen {
     }
     GasInfuserBlockEntity gasBe = (GasInfuserBlockEntity) getMenu().be;
 
-    private IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> oiTankType;
-
     private IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> ioTankType;
+
+    private IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> oiTankType;
     protected String getRecipeTypeName(){
-        return Registration.RECIPE_TYPES.getRegistrar().getId(gasBe.recipeType).getPath();
+        return Registration.RECIPE_TYPES.getRegistrar().getId(gasBe.getRecipeType()).getPath();
     }
     public static ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/generic_machine.png");
     @Override
@@ -47,25 +47,25 @@ public class GasInfuserScreen extends BasicMachineScreen {
     @Override
     public void render(GuiGraphics graphics, int i, int j, float f) {
         fluidTankType = (gasBe.getInfusionMode().isMixer() ? FactocraftyDrawables.MINI_FLUID_TANK : FactocraftyDrawables.FLUID_TANK).createStatic(leftPos + (gasBe.getInfusionMode().isMixer() ? 44 : 112), topPos +  (gasBe.getInfusionMode().isElectrolyzer() ? 17 : 16));
-        oiTankType = (gasBe.getInfusionMode().isMixer() ? FactocraftyDrawables.MINI_FLUID_TANK : FactocraftyDrawables.FLUID_TANK).createStatic(leftPos + (gasBe.getInfusionMode().isMixer() ? 68 : 141), topPos +  (gasBe.getInfusionMode().isElectrolyzer() ? 17 : 16));
-        ioTankType = (gasBe.getInfusionMode().isElectrolyzer() ? FactocraftyDrawables.MINI_FLUID_TANK : FactocraftyDrawables.FLUID_TANK).createStatic(leftPos + (gasBe.getInfusionMode().isElectrolyzer() ? 56 : 112), topPos +  (gasBe.getInfusionMode().isMixer() ? 17 : 16));
+        ioTankType = (gasBe.getInfusionMode().isMixer() ? FactocraftyDrawables.MINI_FLUID_TANK : FactocraftyDrawables.FLUID_TANK).createStatic(leftPos + (gasBe.getInfusionMode().isMixer() ? 68 : 141), topPos +  (gasBe.getInfusionMode().isElectrolyzer() ? 17 : 16));
+        oiTankType = (gasBe.getInfusionMode().isElectrolyzer() ? FactocraftyDrawables.MINI_FLUID_TANK : FactocraftyDrawables.FLUID_TANK).createStatic(leftPos + (gasBe.getInfusionMode().isElectrolyzer() ? 56 : 112), topPos +  (gasBe.getInfusionMode().isMixer() ? 17 : 16));
         super.render(graphics, i, j, f);
     }
 
     @Override
     protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
         super.renderStorageTooltips(graphics,i,j);
-        if (oiTankType.inMouseLimit(i,j)) graphics.renderTooltip(font, getFluidTooltip("tooltip.factory_api.fluid_stored", gasBe.oiTank),i, j);
         if (ioTankType.inMouseLimit(i,j)) graphics.renderTooltip(font, getFluidTooltip("tooltip.factory_api.fluid_stored", gasBe.ioTank),i, j);
+        if (oiTankType.inMouseLimit(i,j)) graphics.renderTooltip(font, getFluidTooltip("tooltip.factory_api.fluid_stored", gasBe.oiTank),i, j);
     }
     @Override
     protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
         ScreenUtil.drawGUIFluidSlot(graphics,fluidTankType.posX - 1,fluidTankType.posY - 1,fluidTankType.width() + 2,fluidTankType.height() + 2);
+        ScreenUtil.drawGUIFluidSlot(graphics, ioTankType.posX - 1, ioTankType.posY - 1, ioTankType.width() + 2, ioTankType.height() + 2);
         ScreenUtil.drawGUIFluidSlot(graphics, oiTankType.posX - 1, oiTankType.posY - 1, oiTankType.width() + 2, oiTankType.height() + 2);
-        ScreenUtil.drawGUIFluidSlot(graphics,ioTankType.posX - 1,ioTankType.posY - 1,ioTankType.width() + 2,ioTankType.height() + 2);
         super.renderStorageSprites(graphics, i, j);
-        oiTankType.drawAsFluidTank(graphics, gasBe.oiTank.getFluidStack(), gasBe.oiTank.getMaxFluid(),true);
         ioTankType.drawAsFluidTank(graphics, gasBe.ioTank.getFluidStack(), gasBe.ioTank.getMaxFluid(),true);
+        oiTankType.drawAsFluidTank(graphics, gasBe.oiTank.getFluidStack(), gasBe.oiTank.getMaxFluid(),true);
 
     }
 }

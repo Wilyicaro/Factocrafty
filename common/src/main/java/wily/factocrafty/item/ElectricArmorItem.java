@@ -39,12 +39,15 @@ public class ElectricArmorItem extends ArmorItem implements ICraftyEnergyItem<CY
         this.armorMaterial = armorMaterial;
     }
 
-
+    @Override
+    public int getEnchantmentValue() {
+        return super.getEnchantmentValue();
+    }
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(energyTier.getEnergyTierComponent(false));
-        list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
+        list.add(StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
     }
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack){
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();

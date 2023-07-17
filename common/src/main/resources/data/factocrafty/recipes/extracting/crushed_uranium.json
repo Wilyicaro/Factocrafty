@@ -1,0 +1,21 @@
+{
+  "type": "factocrafty:extracting",
+  "ingredient": {
+    "item": "factocrafty:crushed_uranium"
+  },
+  "result": {
+    "item": "factocrafty:uranium",
+    "count" : 2
+  },
+  "otherResults": [
+    {
+      "result": {
+        "item": "factocrafty:uranium",
+        "count" : 1
+      },
+      "chance": 0.7
+    }
+],
+  "experience": 0.2,
+  "processtime": 200
+}

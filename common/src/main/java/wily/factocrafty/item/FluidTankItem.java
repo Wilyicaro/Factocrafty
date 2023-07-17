@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import wily.factocrafty.FactocraftyExpectPlatform;
 import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.FactoryCapacityTiers;
@@ -45,7 +46,7 @@ public class FluidTankItem extends BlockItem implements BucketLikeItem {
         //    be.load(be.getUpdateTag().merge( stack.getTag().getCompound(BLOCK_ENTITY_TAG)));
         //    capacity = be.fluidTank.getMaxFluid();
         //}
-        return new FluidStorageBuilder(capacity, (a) -> true, TransportState.EXTRACT_INSERT);
+        return new FluidStorageBuilder(capacity, (a) -> !FactocraftyExpectPlatform.isGas(a.getFluid()), TransportState.EXTRACT_INSERT);
     }
     @Override
     public IPlatformFluidHandler getFluidStorage(ItemStack stack) {

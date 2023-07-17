@@ -42,8 +42,8 @@ public class RefinerScreen extends ChangeableInputMachineScreen {
 
     @Override
     public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
-        list.add(new FactocraftyDrawableButton(leftPos + 85,topPos + 26,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.min(rBe.recipeIndex.get() + 1,rBe.recipeSize.get() - 1),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(3)));
-        list.add(new FactocraftyDrawableButton( leftPos + 85,topPos + 48,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.max(rBe.recipeIndex.get() - 1,0),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),Component.literal("Heat down"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(4)));
+        list.add(new FactocraftyDrawableButton(leftPos + 85,topPos + 26,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.min(rBe.recipeIndex.get() + 1,rBe.recipeSize.get() - 1),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),Component.translatable("gui.factocrafty.heat_up"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(3)));
+        list.add(new FactocraftyDrawableButton( leftPos + 85,topPos + 48,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(rBe.getBlockPos(),Math.max(rBe.recipeIndex.get() - 1,0),rBe.additionalSyncInt.indexOf(rBe.recipeIndex))),Component.translatable("gui.factocrafty.heat_down"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(4)));
         return super.addButtons(list);
     }
 

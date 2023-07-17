@@ -4,6 +4,19 @@
     "item": "minecraft:quartz"
   },
   "result": "factocrafty:silicon",
+  "otherResults": [
+    {
+    "result": "factocrafty:silicon_fragment",
+      "chance": 0.75
+  },
+    {
+      "result": {
+        "item": "factocrafty:silicon_fragment",
+        "count": 2
+      },
+      "chance": 0.5
+    }
+  ],
   "experience": 0.2,
   "processtime": 200
 }

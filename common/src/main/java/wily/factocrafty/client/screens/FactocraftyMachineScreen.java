@@ -56,6 +56,8 @@ public class FactocraftyMachineScreen<T extends FactocraftyProcessBlockEntity> e
 
     protected IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> fluidTankType;
 
+    public IFactoryDrawableType.DrawableStaticProgress machineProgress;
+
     protected MachineSidesConfig configWindow;
 
 
@@ -78,7 +80,7 @@ public class FactocraftyMachineScreen<T extends FactocraftyProcessBlockEntity> e
         if (!(slot instanceof FactocraftySlotWrapper)) super.renderSlot(graphics, slot);
     }
     public void renderWindowSlot(GuiGraphics graphics, Slot slot) {
-        super.renderSlot(graphics, slot);
+        if (slot instanceof FactocraftySlotWrapper) super.renderSlot(graphics, slot);
     }
 
     @Override

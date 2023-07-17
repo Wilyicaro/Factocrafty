@@ -35,7 +35,7 @@ public class SolarPanelScreen extends FactocraftyMachineScreen<SolarPanelBlockEn
     @Override
     protected void init() {
         super.init();
-        energyCellType.posX = leftPos + 91;
+        energyCellType.posX = leftPos + 112;
         this.addConfigToGui(new FactocraftyConfigWidget(leftPos + imageWidth,  topPos + 46, true,Component.translatable("gui.factocrafty.window.equipment"), FactocraftyDrawables.getInfoIcon(1))
                 ,(config)-> new SlotsWindow(config,leftPos + imageWidth + 21,topPos, this, menu.equipmentSlots));
     }

@@ -15,6 +15,8 @@
   "gui.factocrafty.heat": "Calor: %s",
   "gui.factocrafty.armour": "Armadura",
   "gui.factocrafty.waste": "Consumo: %s",
+  "gui.factocrafty.heat_up": "Aquecer",
+  "gui.factocrafty.heat_down": "Resfriar",
   "gui.factocrafty.window.transport": "Lados de Transporte",
   "gui.factocrafty.window.upgrade": "Armazenamento de melhorias",
   "gui.factocrafty.window.upgrade.efficiency": "Eficiência total: %s",
@@ -24,7 +26,7 @@
   "gui.factocrafty.can_operate": "Essa máquina esta pronta!",
 
   "_comment": "Block",
-  "block.factocrafty.generator": "Gerador",
+  "block.factocrafty.generator": "Gerador térmico",
   "block.factocrafty.geothermal_generator": "Gerador geotérmico",
   "block.factocrafty.amorphous_solar_panel": "Painel solar amórfico",
   "block.factocrafty.organic_solar_panel": "Painel solar orgânico",
@@ -44,6 +46,7 @@
   "block.factocrafty.refiner": "Refinador",
   "block.factocrafty.canning_machine": "Enlatador",
   "block.factocrafty.enricher": "Enriquecedor",
+  "block.factocrafty.gas_infuser": "Infusor de gás",
   "block.factocrafty.alloy_smelter": "Forno de fundição",
 
   "block.factocrafty.tin_ore": "Minério de estanho",
@@ -221,6 +224,8 @@
   "item.factocrafty.iridium_nugget": "Pepita de irídio",
   "item.factocrafty.netherite_nugget": "Pepita de netherita",
 
+  "item.factocrafty.silicon_fragment": "Fragmento de silício",
+
   "item.factocrafty.coal_dust": "Pó de carvão",
   "item.factocrafty.diamond_dust": "Pó de diamante",
   "item.factocrafty.silver_dust": "Pó de prata",
@@ -383,6 +388,9 @@
   "item.factocrafty.latex_bucket": "Balde de látex",
   "item.factocrafty.petroleum_bucket": "Balde de petróleo",
   "item.factocrafty.coolant_bucket": "Balde de refrigerante",
+  "item.factocrafty.gasoline_bucket": "Balde de gasolina",
+  "item.factocrafty.naphtha_bucket": "Balde de nafta",
+  "item.factocrafty.isoprene_bucket": "Balde de isopreno",
 
   "item.factocrafty.heat_exchanger": "Dissipador de calor",
   "item.factocrafty.heat_vent": "Ventilação de calor",
@@ -415,16 +423,20 @@
   "block.factocrafty.wooden_energy_converter": "Conversor de energia de madeira",
 
   "_comment": "Fluid",
-  "block.factocrafty.latex": "Látex",
-  "block.factocrafty.petroleum": "Petróleo",
-  "block.factocrafty.coolant": "Refrigerante",
   "fluid.factocrafty.construction_foam": "Espuma de construção",
   "fluid.factocrafty.reinforced_construction_foam": "Espuma de construção reforçada",
   "fluid.factocrafty.coolant": "Refrigerante",
   "fluid.factocrafty.petroleum": "Petróleo",
   "fluid.factocrafty.latex": "Látex",
+  "fluid.factocrafty.gasoline": "Gasolina",
+  "fluid.factocrafty.naphtha": "Nafta",
   "fluid.factocrafty.biomass": "Biomassa",
   "fluid.factocrafty.biogas": "Biogás",
+  "fluid.factocrafty.methane": "Metano",
+  "fluid.factocrafty.isoprene": "Isopreno",
+  "fluid.factocrafty.oxygen": "Oxigênio",
+  "fluid.factocrafty.hydrogen": "Hydrogênio",
+  "fluid.factocrafty.water_vapor": "Vapor de água",
 
 
   "_comment": "Fluid Tank",
@@ -483,7 +495,14 @@
   "category.factocrafty.recipe.extracting": "Extração",
   "category.factocrafty.recipe.refining": "Refinação",
   "category.factocrafty.recipe.enriching": "Enriquecimento",
+  "category.factocrafty.recipe.gaseous_infusion": "Infusão gasosa",
   "category.factocrafty.recipe.smelting": "Fundição elétrica",
+  "category.factocrafty.keyboard.armor_features" :  "Habilidades de Armaduras do Factocrafty",
+
+  "key.factocrafty.v" : "Mudança de visão",
+  "key.factocrafty.b" : "Habilidade de botas",
+  "key.factocrafty.l" : "Habilidade de calças",
+  "key.factocrafty.g" : "Habilidade de Gravidade 0",
 
   "_comment": "Subtitles",
   "subtitles.factocrafty.macerator": "Macerador processando",
@@ -559,8 +578,5 @@
   "ie.factocrafty.last_consumed": "Consumindo: %s",
   "ie.factocrafty.total_consumed": "Total consumido: %s",
 
-
-  "item.factocrafty.gasoline_bucket": "Balde de gasolina",
-  "fluid.factocrafty.gasoline": "Gasolina",
   "item.factocrafty.corrupted_enderman_spawn_egg": "Ovo gerador de enderman corrompido"
 }

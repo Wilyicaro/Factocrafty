@@ -17,17 +17,19 @@ public class BasicMachineScreen extends FactocraftyMachineScreen<FactocraftyMach
 
     public BasicMachineScreen(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
+    }
 
+    @Override
+    protected void init() {
+        super.init();
+        machineProgress = FactocraftyDrawables.MACHINE_PROGRESS.createStatic(leftPos + 80, topPos + 40);
     }
-    public static BasicMachineScreen create(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
-        BasicMachineScreen b = new BasicMachineScreen(abstractContainerMenu,inventory,component);
-        return  b;
-    }
+
     public ResourceLocation GUI() {return BACKGROUND_LOCATION;}
 
     @Override
     protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
         super.renderStorageSprites(graphics, i, j);
-        FactocraftyDrawables.MACHINE_PROGRESS.drawProgress(graphics,leftPos + 80, topPos + 40, getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime());
+        machineProgress.drawProgress(graphics, getMenu().be.progress.get()[0],getMenu().be.getTotalProcessTime());
     }
 }

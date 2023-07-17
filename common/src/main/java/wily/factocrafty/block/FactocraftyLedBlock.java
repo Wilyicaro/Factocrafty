@@ -1,10 +1,13 @@
 package wily.factocrafty.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -20,6 +23,8 @@ import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.ICraftyEnergyItem;
+
+import java.util.List;
 
 public class FactocraftyLedBlock extends FactocraftyBlock implements EntityBlock,IFactocraftyCYEnergyBlock {
 
@@ -37,7 +42,10 @@ public class FactocraftyLedBlock extends FactocraftyBlock implements EntityBlock
     public FactocraftyLedBlock(Properties properties, boolean hasRGB) {
         this(properties.lightLevel((b) -> b.getValue(LIGHT_VALUE)), 15, hasRGB);
     }
-
+    @Override
+    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
+            list.add(getEnergyTier().getEnergyTierComponent(false));
+    }
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         ItemStack hand = player.getItemInHand(interactionHand);

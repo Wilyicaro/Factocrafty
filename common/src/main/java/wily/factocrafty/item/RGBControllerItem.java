@@ -25,7 +25,6 @@ public class RGBControllerItem extends EnergyItem {
         super(FactoryCapacityTiers.BASIC, TransportState.INSERT, properties);
     }
 
-
     @Override
     public InteractionResult useOn(UseOnContext useOnContext) {
         BlockPos blockPos = useOnContext.getClickedPos();

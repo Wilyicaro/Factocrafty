@@ -50,6 +50,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGenericGuiContainerHandler(FactocraftyMachineScreen.class,new FactocraftyMachineGuiHandler());
+
     }
 
     @Override
@@ -83,6 +84,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
         registration.addRecipeCategories(new FactocraftyProgressCategory<>(FactocraftyJeiRecipeTypes.EXTRACTING,registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new FactocraftyProgressCategory<>(RefinerScreen.BACKGROUND_LOCATION,FactocraftyJeiRecipeTypes.REFINING,registration.getJeiHelpers().getGuiHelper(), FactocraftyDrawables.MACHINE_PROGRESS, 145,63));
         registration.addRecipeCategories(new EnricherCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new GasInfuserCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -96,8 +98,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
         registration.addRecipes(FactocraftyJeiRecipeTypes.EXTRACTING, getRecipes(recipeManager, Registration.EXTRACTOR_RECIPE.get()));
         registration.addRecipes(FactocraftyJeiRecipeTypes.REFINING, getRecipes(recipeManager, Registration.REFINER_RECIPE.get()));
         registration.addRecipes(FactocraftyJeiRecipeTypes.ENRICHING, getRecipes(recipeManager, Registration.ENRICHER_RECIPE.get()));
-
-
+        registration.addRecipes(FactocraftyJeiRecipeTypes.GAS_INFUSION, getRecipes(recipeManager, Registration.GASEOUS_INFUSION_RECIPE.get()));
 
     }
 
@@ -112,6 +113,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
         registration.addRecipeCatalyst(Registration.EXTRACTOR.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.EXTRACTING);
         registration.addRecipeCatalyst(Registration.REFINER.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.REFINING);
         registration.addRecipeCatalyst(Registration.ENRICHER.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.ENRICHING);
+        registration.addRecipeCatalyst(Registration.GAS_INFUSER.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.GAS_INFUSION);
 
 
     }

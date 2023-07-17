@@ -32,6 +32,13 @@ public class EnergyItem extends Item implements ICraftyEnergyItem<CYItemEnergySt
         list.add(energyTier.getEnergyTierComponent(false));
         list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
     }
+    public float getChargedLevel(ItemStack stack){
+        int e = getCraftyEnergy(stack).getEnergyStored();
+        if (e > 0 ) {
+            return e /(float)capacity;
+        }
+        return 0;
+    }
 
     @Override
     public boolean isBarVisible(ItemStack itemStack) {return getCraftyEnergy(itemStack).getSpace() > 0;}

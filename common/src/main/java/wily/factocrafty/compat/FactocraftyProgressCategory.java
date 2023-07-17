@@ -19,6 +19,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -93,17 +94,26 @@ public class FactocraftyProgressCategory<T extends Recipe<Container>> implements
         return tooltips;
     }
 
+    protected int getMaxProcess(T recipe){
+        return recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getMaxProcess() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getCookingTime():200;
+    }
+    protected boolean hasOtherResults(T recipe){
+        return recipe instanceof AbstractFactocraftyProcessRecipe rcp && !rcp.getOtherResults().isEmpty();
+    }
     @Override
     public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        boolean b = !(recipe instanceof AbstractFactocraftyProcessRecipe rcp) || rcp.getOtherResults().isEmpty();
-        int max = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getMaxProcess() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getCookingTime():200;
-        float exp = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getExperience() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getExperience():0;
+        boolean b = !hasOtherResults(recipe);
+        int max = getMaxProcess(recipe);
+        drawExp(recipe, graphics);
         renderScaled(graphics.pose(), (float) max / 20 + "s", 62, 52, 1f, 0x7E7E7E, false);
-        if (exp > 0)renderScaled(graphics.pose(),  Component.translatable("gui.jei.category.smelting.experience", exp).getString(), 62, 2, 1f, 0x7E7E7E, false);
-        if (!b) recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT).forEach((r)-> r.getDisplayedItemStack().ifPresent((i-> {if (((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().containsKey(i) && !i.isEmpty())  renderScaled(graphics.pose(), Math.round(((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().get(i) * 100) + "%",92,42,0.5F,0x7E7E7E,false);})));
+        if (!b) recipeSlotsView.findSlotByName("otherOutput").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) renderScaled(graphics.pose(), Math.round(((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().get(i) * 100) + "%",92,42,0.5F,0x7E7E7E,false);})));
         IDrawableAnimated cache = cachedProgressAnim.getUnchecked(max);
         cache.draw(graphics, type== FactocraftyDrawables.PROGRESS ? 61 : 62, type.equals(FactocraftyDrawables.PROGRESS) ? 23 : 29);
         energyCell.draw(graphics,2,6);
+        drawSlots(recipe,graphics);
+    }
+    protected void drawSlots(T recipe, GuiGraphics graphics){
+        boolean b = !hasOtherResults(recipe);
         ScreenUtil.drawGUISlot(graphics, b ? 93 : 106, 19,26,26);
         if (recipe instanceof FactocraftyMachineRecipe rcp){
             if (!b)ScreenUtil.drawGUISlot(graphics,88, 23, 18,18);
@@ -111,7 +121,10 @@ public class FactocraftyProgressCategory<T extends Recipe<Container>> implements
             else ScreenUtil.drawGUISlot(graphics,37, 5, 18, 18);
         }
     }
-
+    public void drawExp(T recipe, GuiGraphics graphics){
+        float exp = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getExperience() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getExperience():0;
+        if (exp > 0)renderScaled(graphics.pose(),   I18n.get("gui.jei.category.smelting.experience", exp), 62, 2, 1f, 0x7E7E7E, false);
+    }
     @Override
     public RecipeType<T> getRecipeType() {
         return recipeType;
@@ -134,13 +147,13 @@ public class FactocraftyProgressCategory<T extends Recipe<Container>> implements
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
-        boolean b = !(recipe instanceof AbstractFactocraftyProcessRecipe rcp) || rcp.getOtherResults().isEmpty();
+        boolean b = !hasOtherResults(recipe);
         builder.addSlot(RecipeIngredientRole.OUTPUT,  b ? 98 : 111, 24).addItemStack(recipe.getResultItem(RegistryAccess.EMPTY));
         IRecipeSlotBuilder input = null;
         if (recipe instanceof FactocraftyMachineRecipe rcp){
-            if (!b) builder.addSlot(RecipeIngredientRole.OUTPUT, 89, 24).addItemStacks(rcp.getOtherResults().keySet().stream().toList());
-            if (rcp.hasFluidIngredient() && !rcp.getFluidIngredient().isEmpty()) input = builder.addSlot(RecipeIngredientRole.INPUT, 38, 3).addFluidStack(rcp.getFluidIngredient().getFluid(),rcp.getFluidIngredient().getAmount()).setFluidRenderer(6* FluidStack.bucketAmount(), true, 16, 19);
-            if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty())builder.addSlot(RecipeIngredientRole.OUTPUT,  120, 6).addFluidStack(rcp.getResultFluid().getFluid(),rcp.getResultFluid().getAmount()).setFluidRenderer(2* FluidStack.bucketAmount(), true, 24, 52);
+            if (!b) builder.addSlot(RecipeIngredientRole.OUTPUT, 89, 24).addItemStacks(rcp.getOtherResults().keySet().stream().toList()).setSlotName("otherOutput");
+            if (rcp.hasFluidIngredient() && !rcp.getFluidIngredient().isEmpty()) input = builder.addSlot(RecipeIngredientRole.INPUT, 38, 3).addFluidStack(rcp.getFluidIngredient().getFluid(),rcp.getFluidIngredient().getAmount()).setFluidRenderer(2* FluidStack.bucketAmount(), true, 16, 19);
+            if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty())builder.addSlot(RecipeIngredientRole.OUTPUT,  120, 6).addFluidStack(rcp.getResultFluid().getFluid(),rcp.getResultFluid().getAmount()).setFluidRenderer(4* FluidStack.bucketAmount(), true, 24, 52);
         }
         if (input ==null) {
             input = builder.addSlot(RecipeIngredientRole.INPUT, 38, 6);
