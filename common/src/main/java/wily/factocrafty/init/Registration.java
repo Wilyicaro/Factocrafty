@@ -195,10 +195,10 @@ public class Registration {
 
     public static final RegistrySupplier<Item> SCRAP = registerFactocraftyItem("scrap");
 
-    public static final RegistrySupplier<Item> ADVANCED_ALLOY = registerFactocraftyItem("advanced_alloy");
+    public static final RegistrySupplier<Item> ADVANCED_ALLOY = ITEMS.register("advanced_alloy",()-> new Item(defaultStackItemProperties().rarity(Rarity.UNCOMMON)));
 
     public static final RegistrySupplier<Item> POLY_SOLAR_PANEL = registerFactocraftyItem("poly_solar_panel");
-    public static final RegistrySupplier<Item> MONO_SOLAR_PANEL = registerFactocraftyItem("mono_solar_panel");
+    public static final RegistrySupplier<Item> MONO_SOLAR_PANEL = ITEMS.register("mono_solar_panel",()-> new Item(defaultStackItemProperties().rarity(Rarity.UNCOMMON)));
 
     public static final RegistrySupplier<Block> REINFORCED_STONE = registerFactocraftyBlockItem(()-> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).requiresCorrectToolForDrops().strength(35.0F, 400.0F)),"reinforced_stone");
 
@@ -223,6 +223,8 @@ public class Registration {
 
     public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> ENRICHER_RECIPE = RECIPE_TYPES.register("enriching", () -> new RecipeType<>() {});
 
+    public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> RECYCLER_RECIPE = RECIPE_TYPES.register("recycling", () -> new RecipeType<>() {});
+
     public static final RegistrySupplier<RecipeType<GasInfuserRecipe>> GASEOUS_INFUSION_RECIPE = RECIPE_TYPES.register("gaseous_infusion", () -> new RecipeType<>() {});
 
     public static final RegistrySupplier<RecipeSerializer<SolderingCraftingRecipe>> SOLDERING_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("soldering_crafting", ()-> new SolderingCraftingRecipe.SimpleSerializer<>(SolderingCraftingRecipe::new));
@@ -238,6 +240,8 @@ public class Registration {
     public static final RegistrySupplier<RecipeSerializer<EnricherRecipe>> ENRICHER_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("enriching", () -> new EnricherRecipe.Serializer((resourceLocation -> new EnricherRecipe("enriching",resourceLocation)),200));
 
     public static final RegistrySupplier<RecipeSerializer<GasInfuserRecipe>> GAS_INFUSER_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("gaseous_infusion", () -> new GasInfuserRecipe.Serializer((resourceLocation -> new GasInfuserRecipe("gaseous_infusion",resourceLocation)),200));
+
+    public static final RegistrySupplier<RecipeSerializer<FactocraftyMachineRecipe>> RECYCLER_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("recycling", () -> new FactocraftyMachineRecipe.Serializer<>((resourceLocation -> new FactocraftyMachineRecipe("recycling",resourceLocation)),150));
 
     public static final RegistrySupplier<RecipeSerializer<FactocraftyMachineRecipe>> EXTRACTOR_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("extracting", () -> new FactocraftyMachineRecipe.Serializer<>((resourceLocation -> new FactocraftyMachineRecipe("extracting",resourceLocation){
         @Override
@@ -271,6 +275,8 @@ public class Registration {
     public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> MACERATOR_MENU = MENUS.register(FactocraftyBlocks.MACERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.MACERATOR,id, buf.readBlockPos(), inventory.player)));
 
     public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> EXTRACTOR_MENU = MENUS.register(FactocraftyBlocks.EXTRACTOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.EXTRACTOR,id, buf.readBlockPos(), inventory.player)));
+
+    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> RECYCLER_MENU = MENUS.register(FactocraftyBlocks.RECYCLER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.RECYCLER,id, buf.readBlockPos(), inventory.player)));
 
     public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> REFINER_MENU = MENUS.register(FactocraftyBlocks.REFINER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.REFINER,id, buf.readBlockPos(), inventory.player)));
 
@@ -308,6 +314,10 @@ public class Registration {
     public static final RegistrySupplier<Block> EXTRACTOR = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.EXTRACTOR.getName(), () -> new FactocraftyMachineBlock(FactoryCapacityTiers.BASIC,BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
     public static final RegistrySupplier<BlockEntityType<ChangeableInputMachineBlockEntity>> EXTRACTOR_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.EXTRACTOR.getName(), () -> BlockEntityType.Builder.of(ChangeableInputMachineBlockEntity::new, EXTRACTOR.get()).build(null));
+
+    public static final RegistrySupplier<Block> RECYCLER = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.RECYCLER.getName(), () -> new FactocraftyMachineBlock(FactoryCapacityTiers.BASIC,BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final RegistrySupplier<BlockEntityType<RecyclerBlockEntity>> RECYCLER_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.RECYCLER.getName(), () -> BlockEntityType.Builder.of(RecyclerBlockEntity::new, RECYCLER.get()).build(null));
+
 
     public static final RegistrySupplier<Block> REFINER = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.REFINER.getName(), () -> new FactocraftyMachineBlock(FactoryCapacityTiers.BASIC,BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final RegistrySupplier<BlockEntityType<RefinerBlockEntity>> REFINER_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.REFINER.getName(), () -> BlockEntityType.Builder.of(RefinerBlockEntity::new, REFINER.get()).build(null));

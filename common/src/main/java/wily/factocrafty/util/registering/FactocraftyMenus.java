@@ -5,7 +5,7 @@ import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyProcessMenu;
 
 public enum FactocraftyMenus {
-    GEOTHERMAL_GENERATOR,GENERATOR,ELECTRIC_FURNACE,MACERATOR,COMPRESSOR,EXTRACTOR,REFINER,ENRICHER,GAS_INFUSER,SOLAR_PANEL,ENERGY_CELL,FLUID_TANK;
+    GEOTHERMAL_GENERATOR,GENERATOR,ELECTRIC_FURNACE,MACERATOR,COMPRESSOR,EXTRACTOR,REFINER,RECYCLER,ENRICHER,GAS_INFUSER,SOLAR_PANEL,ENERGY_CELL,FLUID_TANK;
 
     public MenuType<?> get(){
         return Registration.getRegistrarMenuEntry(getName());

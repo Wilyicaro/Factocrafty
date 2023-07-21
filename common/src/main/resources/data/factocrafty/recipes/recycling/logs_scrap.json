@@ -1,0 +1,12 @@
+{
+  "type": "factocrafty:recycling",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "result": {
+    "item": "factocrafty:scrap",
+    "chance": 0.15
+  },
+  "experience": 0.03,
+  "processtime": 150
+}

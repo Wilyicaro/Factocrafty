@@ -248,6 +248,7 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.GEOTHERMAL_GENERATOR_MENU.get(), GeothermalGeneratorScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         MenuRegistry.registerScreenFactory(Registration.MACERATOR_MENU.get(), BasicMachineScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.RECYCLER_MENU.get(), BasicMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ENERGY_CELL_MENU.get(), EnergyCellScreen::new);
         MenuRegistry.registerScreenFactory(Registration.FLUID_TANK_MENU.get(), FluidTankScreen::new);
         MenuRegistry.registerScreenFactory(Registration.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);

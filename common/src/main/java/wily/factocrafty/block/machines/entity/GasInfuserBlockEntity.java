@@ -61,15 +61,22 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     }
 
     @Override
-    protected void setOtherResults(GasInfuserRecipe recipe, IPlatformItemHandler inv, int i) {
+    protected void processResults(GasInfuserRecipe recipe) {
         if (getInfusionMode().isMixer()) {
-            super.setOtherResults(recipe, inv, i);
-            ioTank.drain(recipe.getOtherFluid(), false);
             oiTank.fill(recipe.getResultFluid(), false);
         }else {
-            oiTank.drain(recipe.getFluidIngredient(), false);
             fluidTank.fill(recipe.getResultFluid(), false);
             ioTank.fill(recipe.getOtherFluid(), false);
+        }
+    }
+
+    @Override
+    protected void processIngredients(GasInfuserRecipe recipe) {
+        if (getInfusionMode().isMixer()) {
+            super.processIngredients(recipe);
+            ioTank.drain(recipe.getOtherFluid(), false);
+        }else {
+            oiTank.drain(recipe.getFluidIngredient(), false);
         }
     }
 
@@ -79,9 +86,7 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
         list.add(ioTank);
         list.add(oiTank);
     }
-    private boolean canTankAcceptResult(IPlatformFluidHandler<?> tank, FluidStack resultFluid){
-        return tank.getTotalSpace() >= resultFluid.getAmount() && (tank.getFluidStack().isEmpty() || tank.getFluidStack().isFluidEqual((resultFluid)));
-    }
+
     @Override
     protected boolean canMachineProcess(@Nullable Recipe<?> recipe) {
         if (recipe instanceof GasInfuserRecipe rcp) {

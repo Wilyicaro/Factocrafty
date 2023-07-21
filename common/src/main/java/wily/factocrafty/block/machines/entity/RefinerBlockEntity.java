@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.init.Registration;
@@ -60,8 +59,8 @@ public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    protected void setOtherResults(FactocraftyMachineRecipe rcp, IPlatformItemHandler inv, int i) {
-        super.setOtherResults(rcp,inv,i);
+    protected void processResults(FactocraftyMachineRecipe rcp) {
+        super.processResults(rcp);
         if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty()) resultTank.fill(rcp.getResultFluid(),false);
     }
 }

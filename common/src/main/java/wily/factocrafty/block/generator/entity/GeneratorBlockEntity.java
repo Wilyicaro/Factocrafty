@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
-import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factocrafty.block.cable.InsulatedCableBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
@@ -31,8 +30,8 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
     private final int FUEL_SLOT = 0;
 
 
-    public Progress burnTime = new Progress(FactocraftyDrawables.BURN_PROGRESS.identifier(),1,0);
-    public Progress progress = new Progress(FactocraftyDrawables.ENERGY_PROGRESS.identifier(), getProgress(), 200);
+    public Progress burnTime = new Progress(Progress.Identifier.BURN_TIME,1,0);
+    public Progress progress = new Progress(Progress.Identifier.DEFAULT, getProgress(), 200);
     public final Bearer<Integer> energyTick = Bearer.of(0);
 
     public GeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {

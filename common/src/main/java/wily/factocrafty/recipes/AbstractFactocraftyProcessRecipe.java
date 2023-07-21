@@ -34,6 +34,8 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
     protected final ResourceLocation id;
     protected Ingredient ingredient = Ingredient.EMPTY;
     protected int ingredientCount = 0;
+
+    protected float resultChance = 1.0F;
     protected FluidStack fluidIngredient = FluidStack.empty();
     protected ItemStack result;
     protected float experience;
@@ -50,6 +52,10 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
 
     public int getDiff() {
         return diff;
+    }
+
+    public float getResultChance() {
+        return resultChance;
     }
 
     public boolean matches(Container container, Level level) {
@@ -158,6 +164,7 @@ public abstract class AbstractFactocraftyProcessRecipe implements Recipe<Contain
             if (rcp.hasFluidIngredient() && rcp.ingredient.isEmpty()) rcp.fluidIngredient = FluidStackUtil.fromJson(jsonObject.getAsJsonObject("fluid_ingredient"));
 
             rcp.result = getJsonItemStack(jsonObject, "result");
+            if (jsonObject.get("result") instanceof JsonObject obj) rcp.resultChance =  GsonHelper.getAsFloat(obj, "chance",1.0F);
             otherResultsFromJson(jsonObject, rcp);
             rcp.experience = GsonHelper.getAsFloat(jsonObject, "experience", 0.0F);
             rcp.maxProcess = GsonHelper.getAsInt(jsonObject, "processtime", this.defaultProcess);

@@ -1,0 +1,12 @@
+{
+  "type": "factocrafty:recycling",
+  "ingredient": {
+    "tag": "minecraft:planks"
+  },
+  "result": {
+    "item": "factocrafty:scrap",
+    "chance": 0.12
+  },
+  "experience": 0.02,
+  "processtime": 150
+}

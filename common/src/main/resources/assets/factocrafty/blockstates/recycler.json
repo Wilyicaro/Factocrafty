@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"facing=north,active=false":	{ "model": "factocrafty:block/machines/recycler" },
+		"facing=south,active=false":	{ "model": "factocrafty:block/machines/recycler", "y": 180 },
+		"facing=west,active=false":	{ "model": "factocrafty:block/machines/recycler", "y": 270 },
+		"facing=east,active=false":	{ "model": "factocrafty:block/machines/recycler", "y": 90 },
+		"facing=north,active=true":	{ "model": "factocrafty:block/machines/recycler_active" },
+		"facing=south,active=true":	{ "model": "factocrafty:block/machines/recycler_active", "y": 180 },
+		"facing=west,active=true":		{ "model": "factocrafty:block/machines/recycler_active", "y": 270 },
+		"facing=east,active=true":		{ "model": "factocrafty:block/machines/recycler_active", "y": 90 }
+	}
+}

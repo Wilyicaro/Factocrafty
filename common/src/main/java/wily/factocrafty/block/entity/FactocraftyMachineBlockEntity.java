@@ -1,6 +1,7 @@
 package wily.factocrafty.block.entity;
 
 import com.google.common.collect.Lists;
+import dev.architectury.fluid.FluidStack;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -29,7 +30,6 @@ import wily.factocrafty.inventory.FactocraftyResultSlot;
 import wily.factocrafty.item.UpgradeType;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
-import wily.factocrafty.util.SoundUtil;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.*;
 
@@ -73,8 +73,7 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
         slots.add(new FactoryItemSlot(this.inventory, SlotsIdentifier.INPUT,TransportState.INSERT,INPUT_SLOT, 56,17){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
-                T recipe =  getActualRecipe( itemStack, false);
-                return recipe != null;
+                return getActualRecipe( itemStack, false) != null;
             }
             @Override
             public boolean isActive() {
@@ -127,46 +126,26 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
     protected static boolean canProcessItem(@Nullable Recipe<?> recipe, Container inv, int input, int output) {
         ItemStack inputStack = inv.getItem(input);
         if (!inputStack.isEmpty() && recipe != null) {
-            ItemStack itemStack = recipe.getResultItem(RegistryAccess.EMPTY);
-            if (itemStack.isEmpty()) {
-                return false;
-            } else {
-                ItemStack itemStack2 = inv.getItem(output);
-                if (itemStack2.isEmpty()) {
-                    return true;
-                } else if (!ItemStack.isSameItem(itemStack2,itemStack)) {
-                    return false;
-                } else if (itemStack2.getCount() < inv.getMaxStackSize() && itemStack2.getCount() < itemStack2.getMaxStackSize()) {
-                    return true;
-                } else {
-                    return itemStack2.getCount() < itemStack.getMaxStackSize();
-                }
-            }
-        } else {
-            return false;
-        }
+            return canSlotAcceptItem(inv,output, recipe.getResultItem(RegistryAccess.EMPTY));
+        }return false;
+
+    }
+    protected static boolean canTankAcceptResult(IPlatformFluidHandler<?> tank, FluidStack resultFluid){
+        return tank.getTotalSpace() >= resultFluid.getAmount() && (tank.getFluidStack().isEmpty() || tank.getFluidStack().isFluidEqual((resultFluid)));
+    }
+    protected static boolean canSlotAcceptItem(Container inv, int slot, ItemStack stack){
+        ItemStack slotStack = inv.getItem(slot);
+        return !stack.isEmpty() && (slotStack.isEmpty() ||(ItemStack.isSameItem(stack,slotStack) &&   slotStack.getCount() + stack.getCount() < Math.min(inv.getMaxStackSize(),slotStack.getMaxStackSize())));
     }
     protected static boolean canProcessFluid(@Nullable Recipe<?> recipe, IPlatformFluidHandler tank,@Nullable IPlatformFluidHandler resultTank,Container inv, int output) {
         if (!tank.getFluidStack().isEmpty() && recipe instanceof FactocraftyMachineRecipe rcp && rcp.matchesFluid(tank,null)) {
             ItemStack itemStack = recipe.getResultItem(RegistryAccess.EMPTY);
-            if (itemStack.isEmpty() && (rcp.hasFluidResult() && rcp.getResultFluid().isEmpty())) {
-                return false;
-            } else {
-                ItemStack itemStack2 = inv.getItem(output);
-                boolean bl = resultTank != null;
-                if ((itemStack2.isEmpty() || itemStack.isEmpty()) && (rcp.getResultFluid().isEmpty() || bl && resultTank.getFluidStack().isEmpty() )) {
-                    return true;
-                } else if (!ItemStack.isSameItem(itemStack2,itemStack) ||  (!bl || !resultTank.getFluidStack().isFluidEqual(rcp.getResultFluid()))) {
-                    return false;
-                } else if (itemStack2.getCount() < inv.getMaxStackSize() && itemStack2.getCount() < itemStack2.getMaxStackSize() && !itemStack.isEmpty() || resultTank.getTotalSpace() >= rcp.getResultFluid().getAmount()) {
-                    return true;
-                } else {
-                    return itemStack2.getCount() < itemStack.getMaxStackSize() && !itemStack.isEmpty();
-                }
+            if (!itemStack.isEmpty()) {
+                return canSlotAcceptItem(inv,output, recipe.getResultItem(RegistryAccess.EMPTY));
+            }else if (!rcp.getResultFluid().isEmpty() && resultTank != null){
+                return canTankAcceptResult(resultTank,rcp.getResultFluid());
             }
-        } else {
-            return false;
-        }
+        } return false;
     }
     protected SoundEvent getMachineSound(){
         return null;
@@ -260,7 +239,13 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
         }
 
     }
-    protected void setOtherResults( T recipe, IPlatformItemHandler inv, int i) {
+    protected void processResults(T recipe) {
+        if (!(recipe instanceof AbstractFactocraftyProcessRecipe rcp) || (rcp.getResultChance() >= 1.0F || level.random.nextFloat() <= rcp.getResultChance()))
+         addOrSetItem(recipe.getResultItem(RegistryAccess.EMPTY), inventory, OUTPUT_SLOT);
+    }
+    protected void processIngredients(T recipe) {
+        if (isInputSlotActive())
+            inventory.getItem(INPUT_SLOT).shrink(recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getIngredientCount() : 1);
     }
     protected int addOrSetItem(ItemStack stack, Container inv, int index){
         ItemStack slotStack = inv.getItem(index);
@@ -285,16 +270,11 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
     }
     protected boolean process(@Nullable T recipe) {
         if (recipe != null && canMachineProcess(recipe)) {
-            addOrSetItem(recipe.getResultItem(RegistryAccess.EMPTY), inventory, OUTPUT_SLOT);
-            if (isInputSlotActive()) {
-                inventory.getItem(INPUT_SLOT).shrink(recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getIngredientCount() : 1);
-            }
-            setOtherResults(recipe, inventory, inventory.getMaxStackSize());
-
+            processIngredients(recipe);
+            processResults(recipe);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
     public void awardUsedRecipesAndPopExperience(ServerPlayer serverPlayer) {
         List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(serverPlayer.serverLevel(), serverPlayer.position());

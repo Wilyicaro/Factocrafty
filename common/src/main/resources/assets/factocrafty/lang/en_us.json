@@ -310,11 +310,11 @@
   "item.factocrafty.bronze_hoe": "Bronze Hoe",
 
   "item.factocrafty.night_vision_goggles": "Night Vision Goggles",
-  "item.factocrafty.graphano_helmet": "Grafano Helmet",
-  "item.factocrafty.graphano_chestplate": "Grafano Chestplate",
-  "item.factocrafty.graphano_leggings": "Grafano Leggings",
-  "item.factocrafty.graphano_boots": "Grafano Boots",
-  "item.factocrafty.graphano_saber": "Grafano Saber",
+  "item.factocrafty.graphano_helmet": "Graphano Helmet",
+  "item.factocrafty.graphano_chestplate": "Graphano Chestplate",
+  "item.factocrafty.graphano_leggings": "Graphano Leggings",
+  "item.factocrafty.graphano_boots": "Graphano Boots",
+  "item.factocrafty.graphano_saber": "Graphano Saber",
 
   "item.factocrafty.quantum_chestplating": "Quantum Chestplating",
 
@@ -524,6 +524,7 @@
   "category.factocrafty.recipe.macerating": "Macerating",
   "category.factocrafty.recipe.compressing": "Compressing",
   "category.factocrafty.recipe.extracting": "Extracting",
+  "category.factocrafty.recipe.recycling": "Recycling",
   "category.factocrafty.recipe.refining": "Refining",
   "category.factocrafty.recipe.enriching": "Enriching",
   "category.factocrafty.recipe.gaseous_infusion": "Gaseous Infusion",

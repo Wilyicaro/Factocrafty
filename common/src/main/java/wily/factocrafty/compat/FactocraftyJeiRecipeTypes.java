@@ -24,6 +24,8 @@ public class FactocraftyJeiRecipeTypes {
     public static RecipeType<FactocraftyMachineRecipe> COMPRESSING = create("compressing", FactocraftyMachineRecipe.class);
 
     public static RecipeType<FactocraftyMachineRecipe> EXTRACTING = create("extracting", FactocraftyMachineRecipe.class);
+
+    public static RecipeType<FactocraftyMachineRecipe> RECYCLING = create("recycling", FactocraftyMachineRecipe.class);
     public static RecipeType<FactocraftyMachineRecipe> REFINING = create("refining", FactocraftyMachineRecipe.class);
     public static RecipeType<EnricherRecipe> ENRICHING = create("enriching", EnricherRecipe.class);
 

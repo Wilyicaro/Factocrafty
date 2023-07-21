@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:recycling",
+  "ingredient": {
+    "tag": "minecraft:stone_crafting_materials",
+    "chance": 0.1
+  },
+  "result": {
+    "item": "factocrafty:scrap",
+    "chance": 0.175
+  },
+  "experience": 0.04,
+  "processtime": 150
+}

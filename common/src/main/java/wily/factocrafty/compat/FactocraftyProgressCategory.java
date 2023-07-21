@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
@@ -157,8 +158,11 @@ public class FactocraftyProgressCategory<T extends Recipe<Container>> implements
         }
         if (input ==null) {
             input = builder.addSlot(RecipeIngredientRole.INPUT, 38, 6);
-            if (recipe.getIngredients().stream().anyMatch((i)-> !i.isEmpty())) input.addItemStack(SolderingCraftingRecipe.getFactocraftyStack(recipe.getIngredients().get(0)).copyWithCount(recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getIngredientCount(): 1));
+            for (Ingredient i : recipe.getIngredients()) {
+                    if (!i.isEmpty())input.addIngredients(i);
+                }
         }
 
     }
+
 }
