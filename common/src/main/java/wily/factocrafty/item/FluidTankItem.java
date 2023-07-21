@@ -28,9 +28,10 @@ public class FluidTankItem extends BlockItem implements BucketLikeItem {
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(((FactocraftyFluidTankBlock)getBlock()).capacityTier.getTierComponent(false));
         list.add(StorageStringUtil.getFluidTooltip("tooltip.factory_api.fluid_stored", getFluidStorage(itemStack),false));
-        
     }
+
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "factocrafty:item/tool/electric/rgb_controller",
+    "layer1": "factocrafty:item/tool/electric/rgb_controller_low"
+  }
+}

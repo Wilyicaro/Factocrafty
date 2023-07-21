@@ -36,10 +36,8 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
 
     protected boolean hasSmokeParticles = false;
 
-    public FactoryCapacityTiers capacityTier;
     public FactocraftyMachineBlock(FactoryCapacityTiers tier, Properties properties) {
         super(tier,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  14 : 0));
-        this.capacityTier =tier;
         this.registerDefaultState(defaultBlockState().setValue(getFacingProperty(), Direction.NORTH));
     }
 

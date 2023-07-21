@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#B#",
+    "BCB",
+    "#B#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:bronze_plate"
+    },
+    "B": {
+      "item": "factocrafty:advanced_battery"
+    },
+    "C": {
+      "item": "factocrafty:battery_box"
+    }
+  },
+  "result": {
+    "item": "factocrafty:advanced_functional_storage"
+  }
+}

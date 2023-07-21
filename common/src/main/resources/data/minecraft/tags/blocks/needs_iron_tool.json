@@ -12,6 +12,13 @@
     "factocrafty:silver_block",
     "factocrafty:raw_silver_block",
     "factocrafty:deepslate_uranium_ore",
-    "factocrafty:uranium_block"
+    "factocrafty:uranium_block",
+    "factocrafty:reinforced_stone",
+    "factocrafty:reinforced_stone_slab",
+    "factocrafty:reinforced_stone_stairs",
+    "factocrafty:ultimate_fluid_tank",
+    "factocrafty:quantum_fluid_tank",
+    "factocrafty:ultimate_functional_unit",
+    "factocrafty:quantum_unit"
   ]
 }

@@ -4,7 +4,6 @@
     "factocrafty:rubber_log",
     "factocrafty:rubber_wood",
     "factocrafty:rubber_planks",
-    "factocrafty:rubber_sign",
     "factocrafty:rubber_fence",
     "factocrafty:rubber_fence_gate",
     "factocrafty:rubber_stairs",
@@ -13,6 +12,7 @@
     "factocrafty:rubber_door",
     "factocrafty:rubber_trapdoor",
     "factocrafty:stripped_rubber_log",
-    "factocrafty:stripped_rubber_wood"
+    "factocrafty:stripped_rubber_wood",
+    "factocrafty:battery_box"
   ]
 }

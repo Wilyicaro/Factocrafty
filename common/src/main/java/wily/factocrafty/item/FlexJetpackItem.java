@@ -30,12 +30,12 @@ public class FlexJetpackItem extends JetpackItem implements IFluidItem<IPlatform
     }
 
     @Override
-    protected boolean canLaunchJetpack(ItemStack stack) {
+    public boolean canLaunchJetpack(ItemStack stack) {
         return getFluidStorage(stack).getFluidStack().getAmount() >= 1;
     }
 
     @Override
-    protected ItemStack consumeFuel(ItemStack stack) {
+    public ItemStack consumeFuel(ItemStack stack) {
         getFluidStorage(stack).drain(1,false);
         return stack;
     }

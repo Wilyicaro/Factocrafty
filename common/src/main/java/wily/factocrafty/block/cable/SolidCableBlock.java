@@ -37,11 +37,6 @@ public class SolidCableBlock extends InsulatedCableBlock implements SimpleFluidL
         return SimpleFluidLoggedBlock.super.getStateForPlacement(defaultBlockState(),ctx);
     }
     @Override
-    public FluidState getFluidState(BlockState state) {
-        return SimpleFluidLoggedBlock.super.getFluidState(state);
-    }
-
-    @Override
     protected void setDefaultState() {
         super.setDefaultState();
         registerDefaultState(defaultBlockState().setValue(UP, CableSide.NONE).setValue(DOWN,CableSide.NONE).setValue(FLUIDLOGGED(), 0));

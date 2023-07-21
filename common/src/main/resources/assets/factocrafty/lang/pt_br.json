@@ -306,8 +306,8 @@
   "item.factocrafty.graphano_boots": "Botas Grafano",
   "item.factocrafty.graphano_saber": "Sabre Nano",
 
-  "item.factocrafty.electric_jetpack": "Mochila a jato elétrica",
-  "item.factocrafty.flex_jetpack": "Mochila a jato flex",
+  "item.factocrafty.electric_jetpack": "Mochila à jato elétrica",
+  "item.factocrafty.flex_jetpack": "Mochila à jato flex",
   "item.factocrafty.basic_hang_glider": "Asa-delta",
   "item.factocrafty.mining_laser": "Laser de mineração",
 
@@ -342,7 +342,7 @@
   "item.factocrafty.small_power_unit": "Unidade pequena de energia",
   "item.factocrafty.power_unit": "Unidade de energia",
   "item.factocrafty.electric_treetap": "Extrator de látex elétrico",
-  "item.factocrafty.electric_wrench": "Chave elétrica",
+  "item.factocrafty.electric_wrench": "Chave inglesa elétrica",
   "item.factocrafty.chainsaw": "Motoserra",
   "item.factocrafty.diamond_chainsaw": "Motoserra de diamante",
   "item.factocrafty.iridium_chainsaw": "Motoserra de irídio",
@@ -402,9 +402,9 @@
   "item.factocrafty.containment_reactor_plating": "Placa de reator de contenção",
   "item.factocrafty.heat_capacity_reactor_plating": "Placa de reator de capacidade de calor",
   "item.factocrafty.heating_cell": "Célula de aquecimento",
-  "item.factocrafty.reactor_heat_exchanger": "Dissipador de calor do reator",
-  "item.factocrafty.reactor_heat_vent": "Ventilação de calor do reator",
-  "item.factocrafty.reactor_plating": "Placa do reator",
+  "item.factocrafty.reactor_heat_exchanger": "Dissipador de calor de reator",
+  "item.factocrafty.reactor_heat_vent": "Ventilação de calor de reator",
+  "item.factocrafty.reactor_plating": "Placa de reator",
 
   "_comment": "Battery Box",
   "block.factocrafty.battery_box": "Caixa de baterias Crafty (CBC)",
@@ -508,6 +508,7 @@
   "subtitles.factocrafty.macerator": "Macerador processando",
   "subtitles.factocrafty.extractor": "Extrator processando",
   "subtitles.factocrafty.compressor": "Compressor processando",
+  "subtitles.factocrafty.jetpack_flight": "Voo de mochila à jato",
   "subtitles.factocrafty.electric_shock": "Choque elétrico",
 
   "_comment": "Upgrade",

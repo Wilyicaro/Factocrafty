@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ACA",
+    "C#C",
+    "ACA"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:machine_frame"
+    },
+    "C": {
+      "item": "factocrafty:carbon_plate"
+    },
+    "A": {
+      "item": "factocrafty:advanced_alloy"
+    }
+  },
+  "result": {
+    "item": "factocrafty:advanced_machine_frame"
+  }
+}

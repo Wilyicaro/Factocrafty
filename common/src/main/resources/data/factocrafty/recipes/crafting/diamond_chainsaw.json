@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " DI",
+    "#CD",
+    "B# "
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:battery"
+    },
+    "I": {
+      "item": "minecraft:diamond"
+    },
+    "D": {
+      "item": "factocrafty:diamond_dust"
+    },
+    "C": {
+      "item": "factocrafty:chainsaw"
+    },
+    "B": {
+      "item": "factocrafty:bronze_plate"
+    }
+  },
+  "result": {
+    "item": "factocrafty:diamond_chainsaw"
+  }
+}

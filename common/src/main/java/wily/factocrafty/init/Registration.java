@@ -1,8 +1,6 @@
 package wily.factocrafty.init;
 
-import dev.architectury.core.block.ArchitecturyLiquidBlock;
 import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
-import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
 import dev.architectury.fluid.FluidStack;
@@ -168,6 +166,9 @@ public class Registration {
 
     public static final RegistrySupplier<SoundEvent> ELECTRIC_SHOCK = SOUNDS.register("ambient.electric_shock",() -> SoundEvent.createVariableRangeEvent((getModResource("ambient.electric_shock"))));
 
+    public static final RegistrySupplier<SoundEvent> JETPACK_FLIGHT = SOUNDS.register("player.jetpack_flight",() -> SoundEvent.createVariableRangeEvent((getModResource("player.jetpack_flight"))));
+
+    public static final RegistrySupplier<SoundEvent> JETPACK_ENGINE_START = SOUNDS.register("player.jetpack_engine_start",() -> SoundEvent.createVariableRangeEvent((getModResource("player.jetpack_engine_start"))));
 
     public static final RegistrySupplier<SoundEvent> WRENCH_TIGHT = SOUNDS.register("item.wrench",() -> SoundEvent.createVariableRangeEvent(getModResource("item.wrench")));
 
@@ -353,7 +354,11 @@ public class Registration {
 
     public static final RegistrySupplier<Item> CHAINSAW =  ITEMS.register("chainsaw", () -> new ChainsawItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
 
-    public static final RegistrySupplier<Item> DIAMOND_CHAINSAW =  ITEMS.register("diamond_chainsaw", () -> new ChainsawItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
+    public static final RegistrySupplier<Item> DIAMOND_CHAINSAW =  ITEMS.register("diamond_chainsaw", () -> new ChainsawItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.ADVANCED,defaultStackItemProperties()));
+
+    public static final RegistrySupplier<Item> ELECTRIC_HOE =  ITEMS.register("electric_hoe", () -> new ElectricHoeItem(Tiers.IRON,1, -2.8F, FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
+
+    public static final RegistrySupplier<Item> ELECTRIC_WRENCH =  ITEMS.register("electric_wrench", () -> new ElectricWrenchItem(FactoryCapacityTiers.BASIC,defaultStackItemProperties()));
 
     public static final RegistrySupplier<Item> MINING_LASER =  ITEMS.register("mining_laser", () -> new MiningLaserItem(FactoryCapacityTiers.HIGH,defaultStackItemProperties()));
 
@@ -489,31 +494,31 @@ public class Registration {
                 if (ore.deep)
                     registrarFactocraftyBlockItem(() -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_IRON_ORE),ConstantInt.of(ore.averageXp)), oreMaterials.getOreName(true));
             };});
-        oreMaterials.getDerivative(FactocraftyOre.INGOT).ifPresent(d->  registrarFactocraftyItem(() -> new Item(fullStackItemProperties()), d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.COMMON_DROP).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties()), d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.CRUSHED).ifPresent(d->  registrarFactocraftyItem(() -> new Item(fullStackItemProperties()), d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.ROD).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties()),d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.PLATE).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties()),  d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.INGOT).ifPresent(d->  registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())), d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.COMMON_DROP).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())), d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.CRUSHED).ifPresent(d->  registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())), d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.ROD).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())),d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.PLATE).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())),  d.getName(oreMaterials)));
         oreMaterials.getDerivative(FactocraftyOre.BLOCK).ifPresent(d-> registrarFactocraftyBlockItem(() -> new FactocraftyBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).mapColor(oreMaterials.getColor())), d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.REFINED).ifPresent(d->registrarFactocraftyItem(() -> new Item(fullStackItemProperties()),   d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.DUST).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties()),  d.getName(oreMaterials)));
-        oreMaterials.getDerivative(FactocraftyOre.NUGGET).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties()), d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.REFINED).ifPresent(d->registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())),   d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.DUST).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())),  d.getName(oreMaterials)));
+        oreMaterials.getDerivative(FactocraftyOre.NUGGET).ifPresent(d-> registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())), d.getName(oreMaterials)));
         oreMaterials.getDerivative(FactocraftyOre.RAW).ifPresent(d-> {
             registrarFactocraftyBlockItem(() -> new FactocraftyBlock(BlockBehaviour.Properties.copy(Blocks.RAW_IRON_BLOCK).mapColor(oreMaterials.getColor())), d.getName(oreMaterials,1));
-            registrarFactocraftyItem(() -> new Item(fullStackItemProperties()), d.getName(oreMaterials,0));
+            registrarFactocraftyItem(() -> new Item(fullStackItemProperties().rarity(oreMaterials.getRarity())), d.getName(oreMaterials,0));
         });
         if (oreMaterials.getArmor() != null ) {
-            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.BOOTS, defaultStackItemProperties()), oreMaterials.getName() + "_boots");
-            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.LEGGINGS, defaultStackItemProperties()), oreMaterials.getName() + "_leggings");
-            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.CHESTPLATE, defaultStackItemProperties()), oreMaterials.getName() + "_chestplate");
-            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.HELMET, defaultStackItemProperties()), oreMaterials.getName() + "_helmet");
+            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.BOOTS, defaultStackItemProperties().rarity(oreMaterials.getRarity())), oreMaterials.getName() + "_boots");
+            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.LEGGINGS, defaultStackItemProperties().rarity(oreMaterials.getRarity())), oreMaterials.getName() + "_leggings");
+            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.CHESTPLATE, defaultStackItemProperties().rarity(oreMaterials.getRarity())), oreMaterials.getName() + "_chestplate");
+            registrarFactocraftyItem(() -> new ArmorItem(oreMaterials.getArmor(), ArmorItem.Type.HELMET, defaultStackItemProperties().rarity(oreMaterials.getRarity())), oreMaterials.getName() + "_helmet");
         }
         if (oreMaterials.getToolTier() != null){
-            registrarFactocraftyItem(() -> new SwordItem(oreMaterials.getToolTier(),3, -2.4F , defaultStackItemProperties()),oreMaterials.getName() + "_sword");
-            registrarFactocraftyItem(() -> new PickaxeItem(oreMaterials.getToolTier(),1, -2.8F , defaultStackItemProperties()),oreMaterials.getName() + "_pickaxe");
-            registrarFactocraftyItem(() -> new AxeItem(oreMaterials.getToolTier(),6.0F, -3.1F , defaultStackItemProperties()),oreMaterials.getName() + "_axe");
-            registrarFactocraftyItem(() -> new ShovelItem(oreMaterials.getToolTier(),1.5F, -3.0F , defaultStackItemProperties()),oreMaterials.getName() + "_shovel");
-            registrarFactocraftyItem(() -> new HoeItem(oreMaterials.getToolTier(),-3, 0.0F ,defaultStackItemProperties()),oreMaterials.getName() + "_hoe");
+            registrarFactocraftyItem(() -> new SwordItem(oreMaterials.getToolTier(),3, -2.4F , defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_sword");
+            registrarFactocraftyItem(() -> new PickaxeItem(oreMaterials.getToolTier(),1, -2.8F , defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_pickaxe");
+            registrarFactocraftyItem(() -> new AxeItem(oreMaterials.getToolTier(),6.0F, -3.1F , defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_axe");
+            registrarFactocraftyItem(() -> new ShovelItem(oreMaterials.getToolTier(),1.5F, -3.0F , defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_shovel");
+            registrarFactocraftyItem(() -> new HoeItem(oreMaterials.getToolTier(),-3, 0.0F ,defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_hoe");
         }
     }
     private static void registerCables(CableTiers tier) {

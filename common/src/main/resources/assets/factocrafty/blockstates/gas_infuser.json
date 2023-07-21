@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"facing=north,active=false":	{ "model": "factocrafty:block/machines/gas_infuser" },
+		"facing=south,active=false":	{ "model": "factocrafty:block/machines/gas_infuser", "y": 180 },
+		"facing=west,active=false":	{ "model": "factocrafty:block/machines/gas_infuser", "y": 270 },
+		"facing=east,active=false":	{ "model": "factocrafty:block/machines/gas_infuser", "y": 90 },
+		"facing=north,active=true":	{ "model": "factocrafty:block/machines/gas_infuser_active" },
+		"facing=south,active=true":	{ "model": "factocrafty:block/machines/gas_infuser_active", "y": 180 },
+		"facing=west,active=true":		{ "model": "factocrafty:block/machines/gas_infuser_active", "y": 270 },
+		"facing=east,active=true":		{ "model": "factocrafty:block/machines/gas_infuser_active", "y": 90 }
+	}
+}

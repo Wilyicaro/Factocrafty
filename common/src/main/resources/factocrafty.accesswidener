@@ -44,3 +44,5 @@ accessible method net/minecraft/world/level/material/FlowingFluid canPassThrough
 accessible field net/minecraft/client/sounds/SoundEngine soundBuffers Lnet/minecraft/client/sounds/SoundBufferLibrary;
 accessible field net/minecraft/client/sounds/SoundManager soundEngine Lnet/minecraft/client/sounds/SoundEngine;
 accessible field net/minecraft/client/sounds/SoundBufferLibrary resourceManager Lnet/minecraft/server/packs/resources/ResourceProvider;
+accessible field net/minecraft/world/item/HoeItem TILLABLES Ljava/util/Map;
+accessible field net/minecraft/client/KeyMapping clickCount I

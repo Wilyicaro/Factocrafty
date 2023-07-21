@@ -1,0 +1,29 @@
+{
+  "parent": "factocrafty:block/panel_block",
+  "elements": [
+    {   "from": [ 0, 0, 0 ],
+        "to": [ 16, 1.5, 16 ],
+        "faces": {
+            "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#all", "cullface": "down" },
+            "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#all" },
+            "north": { "uv": [ 0, 14.5, 16, 16 ], "texture": "#all", "cullface": "north" },
+            "south": { "uv": [ 0, 14.5, 16, 16 ], "texture": "#all", "cullface": "south" },
+            "west":  { "uv": [ 0, 14.5, 16, 16 ], "texture": "#all", "cullface": "west" },
+            "east":  { "uv": [ 0, 14.5, 16, 16 ], "texture": "#all", "cullface": "east" }
+        }
+    },
+    {   
+      "from": [ 0, 0, 0 ],
+    "to": [ 16, 1.5, 16 ],
+    "faces": {
+        "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#all_overlay", "cullface": "down", "tintindex" : 0 },
+        "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#all_overlay", "tintindex" : 0 }
+    }
+}
+],
+"textures": {
+  "particle": "#all",
+  "all": "factocrafty:block/led",
+  "all_overlay": "factocrafty:block/led_overlay"
+}
+}

@@ -28,16 +28,21 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyWoodType;
@@ -54,6 +59,8 @@ import wily.factocrafty.entity.IFactocraftyBoat;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.*;
 import wily.factocrafty.network.FactocraftyArmorFeaturePacket;
+import wily.factocrafty.network.FactocraftyJetpackLaunchPacket;
+import wily.factocrafty.util.DirectionUtil;
 import wily.factocrafty.util.registering.FactocraftyBlockEntities;
 import wily.factocrafty.util.registering.FactocraftyBlocks;
 import wily.factocrafty.util.registering.FactocraftyFluidTanks;
@@ -70,13 +77,28 @@ public class FactocraftyClient {
     private static final ResourceLocation NIGHT_VISION_LOCATION = new ResourceLocation(Factocrafty.MOD_ID,"textures/misc/nightvision.png");
 
     public static void leavesColor() {
-
         BlockColor blockColors = (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageFoliageColor(blockAndTintGetter, blockPos) : FoliageColor.getEvergreenColor();
         ItemColor itemColors = (a, e) -> FoliageColor.getEvergreenColor();
         ColorHandlerRegistry.registerBlockColors(blockColors, Registration.RUBBER_LEAVES.get());
         ColorHandlerRegistry.registerItemColors(itemColors, Registration.RUBBER_LEAVES.get().asItem());
 
-
+    }
+    public static void jetpackClientInventoryTick(JetpackItem item, ItemStack itemStack, Level level, Entity entity, int i, boolean bl){
+        if (entity instanceof  Player player) {
+            boolean bl1 = !player.isSpectator() && !player.isCreative();
+            if (player.getItemBySlot(EquipmentSlot.CHEST).is(itemStack.getItem()) && Minecraft.getInstance().options.keyJump.isDown() && item.canLaunchJetpack(itemStack)) {
+                if (player.tickCount % (6 + level.random.nextInt(4)) == 0) level.playSound(player,player,Registration.JETPACK_FLIGHT.get(), SoundSource.PLAYERS,1.0F,1.0F);
+                player.lerpMotion(Math.sin(Math.toRadians(-player.getYRot())) * 0.2, 0.8, Math.cos(Math.toRadians(player.getYRot())) * 0.2);
+                double angle = Math.toRadians(DirectionUtil.rotationCyclic(player.getYRot()));
+                for (ParticleOptions b : new ParticleOptions[]{ParticleTypes.SMALL_FLAME, ParticleTypes.SMOKE}) {
+                    if (level.random.nextFloat() >= 0.3){
+                        level.addParticle(b, false, DirectionUtil.rotateXByCenter(angle, player.getX(), 0.1875D, -0.21875D), player.getY() + 0.675, DirectionUtil.rotateZByCenter(angle, player.getZ(), 0.1875D, -0.21875D), 0.0, 0.0, 0.0);
+                        level.addParticle(b, false, DirectionUtil.rotateXByCenter(angle, player.getX(), -0.1875D, -0.21875D), player.getY() + 0.675, DirectionUtil.rotateZByCenter(angle, player.getZ(), -0.1875D, -0.21875D), 0.0, 0.0, 0.0);
+                    }
+                }
+                if (bl1) Factocrafty.NETWORK.sendToServer(new FactocraftyJetpackLaunchPacket(item.consumeFuel(itemStack),true));
+            } else if (bl1) Factocrafty.NETWORK.sendToServer(new FactocraftyJetpackLaunchPacket(ItemStack.EMPTY,false));
+        }
     }
     public static void ledColor() {
         BlockColor blockColors = (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null && blockAndTintGetter.getBlockEntity(blockPos) instanceof FactocraftyLedBlockEntity be && blockState.getValue(FactocraftyLedBlock.LIGHT_VALUE) > 0 && i == 0 ? be.actualRgb.get() : 0xFFFFFF;

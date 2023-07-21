@@ -77,7 +77,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
             ItemStack stack = player.getItemInHand(interactionHand);
             boolean fluidItem = ItemContainerUtil.isFluidContainer(stack);
-            boolean isWrench = stack.is(Registration.WRENCH.get());
+            boolean isWrench = stack.getItem() instanceof WrenchItem;
             if (!level.isClientSide) {
                 if (!stack.isEmpty() && level.getBlockEntity(blockPos) instanceof IFactoryStorage be && (isWrench || fluidItem && !be.getTanks().isEmpty())) {
                     if (fluidItem) {

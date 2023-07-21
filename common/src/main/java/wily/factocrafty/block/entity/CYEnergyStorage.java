@@ -79,6 +79,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
         if (!getTransport().canExtract()) return  EnergyTransaction.EMPTY;
 
         if (!simulate) {
+            if (!storedTier.supportTier(transaction.tier)) energyExtracted = transaction.tier.convertEnergyTo(energyExtracted,storedTier);
             energy -= energyExtracted;
             this.be.setChanged();
         }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CEC",
+    "#F#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "E": {
+      "item": "factocrafty:enricher"
+    },
+    "C": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "F": {
+      "item": "factocrafty:basic_fluid_tank"
+    }
+  },
+  "result": {
+    "item": "factocrafty:gas_infuser"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CIR",
+    "#MI",
+    "P#C"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "I": {
+      "item": "factocrafty:iron_plate"
+    },
+    "R": {
+      "item": "factocrafty:refined_iron"
+    },
+    "M": {
+      "item": "factocrafty:electric_motor"
+    },
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "P": {
+      "item": "factocrafty:power_unit"
+    }
+  },
+  "result": {
+    "item": "factocrafty:chainsaw"
+  }
+}

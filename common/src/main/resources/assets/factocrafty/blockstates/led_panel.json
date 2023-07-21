@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north":	{ "model": "factocrafty:block/led_panel","x": 90 },
+		"facing=south":	{ "model": "factocrafty:block/led_panel", "x": -90 },
+		"facing=west":	{ "model": "factocrafty:block/led_panel", "x": -90, "y": 90 },
+		"facing=east":	{ "model": "factocrafty:block/led_panel", "x": 90, "y": 90 },
+		"facing=up":	{ "model": "factocrafty:block/led_panel" },
+		"facing=down":	{ "model": "factocrafty:block/led_panel", "x": 180 }
+	}
+}

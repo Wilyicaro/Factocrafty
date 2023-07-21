@@ -1,9 +1,9 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "factocrafty:crafting_shaped",
   "pattern": [
-    "#C#",
-    "BBB",
-    "#C#"
+    "#B#",
+    "#CI",
+    "#B#"
   ],
   "key": {
     "#": {
@@ -13,6 +13,16 @@
       "item": "factocrafty:battery"
     },
     "C": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:battery",
+          "factocrafty:tin_cable",
+          "factocrafty:battery"
+        ]
+      }
+    },
+    "I": {
       "item": "factocrafty:insulated_copper_cable"
     }
   },

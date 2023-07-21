@@ -167,7 +167,7 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
                     if (ItemContainerUtil.isFluidContainer(stack)) {
                         ItemContainerUtil.ItemFluidContext context = null;
                         if (slot.transportState.canInsert() && !ItemContainerUtil.getFluid(stack).isEmpty()) context = ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), stack);
-                        if (slot.transportState.canExtract()) tank.drain((context = ItemContainerUtil.fillItem(stack,tank.getFluidStack())).fluidStack(),false);
+                        if (slot.transportState.canExtract() && !tank.getFluidStack().isEmpty()) tank.drain((context = ItemContainerUtil.fillItem(stack,tank.getFluidStack())).fluidStack(),false);
                         if (context != null) inventory.setItem(i,context.container());
                     }
                 }

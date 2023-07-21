@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "CameraInjector",
+    "ClientLivingEntityInjector",
     "FogRendererInjector",
     "GameRendererInjector",
     "ItemRendererInjector",
@@ -12,8 +13,7 @@
     "MinecraftInjector",
     "MixinSpriteContents",
     "PlayerModelInjector",
-    "PlayerRendererInjector",
-    "ClientLivingEntityInjector"
+    "PlayerRendererInjector"
   ],
   "mixins": [
     "AxeItemRedirector",

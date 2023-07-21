@@ -49,10 +49,7 @@ public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implement
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return SimpleFluidLoggedBlock.super.getStateForPlacement(IFactocraftyOrientableBlock.super.getStateForPlacement(ctx),ctx);
     }
-    @Override
-    public FluidState getFluidState(BlockState state) {
-        return SimpleFluidLoggedBlock.super.getFluidState(state);
-    }
+
 
 
     @Override
@@ -64,9 +61,7 @@ public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implement
         return (getter.getBlockEntity(pos) instanceof FactocraftyFluidTankBlockEntity fbe) ? FluidStackHooks.getLuminosity(fbe.fluidTank.getFluidStack(), null, null) : 0;
     }
 
-    @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);

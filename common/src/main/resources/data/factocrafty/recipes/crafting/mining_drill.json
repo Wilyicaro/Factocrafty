@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     " II",
-    "#CI",
-    " # "
+    "#MI",
+    "C# "
   ],
   "key": {
     "#": {
@@ -11,6 +11,9 @@
     },
     "I": {
       "item": "factocrafty:iron_plate"
+    },
+    "M": {
+      "item": "factocrafty:electric_motor"
     },
     "C": {
       "item": "factocrafty:power_unit"

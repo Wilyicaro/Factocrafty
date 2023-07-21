@@ -1,8 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#I",
-    "C#"
+    " #I",
+    "IC#",
+    " I "
   ],
   "key": {
     "#": {

@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "factocrafty:block/machines/gas_infuser_front",
+		"top": "factocrafty:block/machines/gas_infuser_top",
+		"bottom": "factocrafty:block/machines/gas_infuser_bottom",
+		"side": "factocrafty:block/machines/gas_infuser_side"
+	}
+}

@@ -74,6 +74,7 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage {
         int energyExtracted = Math.min(energy, Math.min(this.maxInOut, transaction.energy));
 
         if (!simulate) {
+            if (!storedTier.supportTier(transaction.tier)) energyExtracted = transaction.tier.convertEnergyTo(energyExtracted,storedTier);
             energy -= energyExtracted;
             setEnergyStored(energy);
         }

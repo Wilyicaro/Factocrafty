@@ -9,6 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -188,6 +189,8 @@ public class FactocraftyOre {
 
         private final MapColor color;
         private final ArmorMaterial armor;
+
+        private final Rarity rarity;
         private final net.minecraft.world.item.Tier tier;
 
         public final List<Derivative> derivatives;
@@ -197,15 +200,18 @@ public class FactocraftyOre {
                 return key.getIngredient();
             }
         });;
-        Material(MapColor color, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, Derivative... derivatives) {
+        Material(MapColor color, Rarity rarity, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, Derivative... derivatives) {
             this.color = color;
             this.armor = armor;
             this.tier = tier;
             this.derivatives = List.of(derivatives);
+            this.rarity = rarity;
 
         }
 
-
+        Material(MapColor color, @Nullable ArmorMaterial armor, @Nullable net.minecraft.world.item.Tier tier, Derivative... derivatives) {
+            this(color, Rarity.COMMON, armor,tier,derivatives);
+        }
         Material(MapColor color, Derivative... derivatives) {
             this(color, null, null, derivatives);
         }
@@ -213,6 +219,10 @@ public class FactocraftyOre {
             this(color, derivatives);
             this.registeredDerivatives = registeredDerivatives;
 
+        }
+
+        public Rarity getRarity() {
+            return rarity;
         }
 
         public boolean isEmpty(){

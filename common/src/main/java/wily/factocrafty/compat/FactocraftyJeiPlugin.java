@@ -56,7 +56,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
         registration.getCraftingCategory().addCategoryExtension(SolderingCraftingRecipe.class,(s)-> (builder, craftingGridHelper, focuses) -> {
-            craftingGridHelper.createAndSetInputs(builder, s.getIngredients().stream().map((i)->Arrays.stream(i.getItems()).peek((stack-> {if (stack.getItem() instanceof ICraftyEnergyItem<?> e) e.getCraftyEnergy(stack).receiveEnergy(e.getCraftyEnergy(stack).getMaxEnergyStored(),false);})).toList()).toList(),0,0);
+            craftingGridHelper.createAndSetInputs(builder, s.getIngredients().stream().map((i)->Arrays.stream(i.getItems()).peek((stack-> {if (stack.getItem() == Registration.SOLDERING_IRON.get() &&  stack.getItem() instanceof ICraftyEnergyItem<?> e) e.getCraftyEnergy(stack).receiveEnergy(e.getCraftyEnergy(stack).getMaxEnergyStored(),false);})).toList()).toList(),0,0);
             Ingredient ing = Ingredient.of(focuses.getItemStackFocuses(RecipeIngredientRole.INPUT).map(f-> f.getTypedValue().getIngredient()));
             List<Ingredient> inputs = new ArrayList<>(s.getAdditionalInputs());
             if (!ing.isEmpty())

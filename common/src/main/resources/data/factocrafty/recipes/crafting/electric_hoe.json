@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ##",
+    "PM ",
+    "CP "
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:refined_iron"
+    },
+    "P": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "M": {
+      "item": "factocrafty:electric_motor"
+    },
+    "C": {
+      "item": "factocrafty:small_power_unit"
+    }
+  },
+  "result": {
+    "item": "factocrafty:electric_hoe"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "factocrafty:item/tool/electric/rgb_controller"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 0.01
+      },
+      "model": "factocrafty:item/rgb_led_controller_low"
+    },
+    {
+      "predicate": {
+        "factocrafty:charge_ratio": 0.25
+      },
+      "model": "factocrafty:item/rgb_led_controller_charged"
+    }
+  ]
+}

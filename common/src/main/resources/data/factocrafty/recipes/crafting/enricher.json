@@ -1,0 +1,34 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "I#I",
+    "RFR",
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "I": {
+      "item": "factocrafty:refined_iron"
+    },
+    "F": {
+      "item": "factocrafty:machine_frame"
+    },
+    "C": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable",
+          "factocrafty:coil"
+        ]
+      }
+    },
+    "R": {
+      "item": "factocrafty:fluid_cell"
+    }
+  },
+  "result": {
+    "item": "factocrafty:enricher"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "factocrafty:crafting_shaped",
   "pattern": [
     "#A#",
     "RFR",
@@ -13,7 +13,12 @@
       "item": "factocrafty:machine_frame"
     },
     "C": {
-      "item": "factocrafty:circuit_board"
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable"
+        ]
+      }
     },
     "R": {
       "item": "minecraft:glass_pane"

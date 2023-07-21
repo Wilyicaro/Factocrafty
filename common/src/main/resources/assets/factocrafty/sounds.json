@@ -108,5 +108,21 @@
       }
 
     ]
+  },
+  "player.jetpack_flight": {
+    "subtitle": "subtitles.factocrafty.jetpack_flight",
+    "sounds": [
+      {
+        "name": "factocrafty:jetpack_flight1"
+      }
+    ]
+  },
+  "player.jetpack_engine_start": {
+    "subtitle": "subtitles.factocrafty.jetpack_flighta",
+    "sounds": [
+      {
+        "name": "factocrafty:jetpack_flight"
+      }
+    ]
   }
 }

@@ -19,6 +19,13 @@
     "factocrafty:generator",
     "factocrafty:geothermal_generator",
     "factocrafty:electric_furnace",
-    "factocrafty:macerator"
-    ]
+    "factocrafty:macerator",
+    "factocrafty:reinforced_glass",
+    "factocrafty:reinforced_glass_pane",
+    "factocrafty:basic_fluid_tank",
+    "factocrafty:advanced_fluid_tank",
+    "factocrafty:high_fluid_tank",
+    "factocrafty:advanced_functional_storage",
+    "factocrafty:high_functional_storage"
+  ]
 }

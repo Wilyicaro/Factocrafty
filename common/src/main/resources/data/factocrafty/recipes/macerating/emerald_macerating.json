@@ -1,0 +1,9 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:emerald"
+  },
+  "result": "factocrafty:emerald_dust",
+  "experience": 0.2,
+  "processtime": 200
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "factocrafty:block/cube_all_overlay",
+  "textures": {
+    "all": "factocrafty:block/led",
+    "all_overlay": "factocrafty:block/led_overlay"
+  }
+}

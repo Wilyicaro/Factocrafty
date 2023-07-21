@@ -1,0 +1,34 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "###",
+    "RBR",
+    "ACA"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:mono_solar_panel"
+    },
+    "B": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:copper_cable",
+          "factocrafty:advanced_battery"
+        ]
+      }
+    },
+    "R": {
+      "item": "factocrafty:refined_iron"
+    },
+    "C": {
+      "item": "factocrafty:carbon_plate"
+    },
+    "A": {
+      "item": "factocrafty:advanced_alloy"
+    }
+  },
+  "result": {
+    "item": "factocrafty:mono_advanced_solar_panel"
+  }
+}

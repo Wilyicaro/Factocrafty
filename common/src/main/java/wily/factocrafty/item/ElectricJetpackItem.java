@@ -24,12 +24,12 @@ public class ElectricJetpackItem extends JetpackItem implements ICraftyEnergyIte
     public FactoryCapacityTiers energyTier;
 
     @Override
-    protected boolean canLaunchJetpack(ItemStack stack) {
+    public boolean canLaunchJetpack(ItemStack stack) {
         return getCraftyEnergy(stack).getEnergyStored() >= 1;
     }
 
     @Override
-    protected ItemStack consumeFuel(ItemStack stack) {
+    public ItemStack consumeFuel(ItemStack stack) {
         getCraftyEnergy(stack).consumeEnergy(1,false);
         return stack;
     }
