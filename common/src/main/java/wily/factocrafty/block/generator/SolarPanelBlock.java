@@ -4,6 +4,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,6 +19,8 @@ import wily.factocrafty.block.FactocraftyStorageBlock;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factocrafty.block.generator.entity.SolarPanelBlockEntity;
 import wily.factoryapi.base.FactoryCapacityTiers;
+
+import java.util.List;
 
 public class SolarPanelBlock extends FactocraftyStorageBlock implements IFactocraftyCYEnergyBlock {
     public SolarPanelTiers solarTier;
@@ -31,7 +36,10 @@ public class SolarPanelBlock extends FactocraftyStorageBlock implements IFactocr
         }));
         solarTier = tier;
     }
-
+    @Override
+    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(capacityTier.getEnergyTierComponent(false));
+    }
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
