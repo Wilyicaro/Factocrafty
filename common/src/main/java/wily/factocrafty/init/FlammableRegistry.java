@@ -20,7 +20,5 @@ public class FlammableRegistry {
         fireBlock.setFlammable(Registration.STRIPPED_RUBBER_LOG.get(), 5, 20);
         fireBlock.setFlammable(Registration.STRIPPED_RUBBER_WOOD.get(), 5, 5);
         fireBlock.setFlammable(Registration.RUBBER_PLANKS.get(), 5, 20);
-
-
     }
 }

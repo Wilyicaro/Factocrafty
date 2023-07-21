@@ -5,12 +5,8 @@ import com.ibm.icu.impl.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.crafting.Ingredient;
-import wily.factocrafty.Factocrafty;
-import wily.factocrafty.item.FactocraftyOre;
+import wily.factocrafty.util.registering.FactocraftyOre;
 import wily.factoryapi.base.Progress;
-
-import static wily.factocrafty.util.JsonUtils.jsonElement;
 
 public class EnricherRecipe extends FactocraftyMachineRecipe{
     protected FactocraftyOre.Material matter = FactocraftyOre.Material.EMPTY;

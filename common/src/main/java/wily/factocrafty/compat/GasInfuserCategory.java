@@ -1,27 +1,17 @@
 package wily.factocrafty.compat;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.fluid.FluidStack;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import wily.factocrafty.client.screens.EnricherScreen;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.client.screens.GasInfuserScreen;
-import wily.factocrafty.item.FactocraftyOre;
-import wily.factocrafty.recipes.*;
 import wily.factocrafty.recipes.GasInfuserRecipe;
 import wily.factocrafty.util.ScreenUtil;
-
-import java.util.List;
 
 import static wily.factocrafty.util.ScreenUtil.renderScaled;
 

@@ -13,10 +13,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import wily.factocrafty.datagen.FactocraftyWorldGenBootstrap;
 import wily.factocrafty.entity.CorruptedEnderMan;
+import wily.factocrafty.init.CompostableRegistry;
 import wily.factocrafty.init.FlammableRegistry;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.ElectricArmorItem;
-import wily.factocrafty.item.FactocraftyOre;
+import wily.factocrafty.util.registering.FactocraftyOre;
 import wily.factocrafty.util.registering.RegisterUtil;
 
 import java.util.function.Predicate;
@@ -27,7 +28,9 @@ import static wily.factocrafty.init.Registration.getModResource;
 public class ModEvents {
     public static void init(){
         LifecycleEvent.SETUP.register(() -> {
-            AxeItemHooks.addStrippable(RUBBER_LOG.get(), Registration.STRIPPED_RUBBER_LOG.get()); FlammableRegistry.bootStrap(); FuelRegistry.register(300, Registration.RUBBER_FENCE.get(), Registration.RUBBER_FENCE_GATE.get());
+            AxeItemHooks.addStrippable(RUBBER_LOG.get(), Registration.STRIPPED_RUBBER_LOG.get());
+            FlammableRegistry.bootStrap();
+            CompostableRegistry.bootStrap();
         });
         biomeLoadingEvent();
         EntityAttributeRegistry.register(Registration.CORRUPTED_ENDERMAN, CorruptedEnderMan::createAttributes);

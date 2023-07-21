@@ -1,31 +1,17 @@
 package wily.factocrafty.block.machines.entity;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.item.FactocraftyOre;
+import wily.factocrafty.util.registering.FactocraftyOre;
 import wily.factocrafty.recipes.EnricherRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.tag.Items;
@@ -38,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static wily.factocrafty.item.FactocraftyOre.Material.ingCache;
+import static wily.factocrafty.util.registering.FactocraftyOre.Material.ingCache;
 
 public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
 

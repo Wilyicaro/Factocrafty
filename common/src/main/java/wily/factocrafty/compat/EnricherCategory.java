@@ -1,29 +1,20 @@
 package wily.factocrafty.compat;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import wily.factocrafty.client.screens.EnricherScreen;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
-import wily.factocrafty.item.FactocraftyOre;
+import wily.factocrafty.util.registering.FactocraftyOre;
 import wily.factocrafty.recipes.EnricherRecipe;
 import wily.factocrafty.util.ScreenUtil;
 
 import java.util.List;
-
-import static wily.factocrafty.client.screens.FactocraftyMachineScreen.getProgressScaled;
-import static wily.factocrafty.compat.FactocraftyJeiUtils.fromProgress;
 
 public class EnricherCategory extends FactocraftyProgressCategory<EnricherRecipe>{
 

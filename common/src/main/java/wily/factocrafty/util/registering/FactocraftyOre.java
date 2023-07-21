@@ -1,9 +1,8 @@
-package wily.factocrafty.item;
+package wily.factocrafty.util.registering;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +16,8 @@ import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.FactocraftyArmorMaterials;
+import wily.factocrafty.item.FactocraftyTiers;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -181,9 +182,9 @@ public class FactocraftyOre {
         SYNTHETIC_RUBBER(MapColor.COLOR_BLACK, COMMON_DROP),
         WOOD(MapColor.WOOD,DUST.withCustomName("sawdust")),
         SILICON(MapColor.COLOR_LIGHT_GRAY,COMMON_DROP,REFINED,NUGGET.withSuffix("fragment")),
-        GRAPHENE(MapColor.COLOR_GRAY,COMMON_DROP, DUST),
+        GRAPHENE(MapColor.COLOR_GRAY, Rarity.UNCOMMON,COMMON_DROP, DUST),
         GRAPHITE(MapColor.COLOR_BLACK,INGOT),
-        IRIDIUM(MapColor.TERRACOTTA_WHITE,COMMON_DROP, PLATE, NUGGET),
+        IRIDIUM(MapColor.TERRACOTTA_WHITE, Rarity.EPIC,COMMON_DROP, PLATE, NUGGET),
         STEEL(MapColor.COLOR_GRAY,BLOCK,INGOT,PLATE,NUGGET,DUST);
 
 
@@ -214,6 +215,9 @@ public class FactocraftyOre {
         }
         Material(MapColor color, Derivative... derivatives) {
             this(color, null, null, derivatives);
+        }
+        Material(MapColor color, Rarity rarity, Derivative... derivatives) {
+            this(color, rarity,null, null, derivatives);
         }
         Material(MapColor color, List<Derivative> registeredDerivatives,Derivative... derivatives) {
             this(color, derivatives);

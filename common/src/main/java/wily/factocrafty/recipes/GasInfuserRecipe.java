@@ -1,16 +1,12 @@
 package wily.factocrafty.recipes;
 
 import com.google.gson.JsonObject;
-import com.ibm.icu.impl.Pair;
 import dev.architectury.fluid.FluidStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
-import wily.factocrafty.item.FactocraftyOre;
 import wily.factocrafty.util.FluidStackUtil;
 import wily.factoryapi.base.IPlatformFluidHandler;
-import wily.factoryapi.base.Progress;
 
 public class GasInfuserRecipe extends FactocraftyMachineRecipe{
     protected FluidStack otherFluid = FluidStack.empty();

@@ -34,7 +34,7 @@ import wily.factocrafty.block.RubberLog;
 import wily.factocrafty.gen.BasinFeature;
 import wily.factocrafty.gen.RubberTreeFoliagePlacer;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.item.FactocraftyOre;
+import wily.factocrafty.util.registering.FactocraftyOre;
 import wily.factocrafty.util.registering.FactocraftyFluids;
 import wily.factocrafty.util.registering.RegisterUtil;
 
