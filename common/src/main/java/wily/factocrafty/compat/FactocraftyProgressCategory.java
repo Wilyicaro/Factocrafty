@@ -3,13 +3,11 @@ package wily.factocrafty.compat;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.architectury.fluid.FluidStack;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -17,7 +15,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.RegistryAccess;
@@ -30,7 +27,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
-import wily.factocrafty.recipes.SolderingCraftingRecipe;
+import wily.factocrafty.util.FactocraftyRecipeUtil;
 import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.IFactoryDrawableType;
 
@@ -38,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static wily.factocrafty.client.screens.BasicMachineScreen.BACKGROUND_LOCATION;
-import static wily.factocrafty.client.screens.FactocraftyMachineScreen.WIDGETS;
 import static wily.factocrafty.compat.FactocraftyJeiUtils.fromProgress;
 import static wily.factocrafty.util.ScreenUtil.renderScaled;
 import static wily.factoryapi.util.StorageStringUtil.*;
@@ -158,9 +154,8 @@ public class FactocraftyProgressCategory<T extends Recipe<Container>> implements
         }
         if (input ==null) {
             input = builder.addSlot(RecipeIngredientRole.INPUT, 38, 6);
-            for (Ingredient i : recipe.getIngredients()) {
-                    if (!i.isEmpty())input.addIngredients(i);
-                }
+            for (Ingredient i : recipe.getIngredients()) if (!i.isEmpty())input.addItemStack(FactocraftyRecipeUtil.getFactocraftyStack(i).copyWithCount(recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getIngredientCount(): 1));
+
         }
 
     }

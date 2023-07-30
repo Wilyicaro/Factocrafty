@@ -1,0 +1,13 @@
+{
+  "type": "factocrafty:recycling",
+  "ingredient": {
+    "item": "factocrafty:scrap_box"
+  },
+  "result": {
+    "item": "factocrafty:scrap",
+    "count": 9,
+    "chance": 1.0
+  },
+  "experience": 0.03,
+  "processtime": 150
+}

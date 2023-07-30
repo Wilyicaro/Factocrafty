@@ -157,7 +157,7 @@ public class FactocraftyProcessMenu<T extends BlockEntity> extends AbstractConta
             storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)-> Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncEnergyPacket(be.getBlockPos(), e.getEnergyStored(), e.getStoredTier())));
             if (storage instanceof IFactoryProcessableStorage progressableStorage){
                  progressableStorage.getProgresses().forEach((p) -> {
-                    Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncProgressPacket(be.getBlockPos(), progressableStorage.getProgresses().indexOf(p), p.get(),p.maxProgress));
+                    Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncProgressPacket(be.getBlockPos(), progressableStorage.getProgresses().indexOf(p), p.getValues()));
                 });
                  progressableStorage.itemSides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),0,d.ordinal(),s.transportState, s.getSlotIndex(progressableStorage.getSlotsIdentifiers())))));
                  progressableStorage.energySides().ifPresent((i) -> i.forEach((d,s) -> Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftyStateButtonPacket(be.getBlockPos(),1,d.ordinal(),s,0))));

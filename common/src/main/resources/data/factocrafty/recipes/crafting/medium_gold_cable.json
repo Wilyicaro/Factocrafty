@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "factocrafty:rubber"
+    },
+    {
+      "tag": "factocrafty:rubber"
+    },
+    {
+      "tag": "factocrafty:rubber"
+    },
+    {
+      "tag": "factocrafty:rubber"
+    },
+    {
+      "item": "factocrafty:gold_cable"
+    }
+  ],
+  "result": {
+    "item": "factocrafty:medium_insulated_gold_cable"
+  }
+}

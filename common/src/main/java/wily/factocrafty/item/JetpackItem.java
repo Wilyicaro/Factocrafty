@@ -10,7 +10,7 @@ import wily.factocrafty.FactocraftyClient;
 public abstract class JetpackItem extends ArmorItem {
     public final ArmorMaterial armorMaterial;
     public JetpackItem(ArmorMaterial armorMaterial, Properties properties) {
-        super(armorMaterial, Type.CHESTPLATE, properties);
+        super(armorMaterial, Type.CHESTPLATE, properties.durability(-1));
         this.armorMaterial = armorMaterial;
 
     }

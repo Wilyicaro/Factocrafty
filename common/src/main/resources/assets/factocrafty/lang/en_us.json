@@ -116,7 +116,6 @@
   "block.factocrafty.iron_scaffolding": "Iron Scaffolding",
   "block.factocrafty.iron_fence": "Iron Fence",
 
-  "block.factocrafty.luminator": "Luminator",
   "block.factocrafty.recycler": "Recycler",
   "block.factocrafty.fermenter": "Fermenter",
 
@@ -150,8 +149,12 @@
   "block.factocrafty.insulated_copper_cable": "Insulated Copper Cable",
   "block.factocrafty.gold_cable": "Gold Cable",
   "block.factocrafty.insulated_gold_cable": "Insulated Gold Cable",
+  "block.factocrafty.high_insulated_gold_cable": "H-Insulated Gold Cable",
+  "block.factocrafty.medium_insulated_gold_cable": "M-Insulated Gold Cable",
   "block.factocrafty.silver_cable": "Silver Cable",
   "block.factocrafty.insulated_silver_cable": "Insulated Silver Cable",
+  "block.factocrafty.high_insulated_silver_cable": "H-Insulated Silver Cable",
+  "block.factocrafty.medium_insulated_silver_cable": "M-Insulated Silver Cable",
   "block.factocrafty.crystal_cable": "Crystal Cable",
 
   "_comment": "Transformer",
@@ -529,6 +532,7 @@
   "category.factocrafty.recipe.enriching": "Enriching",
   "category.factocrafty.recipe.gaseous_infusion": "Gaseous Infusion",
   "category.factocrafty.recipe.smelting": "Electric Smelting",
+  "category.factocrafty.recipe.scrap_box": "Scrap Box Items",
   "category.factocrafty.keyboard.armor_features" :  "Factocrafty Armor Features",
 
   "key.factocrafty.v" : "Vision change",

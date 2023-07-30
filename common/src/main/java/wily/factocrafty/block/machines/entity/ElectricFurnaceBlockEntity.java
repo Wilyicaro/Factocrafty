@@ -2,18 +2,21 @@ package wily.factocrafty.block.machines.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.FactoryCapacityTiers;
+import wily.factoryapi.base.Progress;
 
-public class ElectricFurnaceBlockEntity extends FactocraftyMachineBlockEntity {
+public class ElectricFurnaceBlockEntity extends FactocraftyMachineBlockEntity<SmeltingRecipe> {
 
 
 
     public ElectricFurnaceBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super( FactocraftyMenus.ELECTRIC_FURNACE, FactoryCapacityTiers.BASIC,RecipeType.SMELTING,Registration.ELECTRIC_FURNACE_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(FactocraftyMenus.ELECTRIC_FURNACE, FactoryCapacityTiers.BASIC,RecipeType.SMELTING,Registration.ELECTRIC_FURNACE_BLOCK_ENTITY.get(), blockPos, blockState);
+        progress = new Progress(Progress.Identifier.DEFAULT,79,35,200);
     }
 
     @Override

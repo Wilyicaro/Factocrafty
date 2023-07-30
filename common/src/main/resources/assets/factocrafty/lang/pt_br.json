@@ -111,7 +111,6 @@
   "block.factocrafty.iron_scaffolding": "Andaime de ferro",
   "block.factocrafty.iron_fence": "Cerca de ferro",
 
-  "block.factocrafty.luminator": "Luminária",
   "block.factocrafty.recycler": "Reciclador",
   "block.factocrafty.fermenter": "Fermentador",
 
@@ -145,8 +144,12 @@
   "block.factocrafty.insulated_copper_cable": "Cabo de cobre isolado",
   "block.factocrafty.gold_cable": "Cabo de ouro",
   "block.factocrafty.insulated_gold_cable": "Cabo de ouro isolado",
+  "block.factocrafty.high_insulated_gold_cable": "Cabo de ouro isolado G",
+  "block.factocrafty.medium_insulated_gold_cable": "Cabo de ouro isolado M",
   "block.factocrafty.silver_cable": "Cabo de prata",
   "block.factocrafty.insulated_silver_cable": "Cabo de prata isolado",
+  "block.factocrafty.high_insulated_silver_cable": "Cabo de prata isolado G",
+  "block.factocrafty.medium_insulated_silver_cable": "Cabo de prata isolado M",
   "block.factocrafty.crystal_cable": "Cabo de cristal",
 
   "_comment": "Transformer",
@@ -487,6 +490,8 @@
   "tooltip.factocrafty.config": "Configuração do %s",
   "tooltip.factocrafty.config.input_type.item": "%s de itens",
   "tooltip.factocrafty.config.input_type.fluid": "%s de fluídos",
+  "tooltip.factocrafty.config.infusion_mode.mixer": "%s de mistura",
+  "tooltip.factocrafty.config.infusion_mode.electrolyzer": "%s de eletrolização",
   "tooltip.factocrafty.item.components": "Componentes",
 
   "_comment": "Recipe Categories",
@@ -494,6 +499,7 @@
   "category.factocrafty.recipe.compressing": "Compressão",
   "category.factocrafty.recipe.extracting": "Extração",
   "category.factocrafty.recipe.recycling": "Reciclagem",
+  "category.factocrafty.recipe.scrap_box": "Items da caixa de sucatas",
   "category.factocrafty.recipe.refining": "Refinação",
   "category.factocrafty.recipe.enriching": "Enriquecimento",
   "category.factocrafty.recipe.gaseous_infusion": "Infusão gasosa",

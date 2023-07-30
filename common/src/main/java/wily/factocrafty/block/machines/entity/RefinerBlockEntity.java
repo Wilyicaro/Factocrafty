@@ -43,8 +43,8 @@ public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-        addBasicSlots(slots, player);
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        return getBasicSlots(player);
     }
 
     @Override

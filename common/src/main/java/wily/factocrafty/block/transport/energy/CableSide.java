@@ -1,4 +1,4 @@
-package wily.factocrafty.block.cable;
+package wily.factocrafty.block.transport.energy;
 
 import net.minecraft.util.StringRepresentable;
 

@@ -1,31 +1,23 @@
 package wily.factocrafty.compat;
 
+import it.unimi.dsi.fastutil.Pair;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
-import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
-import mezz.jei.api.ingredients.IIngredientType;
-import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
-import wily.factocrafty.block.cable.CableTiers;
 import wily.factocrafty.client.screens.ElectricFurnaceScreen;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.RefinerScreen;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.ScrapBoxItem;
 import wily.factocrafty.recipes.ShapedTagRecipe;
 import wily.factocrafty.recipes.ShapelessTagRecipe;
 import wily.factocrafty.recipes.SolderingCraftingRecipe;
@@ -37,8 +29,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static wily.factocrafty.compat.FactocraftyJeiUtils.getRecipes;
-import static wily.factocrafty.init.Registration.getModResource;
+import static wily.factocrafty.util.FactocraftyRecipeUtil.getRecipes;
+
 
 @JeiPlugin
 public class FactocraftyJeiPlugin  implements IModPlugin {
@@ -86,13 +78,13 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
         registration.addRecipeCategories(new FactocraftyProgressCategory<>(RefinerScreen.BACKGROUND_LOCATION,FactocraftyJeiRecipeTypes.REFINING,registration.getJeiHelpers().getGuiHelper(), FactocraftyDrawables.MACHINE_PROGRESS, 145,63));
         registration.addRecipeCategories(new EnricherCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new GasInfuserCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new ScrapBoxCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         Level world = Minecraft.getInstance().level;
         RecipeManager recipeManager = world.getRecipeManager();
-        //registration.addRecipes(RecipeTypes.CRAFTING, List.of(new ShapelessRecipe(getModResource("soldering_board_recipe"),"", CraftingBookCategory.MISC,new ItemStack(Registration.CIRCUIT_BOARD.get()), NonNullList.of(Ingredient.EMPTY,Ingredient.of(Registration.SOLDERING_IRON.get()),Ingredient.of(Registration.CIRCUIT_BOARD.get()),Ingredient.of(CableTiers.TIN.getBlock())))));
         registration.addRecipes(FactocraftyJeiRecipeTypes.SMELTING, getRecipes(recipeManager, RecipeType.SMELTING));
         registration.addRecipes(FactocraftyJeiRecipeTypes.MACERATING, getRecipes(recipeManager, Registration.MACERATOR_RECIPE.get()));
         registration.addRecipes(FactocraftyJeiRecipeTypes.COMPRESSING, getRecipes(recipeManager, Registration.COMPRESSOR_RECIPE.get()));
@@ -101,6 +93,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
         registration.addRecipes(FactocraftyJeiRecipeTypes.REFINING, getRecipes(recipeManager, Registration.REFINER_RECIPE.get()));
         registration.addRecipes(FactocraftyJeiRecipeTypes.ENRICHING, getRecipes(recipeManager, Registration.ENRICHER_RECIPE.get()));
         registration.addRecipes(FactocraftyJeiRecipeTypes.GAS_INFUSION, getRecipes(recipeManager, Registration.GASEOUS_INFUSION_RECIPE.get()));
+        registration.addRecipes(FactocraftyJeiRecipeTypes.SCRAP_BOX_ITEMS,List.of(()-> ScrapBoxItem.SCRAP_ITEMS.stream().map(p-> Pair.of(p.first().get(),p.second())).toList()));
 
     }
 
@@ -117,6 +110,7 @@ public class FactocraftyJeiPlugin  implements IModPlugin {
         registration.addRecipeCatalyst(Registration.REFINER.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.REFINING);
         registration.addRecipeCatalyst(Registration.ENRICHER.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.ENRICHING);
         registration.addRecipeCatalyst(Registration.GAS_INFUSER.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.GAS_INFUSION);
+        registration.addRecipeCatalyst(Registration.SCRAP_BOX.get().asItem().getDefaultInstance(),FactocraftyJeiRecipeTypes.SCRAP_BOX_ITEMS);
 
 
     }

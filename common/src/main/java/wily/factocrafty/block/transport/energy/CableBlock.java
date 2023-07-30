@@ -1,10 +1,13 @@
-package wily.factocrafty.block.cable;
+package wily.factocrafty.block.transport.energy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -16,22 +19,25 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
-import wily.factocrafty.block.cable.entity.CableBlockEntity;
+import wily.factocrafty.block.transport.energy.entity.CableBlockEntity;
+import wily.factocrafty.init.Registration;
+import wily.factocrafty.util.registering.FactocraftyCables;
+import wily.factoryapi.base.CraftyTransaction;
 import wily.factoryapi.base.FactoryCapacityTiers;
+import wily.factoryapi.base.ICraftyEnergyStorage;
 import wily.factoryapi.util.VoxelShapeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class InsulatedCableBlock extends BaseEntityBlock implements IFactocraftyCYEnergyBlock {
+public class CableBlock extends BaseEntityBlock implements IFactocraftyCYEnergyBlock {
     public static final EnumProperty<CableSide> NORTH = EnumProperty.create("north", CableSide.class);
     public static final EnumProperty<CableSide> EAST = EnumProperty.create("east", CableSide.class);
     public static final EnumProperty<CableSide> SOUTH = EnumProperty.create("south", CableSide.class);
@@ -40,10 +46,10 @@ public class InsulatedCableBlock extends BaseEntityBlock implements IFactocrafty
     public static final Map<Direction, EnumProperty<CableSide>> PROPERTY_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.EAST, EAST, Direction.SOUTH, SOUTH, Direction.WEST, WEST));
 
 
-    protected CableTiers cableTier;
-    public InsulatedCableBlock(CableTiers tier, Properties properties) {
+    protected FactocraftyCables cableTier;
+    public CableBlock(FactocraftyCables cable, Properties properties) {
         super(properties);
-        this.cableTier = tier;
+        this.cableTier = cable;
         setDefaultState();
         for (BlockState blockState : this.getStateDefinition().getPossibleStates()) {
             SHAPES_CACHE.put(blockState, this.calculateShape(blockState));
@@ -56,12 +62,20 @@ public class InsulatedCableBlock extends BaseEntityBlock implements IFactocrafty
     protected void setDefaultState(){
         this.registerDefaultState(defaultBlockState().setValue(NORTH, CableSide.NONE).setValue(EAST, CableSide.NONE).setValue(SOUTH, CableSide.NONE).setValue(WEST, CableSide.NONE));
     }
-
+    @Override
+    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+        super.stepOn(level, blockPos, blockState, entity);
+        if (cableTier.insulation < 1 && entity instanceof LivingEntity && level.random.nextFloat() <= 0.45  && level.getBlockEntity(blockPos) instanceof CableBlockEntity be && be.energyStorage.getEnergyStored() > 100){
+            if (entity.hurt(level.damageSources().lightningBolt(), be.energyStorage.consumeEnergy(new CraftyTransaction((int) Math.min(400, Math.pow(be.energyStorage.getEnergyStored() * (1 - cableTier.insulation), cableTier.energyTier.getConductivity())), be.energyStorage.storedTier).reduce(25), false).energy)){
+                level.playSound(null,entity.getOnPos(), Registration.ELECTRIC_SHOCK.get(), SoundSource.BLOCKS,1.0F,1.0F);
+            }
+        }
+    }
     private static final VoxelShape SHAPE_CUBE = Block.box(6, 0, 6, 10, 4, 10);
 
-    protected static VoxelShape getSideShape(Direction d, CableTiers tier, boolean insulated) {return VoxelShapeUtil.rotateHorizontal(insulated ? tier.insulatedSideShape : tier.sideShape,d);}
+    protected static VoxelShape getSideShape(Direction d, FactocraftyCables tier) {return VoxelShapeUtil.rotateHorizontal(tier.cableShape.shapes[0],d);}
 
-    public static VoxelShape getUpShape(Direction d, CableTiers tier, boolean insulated) {return VoxelShapeUtil.rotateHorizontal(insulated ? tier.insulatedUpShape :tier.upShape,d);}
+    public static VoxelShape getUpShape(Direction d, FactocraftyCables tier) {return VoxelShapeUtil.rotateHorizontal(tier.cableShape.shapes[1],d);}
     protected static final Map<BlockState, VoxelShape> SHAPES_CACHE = Maps.newHashMap();
 
     protected VoxelShape calculateShape(BlockState blockState) {
@@ -70,11 +84,11 @@ public class InsulatedCableBlock extends BaseEntityBlock implements IFactocrafty
         if (cableTier != null) for (Direction direction : Direction.Plane.HORIZONTAL) {
             CableSide cableSide = blockState.getValue(PROPERTY_BY_DIRECTION.get(direction));
             if (cableSide == CableSide.SIDE || cableSide == CableSide.DOWN) {
-                voxelShape = Shapes.or(voxelShape, getSideShape(direction,cableTier, insulated));
+                voxelShape = Shapes.or(voxelShape, getSideShape(direction,cableTier));
                 continue;
             }
             if (cableSide != CableSide.UP) continue;
-            voxelShape = Shapes.or(voxelShape, Shapes.or(getUpShape(direction,cableTier,insulated), getSideShape(direction,cableTier,insulated)));
+            voxelShape = Shapes.or(voxelShape, Shapes.or(getUpShape(direction,cableTier), getSideShape(direction,cableTier)));
         }
         return voxelShape;
     }

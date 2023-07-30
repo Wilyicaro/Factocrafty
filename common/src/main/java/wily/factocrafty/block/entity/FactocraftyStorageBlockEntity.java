@@ -118,13 +118,14 @@ public class FactocraftyStorageBlockEntity extends BlockEntity implements IFacto
         return getTanks().isEmpty() ?  Optional.empty(): Optional.of(fluidSides);
     }
 
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-
+    @Override
+    public List<IPlatformFluidHandler> getTanks() {
+        List<IPlatformFluidHandler> tanks = IFactoryStorage.super.getTanks();
+        addTanks(tanks);
+        return tanks;
     }
 
-
-
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    protected void addTanks(List<IPlatformFluidHandler> list) {
 
     }
 

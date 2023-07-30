@@ -54,10 +54,6 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
     protected int INPUT_SLOT = 0;
     protected int OUTPUT_SLOT = 2;
 
-    protected boolean isInputFree(){
-        Recipe<Container> rcp = getActualRecipe(null,true);
-        return rcp != null && canMachineProcess(rcp);
-    }
 
     public RecipeType<T> getRecipeType() {
         return recipeType;
@@ -68,8 +64,9 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
         return level.getRecipeManager().getAllRecipesFor(recipeType).stream().sorted(Comparator.comparingInt( ca-> ca instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getDiff() : 0)).toList();
     }
 
-    @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
+
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots = super.getSlots(player);
         slots.add(new FactoryItemSlot(this.inventory, SlotsIdentifier.INPUT,TransportState.INSERT,INPUT_SLOT, 56,17){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
@@ -82,6 +79,7 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
         });
         slots.add(new FactocraftyCYItemSlot(this, DRAIN_SLOT, 56,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
         slots.add(new FactocraftyResultSlot(this,player, OUTPUT_SLOT,116,35).withType(FactoryItemSlot.Type.BIG));
+        return slots;
     }
     public boolean isInputSlotActive(){
         return true;
@@ -116,8 +114,8 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
 
 
 
-    public boolean isProcessing(){
-        return (progress.getInt(0) > 0 || (isInputFree() && inventory.getItem(OUTPUT_SLOT).getCount() < inventory.getMaxStackSize()) && energyStorage.getEnergyStored() > 0);
+    public boolean isActive(){
+        return progress.first().get() > 0;
     }
     protected boolean canMachineProcess(@Nullable Recipe<?> recipe){
         return canProcessItem(recipe,inventory,INPUT_SLOT,OUTPUT_SLOT);
@@ -167,28 +165,21 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
     public void tick() {
         if (!level.isClientSide) {
             boolean bl2 = false;
-            if (getMachineSound() != null && isProcessing() && progress.getInt(0) % 75 == 0) {
-                level.playSound(null, worldPosition, getMachineSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-            }
 
             super.tick();
 
-            boolean bl3 = isInputFree();
-            if (this.isProcessing()) {
-
-                T recipe;
-                if (bl3) {
-                    recipe = getActualRecipe(null,true);
-                } else {
-                    recipe = null;
-                }
-                if (recipe != null) this.progress.maxProgress = getTotalProcessTime();
-
-                if (canMachineProcess(recipe)) {
+            if (energyStorage.getEnergyStored() > 0) {
+                T recipe = getActualRecipe(null,true);
 
 
-                    if (this.progress.get()[0] >= this.progress.maxProgress) {
-                        this.progress.get()[0] = 0;
+                if (recipe != null && canMachineProcess(recipe)) {
+                    this.progress.first().maxProgress = getTotalProcessTime();
+                    if (getMachineSound() != null && progress.first().get() % 75 == 0) {
+                        level.playSound(null, worldPosition, getMachineSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    }
+
+                    if (this.progress.first().get() >= this.progress.first().maxProgress) {
+                        this.progress.first().set(0);
                         if (process(recipe)) {
                             this.setRecipeUsed(recipe);
                         }
@@ -198,18 +189,18 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
                     int energy = (recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getEnergyConsume() : 3) * (int)Math.pow(72,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK));
                     if (energyStorage.getEnergyStored() > energy) {
                         bl2 = true;
-                        energyStorage.consumeEnergy(new ICraftyEnergyStorage.EnergyTransaction(energy, energyStorage.supportableTier), false);
-                        ++this.progress.get()[0];
-                    } else if (!isProcessing()){
-                        this.progress.setInt(0, 0);
+                        energyStorage.consumeEnergy(new CraftyTransaction(energy, energyStorage.supportableTier), false);
+                        this.progress.first().add((int) Math.pow(getTotalProcessTime(), storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK)));
+                    } else if (!isActive()){
+                        this.progress.first().set(0);
                     }
-                } else if (this.progress.getInt(0) > 0) {
-                    this.progress.setInt(0, Mth.clamp(this.progress.getInt(0) - 2, 0, this.progress.maxProgress));
+                } else if (this.progress.first().get() > 0) {
+                    this.progress.first().shrink(2);
                 }
             }
 
             if (getBlockState().getValue(FactocraftyMachineBlock.ACTIVE) != bl2) {
-                level.setBlock(getBlockPos(), getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, this.isProcessing()), 3);
+                level.setBlock(getBlockPos(), getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, bl2), 3);
             }
             if (bl2) {
                 this.setChanged();
@@ -218,18 +209,17 @@ public class FactocraftyMachineBlockEntity<T extends Recipe<Container>> extends 
 
     }
     public int getTotalProcessTime() {
-        double d = Math.pow(100,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK));
-        if (level == null ) return (int) (progress.maxProgress / d);
+        if (level == null ) return progress.first().maxProgress;
         Optional<? extends Recipe<Container>> optRcp = Optional.ofNullable(getActualRecipe(null,true));
         if (optRcp.isPresent())
-            if( optRcp.get() instanceof AbstractFactocraftyProcessRecipe rcp) {return (int) (rcp.getMaxProcess() / d);}
-            else if( optRcp.get() instanceof AbstractCookingRecipe rcp) {return (int) (rcp.getCookingTime() / d);}
-        return (int) (200 / d);
+            if( optRcp.get() instanceof AbstractFactocraftyProcessRecipe rcp) {return rcp.getMaxProcess();}
+            else if( optRcp.get() instanceof AbstractCookingRecipe rcp) {return rcp.getCookingTime();}
+        return 200;
     }
 
     @Override
-    public void addProgresses(List<Progress> list) {
-        list.add(progress);
+    public List<Progress> getProgresses() {
+        return new ArrayList<>(List.of(progress));
     }
 
     public void setRecipeUsed(@Nullable Recipe<?> recipe) {

@@ -1,4 +1,4 @@
-package wily.factocrafty.block.cable.entity;
+package wily.factocrafty.block.transport.energy.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -7,10 +7,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.cable.CableSide;
-import wily.factocrafty.block.cable.CableTiers;
-import wily.factocrafty.block.cable.InsulatedCableBlock;
-import wily.factocrafty.block.cable.SolidCableBlock;
+import wily.factocrafty.block.transport.energy.CableSide;
+import wily.factocrafty.util.registering.FactocraftyCables;
+import wily.factocrafty.block.transport.energy.CableBlock;
+import wily.factocrafty.block.transport.energy.SolidCableBlock;
 
 import java.util.Map;
 
@@ -21,16 +21,16 @@ public class SolidCableBlockEntity extends CableBlockEntity {
 
 
 
-    public SolidCableBlockEntity(CableTiers tier, BlockPos blockPos, BlockState blockState) {
+    public SolidCableBlockEntity(FactocraftyCables tier, BlockPos blockPos, BlockState blockState) {
         this(tier.getBlockEntity(),tier, blockPos, blockState);
     }
-    public SolidCableBlockEntity(BlockEntityType<?> type, CableTiers tier, BlockPos blockPos, BlockState blockState) {
+    public SolidCableBlockEntity(BlockEntityType<?> type, FactocraftyCables tier, BlockPos blockPos, BlockState blockState) {
         super(type, tier,blockPos, blockState);
 
     }
 @Override
     public void updateAllStates(){
-        Map<Direction, EnumProperty<CableSide>> directionProperty = InsulatedCableBlock.PROPERTY_BY_DIRECTION;
+        Map<Direction, EnumProperty<CableSide>> directionProperty = CableBlock.PROPERTY_BY_DIRECTION;
 
         BlockState blockState = getBlockState();
         for (Direction direction : Direction.values()){

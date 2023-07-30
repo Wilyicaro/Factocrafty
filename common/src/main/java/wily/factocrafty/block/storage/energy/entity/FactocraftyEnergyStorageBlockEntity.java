@@ -59,9 +59,10 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlock
     }
 
     @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots= super.getSlots(player);
         slots.add(new FactocraftyCYItemSlot(this, FILL_SLOT, 61,17, TransportState.INSERT, FactoryCapacityTiers.BASIC));
         slots.add(new FactocraftyCYItemSlot(this, DRAIN_SLOT, 61,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
+        return slots;
     }
 }

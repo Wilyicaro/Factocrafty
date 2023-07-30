@@ -38,7 +38,7 @@ public class EnricherScreen extends ChangeableInputMachineScreen{
 
     @Override
     public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
-        list.add(new FactocraftyDrawableButton(leftPos + 157,topPos + 71,(i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncProgressPacket(eBe.getBlockPos(), eBe.getProgresses().indexOf(eBe.matterAmount),new int[1],eBe.matterAmount.maxProgress)), Component.translatable("tooltip.factocrafty.config.eject"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(2)));
+        list.add(new FactocraftyDrawableButton(leftPos + 157,topPos + 71,(i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncProgressPacket(eBe.getBlockPos(), eBe.getProgresses().indexOf(eBe.matterAmount),eBe.matterAmount.getValues())), Component.translatable("tooltip.factocrafty.config.eject"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(2)));
         return super.addButtons(list);
     }
 
@@ -53,13 +53,13 @@ public class EnricherScreen extends ChangeableInputMachineScreen{
     protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
         super.renderStorageTooltips(graphics,i,j);
         if (resultTank.inMouseLimit(i,j)) graphics.renderTooltip(font, getFluidTooltip("tooltip.factory_api.fluid_stored", rBe.resultTank),i, j);
-        if (matterProgress.inMouseLimit(i,j)) graphics.renderTooltip(font, eBe.getMatterMaterial().isEmpty() ?   eBe.getMatterMaterial().getComponent() : Component.translatable("tooltip.factocrafty.matter", eBe.getMatterMaterial().getComponent().getString(),eBe.matterAmount.get()[0]),i, j);
+        if (matterProgress.inMouseLimit(i,j)) graphics.renderTooltip(font, eBe.getMatterMaterial().isEmpty() ?   eBe.getMatterMaterial().getComponent() : Component.translatable("tooltip.factocrafty.matter", eBe.getMatterMaterial().getComponent().getString(),eBe.matterAmount.first().get()),i, j);
     }
     @Override
     protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
         int c = eBe.getMatterMaterial().getColor().col;
         RenderSystem.setShaderColor(ScreenUtil.getRed(c),ScreenUtil.getGreen(c),ScreenUtil.getBlue(c),1.0F);
-        matterProgress.drawProgress(graphics,eBe.matterAmount.get()[0], eBe.matterAmount.maxProgress);
+        matterProgress.drawProgress(graphics,eBe.matterAmount.first().get(), eBe.matterAmount.first().maxProgress);
         RenderSystem.setShaderColor(1.0F,1.0F,1.0F,1.0F);
         super.renderStorageSprites(graphics, i, j);
         resultTank.drawAsFluidTank(graphics, rBe.resultTank.getFluidStack(),(int) rBe.resultTank.getMaxFluid(), true);

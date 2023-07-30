@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,13 +24,16 @@ public class WrenchItem extends Item {
         super(properties.durability(225));
     }
 
-
+    protected boolean canUseWrench(ItemStack stack){
+        return true;
+    }
     @Override
     public InteractionResult useOn(UseOnContext useOnContext) {
         Level level = useOnContext.getLevel();
         BlockPos pos = useOnContext.getClickedPos();
         Player player = useOnContext.getPlayer();
-        if (level.getBlockEntity(pos) instanceof FactocraftyStorageBlockEntity be){
+        ItemStack stack = useOnContext.getItemInHand();
+        if (level.getBlockEntity(pos) instanceof FactocraftyStorageBlockEntity be && canUseWrench(stack)){
             level.playSound(null, pos, Registration.WRENCH_TIGHT.get(), SoundSource.PLAYERS,1.0F,1.0F);
             BlockState blockState = be.getBlockState();
             FluidState fluidState = level.getFluidState(pos);

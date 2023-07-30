@@ -2,20 +2,21 @@ package wily.factocrafty.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.ICraftyEnergyItem;
-import wily.factoryapi.base.ICraftyEnergyStorage;
-import wily.factoryapi.base.TransportState;
+import wily.factoryapi.base.*;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<CYItemEnergyStorage> {
+public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<CYItemEnergyStorage>,FactocraftyDiggerItem {
 
 
     private final FactoryCapacityTiers energyTier;
@@ -29,10 +30,30 @@ public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<
         list.add(getEnergyTier().getEnergyTierComponent(false));
         list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
     }
+    public boolean isActivated(ItemStack itemStack){
+        return itemStack.getOrCreateTag().getBoolean("activated");
+    }
+
+    @Override
+    protected boolean canUseWrench(ItemStack stack) {
+        return isActivated(stack) && getCraftyEnergy(stack).getEnergyStored() > 0;
+    }
 
     @Override
     protected void whenUseWrench(int used, UseOnContext useOnContext) {
-        getCraftyEnergy(useOnContext.getItemInHand()).consumeEnergy(new ICraftyEnergyStorage.EnergyTransaction(used, energyTier),false);
+        getCraftyEnergy(useOnContext.getItemInHand()).consumeEnergy(new CraftyTransaction(used, energyTier),false);
+    }
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        ItemStack enabled = player.getItemInHand(interactionHand);
+        enabled.getOrCreateTag().putBoolean("activated",!isActivated(enabled));
+        return InteractionResultHolder.sidedSuccess(enabled,!level.isClientSide);
+    }
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
+        if (isActivated(stack) && !level.isClientSide && level.random.nextFloat() <= 0.7 && entity.tickCount % 18 == 0)
+            getCraftyEnergy(stack).consumeEnergy(1,false);
+        super.inventoryTick(stack, level, entity, i, bl);
     }
 
     @Override

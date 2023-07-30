@@ -18,7 +18,8 @@
   "mixins": [
     "AxeItemRedirector",
     "EntityInjector",
-    "LivingEntityInjector"
+    "LivingEntityInjector",
+    "MultiplayerGameModeInjector"
   ],
   "injectors": {
     "defaultRequire": 1

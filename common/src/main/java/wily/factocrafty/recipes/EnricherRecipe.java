@@ -16,7 +16,7 @@ public class EnricherRecipe extends FactocraftyMachineRecipe{
     }
 
     public boolean matchesMatter(FactocraftyOre.Material matter, Progress progress) {
-        return !matter.isEmpty() && progress.getInt(0) >= getMatter().second && matter == getMatter().first;
+        return !matter.isEmpty() && progress.first().get() >= getMatter().second && matter == getMatter().first;
     }
 
     @Override

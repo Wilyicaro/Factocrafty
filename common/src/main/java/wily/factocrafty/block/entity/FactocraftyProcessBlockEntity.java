@@ -41,15 +41,9 @@ public class FactocraftyProcessBlockEntity extends FactocraftyStorageBlockEntity
     public int getInitialEnergyCapacity(){
         return defaultEnergyTier.getDefaultCapacity() / 2;
     }
-    public int getProgress() {
-        return 1;
-    }
 
 
-    public Progress progress = new Progress(Progress.Identifier.DEFAULT, getProgress(), 200);
-
-    @Override
-    public void addProgresses(List<Progress> list) {}
+    public Progress progress = new Progress(Progress.Identifier.DEFAULT,80,40,200);
 
     public boolean hasInventory(){
         return true;

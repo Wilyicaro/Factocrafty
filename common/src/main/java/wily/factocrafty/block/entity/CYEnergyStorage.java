@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
+import wily.factoryapi.base.CraftyTransaction;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.ICraftyEnergyStorage;
 import wily.factoryapi.base.TransportState;
@@ -43,13 +44,13 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
         return storedTier;
     }
     @Override
-    public EnergyTransaction receiveEnergy(EnergyTransaction transaction, boolean simulate) {
+    public CraftyTransaction receiveEnergy(CraftyTransaction transaction, boolean simulate) {
+        if (transaction.isEmpty()) return CraftyTransaction.EMPTY;
         int energyReceived = Math.min(getSpace(), Math.min(this.maxInOut, transaction.energy));
-        if (!getTransport().canInsert()) return  EnergyTransaction.EMPTY;
 
         if (!simulate && energyReceived != 0) {
 
-            if ( supportableTier.supportTier(transaction.tier)) {
+            if (supportableTier.supportTier(transaction.tier)) {
                 if (storedTier.supportTier(transaction.tier)){
                     energyReceived = transaction.tier.convertEnergyTo(energyReceived, storedTier);
                     transaction.tier = storedTier;
@@ -63,7 +64,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
                     if (be.getBlockState().getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock)
                         energyBlock.unsupportedTierBurn(be.getLevel(), be.getBlockPos());
                 }
-                return new EnergyTransaction((int) ((transaction.tier.getConductivity() - supportableTier.getConductivity()) * energyReceived), transaction.tier);
+                return new CraftyTransaction((int) ((transaction.tier.getConductivity() - supportableTier.getConductivity()) * energyReceived), transaction.tier);
             }
 
             energy += energyReceived;
@@ -71,20 +72,20 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
         }
 
-        return new EnergyTransaction(energyReceived, transaction.tier);
+        return new CraftyTransaction(energyReceived, transaction.tier);
     }
 
-    public EnergyTransaction consumeEnergy(EnergyTransaction transaction, boolean simulate) {
+    public CraftyTransaction consumeEnergy(CraftyTransaction transaction, boolean simulate) {
+        if (transaction.isEmpty()) return  CraftyTransaction.EMPTY;
         int energyExtracted = Math.min(energy, Math.min(this.maxInOut, transaction.energy));
-        if (!getTransport().canExtract()) return  EnergyTransaction.EMPTY;
 
         if (!simulate) {
-            if (!storedTier.supportTier(transaction.tier)) energyExtracted = transaction.tier.convertEnergyTo(energyExtracted,storedTier);
+            if (!storedTier.supportTier(transaction.tier)) energyExtracted = storedTier.convertEnergyTo(energyExtracted,transaction.tier);
             energy -= energyExtracted;
             this.be.setChanged();
         }
 
-        return new EnergyTransaction(energyExtracted, storedTier);
+        return new CraftyTransaction(energyExtracted, storedTier);
     }
 
     @Override

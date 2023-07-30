@@ -42,17 +42,18 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
         additionalSyncInt.add(matterInt);
     }
 
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-        addBasicSlots(slots,player);
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots = super.getBasicSlots(player);
         slots.add(new FactoryItemSlot(inventory,SlotsIdentifier.INPUT,TransportState.INSERT, MATTER_SLOT, 56, 35){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
                 return (getItem().isEmpty() || ingCache.getUnchecked(getMatterMaterial()).test(itemStack)) && Arrays.stream(FactocraftyOre.Material.values()).anyMatch((m)-> m.getIngredient().test(itemStack));
             }
         });
+        return slots;
     }
     protected int getMatterSpace(){
-        return matterAmount.maxProgress - matterAmount.getInt(0);
+        return matterAmount.first().maxProgress - matterAmount.first().get();
     }
     public static int getMatterValue( ItemStack stack){
         for (TagKey<Item> i : customMatterValues.keySet()) {
@@ -78,10 +79,10 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
                 if(getMatterMaterial().isEmpty()) {
                     matterInt.set(m.ordinal());
                 }
-                matterAmount.setInt(0,matterAmount.getInt(0) + inventory.extractItem(MATTER_SLOT,getMatterSpace() / i ,false).getCount() * i);
+                matterAmount.first().add(inventory.extractItem(MATTER_SLOT,getMatterSpace() / i ,false).getCount() * i);
                 }
             }
-            if (matterAmount.getInt(0) == 0 && !getMatterMaterial().isEmpty()) matterInt.set(0);
+            if (matterAmount.first().get() == 0 && !getMatterMaterial().isEmpty()) matterInt.set(0);
         }
     }
 
@@ -92,9 +93,10 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    public void addProgresses(List<Progress> list) {
-        super.addProgresses(list);
-        list.add(matterAmount);
+    public List<Progress> getProgresses() {
+        List<Progress> progresses = super.getProgresses();
+        progresses.add(matterAmount);
+        return progresses;
     }
 
     @Override
@@ -107,7 +109,7 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
         super.processResults(recipe);
         if (recipe instanceof EnricherRecipe rcp){
             if (rcp.hasFluidResult() && !rcp.getResultFluid().isEmpty()) resultTank.fill(rcp.getResultFluid(),false);
-            matterAmount.setInt(0, matterAmount.getInt(0) - rcp.getMatter().second);
+            matterAmount.first().shrink(rcp.getMatter().second);
         }
     }
 

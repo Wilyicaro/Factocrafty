@@ -4,22 +4,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.item.ElectricCraftingToolItem;
-import wily.factocrafty.util.CompoundTagUtils;
+import wily.factocrafty.util.CompoundTagUtil;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -50,7 +45,7 @@ public class ShapelessTagRecipe extends CustomRecipe {
             if (!itemStack2.isEmpty()) {{
                     if (!remainInput.removeIf((ing -> {
                         //Factocrafty.LOGGER.info( ing.test(itemStack2) + "-" +ingredients.get(ing).isEmpty());
-                        return ing.test(itemStack2) &&(ingredients.get(ing).isEmpty() || CompoundTagUtils.compoundContains(ingredients.get(ing), itemStack2.getOrCreateTag()));
+                        return ing.test(itemStack2) &&(ingredients.get(ing).isEmpty() || CompoundTagUtil.compoundContains(ingredients.get(ing), itemStack2.getOrCreateTag()));
                     }))) {
                         return false;
                     }
@@ -93,7 +88,7 @@ public class ShapelessTagRecipe extends CustomRecipe {
             CraftingBookCategory craftingBookCategory = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", (String)null), CraftingBookCategory.MISC);
             JsonElement element = jsonElement(json,  "ingredients");
             Map<Ingredient, CompoundTag> map = new HashMap<>();
-            Consumer<JsonObject> c = obj-> map.put(Ingredient.fromJson(obj), CompoundTagUtils.getFromJson(obj));
+            Consumer<JsonObject> c = obj-> map.put(Ingredient.fromJson(obj), CompoundTagUtil.getFromJson(obj));
             if (element instanceof JsonArray a) a.forEach(j-> {
                 if (j instanceof JsonObject obj) c.accept(obj);
             }); else {
@@ -106,7 +101,7 @@ public class ShapelessTagRecipe extends CustomRecipe {
             } else {
                 JsonObject obj = GsonHelper.getAsJsonObject(json, "result");
                 ItemStack itemStack = ShapedRecipe.itemStackFromJson(obj);
-                CompoundTag nbt =  CompoundTagUtils.getFromJson(obj);
+                CompoundTag nbt =  CompoundTagUtil.getFromJson(obj);
                 if (!nbt.isEmpty()) itemStack.setTag(nbt);
                 return new ShapelessTagRecipe(resourceLocation, string, craftingBookCategory, itemStack, map);
             }

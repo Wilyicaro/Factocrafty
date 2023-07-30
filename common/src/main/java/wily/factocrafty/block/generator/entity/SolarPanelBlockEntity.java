@@ -6,12 +6,11 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.DaylightDetectorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
-import wily.factocrafty.block.cable.InsulatedCableBlock;
+import wily.factocrafty.block.transport.energy.CableBlock;
 import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.block.generator.SolarPanelTiers;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
@@ -42,9 +41,10 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
         return defaultEnergyTier.energyCapacity;
     }
 
-    @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots = super.getSlots(player);
         slots.add(new FactocraftyCYItemSlot(this,0,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC));
+        return slots;
     }
 
 
@@ -67,11 +67,11 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
     }
     public void tick() {
         if (!level.isClientSide) {
-            tickEnergy.set(energyStorage.receiveEnergy(new ICraftyEnergyStorage.EnergyTransaction(getEnergyPerTick(),solarTier.energyTier), false).energy);
+            tickEnergy.set(energyStorage.receiveEnergy(new CraftyTransaction(getEnergyPerTick(),solarTier.energyTier), false).energy);
             super.tick();
             for (Direction direction : Direction.values()) {
                 BlockPos pos = getBlockPos().relative(direction);
-                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof InsulatedCableBlock)) {
+                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof CableBlock)) {
                     IFactoryStorage CYEbe = (IFactoryStorage) level.getBlockEntity(pos);
                     if (CYEbe != null)
                         CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(direction, e));

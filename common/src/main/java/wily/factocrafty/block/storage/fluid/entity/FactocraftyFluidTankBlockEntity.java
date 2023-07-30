@@ -67,9 +67,10 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyProcessBlockEnti
     }
 
     @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots= super.getSlots(player);
         slots.add(new FactocraftyFluidItemSlot(this,DRAIN_SLOT, 51,17,SlotsIdentifier.OUTPUT, TransportState.INSERT));
         slots.add(new FactocraftyFluidItemSlot(this,FILL_SLOT, 51,53,SlotsIdentifier.INPUT, TransportState.EXTRACT));
+        return slots;
     }
 }

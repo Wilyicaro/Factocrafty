@@ -24,6 +24,7 @@ public class GeneratorScreen extends FactocraftyMachineScreen<GeneratorBlockEnti
     @Override
     protected void init() {
         super.init();
+        defaultProgress = FactocraftyDrawables.ENERGY_PROGRESS.createStatic(leftPos,topPos);
         energyCellType.posX = leftPos + 112;
         this.addConfigToGui(new FactocraftyConfigWidget(leftPos + imageWidth,  topPos + 46, true,Component.translatable("gui.factocrafty.window.equipment"), FactocraftyDrawables.getInfoIcon(1))
                 ,(config)-> new SlotsWindow(config,leftPos + imageWidth + 21,topPos, this, menu.equipmentSlots));
@@ -35,8 +36,7 @@ public class GeneratorScreen extends FactocraftyMachineScreen<GeneratorBlockEnti
     @Override
     protected void renderStorageSprites(GuiGraphics graphics, int i, int j) {
         super.renderStorageSprites(graphics, i, j);
-        FactocraftyDrawables.BURN_PROGRESS.drawProgress(graphics,leftPos + 56, topPos + 36,getMenu().be.burnTime.getInt(0), getMenu().be.burnTime.maxProgress);
-        FactocraftyDrawables.ENERGY_PROGRESS.drawProgress(graphics,leftPos + 80, topPos + 39, getMenu().be.progress.get()[0],getMenu().be.progress.maxProgress);
+        FactocraftyDrawables.BURN_PROGRESS.drawProgress(graphics, leftPos, topPos,getMenu().be.burnTime);
         FactocraftyDrawables.MINI_FLUID_TANK.drawAsFluidTank(graphics,leftPos + 56, topPos + 14, getMenu().be.fluidTank.getFluidStack(),(int) getMenu().be.fluidTank.getMaxFluid(), true);
     }
 

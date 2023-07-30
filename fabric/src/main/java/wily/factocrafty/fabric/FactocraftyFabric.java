@@ -26,6 +26,7 @@ public class FactocraftyFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Factocrafty.init();
+
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> (SingleVariantStorage<FluidVariant>) be.fluidTank, Registration.GEOTHERMAL_GENERATOR_BLOCK_ENTITY.get());
         ItemLike[] items = new ItemLike[]{Registration.FLUID_CELL.get(),Registration.FLEX_JETPACK.get()};
         for (FactocraftyFluidTanks value : FactocraftyFluidTanks.BASIC_FLUID_TANK.values()) items = ArrayUtils.add(items, value.get().asItem());

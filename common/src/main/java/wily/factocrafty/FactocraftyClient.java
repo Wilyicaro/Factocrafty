@@ -46,8 +46,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyWoodType;
-import wily.factocrafty.block.cable.CableTiers;
-import wily.factocrafty.block.cable.InsulatedCableBlock;
+import wily.factocrafty.util.registering.FactocraftyCables;
+import wily.factocrafty.block.transport.energy.CableBlock;
 import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
 import wily.factocrafty.client.renderer.block.FactocraftyLiquidTankRenderer;
 import wily.factocrafty.client.renderer.block.RubberHangingSignRenderer;
@@ -229,7 +229,7 @@ public class FactocraftyClient {
         });
         FactocraftyWoodType.addWoodType(FactocraftyWoodType.RUBBER);
         for (Block a : Registration.BLOCKS.getRegistrar())
-            if (a instanceof InsulatedCableBlock)
+            if (a instanceof CableBlock)
                 FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + BuiltInRegistries.BLOCK.getKey(a).getPath() + "_in_hand"),"inventory"));
 
 
@@ -238,7 +238,7 @@ public class FactocraftyClient {
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex"),""));
         FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex_fall"),""));
         RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get(),FactocraftyFluids.OXYGEN.get(),FactocraftyFluids.FLOWING_OXYGEN.get(),FactocraftyFluids.HYDROGEN.get(),FactocraftyFluids.FLOWING_HYDROGEN.get());
-        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), CableTiers.CRYSTAL.getBlock());
+        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), FactocraftyCables.CRYSTAL_CABLE.get());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.RUBBER_HANGING_SIGN_BLOCK_ENTITY.get(), RubberHangingSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.TREETAP_BLOCK_ENTITY.get(), TreeTapRenderer::new);

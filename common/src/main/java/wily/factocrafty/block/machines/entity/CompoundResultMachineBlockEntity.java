@@ -16,7 +16,6 @@ import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.FactoryItemSlot;
-import wily.factoryapi.base.IPlatformItemHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -33,14 +32,15 @@ public class CompoundResultMachineBlockEntity<T extends AbstractFactocraftyProce
 
 
     @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-        super.addSlots(slots,player);
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots = super.getSlots(player);
         slots.set(OUTPUT_SLOT, new FactocraftyResultSlot(this,player, OUTPUT_SLOT,129,35).withType(FactoryItemSlot.Type.BIG));
         slots.add(new FactocraftyResultSlot(this, player, OTHER_RESULT_SLOT, 107,35));
+        return slots;
     }
 
-    protected void addBasicSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-        super.addSlots(slots,player);
+    protected NonNullList<FactoryItemSlot> getBasicSlots(@Nullable Player player) {
+        return super.getSlots(player);
     }
     @Override
     protected SoundEvent getMachineSound() {
@@ -67,6 +67,6 @@ public class CompoundResultMachineBlockEntity<T extends AbstractFactocraftyProce
     @Override
     protected void processIngredients(T recipe) {
         super.processIngredients(recipe);
-        if (recipe.hasFluidIngredient()) fluidTank.drain(recipe.getFluidIngredient(),false);
+        if (recipe.hasFluidIngredient() && !recipe.getFluidIngredient().isEmpty()) fluidTank.drain(recipe.getFluidIngredient(),false);
     }
 }

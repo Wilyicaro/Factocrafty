@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
@@ -28,19 +29,20 @@ public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
     }
 
     public IPlatformFluidHandler lavaTank = FactoryAPIPlatform.getFluidHandlerApi(FluidStack.bucketAmount() * 6, this, f -> FuelRegistry.get(new ItemStack(f.getFluid().getBucket())) > 0, SlotsIdentifier.LAVA,TransportState.EXTRACT_INSERT);
-    @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, Player player) {
-        super.addSlots(slots, player);
+    public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
+        NonNullList<FactoryItemSlot> slots = super.getSlots(player);
         slots.set(0,new FactoryItemSlot(this.inventory, SlotsIdentifier.FUEL,TransportState.EXTRACT_INSERT,0,56,53){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
                 return lavaTank.isFluidValid(0, ItemContainerUtil.getFluid(itemStack)) || fluidTank.isFluidValid(0, ItemContainerUtil.getFluid(itemStack));
             }
         });
+        return slots;
     }
     @Override
     protected void consumeFuel(){
-        burnTime.setInt(0,200);
+        burnTime.first().maxProgress = 200;
+        burnTime.first().set(200);
         lavaTank.drain(getPlatformFluidConsume(1), false);
     }
     @Override

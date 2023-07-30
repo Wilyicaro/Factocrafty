@@ -23,7 +23,7 @@ public class RecyclerCategory extends FactocraftyProgressCategory<FactocraftyMac
     @Override
     public void draw(FactocraftyMachineRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
-        recipeSlotsView.findSlotByName("output").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) renderScaled(graphics.pose(), Math.round(recipe.getResultChance() * 100) + "%",100,49,0.5F,0x7E7E7E,false);})));
+        recipeSlotsView.findSlotByName("output").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) renderScaled(graphics.pose(), Math.round(recipe.getResultChance() * 100) + "%",102,49,0.5F,0x7E7E7E,false);})));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class RecyclerCategory extends FactocraftyProgressCategory<FactocraftyMac
         IRecipeSlotBuilder input = builder.addSlot(RecipeIngredientRole.INPUT, 38, 6);
         for (Ingredient i : recipe.getIngredients()) {
             if (!i.isEmpty())input.addIngredients(i);
-            else input.addItemStacks(BuiltInRegistries.ITEM.stream().map(Item::getDefaultInstance).toList());
+            else input.addItemStacks(BuiltInRegistries.ITEM.stream().map(Item::getDefaultInstance).filter(stack-> !stack.isEmpty()).toList());
         }
     }
 

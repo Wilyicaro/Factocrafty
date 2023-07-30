@@ -2,6 +2,7 @@ package wily.factocrafty.item;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import wily.factoryapi.base.CraftyTransaction;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.ICraftyEnergyStorage;
 import wily.factoryapi.base.TransportState;
@@ -52,34 +53,35 @@ public class CYItemEnergyStorage implements ICraftyEnergyStorage {
         return tag.getCompound("CYEnergy");
     }
     @Override
-    public EnergyTransaction receiveEnergy(EnergyTransaction transaction, boolean simulate) {
-
+    public CraftyTransaction receiveEnergy(CraftyTransaction transaction, boolean simulate) {
+        if (transaction.isEmpty()) return  CraftyTransaction.EMPTY;
         int energyReceived = Math.min(getSpace(), Math.min(this.maxInOut, transaction.energy));
         int energy = getEnergyStored();
         if (!simulate) {
             if ( supportableTier.supportTier(transaction.tier)) setStoredTier(transaction.tier);
             else {
-                return EnergyTransaction.EMPTY;
+                return CraftyTransaction.EMPTY;
             }
             energy += energyReceived;
             setEnergyStored(energy);
 
         }
 
-        return new EnergyTransaction(energyReceived, transaction.tier);
+        return new CraftyTransaction(energyReceived, transaction.tier);
     }
 
-    public EnergyTransaction consumeEnergy(EnergyTransaction transaction, boolean simulate) {
+    public CraftyTransaction consumeEnergy(CraftyTransaction transaction, boolean simulate) {
+        if (transaction.isEmpty()) return  CraftyTransaction.EMPTY;
         int energy = getEnergyStored();
         int energyExtracted = Math.min(energy, Math.min(this.maxInOut, transaction.energy));
 
         if (!simulate) {
-            if (!storedTier.supportTier(transaction.tier)) energyExtracted = transaction.tier.convertEnergyTo(energyExtracted,storedTier);
+            if (!storedTier.supportTier(transaction.tier)) energyExtracted = storedTier.convertEnergyTo(energyExtracted,transaction.tier);
             energy -= energyExtracted;
             setEnergyStored(energy);
         }
 
-        return new EnergyTransaction(energyExtracted, transaction.tier);
+        return new CraftyTransaction(energyExtracted, transaction.tier);
     }
 
     @Override

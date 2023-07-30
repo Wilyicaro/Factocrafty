@@ -2,12 +2,9 @@ package wily.factocrafty.compat;
 
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import mezz.jei.api.recipe.IFocusFactory;
-import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.renderer.Rect2i;
 import org.jetbrains.annotations.NotNull;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyMachineScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
@@ -31,7 +28,7 @@ public class FactocraftyMachineGuiHandler implements IGuiContainerHandler<Factoc
     public @NotNull Collection<IGuiClickableArea> getGuiClickableAreas(FactocraftyMachineScreen<?> containerScreen, double guiMouseX, double guiMouseY) {
         List<IGuiClickableArea> list = new ArrayList<>();
         if (containerScreen.getMenu().be instanceof FactocraftyMachineBlockEntity<?> be){
-            list.add(IGuiClickableArea.createBasic(containerScreen.machineProgress.posX - containerScreen.getBounds().getX(),containerScreen.machineProgress.posY - containerScreen.getBounds().getY(),containerScreen.machineProgress.width(),containerScreen.machineProgress.height(),FactocraftyJeiUtils.fromVanillaRecipeType(be.getRecipeType())));
+            list.add(IGuiClickableArea.createBasic(be.progress.first().x,be.progress.first().y,containerScreen.defaultProgress.width(),containerScreen.defaultProgress.height(),FactocraftyJeiUtils.fromVanillaRecipeType(be.getRecipeType())));
         }
         return list;
     }

@@ -3,19 +3,16 @@ package wily.factocrafty.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import dev.architectury.fluid.FluidStack;
 import dev.architectury.platform.Platform;
 import net.minecraft.nbt.*;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-import wily.factocrafty.Factocrafty;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static wily.factocrafty.util.FluidStackUtil.getPlatformFluidAmount;
 
-public class CompoundTagUtils {
+public class CompoundTagUtil {
 
 
     public static boolean compoundContains(CompoundTag comparator, CompoundTag contains){

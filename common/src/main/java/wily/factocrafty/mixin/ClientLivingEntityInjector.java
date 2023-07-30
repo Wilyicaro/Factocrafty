@@ -32,12 +32,6 @@ public abstract class ClientLivingEntityInjector extends Entity {
     private ItemStack lastHeadItemStack;
 
     GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
-
-    @PlatformOnly(PlatformOnly.FABRIC)
-    @Redirect(method = ("baseTick"), at = @At(value = "INVOKE", target = ("Lnet/minecraft/world/entity/LivingEntity;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z")))
-    public boolean injectBaseTick(LivingEntity entity,TagKey<Fluid> tagKey){
-        return entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(Fluids.PETROLEUM);
-    }
     @Inject(method = ("baseTick"), at = @At(value = "HEAD"))
     private void tick(CallbackInfo info) {
         if ((Object) this instanceof LocalPlayer p && (lastHeadItemStack== null || lastHeadItemStack != p.getItemBySlot(EquipmentSlot.HEAD))){

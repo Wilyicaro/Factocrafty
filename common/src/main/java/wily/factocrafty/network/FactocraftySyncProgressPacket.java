@@ -6,48 +6,40 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factoryapi.base.IFactoryProcessableStorage;
-import wily.factoryapi.base.Progress;
 
 import java.util.function.Supplier;
 
 public class FactocraftySyncProgressPacket {
 
     private final int index;
-    private final int[] progress;
-
-    private final int maxProgress;
+    private final int[] values;
 
     private final BlockPos pos;
 
     public FactocraftySyncProgressPacket(FriendlyByteBuf buf) {
-        this(buf.readBlockPos(),buf.readInt() , buf.readVarIntArray(), buf.readInt());
+        this(buf.readBlockPos(),buf.readInt() , buf.readVarIntArray());
 
     }
 
-    public FactocraftySyncProgressPacket(BlockPos pos, int index, int[] progress, int maxProgress) {
+    public FactocraftySyncProgressPacket(BlockPos pos, int index, int[] values) {
         this.pos = pos;
         this.index = index;
-        this.progress = progress;
-        this.maxProgress = maxProgress;
-
+        this.values = values;
 
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeBlockPos(pos);
         buf.writeInt(index);
-        buf.writeVarIntArray(progress);
-        buf.writeInt(maxProgress);
+        buf.writeVarIntArray(values);
     }
 
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
             BlockEntity be = player.level().getBlockEntity(pos);
-            if (player.level().isLoaded(pos)) {
-                assert be != null;
-                ((IFactoryProcessableStorage)be).getProgresses().get(index).set(progress);
-                ((IFactoryProcessableStorage)be).getProgresses().get(index).maxProgress = maxProgress;
+            if (player.level().isLoaded(pos) && be instanceof IFactoryProcessableStorage s) {
+                s.getProgresses().get(index).setValues(values);
                 be.setChanged();
             }
         });

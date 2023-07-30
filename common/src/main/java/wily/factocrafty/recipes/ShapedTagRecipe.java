@@ -20,7 +20,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.util.CompoundTagUtils;
+import wily.factocrafty.util.CompoundTagUtil;
 
 import java.util.*;
 
@@ -110,7 +110,7 @@ public class ShapedTagRecipe extends CustomRecipe {
                 }
                 Ingredient ing = recipeItems.get(index).first();
                 ItemStack stack = craftingContainer.getItem(k + l * craftingContainer.getWidth()).copy();
-                if (!ing.test(stack) || !(recipeItems.get(index).second().isEmpty() || CompoundTagUtils.compoundContains(recipeItems.get(index).second(), stack.getOrCreateTag()))) {
+                if (!ing.test(stack) || !(recipeItems.get(index).second().isEmpty() || CompoundTagUtil.compoundContains(recipeItems.get(index).second(), stack.getOrCreateTag()))) {
                     return false;
                 }
             }
@@ -247,7 +247,7 @@ public class ShapedTagRecipe extends CustomRecipe {
                 throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
             }
 
-            map.put(s, Pair.of(Ingredient.fromJson(e), CompoundTagUtils.getFromJson((JsonObject) e)));
+            map.put(s, Pair.of(Ingredient.fromJson(e), CompoundTagUtil.getFromJson((JsonObject) e)));
         });
 
         map.put(" ", Pair.of(Ingredient.EMPTY,new CompoundTag()));

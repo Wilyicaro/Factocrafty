@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import wily.factoryapi.base.CraftyTransaction;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.ICraftyEnergyStorage;
 import wily.factoryapi.base.TransportState;
@@ -45,13 +46,14 @@ public class ElectricHoeItem extends EnergyDiggerItem {
         }
         Predicate<UseOnContext> predicate = pair.getFirst();
         Consumer<UseOnContext> consumer = pair.getSecond();
-        if (predicate.test(useOnContext)) {
+        ItemStack hoe = useOnContext.getItemInHand();
+        if (predicate.test(useOnContext) && isActivated(hoe)) {
             Player player2 = useOnContext.getPlayer();
             level.playSound(player2, blockPos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0f, 1.0f);
             if (!level.isClientSide) {
                 consumer.accept(useOnContext);
                 if (player2 != null) {
-                    getCraftyEnergy(useOnContext.getItemInHand()).consumeEnergy(new ICraftyEnergyStorage.EnergyTransaction(1, energyTier),false);
+                    getCraftyEnergy(hoe).consumeEnergy(new CraftyTransaction(1, energyTier),false);
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);

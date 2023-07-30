@@ -35,12 +35,11 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 import net.minecraft.world.level.material.*;
 import wily.factocrafty.FactocraftyFluidAttributes;
 import wily.factocrafty.block.*;
-import wily.factocrafty.block.cable.CableBlock;
-import wily.factocrafty.block.cable.CableTiers;
-import wily.factocrafty.block.cable.InsulatedCableBlock;
-import wily.factocrafty.block.cable.SolidCableBlock;
-import wily.factocrafty.block.cable.entity.CableBlockEntity;
-import wily.factocrafty.block.cable.entity.SolidCableBlockEntity;
+import wily.factocrafty.util.registering.FactocraftyCables;
+import wily.factocrafty.block.transport.energy.CableBlock;
+import wily.factocrafty.block.transport.energy.SolidCableBlock;
+import wily.factocrafty.block.transport.energy.entity.CableBlockEntity;
+import wily.factocrafty.block.transport.energy.entity.SolidCableBlockEntity;
 import wily.factocrafty.block.entity.*;
 import wily.factocrafty.block.generator.*;
 import wily.factocrafty.block.generator.entity.GeneratorBlockEntity;
@@ -135,7 +134,7 @@ public class Registration {
                         if (item instanceof ICraftyEnergyItem<?> energyItem) {
                             ItemStack charged = new ItemStack(item);
                             ICraftyEnergyStorage storage = energyItem.getCraftyEnergy(charged);
-                            storage.receiveEnergy(new ICraftyEnergyStorage.EnergyTransaction(storage.getMaxEnergyStored(), storage.getSupportedTier()), false);
+                            storage.receiveEnergy(new CraftyTransaction(storage.getMaxEnergyStored(), storage.getSupportedTier()), false);
                             output.accept(charged);
                         } else if (item instanceof FluidCellItem cell) {
                             Registration.FLUIDS.getRegistrar().forEach((f) -> {
@@ -195,10 +194,12 @@ public class Registration {
 
     public static final RegistrySupplier<Item> SCRAP = registerFactocraftyItem("scrap");
 
-    public static final RegistrySupplier<Item> ADVANCED_ALLOY = ITEMS.register("advanced_alloy",()-> new Item(defaultStackItemProperties().rarity(Rarity.UNCOMMON)));
+    public static final RegistrySupplier<Item> SCRAP_BOX = ITEMS.register("scrap_box",()-> new ScrapBoxItem(fullStackItemProperties()));
+
+    public static final RegistrySupplier<Item> ADVANCED_ALLOY = ITEMS.register("advanced_alloy",()-> new Item(fullStackItemProperties().rarity(Rarity.UNCOMMON)));
 
     public static final RegistrySupplier<Item> POLY_SOLAR_PANEL = registerFactocraftyItem("poly_solar_panel");
-    public static final RegistrySupplier<Item> MONO_SOLAR_PANEL = ITEMS.register("mono_solar_panel",()-> new Item(defaultStackItemProperties().rarity(Rarity.UNCOMMON)));
+    public static final RegistrySupplier<Item> MONO_SOLAR_PANEL = ITEMS.register("mono_solar_panel",()-> new Item(fullStackItemProperties().rarity(Rarity.UNCOMMON)));
 
     public static final RegistrySupplier<Block> REINFORCED_STONE = registerFactocraftyBlockItem(()-> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).requiresCorrectToolForDrops().strength(35.0F, 400.0F)),"reinforced_stone");
 
@@ -531,14 +532,14 @@ public class Registration {
             registrarFactocraftyItem(() -> new HoeItem(oreMaterials.getToolTier(),-3, 0.0F ,defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_hoe");
         }
     }
-    private static void registerCables(CableTiers tier) {
-        if (tier.hasInsulated) {
-            registrarFactocraftyBlockItem(() -> new CableBlock(tier, cableBehaviour()), tier.getName());
-            registrarFactocraftyBlockItem(() -> new InsulatedCableBlock(tier, cableBehaviour()), "insulated_" + tier.getName());
-            BLOCK_ENTITIES_REGISTRAR.register(getModResource(tier.getName()), () -> BlockEntityType.Builder.of((blockPos, blockState) -> new CableBlockEntity(tier, blockPos, blockState), tier.getBlock(), tier.getInsulatedBlock()).build(null));
-        } else {
-            registrarFactocraftyBlockItem(() -> new SolidCableBlock(tier, cableBehaviour()), tier.getName());
-            BLOCK_ENTITIES_REGISTRAR.register(getModResource(tier.getName()), () -> BlockEntityType.Builder.of((blockPos, blockState) -> new SolidCableBlockEntity(tier, blockPos, blockState), tier.getBlock()).build(null));
+    private static void registerCables(FactocraftyCables cable) {
+        if (cable.cableShape == FactocraftyCables.Shape.SOLID){
+            registrarFactocraftyBlockItem(() -> new SolidCableBlock(cable, cableBehaviour()), cable.getName());
+            BLOCK_ENTITIES_REGISTRAR.register(getModResource(cable.getName()), () -> BlockEntityType.Builder.of((blockPos, blockState) -> new SolidCableBlockEntity(cable, blockPos, blockState), cable.get()).build(null));
+        }
+        else {
+            registrarFactocraftyBlockItem(() ->  new CableBlock(cable, cableBehaviour()), cable.getName());
+            BLOCK_ENTITIES_REGISTRAR.register(getModResource(cable.getName()), () -> BlockEntityType.Builder.of((blockPos, blockState) -> new CableBlockEntity(cable, blockPos, blockState), cable.get()).build(null));
         }
     }
     private static void registerSolarPanel(SolarPanelTiers tier) {
@@ -637,7 +638,7 @@ public class Registration {
         for (FactocraftyOre.Material material : FactocraftyOre.Material.values()) registerAllOreDerivatives(material);
         for (FactocraftyEnergyStorages storage : FactocraftyEnergyStorages.values()) registerEnergyStorage(storage);
         for (FactocraftyFluidTanks tank : FactocraftyFluidTanks.values()) registerFluidTank(tank);
-        for (CableTiers tier : CableTiers.values()) registerCables(tier);
+        for (FactocraftyCables tier : FactocraftyCables.values()) registerCables(tier);
         RegistrarBlockItems.forEach((blockEntry) -> {ITEMS_REGISTRAR.register(blockEntry, () -> new BlockItem(Objects.requireNonNull(BLOCKS_REGISTRAR.get(blockEntry)), fullStackItemProperties()));});
         RECIPE_TYPES.register();
         RECIPE_SERIALIZER.register();

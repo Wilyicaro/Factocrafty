@@ -1,4 +1,4 @@
-package wily.factocrafty.block.cable.entity;
+package wily.factocrafty.block.transport.energy.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,8 +16,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
-import wily.factocrafty.block.cable.*;
 import wily.factocrafty.block.entity.CYEnergyStorage;
+import wily.factocrafty.block.transport.energy.*;
+import wily.factocrafty.util.registering.FactocraftyCables;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.VoxelShapeUtil;
 
@@ -30,12 +31,12 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
     private VoxelShape collisionBox(Direction d) {return VoxelShapeUtil.rotateHorizontal(Block.box(6.4,0.4,15,9.6,3.6,16),d);};
     public Map<Direction, CableSide> connectedBlocks = new HashMap<>();
 
-    public CableTiers cableTier;
+    public FactocraftyCables cableTier;
 
-    public CableBlockEntity(CableTiers tier, BlockPos blockPos, BlockState blockState) {
+    public CableBlockEntity(FactocraftyCables tier, BlockPos blockPos, BlockState blockState) {
         this(tier.getBlockEntity(),tier, blockPos, blockState);
     }
-    public CableBlockEntity(BlockEntityType<?> type, CableTiers tier, BlockPos blockPos, BlockState blockState) {
+    public CableBlockEntity(BlockEntityType<?> type, FactocraftyCables tier, BlockPos blockPos, BlockState blockState) {
         super(type, blockPos, blockState);
         this.cableTier = tier;
         energyStorage = new CYEnergyStorage(this, 0,cableTier.energyTier.energyCapacity, maxEnergyTransfer(),cableTier.energyTier);
@@ -47,12 +48,9 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
         return (int) (cableTier.energyTier.energyCapacity * cableTier.energyTier.getConductivity());
     }
 
-    protected double transferenceEfficiency() {
-        return Math.min(Math.pow(cableTier.energyTier.getConductivity(), 0.18), 0.99);
-    }
 
     public void updateAllStates(){
-        Map<Direction, EnumProperty<CableSide>> directionProperty = InsulatedCableBlock.PROPERTY_BY_DIRECTION;
+        Map<Direction, EnumProperty<CableSide>> directionProperty = CableBlock.PROPERTY_BY_DIRECTION;
 
         BlockState blockState = getBlockState();
         for (Direction direction : Direction.values()){
@@ -94,14 +92,14 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
         return (blockBellow.isFaceSturdy(level,blockPosBellow, Direction.UP, SupportType.CENTER) && shouldConnectTo(blockPosBellow));
     }
     protected  boolean shouldConnectBlockBellowSide(BlockPos blockSidesBellow, BlockState blockSides, BlockState blockBellow, Direction direction) {
-        return (level.getBlockState(blockSidesBellow).getBlock() instanceof InsulatedCableBlock && shouldConnectTo(blockSidesBellow, direction) && !(blockBellow.getBlock() instanceof InsulatedCableBlock) && isAboveBlockValid(blockSides, direction.getOpposite()));
+        return (level.getBlockState(blockSidesBellow).getBlock() instanceof CableBlock && shouldConnectTo(blockSidesBellow, direction) && !(blockBellow.getBlock() instanceof CableBlock) && isAboveBlockValid(blockSides, direction.getOpposite()));
     }
     protected boolean shouldConnectBlockAboveSide(BlockPos blockState, BlockState blockStateUp, Direction direction) {
         return (shouldConnectTo(blockState, direction) &&  isAboveBlockValid(blockStateUp, direction));
     }
     protected boolean isAboveBlockValid(BlockState blockState, Direction direction) {
         VoxelShape shape = blockState.getShape(level, getBlockPos().above());
-        VoxelShape shape1 = CableBlock.getUpShape(direction,cableTier,!(this.getBlockState().getBlock() instanceof CableBlock));
+        VoxelShape shape1 = CableBlock.getUpShape(direction,cableTier);
         AABB  aabb = new AABB(new Vec3(shape1.bounds().minX, shape1.bounds().minY - 1,shape1.bounds().minZ), new Vec3(shape1.bounds().maxX, shape1.bounds().maxY - 1,shape1.bounds().maxZ));
         boolean bl = !shape.isEmpty();
 
@@ -115,7 +113,7 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
         Block cable = getBlockState().getBlock();
         VoxelShape blockShape = blockState.getShape(level,pos);
 
-        if (blockState.getBlock() instanceof InsulatedCableBlock otherCable) {
+        if (blockState.getBlock() instanceof CableBlock otherCable) {
             if ((otherCable instanceof SolidCableBlock) && !(cable instanceof SolidCableBlock)) return false;
             return level.getBlockEntity(pos) instanceof CableBlockEntity be && (direction == null || (Objects.requireNonNullElse(be.getConnectedBlockPos(direction.getOpposite()),pos).equals(getBlockPos()) || be.connectedBlocks.get(direction.getOpposite()) == null));
         }
@@ -139,7 +137,7 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
                         if (e.getEnergyStored() < energyStorage.getEnergyStored()) {
 
                             int i = (energyStorage.getEnergyStored() - e.getEnergyStored()) / 2;
-                            energyStorage.consumeEnergy((e.receiveEnergy(new ICraftyEnergyStorage.EnergyTransaction(Math.min(i, maxEnergyTransfer()), energyStorage.storedTier), false).reduce(transferenceEfficiency())), false);
+                            energyStorage.consumeEnergy((e.receiveEnergy(new CraftyTransaction(Math.min(i, maxEnergyTransfer()), energyStorage.storedTier), false).reduce(cableTier.transferenceEfficiency())), false);
                         }
                     }else {
                         if (!energyBlock.produceEnergy())
@@ -163,16 +161,6 @@ public class CableBlockEntity extends BlockEntity implements IFactoryStorage {
         return Optional.empty();
     }
 
-    @Override
-    public void addSlots(NonNullList<FactoryItemSlot> slots, @Nullable Player player) {
-
-    }
-
-
-    @Override
-    public void addTanks(List<IPlatformFluidHandler> list) {
-
-    }
 
     @Override
     public void load(CompoundTag compoundTag) {

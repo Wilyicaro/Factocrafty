@@ -1,6 +1,5 @@
 package wily.factocrafty.recipes;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -15,9 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.init.Registration;
-import wily.factoryapi.base.Bearer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +22,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static wily.factocrafty.util.FactocraftyRecipeUtil.getFactocraftyStack;
 import static wily.factocrafty.util.JsonUtils.jsonElement;
 
 public class SolderingCraftingRecipe extends ElectricCraftingRecipe {
@@ -56,13 +54,6 @@ public class SolderingCraftingRecipe extends ElectricCraftingRecipe {
         return list;
     }
 
-    public static ItemStack getFactocraftyStack(Ingredient i){
-        for (int j = 0; j < i.getItems().length; j++) {
-            ItemStack s = i.getItems()[j];
-            if (s.getItem().arch$registryName().getNamespace().equals(Factocrafty.MOD_ID)) return s;
-        }
-        return i.getItems()[0];
-    }
     @Override
     public @NotNull ItemStack getResultItem(List<ItemStack> additionalInputs,ItemStack inputResult) {
         ItemStack result = inputResult.copy();

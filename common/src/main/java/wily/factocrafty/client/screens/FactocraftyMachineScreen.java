@@ -56,7 +56,7 @@ public class FactocraftyMachineScreen<T extends FactocraftyProcessBlockEntity> e
 
     protected IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> fluidTankType;
 
-    public IFactoryDrawableType.DrawableStaticProgress machineProgress;
+    public IFactoryDrawableType.DrawableStaticProgress defaultProgress;
 
     protected MachineSidesConfig configWindow;
 
@@ -185,6 +185,7 @@ public class FactocraftyMachineScreen<T extends FactocraftyProcessBlockEntity> e
                 }
             }
         });
+        if (defaultProgress != null) defaultProgress.drawProgress(graphics, getMenu().be.progress);
     }
 
     public BakedModel getItemStackModel(ItemRenderer itemRenderer,ItemStack stack){

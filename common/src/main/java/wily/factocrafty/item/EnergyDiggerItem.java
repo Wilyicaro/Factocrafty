@@ -4,11 +4,15 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Vanishable;
@@ -19,7 +23,7 @@ import wily.factocrafty.FactocraftyExpectPlatform;
 import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.TransportState;
 
-public class EnergyDiggerItem extends EnergyItem implements Vanishable, FactocraftyTierItem {
+public class EnergyDiggerItem extends EnergyItem implements Vanishable, FactocraftyDiggerItem {
     private  final Tier tier;
     private final TagKey<Block> blocks;
     protected final float speed;
@@ -45,15 +49,36 @@ public class EnergyDiggerItem extends EnergyItem implements Vanishable, Factocra
 
     @Override
     public boolean mineBlock(ItemStack itemStack, Level level, BlockState blockState, BlockPos blockPos, LivingEntity livingEntity) {
-        getCraftyEnergy(itemStack).consumeEnergy((int) Math.min(1, blockState.getBlock().defaultDestroyTime() *2),false);
+        getCraftyEnergy(itemStack).consumeEnergy((int) Math.max(1, blockState.getBlock().defaultDestroyTime() *2),false);
         return super.mineBlock(itemStack, level, blockState, blockPos, livingEntity);
+    }
+    public boolean isActivated(ItemStack itemStack){
+        return itemStack.getOrCreateTag().getBoolean("activated");
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
+        if (isActivated(stack) && !level.isClientSide && level.random.nextFloat() <= 0.7 && entity.tickCount % 18 == 0)
+            getCraftyEnergy(stack).consumeEnergy(1,false);
+        super.inventoryTick(stack, level, entity, i, bl);
     }
 
 
     @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack itemStack, int i) {
+        super.onUseTick(level, livingEntity, itemStack, i);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        ItemStack enabled = player.getItemInHand(interactionHand);
+        enabled.getOrCreateTag().putBoolean("activated",!isActivated(enabled));
+        return InteractionResultHolder.sidedSuccess(enabled,!level.isClientSide);
+    }
+
+    @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
-        if (getCraftyEnergy(itemStack).getEnergyStored() <= 0) return 0.05F;
-        return blockState.is(this.blocks) ? this.speed : 1.0F;
+        return blockState.is(this.blocks) && getCraftyEnergy(itemStack).getEnergyStored() > 0 && isActivated(itemStack) ? this.speed : 1.0F;
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
