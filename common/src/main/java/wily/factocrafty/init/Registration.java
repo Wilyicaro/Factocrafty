@@ -122,7 +122,7 @@ public class Registration {
 
 
 
-    public static final RegistrySupplier<CreativeModeTab> FACTOCRAFTY_TAB = TABS.register("factocrafty_tab",()->CreativeTabRegistry.create((b)->b.title(Component.translatable("itemGroup.factocrafty.tab")).icon(() -> new ItemStack(Registration.GENERATOR.get())).displayItems(
+    public static final RegistrySupplier<CreativeModeTab> FACTOCRAFTY_TAB = TABS.register("factocrafty_tab",()->CreativeTabRegistry.create((b)->b.title(Component.translatable("itemGroup.factocrafty.tab")).icon(() -> new ItemStack(Registration.MACERATOR.get())).displayItems(
             ((bool,output) -> {
                 Iterator var2 = BuiltInRegistries.ITEM.iterator();
 
