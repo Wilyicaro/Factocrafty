@@ -47,3 +47,4 @@ accessible field net/minecraft/client/sounds/SoundBufferLibrary resourceManager 
 accessible field net/minecraft/world/item/HoeItem TILLABLES Ljava/util/Map;
 accessible field net/minecraft/client/KeyMapping clickCount I
 accessible method net/minecraft/world/level/block/ComposterBlock add (FLnet/minecraft/world/level/ItemLike;)V
+accessible field net/minecraft/client/resources/model/ModelManager bakedRegistry Ljava/util/Map;

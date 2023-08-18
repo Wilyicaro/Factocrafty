@@ -6,11 +6,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
+import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
 import wily.factocrafty.block.machines.entity.GasInfuserBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyInfoWidget;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
 import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.IFactoryDrawableType;
@@ -21,7 +21,7 @@ import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 public class GasInfuserScreen extends BasicMachineScreen {
 
 
-    public GasInfuserScreen(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+    public GasInfuserScreen(FactocraftyStorageMenu<ProcessMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
     }
     GasInfuserBlockEntity gasBe = (GasInfuserBlockEntity) getMenu().be;

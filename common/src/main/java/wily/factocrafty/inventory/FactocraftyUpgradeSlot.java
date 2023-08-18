@@ -1,23 +1,21 @@
 package wily.factocrafty.inventory;
 
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.item.FactocraftyUpgradeItem;
-import wily.factocrafty.network.FactocraftySyncSelectedUpgradePacket;
 
 public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
-    public FactocraftyUpgradeSlot(FactocraftyProcessBlockEntity pBe, int i, int x, int y) {
+    public FactocraftyUpgradeSlot(FactocraftyMenuBlockEntity pBe, int i, int x, int y) {
         super(new Slot(pBe.inventory,i,x,y){
             @Override
             public void set(ItemStack itemStack) {
-                //Factocrafty.LOGGER.info(itemStack.getDisplayName().getString());
+                Factocrafty.LOGGER.info(pBe.getLevel().isClientSide + "?");
                 for (ItemStack i: pBe.storedUpgrades) {
                     if (ItemStack.isSameItemSameTags(itemStack,i)) {
-                        if (pBe.selectedUpgrade <0) i.grow(itemStack.getCount());
+                        if (pBe.selectedUpgrade.get() <0) i.grow(itemStack.getCount());
                         else  pBe.storedUpgrades.set(pBe.storedUpgrades.indexOf(i),itemStack);
                         return;
                     }
@@ -25,8 +23,8 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
                 if (pBe.storedUpgrades.stream().noneMatch(i->ItemStack.isSameItem(i,itemStack))){
                     if (itemStack.isEmpty()) pBe.storedUpgrades.removeIf(i-> {
                         //Factocrafty.LOGGER.info("HERE 2");
-                        boolean b = pBe.storedUpgrades.indexOf(i) == pBe.selectedUpgrade;
-                        if (b) pBe.selectedUpgrade = -1;
+                        boolean b = pBe.storedUpgrades.indexOf(i) == pBe.selectedUpgrade.get();
+                        if (b) pBe.selectedUpgrade.set(-1);
                         return b;
                     });
                     else pBe.storedUpgrades.add(itemStack);
@@ -54,22 +52,22 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
 
             @Override
             public ItemStack getItem() {
-                return (pBe.selectedUpgrade < 0 || pBe.storedUpgrades.isEmpty()? ItemStack.EMPTY: pBe.storedUpgrades.get(Math.min(pBe.selectedUpgrade,pBe.storedUpgrades.size() - 1)));
+                return (pBe.selectedUpgrade.get() < 0 || pBe.storedUpgrades.isEmpty()? ItemStack.EMPTY: pBe.storedUpgrades.get(Math.min(pBe.selectedUpgrade.get(),pBe.storedUpgrades.size() - 1)));
             }
 
             @Override
             public boolean mayPickup(Player player) {
-                return pBe.selectedUpgrade >=0;
+                return pBe.selectedUpgrade.get() >=0;
             }
 
             @Override
             public ItemStack remove(int i) {
-                ItemStack stack = pBe.storedUpgrades.get(pBe.selectedUpgrade);
-                ItemStack itemStack = stack.getCount() <= i ? pBe.storedUpgrades.remove(pBe.selectedUpgrade) : stack.split(i);
+                ItemStack stack = pBe.storedUpgrades.get(pBe.selectedUpgrade.get());
+                ItemStack itemStack = stack.getCount() <= i ? pBe.storedUpgrades.remove((int)pBe.selectedUpgrade.get()) : stack.split(i);
                 if (!itemStack.isEmpty()) {
                     this.setChanged();
                     if (!pBe.storedUpgrades.contains(stack)) {
-                        pBe.selectedUpgrade = -1;
+                        pBe.selectedUpgrade.set(-1);
                     }
                 }
                 //Factocrafty.LOGGER.info("HERE 1");

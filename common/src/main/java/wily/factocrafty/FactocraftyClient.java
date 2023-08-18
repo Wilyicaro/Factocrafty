@@ -30,7 +30,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -43,16 +42,11 @@ import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyWoodType;
-import wily.factocrafty.util.registering.FactocraftyCables;
-import wily.factocrafty.block.transport.energy.CableBlock;
+import wily.factocrafty.client.renderer.block.*;
+import wily.factocrafty.util.registering.*;
 import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
-import wily.factocrafty.client.renderer.block.FactocraftyLiquidTankRenderer;
-import wily.factocrafty.client.renderer.block.RubberHangingSignRenderer;
-import wily.factocrafty.client.renderer.block.TreeTapRenderer;
-import wily.factocrafty.client.renderer.block.RubberSignRenderer;
 import wily.factocrafty.client.renderer.entity.*;
 import wily.factocrafty.client.screens.*;
 import wily.factocrafty.entity.IFactocraftyBoat;
@@ -60,12 +54,9 @@ import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.*;
 import wily.factocrafty.network.FactocraftyArmorFeaturePacket;
 import wily.factocrafty.network.FactocraftyJetpackLaunchPacket;
-import wily.factocrafty.util.DirectionUtil;
-import wily.factocrafty.util.registering.FactocraftyBlockEntities;
-import wily.factocrafty.util.registering.FactocraftyBlocks;
-import wily.factocrafty.util.registering.FactocraftyFluidTanks;
-import wily.factocrafty.util.registering.FactocraftyFluids;
 import wily.factoryapi.ItemContainerUtil;
+import wily.factoryapi.base.TransportState;
+import wily.factoryapi.util.DirectionUtil;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -228,28 +219,45 @@ public class FactocraftyClient {
             }
         });
         FactocraftyWoodType.addWoodType(FactocraftyWoodType.RUBBER);
-        for (Block a : Registration.BLOCKS.getRegistrar())
-            if (a instanceof CableBlock)
-                FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + BuiltInRegistries.BLOCK.getKey(a).getPath() + "_in_hand"),"inventory"));
-
-
-        FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:fluid_model"),""));
-        FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_bowl"),""));
-        FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex"),""));
-        FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:treetap_latex_fall"),""));
-        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get(),FactocraftyFluids.OXYGEN.get(),FactocraftyFluids.FLOWING_OXYGEN.get(),FactocraftyFluids.HYDROGEN.get(),FactocraftyFluids.FLOWING_HYDROGEN.get());
+        for (FactocraftyCables value : FactocraftyCables.values()){
+            FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + value.getName() + "_in_hand"),"inventory"));
+            FactocraftyExpectPlatform.registerModel(value.getSideModelLocation());
+            if (value.cableShape != FactocraftyCables.Shape.SOLID){
+                FactocraftyExpectPlatform.registerModel(value.getUpModelLocation());
+                BlockEntityRendererRegistry.register(value.getBlockEntity(), ConduitRenderer::new);
+            }else BlockEntityRendererRegistry.register(value.getBlockEntity(), SolidConduitRenderer::new);
+        }
+        for (FactocraftyFluidPipes value : FactocraftyFluidPipes.values()) {
+            FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:" + value.getName() + "_in_hand"), "inventory"));
+            for (TransportState state : TransportState.values()) FactocraftyExpectPlatform.registerModel(value.getSideModelLocation(state));
+            BlockEntityRendererRegistry.register(value.getBlockEntity(), FluidPipeRenderer::new);
+        }
+        boolean[] booleans = new boolean[]{false,true};
+        for (boolean b : booleans) {
+            FactocraftyExpectPlatform.registerModel(FluidPipeRenderer.fluidCenterLocation(b));
+            for (boolean b1 : booleans)
+                FactocraftyExpectPlatform.registerModel(FluidPipeRenderer.fluidSideLocation(b,b1));
+        }
+        FactocraftyExpectPlatform.registerModel(FactocraftyLiquidTankRenderer.FLUID_MODEL_LOCATION);
+        FactocraftyExpectPlatform.registerModel(TreeTapRenderer.TREETAP_BOWL);
+        FactocraftyExpectPlatform.registerModel(TreeTapRenderer.TREETAP_LATEX);
+        FactocraftyExpectPlatform.registerModel(TreeTapRenderer.TREETAP_LATEX_FALL);
+        FactocraftyExpectPlatform.registerModel(new ResourceLocation("block/leaves"));
+        RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.ISOPRENE.get(),FactocraftyFluids.FLOWING_ISOPRENE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get(),FactocraftyFluids.OXYGEN.get(),FactocraftyFluids.FLOWING_OXYGEN.get(),FactocraftyFluids.HYDROGEN.get(),FactocraftyFluids.FLOWING_HYDROGEN.get());
         RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), FactocraftyCables.CRYSTAL_CABLE.get());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.RUBBER_HANGING_SIGN_BLOCK_ENTITY.get(), RubberHangingSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.TREETAP_BLOCK_ENTITY.get(), TreeTapRenderer::new);
+        BlockEntityRendererRegistry.register(Registration.FLUID_PUMP_BLOCK_ENTITY.get(), FactocraftyMachineRenderer::new);
         for (FactocraftyFluidTanks tank : FactocraftyFluidTanks.values())
             BlockEntityRendererRegistry.register(FactocraftyBlockEntities.ofBlock(tank.get()), FactocraftyLiquidTankRenderer::new);
         MenuRegistry.registerScreenFactory(Registration.GENERATOR_MENU.get(), GeneratorScreen::new);
         MenuRegistry.registerScreenFactory(Registration.GEOTHERMAL_GENERATOR_MENU.get(), GeothermalGeneratorScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.FLUID_PUMP_MENU.get(), FluidPumpScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         MenuRegistry.registerScreenFactory(Registration.MACERATOR_MENU.get(), BasicMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.RECYCLER_MENU.get(), BasicMachineScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.ENERGY_CELL_MENU.get(), EnergyCellScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.ENERGY_STORAGE_MENU.get(), EnergyCellScreen::new);
         MenuRegistry.registerScreenFactory(Registration.FLUID_TANK_MENU.get(), FluidTankScreen::new);
         MenuRegistry.registerScreenFactory(Registration.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
         MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen::new);
@@ -257,6 +265,7 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.REFINER_MENU.get(), RefinerScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ENRICHER_MENU.get(), EnricherScreen::new);
         MenuRegistry.registerScreenFactory(Registration.GAS_INFUSER_MENU.get(), GasInfuserScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.SAWMILL_MENU.get(), BasicMachineScreen::new);
         MenuRegistry.registerScreenFactory(Registration.RGB_MENU.get(), RGBControllerScreen::new);
 
 

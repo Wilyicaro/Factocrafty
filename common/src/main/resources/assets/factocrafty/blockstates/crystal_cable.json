@@ -1,62 +1,7 @@
 {
-	"multipart": [
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_center"
-		}
-	  },
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_side"
-		},
-		"when": {
-		  "north": "side"
-		}
-	  },
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_side",
-		  "y": 180
-		},
-		"when": {
-		  "south": "side"
-		}
-	  },
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_side",
-		  "y": 90
-		},
-		"when": {
-		  "east": "side"
-		}
-	  },
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_side",
-		  "y": 270
-		},
-		"when": {
-		  "west": "side"
-		}
-	  },
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_side",
-		  "x": -90
-		},
-		"when": {
-		  "up": "side"
-		}
-	  },
-	  {
-		"apply": {
-		  "model": "factocrafty:block/cable/tier/crystal_cable_side",
-		  "x": 90
-		},
-		"when": {
-		  "down": "side"
-		}
+	"variants": {
+	  "": {
+		"model": "factocrafty:block/cable/tier/crystal_cable_center"
 	  }
-	]
+	}
   }

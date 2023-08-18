@@ -9,15 +9,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.util.registering.FactocraftyFluids;
-import wily.factoryapi.FactoryAPIPlatform;
-import wily.factoryapi.base.IFluidItem;
+import wily.factoryapi.base.IFluidHandlerItem;
 import wily.factoryapi.base.IPlatformFluidHandler;
-import wily.factoryapi.base.TransportState;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class FlexJetpackItem extends JetpackItem implements IFluidItem<IPlatformFluidHandler> {
+public class FlexJetpackItem extends JetpackItem implements IFluidHandlerItem<IPlatformFluidHandler<?>> {
 
 
     public FlexJetpackItem(ArmorMaterial armorMaterial, Properties properties) {
@@ -51,9 +49,12 @@ public class FlexJetpackItem extends JetpackItem implements IFluidItem<IPlatform
         return FluidStackHooks.getColor( getFluidStorage(itemStack).getFluidStack().getFluid());
     }
 
-
     @Override
-    public FluidStorageBuilder getFluidStorageBuilder(ItemStack stack) {
-        return new FluidStorageBuilder(2*FluidStack.bucketAmount(), (a) -> a.getFluid().isSame(FactocraftyFluids.GASOLINE.get()), TransportState.EXTRACT_INSERT);
+    public long getCapacity() {
+        return 2*FluidStack.bucketAmount();
+    }
+    @Override
+    public boolean isFluidValid(FluidStack fluidStack) {
+        return fluidStack.getFluid().isSame(FactocraftyFluids.GASOLINE.get());
     }
 }

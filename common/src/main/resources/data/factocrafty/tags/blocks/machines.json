@@ -1,0 +1,14 @@
+{
+  "values": [
+    "factocrafty:electric_furnace",
+    "factocrafty:macerator",
+    "factocrafty:compressor",
+    "factocrafty:extractor",
+    "factocrafty:refiner",
+    "factocrafty:enricher",
+    "factocrafty:gas_infuser",
+    "factocrafty:recycler",
+    "factocrafty:sawmill",
+    "factocrafty:fluid_pump"
+  ]
+}

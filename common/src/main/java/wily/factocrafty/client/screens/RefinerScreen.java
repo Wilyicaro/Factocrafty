@@ -1,22 +1,18 @@
 package wily.factocrafty.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.navigation.ScreenAxis;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
+import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
 import wily.factocrafty.block.machines.entity.RefinerBlockEntity;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
-import wily.factocrafty.network.FactocraftySyncProgressPacket;
 import wily.factoryapi.base.IFactoryDrawableType;
 
 import java.util.List;
-import java.util.Map;
 
 import static wily.factocrafty.util.ScreenUtil.renderScaled;
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
@@ -26,7 +22,7 @@ public class RefinerScreen extends ChangeableInputMachineScreen {
 
     public static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/refiner.png");
 
-    public RefinerScreen(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+    public RefinerScreen(FactocraftyStorageMenu<ProcessMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
     }
     RefinerBlockEntity rBe = (RefinerBlockEntity) getMenu().be;

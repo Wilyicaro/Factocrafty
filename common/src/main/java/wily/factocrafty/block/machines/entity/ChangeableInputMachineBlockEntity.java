@@ -6,20 +6,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.network.FactocraftySyncInputTypePacket;
-import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.IPlatformFluidHandler;
 import wily.factoryapi.base.SlotsIdentifier;
@@ -44,7 +41,7 @@ public class ChangeableInputMachineBlockEntity extends CompoundResultMachineBloc
 
 
 
-    public ChangeableInputMachineBlockEntity(FactocraftyMenus menu, RecipeType<FactocraftyMachineRecipe> recipeType, BlockEntityType<? extends FactocraftyMachineBlockEntity<FactocraftyMachineRecipe>> blockEntity, BlockPos blockPos, BlockState blockState) {
+    public ChangeableInputMachineBlockEntity(MenuType<?> menu, RecipeType<FactocraftyMachineRecipe> recipeType, BlockEntityType<? extends ProcessMachineBlockEntity<FactocraftyMachineRecipe>> blockEntity, BlockPos blockPos, BlockState blockState) {
         super(menu,recipeType,blockEntity, blockPos, blockState);
         fluidTank = FactoryAPIPlatform.getFluidHandlerApi(6 * FluidStack.bucketAmount(), this, f -> {
             for (Recipe<Container> recipe: getRecipes())
@@ -56,7 +53,7 @@ public class ChangeableInputMachineBlockEntity extends CompoundResultMachineBloc
     }
 
     public ChangeableInputMachineBlockEntity(BlockPos blockPos, BlockState blockState){
-        this(FactocraftyMenus.EXTRACTOR,Registration.EXTRACTOR_RECIPE.get(),Registration.EXTRACTOR_BLOCK_ENTITY.get(), blockPos, blockState);
+        this(Registration.EXTRACTOR_MENU.get(),Registration.EXTRACTOR_RECIPE.get(),Registration.EXTRACTOR_BLOCK_ENTITY.get(), blockPos, blockState);
     }
     @Override
     protected SoundEvent getMachineSound() {
@@ -87,12 +84,12 @@ public class ChangeableInputMachineBlockEntity extends CompoundResultMachineBloc
     }
     public IPlatformFluidHandler resultTank;
     @Override
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    public void addTanks(List<IPlatformFluidHandler<?>> list) {
         list.add(fluidTank);
     }
 
     @Override
     protected boolean canMachineProcess(@Nullable Recipe<?> recipe) {
-        return inputType.isFluid() ? FactocraftyMachineBlockEntity.canProcessFluid(recipe,fluidTank,resultTank,inventory,OUTPUT_SLOT) : super.canMachineProcess(recipe);
+        return inputType.isFluid() ? ProcessMachineBlockEntity.canProcessFluid(recipe,fluidTank,resultTank,inventory,OUTPUT_SLOT) : super.canMachineProcess(recipe);
     }
 }

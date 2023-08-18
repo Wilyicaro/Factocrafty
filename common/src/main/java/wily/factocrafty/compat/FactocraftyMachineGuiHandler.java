@@ -5,17 +5,17 @@ import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.renderer.Rect2i;
 import org.jetbrains.annotations.NotNull;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
-import wily.factocrafty.client.screens.FactocraftyMachineScreen;
+import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
+import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FactocraftyMachineGuiHandler implements IGuiContainerHandler<FactocraftyMachineScreen<?>> {
+public class FactocraftyMachineGuiHandler implements IGuiContainerHandler<FactocraftyStorageScreen<?>> {
     @Override
-    public @NotNull List<Rect2i> getGuiExtraAreas(FactocraftyMachineScreen<?> containerScreen) {
+    public @NotNull List<Rect2i> getGuiExtraAreas(FactocraftyStorageScreen<?> containerScreen) {
         List<Rect2i> extraAreas = new ArrayList<>();
         extraAreas.add(containerScreen.getBounds());
         for ( GuiEventListener listener :containerScreen.children())
@@ -25,9 +25,9 @@ public class FactocraftyMachineGuiHandler implements IGuiContainerHandler<Factoc
     }
 
     @Override
-    public @NotNull Collection<IGuiClickableArea> getGuiClickableAreas(FactocraftyMachineScreen<?> containerScreen, double guiMouseX, double guiMouseY) {
+    public @NotNull Collection<IGuiClickableArea> getGuiClickableAreas(FactocraftyStorageScreen<?> containerScreen, double guiMouseX, double guiMouseY) {
         List<IGuiClickableArea> list = new ArrayList<>();
-        if (containerScreen.getMenu().be instanceof FactocraftyMachineBlockEntity<?> be){
+        if (containerScreen.getMenu().be instanceof ProcessMachineBlockEntity<?> be){
             list.add(IGuiClickableArea.createBasic(be.progress.first().x,be.progress.first().y,containerScreen.defaultProgress.width(),containerScreen.defaultProgress.height(),FactocraftyJeiUtils.fromVanillaRecipeType(be.getRecipeType())));
         }
         return list;

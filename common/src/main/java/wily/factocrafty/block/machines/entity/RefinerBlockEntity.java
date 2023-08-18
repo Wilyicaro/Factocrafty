@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 
@@ -22,7 +21,7 @@ public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
     public Bearer<Integer> recipeHeat = Bearer.of(0);
 
     public RefinerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.REFINER, Registration.REFINER_RECIPE.get(),Registration.REFINER_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(Registration.REFINER_MENU.get(), Registration.REFINER_RECIPE.get(),Registration.REFINER_BLOCK_ENTITY.get(), blockPos, blockState);
         inputType = InputType.FLUID;
         resultTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.OUTPUT, TransportState.EXTRACT);
         additionalSyncInt.add(recipeIndex);
@@ -48,7 +47,7 @@ public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    public void addTanks(List<IPlatformFluidHandler<?>> list) {
         super.addTanks(list);
         list.add(resultTank);
     }

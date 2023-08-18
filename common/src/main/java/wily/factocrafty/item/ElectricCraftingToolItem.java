@@ -19,7 +19,7 @@ public class ElectricCraftingToolItem extends EnergyItem{
     }
     public ItemStack getCraftingRemainingItem(ItemStack stack) {
         ItemStack itemStack = stack.copy();
-        CYItemEnergyStorage storage = getCraftyEnergy(itemStack);
+        ICraftyEnergyStorage storage = getEnergyStorage(itemStack);
         storage.consumeEnergy(15,false);
         return itemStack;
     }

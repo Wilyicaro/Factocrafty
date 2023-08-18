@@ -7,10 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.FactocraftyMachineBlock;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
-import wily.factocrafty.client.screens.FactocraftyMachineScreen;
+import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.network.FactocraftyStateButtonPacket;
 import wily.factocrafty.util.ScreenUtil;
@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static wily.factocrafty.util.DirectionUtil.nearestRotation;
-import static wily.factocrafty.util.DirectionUtil.rotationCyclic;
+import static wily.factoryapi.util.DirectionUtil.nearestRotation;
+import static wily.factoryapi.util.DirectionUtil.rotationCyclic;
 
 public class MachineSidesConfig extends FactocraftyScreenWindow{
 
@@ -32,8 +32,8 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
     // ItemSides: 0, EnergySides: 1, FluidSides: 2
     int sideConfigState = 0;
 
-    FactocraftyProcessBlockEntity be = parent.getMenu().be;
-    public MachineSidesConfig(FactocraftyConfigWidget config, int x, int y, FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> screen) {
+    FactocraftyMenuBlockEntity be = parent.getMenu().be;
+    public MachineSidesConfig(FactocraftyConfigWidget config, int x, int y, FactocraftyStorageScreen<? extends FactocraftyMenuBlockEntity> screen) {
         super(config, 130, 90, x, y, 0, 0, screen);
         BlockState state = screen.getMenu().be.getBlockState();
         if (state.getBlock() instanceof FactocraftyMachineBlock mb) configBlockRotateY = 45 + 90 * state.getValue(mb.getFacingProperty()).get2DDataValue();
@@ -43,22 +43,18 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
     public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
         list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 11, (b)-> sideConfigState = getNextSide(), getSidesConfigTooltip(),FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(sideConfigState)));
         list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 30,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : ((ISideType) getSideType().get(selectedDirection)).nextSlotIndex(getSlotsIdentifiers()))), getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank")),FactocraftyDrawables.LARGE_BUTTON).color(getSideIdentifier().getColor()));
-        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 49, (b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().nextStateSide(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers()))),getStateSide().getTooltip(), FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getStateSide(getSideType(),selectedDirection).ordinal() + 4)));
+        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 49, (b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().nextStateSide(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers()))),getStateSide().getTooltip(), FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getSideType().getTransport(selectedDirection).ordinal() + 4)));
+        list.add(new FactocraftyDrawableButton(getX() + width - 18,getY() + 54, (b)-> {for (Direction d : Direction.values()) Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(), sideConfigState, d.ordinal(), TransportState.NONE, sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers())));}, Component.translatable("tooltip.factocrafty.config.reset"), FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(1)));
         return super.addButtons(list);
     }
-    public static TransportState getStateSide(Map<Direction, ?> map, Direction d){
-        if (map.get(d) instanceof ItemSide item) return item.transportState;
-        else if (map.get(d) instanceof FluidSide fluid) return fluid.transportState;
-        else return (TransportState) map.get(d);
-    }
-    public TransportState getStateSide(){return getStateSide(getSideType(),selectedDirection);}
+    public TransportState getStateSide(){return getSideType().getTransport(selectedDirection);}
 
     public Component getSidesConfigTooltip(){
         return Component.translatable("tooltip.factocrafty.config." + (sideConfigState == 0 ? "item" : sideConfigState < 2 ? "energy":"fluid"));
     }
 
     protected List<Integer> sidesType(){
-        FactocraftyProcessBlockEntity be = parent.getMenu().be;
+        FactocraftyMenuBlockEntity be = parent.getMenu().be;
         List<Integer> list = new ArrayList<>();
         be.itemSides().ifPresent((i)-> list.add(0));
         be.energySides().ifPresent((i)-> list.add(1));
@@ -70,10 +66,10 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
         int next = sidesType().indexOf(sideConfigState) + 1;
         return  sidesType().get(next < sidesType().size() ?  next : 0);
     }
-    public static Map<Direction, ?> getSideType(FactocraftyProcessBlockEntity be, int sideConfigState){
+    public static SideList<?> getSideType(FactocraftyMenuBlockEntity be, int sideConfigState){
         return sideConfigState == 0 ? be.itemSides : sideConfigState == 1 ? be.energySides : sideConfigState == 2 ? be.fluidSides : null;
     }
-    protected Map<Direction, ?> getSideType(){ return getSideType(be,sideConfigState);}
+    protected SideList<?> getSideType(){ return getSideType(be,sideConfigState);}
     protected List<?> getSlotsIdentifiers(){
         if (getSideType().get(selectedDirection) instanceof ISideType<?,?> s)
             if (s instanceof ItemSide) return be.getSlotsIdentifiers();

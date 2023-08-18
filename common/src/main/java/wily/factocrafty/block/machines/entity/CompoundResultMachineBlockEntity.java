@@ -4,30 +4,28 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyResultSlot;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
-import wily.factocrafty.util.registering.FactocraftyMenus;
-import wily.factoryapi.base.FactoryCapacityTiers;
 import wily.factoryapi.base.FactoryItemSlot;
 
 import java.util.List;
 import java.util.Map;
 
-public class CompoundResultMachineBlockEntity<T extends AbstractFactocraftyProcessRecipe> extends FactocraftyMachineBlockEntity<T> {
+public class CompoundResultMachineBlockEntity<T extends AbstractFactocraftyProcessRecipe> extends ProcessMachineBlockEntity<T> {
 
 
 
     protected static int OTHER_RESULT_SLOT = 3;
 
-    public CompoundResultMachineBlockEntity(FactocraftyMenus menu, RecipeType<T> recipe, BlockEntityType<? extends FactocraftyMachineBlockEntity<T>> be, BlockPos blockPos, BlockState blockState) {
-        super(menu, FactoryCapacityTiers.BASIC,recipe,be, blockPos, blockState);
+    public CompoundResultMachineBlockEntity(MenuType<?> menu, RecipeType<T> recipe, BlockEntityType<? extends ProcessMachineBlockEntity<T>> be, BlockPos blockPos, BlockState blockState) {
+        super(menu,recipe,be, blockPos, blockState);
     }
 
 

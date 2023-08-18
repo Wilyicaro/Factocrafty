@@ -30,7 +30,7 @@ public class RGBControllerItem extends EnergyItem {
         BlockPos blockPos = useOnContext.getClickedPos();
         Level level = useOnContext.getPlayer().level();
         ItemStack stack = useOnContext.getItemInHand();
-        if (level.getBlockEntity(blockPos) instanceof FactocraftyLedBlockEntity be && be.energyStorage.getEnergyStored() > 0 && getCraftyEnergy(useOnContext.getItemInHand()).getEnergyStored() > 0){
+        if (level.getBlockEntity(blockPos) instanceof FactocraftyLedBlockEntity be && be.energyStorage.getEnergyStored() > 0 && getEnergyStorage(useOnContext.getItemInHand()).getEnergyStored() > 0){
             if (level.isClientSide) return InteractionResult.SUCCESS;
             MenuRegistry.openExtendedMenu((ServerPlayer) useOnContext.getPlayer(),new ExtendedMenuProvider(){
 

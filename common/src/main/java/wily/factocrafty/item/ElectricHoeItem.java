@@ -53,7 +53,7 @@ public class ElectricHoeItem extends EnergyDiggerItem {
             if (!level.isClientSide) {
                 consumer.accept(useOnContext);
                 if (player2 != null) {
-                    getCraftyEnergy(hoe).consumeEnergy(new CraftyTransaction(1, energyTier),false);
+                    getEnergyStorage(hoe).consumeEnergy(new CraftyTransaction(1, energyTier),false);
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);

@@ -1,0 +1,7 @@
+{
+	"parent": "factocrafty:item/transport/fluid/large_pipe",
+	"textures": {
+		"pipe": "factocrafty:block/transport/fluid/quantum_pipe",
+		"frame": "factocrafty:block/transport/fluid/quantum_pipe_frame"
+	}
+}

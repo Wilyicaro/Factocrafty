@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.util.registering.FactocraftyMenus;
+import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
@@ -20,21 +20,18 @@ import java.util.List;
 public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
 
     public GeothermalGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.GEOTHERMAL_GENERATOR,Registration.GEOTHERMAL_GENERATOR_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(Registration.GEOTHERMAL_GENERATOR_MENU.get(),Registration.GEOTHERMAL_GENERATOR_BLOCK_ENTITY.get(), blockPos, blockState);
         replaceSidedStorage(BlockSide.LEFT,fluidSides, new FluidSide(lavaTank, TransportState.EXTRACT_INSERT));
     }
 
-    public GeothermalGeneratorBlockEntity(BlockEntityType blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.GEOTHERMAL_GENERATOR,blockEntityType, blockPos, blockState);
-    }
 
     public IPlatformFluidHandler lavaTank = FactoryAPIPlatform.getFluidHandlerApi(FluidStack.bucketAmount() * 6, this, f -> FuelRegistry.get(new ItemStack(f.getFluid().getBucket())) > 0, SlotsIdentifier.LAVA,TransportState.EXTRACT_INSERT);
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
         NonNullList<FactoryItemSlot> slots = super.getSlots(player);
-        slots.set(0,new FactoryItemSlot(this.inventory, SlotsIdentifier.FUEL,TransportState.EXTRACT_INSERT,0,56,53){
+        slots.set(0,new FactocraftyFluidItemSlot(this,0,56,53, SlotsIdentifier.INPUT,TransportState.INSERT){
             @Override
             public boolean mayPlace(ItemStack itemStack) {
-                return lavaTank.isFluidValid(0, ItemContainerUtil.getFluid(itemStack)) || fluidTank.isFluidValid(0, ItemContainerUtil.getFluid(itemStack));
+                return lavaTank.isFluidValid(ItemContainerUtil.getFluid(itemStack)) || fluidTank.isFluidValid(ItemContainerUtil.getFluid(itemStack));
             }
         });
         return slots;
@@ -49,7 +46,7 @@ public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
     protected boolean canConsumeFuel(){
         return lavaTank.getFluidStack().getAmount() >= getPlatformFluidConsume(1);
     }
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    public void addTanks(List<IPlatformFluidHandler<?>> list) {
         super.addTanks(list);
         list.add(lavaTank.identifier().differential(),lavaTank);
     }

@@ -49,7 +49,7 @@ public class EnergyDiggerItem extends EnergyItem implements Vanishable, Factocra
 
     @Override
     public boolean mineBlock(ItemStack itemStack, Level level, BlockState blockState, BlockPos blockPos, LivingEntity livingEntity) {
-        getCraftyEnergy(itemStack).consumeEnergy((int) Math.max(1, blockState.getBlock().defaultDestroyTime() *2),false);
+        getEnergyStorage(itemStack).consumeEnergy((int) Math.max(1, blockState.getBlock().defaultDestroyTime() *2),false);
         return super.mineBlock(itemStack, level, blockState, blockPos, livingEntity);
     }
     public boolean isActivated(ItemStack itemStack){
@@ -59,14 +59,8 @@ public class EnergyDiggerItem extends EnergyItem implements Vanishable, Factocra
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
         if (isActivated(stack) && !level.isClientSide && level.random.nextFloat() <= 0.7 && entity.tickCount % 18 == 0)
-            getCraftyEnergy(stack).consumeEnergy(1,false);
+            getEnergyStorage(stack).consumeEnergy(1,false);
         super.inventoryTick(stack, level, entity, i, bl);
-    }
-
-
-    @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack itemStack, int i) {
-        super.onUseTick(level, livingEntity, itemStack, i);
     }
 
     @Override
@@ -78,7 +72,7 @@ public class EnergyDiggerItem extends EnergyItem implements Vanishable, Factocra
 
     @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
-        return blockState.is(this.blocks) && getCraftyEnergy(itemStack).getEnergyStored() > 0 && isActivated(itemStack) ? this.speed : 1.0F;
+        return blockState.is(this.blocks) && getEnergyStorage(itemStack).getEnergyStored() > 0 && isActivated(itemStack) ? this.speed : 1.0F;
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {

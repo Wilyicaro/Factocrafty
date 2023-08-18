@@ -9,19 +9,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BucketPickup;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import wily.factoryapi.FactoryAPIPlatform;
-import wily.factoryapi.ItemContainerUtil;
-import wily.factoryapi.base.IFluidItem;
-import wily.factoryapi.base.IPlatformFluidHandler;
-import wily.factoryapi.base.TransportState;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
@@ -61,9 +50,9 @@ public class FluidCellItem extends Item implements BucketLikeItem {
         return FluidStackHooks.getColor( getFluidStorage(itemStack).getFluidStack().getFluid());
     }
 
-
     @Override
-    public FluidStorageBuilder getFluidStorageBuilder(ItemStack stack) {
-        return new FluidStorageBuilder(capacity, (a) -> true, TransportState.EXTRACT_INSERT);
+    public long getCapacity() {
+        return capacity;
     }
+
 }

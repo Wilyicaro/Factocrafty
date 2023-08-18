@@ -1,0 +1,7 @@
+{
+	"parent": "factocrafty:item/transport/fluid/pipe",
+	"textures": {
+		"pipe": "factocrafty:block/transport/fluid/basic_pipe",
+		"frame": "factocrafty:block/transport/fluid/basic_pipe_frame"
+	}
+}

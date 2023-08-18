@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -19,7 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import wily.factocrafty.block.FactocraftyFlowingFluid;
+import wily.factocrafty.fluid.FactocraftyFlowingFluid;
 import wily.factocrafty.item.ArmorFeatures;
 import wily.factocrafty.item.ElectricArmorItem;
 

@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import wily.factoryapi.base.IFactoryExpandedStorage;
 import wily.factoryapi.base.IFactoryStorage;
 
 import java.util.function.Supplier;
@@ -38,7 +39,7 @@ public class FactocraftySyncFluidPacket {
             Player player = ctx.get().getPlayer();
             BlockEntity te = player.level().getBlockEntity(pos);
             if (player.level().isLoaded(pos)) {
-                ((IFactoryStorage)te).getTanks().get(tankIdentifier).setFluid(stack);
+                ((IFactoryExpandedStorage)te).getTanks().get(tankIdentifier).setFluid(stack);
                 te.setChanged();
             }
         });

@@ -1,20 +1,19 @@
 package wily.factocrafty.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.generator.entity.GeothermalGeneratorBlockEntity;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factoryapi.base.IFactoryDrawableType;
 
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 
 
 public class GeothermalGeneratorScreen extends GeneratorScreen {
-    public GeothermalGeneratorScreen(FactocraftyProcessMenu abstractContainerMenu, Inventory inventory, Component component) {
+    public GeothermalGeneratorScreen(FactocraftyStorageMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
 
     }

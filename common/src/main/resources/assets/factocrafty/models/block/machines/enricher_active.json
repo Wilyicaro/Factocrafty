@@ -1,9 +1,12 @@
 {
-	"parent": "block/orientable",
+	"parent": "block/cube",
 	"textures": {
-		"front": "factocrafty:block/machines/enricher_front_active",
-		"top": "factocrafty:block/machines/enricher_top",
-		"bottom": "factocrafty:block/machines/enricher_bottom",
-		"side": "factocrafty:block/machines/enricher_side"
+		"north": "factocrafty:block/machines/enricher_front_active",
+		"up": "factocrafty:block/machines/enricher_top",
+		"down": "factocrafty:block/machines/enricher_bottom",
+		"south": "factocrafty:block/machines/enricher_side",
+		"west": "factocrafty:block/machines/enricher_leftright_active",
+		"east": "factocrafty:block/machines/enricher_leftright_active",
+		"particle": "factocrafty:block/machines/enricher_front_active"
 	}
 }

@@ -37,7 +37,7 @@ public class ModEvents {
         EntityEvent.LIVING_HURT.register((l, s, f)-> {
                     if (!s.is(DamageTypeTags.BYPASSES_ARMOR)) {
                         for (ItemStack i: l.getArmorSlots()) {
-                            if (i.getItem() instanceof ElectricArmorItem item) item.getCraftyEnergy(i).consumeEnergy((int) Math.max( f * 140,1), false);
+                            if (i.getItem() instanceof ElectricArmorItem item) item.getEnergyStorage(i).consumeEnergy((int) Math.max( f * 140,1), false);
                         }
                         return EventResult.pass();
                     }

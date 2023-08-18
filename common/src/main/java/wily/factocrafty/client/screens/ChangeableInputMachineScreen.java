@@ -5,11 +5,11 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
+import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
 import wily.factocrafty.block.machines.entity.ChangeableInputMachineBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyInfoWidget;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncInputTypePacket;
 import wily.factocrafty.util.ScreenUtil;
 
@@ -19,7 +19,7 @@ import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 public class ChangeableInputMachineScreen extends BasicMachineScreen {
 
 
-    public ChangeableInputMachineScreen(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+    public ChangeableInputMachineScreen(FactocraftyStorageMenu<ProcessMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
     }
     ChangeableInputMachineBlockEntity rBe = (ChangeableInputMachineBlockEntity) getMenu().be;

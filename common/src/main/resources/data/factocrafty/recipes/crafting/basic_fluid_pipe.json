@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "F#F",
+    "#G#",
+    "F#F"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:steel_ingot"
+    },
+    "G": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "F": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "factocrafty:basic_fluid_pipe",
+    "count": 8
+  }
+}

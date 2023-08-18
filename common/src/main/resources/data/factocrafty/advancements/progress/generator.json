@@ -1,0 +1,38 @@
+{
+  "parent": "factocrafty:progress/root",
+  "criteria": {
+    "generator": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "factocrafty:generator"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.factocrafty.progress.generator.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "factocrafty:generator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.factocrafty.progress.generator.title"
+    }
+  },
+  "requirements": [
+    [
+      "generator"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

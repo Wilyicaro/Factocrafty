@@ -1,27 +1,25 @@
 package wily.factocrafty.client.screens.widgets.windows;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyDrawableButton;
-import wily.factocrafty.client.screens.FactocraftyMachineScreen;
+import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.inventory.FactocraftySlotWrapper;
 import wily.factoryapi.base.IFactoryDrawableType;
 
 import java.util.List;
-import java.util.Map;
 
 public class SlotsWindow extends FactocraftyScreenWindow{
 
 
     public final int[] slots;
-    public SlotsWindow(FactocraftyConfigWidget config,int width, int height, int x, int y, int uvX, int uvY,FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent, int[] slots) {
+    public SlotsWindow(FactocraftyConfigWidget config, int width, int height, int x, int y, int uvX, int uvY, FactocraftyStorageScreen<? extends FactocraftyMenuBlockEntity> parent, int[] slots) {
         super(config, width,height, x, y, uvX, uvY, parent);
         this.slots = slots;
     }
-    public SlotsWindow(FactocraftyConfigWidget config, int x, int y, FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent, int[] slots) {
+    public SlotsWindow(FactocraftyConfigWidget config, int x, int y, FactocraftyStorageScreen<? extends FactocraftyMenuBlockEntity> parent, int[] slots) {
         this(config, 34,109, x, y, 222, 87, parent, slots);
     }
     public boolean hasSlotAt(int i, int j){

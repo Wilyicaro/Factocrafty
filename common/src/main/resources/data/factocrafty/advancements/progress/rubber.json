@@ -1,0 +1,36 @@
+{
+  "parent": "factocrafty:progress/cut_rubber_log",
+  "criteria": {
+    "rubber": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "factocrafty:rubber"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.factocrafty.progress.rubber.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "factocrafty:rubber"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.factocrafty.progress.rubber.title"
+    }
+  },
+  "requirements": [
+    [
+      "rubber"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

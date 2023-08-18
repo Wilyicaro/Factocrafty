@@ -20,7 +20,7 @@ import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class FluidTankItem extends BlockItem implements BucketLikeItem {
+public class FluidTankItem extends FactocraftyMachineBlockItem implements BucketLikeItem {
     public FluidTankItem(FactocraftyFluidTankBlock block, Properties properties) {
         super(block, properties);
     }
@@ -39,18 +39,12 @@ public class FluidTankItem extends BlockItem implements BucketLikeItem {
     }
 
     @Override
-    public FluidStorageBuilder getFluidStorageBuilder(ItemStack stack) {
-        FactoryCapacityTiers capacityTier = ((FactocraftyFluidTankBlock)getBlock()).capacityTier;
-        long capacity = capacityTier.capacityMultiplier * 16 * FluidStack.bucketAmount();
-        //if (stack != null && stack.hasTag()){
-        //    FactocraftyFluidTankBlockEntity be = FactocraftyBlockEntityWLRenderer.getFluidTank(Direction.UP,capacityTier);
-        //    be.load(be.getUpdateTag().merge( stack.getTag().getCompound(BLOCK_ENTITY_TAG)));
-        //    capacity = be.fluidTank.getMaxFluid();
-        //}
-        return new FluidStorageBuilder(capacity, (a) -> !FactocraftyExpectPlatform.isGas(a.getFluid()), TransportState.EXTRACT_INSERT);
+    public long getCapacity() {
+        return ((FactocraftyFluidTankBlock)getBlock()).capacityTier.capacityMultiplier * 16 * FluidStack.bucketAmount();
     }
+
     @Override
-    public IPlatformFluidHandler getFluidStorage(ItemStack stack) {
-        return FactoryAPIPlatform.getFluidItemHandlerApi(stack,getFluidStorageBuilder(stack));
+    public boolean isFluidValid(FluidStack fluidStack) {
+        return !FactocraftyExpectPlatform.isGas(fluidStack.getFluid());
     }
 }

@@ -81,7 +81,12 @@ public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
     }
 
     public static ICraftyEnergyStorage of(ICraftyEnergyStorage fluidHandler, TransportState transportState){
-        return new FilteredCYEnergyStorage(fluidHandler,transportState) {};
+        return new FilteredCYEnergyStorage(fluidHandler,transportState){};
+    }
+
+    @Override
+    public void setSupportedTier(FactoryCapacityTiers tier) {
+        energyStorage.setSupportedTier(tier);
     }
 
     @Override

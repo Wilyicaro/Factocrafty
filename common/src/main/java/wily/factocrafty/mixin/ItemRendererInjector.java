@@ -16,9 +16,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import wily.factocrafty.block.transport.energy.CableBlock;
+import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
+import wily.factocrafty.block.transport.FactocraftyConduitBlock;
 import wily.factocrafty.client.renderer.block.FactocraftyBlockEntityWLRenderer;
+import wily.factocrafty.item.FactocraftyMachineBlockItem;
 import wily.factocrafty.util.registering.FactocraftyFluidTanks;
+import wily.factocrafty.util.registering.IFactocraftyConduit;
 
 @Mixin({ItemRenderer.class})
 public abstract class ItemRendererInjector {
@@ -32,27 +35,25 @@ public abstract class ItemRendererInjector {
     private BakedModel injectRender(BakedModel bakedModel, ItemStack itemStack, ItemDisplayContext transformType, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j){
         if (!itemStack.isEmpty()) {
             boolean bl2 = transformType == ItemDisplayContext.GUI || transformType == ItemDisplayContext.GROUND || transformType == ItemDisplayContext.FIXED;
-            if (bl2 && itemStack.getItem() instanceof BlockItem b && b.getBlock() instanceof CableBlock)
+            if (bl2 && itemStack.getItem() instanceof BlockItem b && b.getBlock() instanceof FactocraftyConduitBlock<?,?>)
                 return  itemModelShaper.getModelManager().getModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + b.arch$registryName().getPath()), "inventory"));
-            if (Platform.isFabric()){
-                for (FactocraftyFluidTanks tank : FactocraftyFluidTanks.values())
-                    if (itemStack.is(tank.get().asItem())) {
-                        poseStack.pushPose();
-                        bakedModel.getTransforms().getTransform(transformType).apply(bl, poseStack);
-                        poseStack.translate(-0.5, -0.5, -0.5);
-                        FactocraftyBlockEntityWLRenderer.INSTANCE.renderByItem(itemStack,transformType,poseStack,multiBufferSource,i,j);
-                        poseStack.popPose();
-                        return bakedModel;
-                    }
-            }
+            if (Platform.isFabric())
+                if (itemStack.getItem() instanceof BlockItem b && b instanceof FactocraftyMachineBlockItem) {
+                    poseStack.pushPose();
+                    bakedModel.getTransforms().getTransform(transformType).apply(bl, poseStack);
+                    poseStack.translate(-0.5, -0.5, -0.5);
+                    FactocraftyBlockEntityWLRenderer.INSTANCE.renderByItem(itemStack, transformType, poseStack, multiBufferSource, i, j);
+                    poseStack.popPose();
+                    return bakedModel;
+
+                }
         }
         return bakedModel;
     }
     @ModifyVariable(method = ("getModel"), at = @At("STORE"), ordinal = 0)
     private BakedModel injectBakedModel(BakedModel bakedModel,ItemStack itemStack){
-            if (itemStack.getItem() instanceof BlockItem b && b.getBlock() instanceof CableBlock)
+            if (itemStack.getItem() instanceof BlockItem b && b.getBlock() instanceof FactocraftyConduitBlock<?,?>)
                 return  itemModelShaper.getModelManager().getModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + b.arch$registryName().getPath() + "_in_hand"), "inventory"));
-
         return  bakedModel;
     }
 }

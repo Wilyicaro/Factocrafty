@@ -8,44 +8,33 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.entity.CYEnergyStorage;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
+import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.util.registering.FactocraftyBlockEntities;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.*;
+import wily.factoryapi.util.StorageStringUtil;
 
-public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlockEntity {
-    public FactocraftyEnergyStorageBlockEntity(FactoryCapacityTiers energyTier, BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.ENERGY_CELL, energyTier, FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
+import static wily.factoryapi.util.StorageUtil.transferEnergyFrom;
+
+public class FactocraftyEnergyStorageBlockEntity extends FactocraftyMenuBlockEntity {
+    public FactocraftyEnergyStorageBlockEntity(BlockPos blockPos, BlockState blockState) {
+        super(Registration.ENERGY_STORAGE_MENU.get(), FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
         for (BlockSide side : BlockSide.values())
             replaceSidedStorage(side,energySides, TransportState.EXTRACT_INSERT);
         replaceSidedStorage(BlockSide.BACK,energySides, TransportState.EXTRACT);
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.INSERT);
-        FILL_SLOT = 0;
-        DRAIN_SLOT = 1;
+        STORAGE_SLOTS = new int[]{0,1};
     }
 
     @Override
     public int getInitialEnergyCapacity() {
-        return defaultEnergyTier.getStorageCapacity();
-    }
-
-    @Override
-    public boolean hasInventory() {
-        return true;
-    }
-
-    @Override
-    public boolean hasEnergyCell() {
-        return true;
+        return getDefaultEnergyTier().getStorageCapacity();
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        String[] s = super.getDisplayName().getString().split(" ");
-
-        return Component.literal(s[s.length -1].replaceAll("[()]","")).setStyle(super.getDisplayName().getStyle());
+        return Component.literal(StorageStringUtil.getBetweenParenthesis(super.getDisplayName().getString())).setStyle(super.getDisplayName().getStyle());
     }
 
     @Override
@@ -53,7 +42,7 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlock
         super.tick();
         for  (Direction d : Direction.values()){
             if (level.getBlockEntity(getBlockPos().relative(d)) instanceof IFactoryStorage storage) {
-                if (energySides.get(d).canInsert() && storage.energySides().isPresent() && storage.energySides().get().get(d.getOpposite()).canExtract() ) transferEnergyFrom(d,storage.getStorage(Storages.CRAFTY_ENERGY,d.getOpposite()).get());
+                if (energySides.get(d).canInsert() && storage.energySides().isPresent() && storage.energySides().get().get(d.getOpposite()).canExtract() ) transferEnergyFrom(this, d,storage.getStorage(Storages.CRAFTY_ENERGY,d.getOpposite()).get());
             }
         }
     }
@@ -61,8 +50,8 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyProcessBlock
     @Override
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
         NonNullList<FactoryItemSlot> slots= super.getSlots(player);
-        slots.add(new FactocraftyCYItemSlot(this, FILL_SLOT, 61,17, TransportState.INSERT, FactoryCapacityTiers.BASIC));
-        slots.add(new FactocraftyCYItemSlot(this, DRAIN_SLOT, 61,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this, 0, 61,53, TransportState.INSERT, SlotsIdentifier.INPUT,()->energyStorage.getStoredTier()));
+        slots.add(new FactocraftyCYItemSlot(this, 1, 61,17, TransportState.EXTRACT, SlotsIdentifier.OUTPUT,()->energyStorage.getStoredTier()));
         return slots;
     }
 }

@@ -27,7 +27,7 @@
   "gui.factocrafty.can_operate": "This machine is ready!",
 
   "_comment": "Block",
-  "block.factocrafty.generator": "Generator",
+  "block.factocrafty.generator": "Thermal Generator",
   "block.factocrafty.geothermal_generator": "Geothermal Generator",
   "block.factocrafty.amorphous_solar_panel": "Amorphous Solar Panel",
   "block.factocrafty.organic_solar_panel": "Organic Solar Panel",
@@ -49,7 +49,7 @@
   "block.factocrafty.extruder": "Extruder",
   "block.factocrafty.sawmill": "Sawmill",
   "block.factocrafty.canning_machine": "Canning Machine",
-  "block.factocrafty.fluid_enricher": "Fluid Enricher",
+  "block.factocrafty.fluid_pump": "Fluid Pump",
   "block.factocrafty.alloy_smelter": "Alloy Smelter",
 
   "block.factocrafty.tin_ore": "Tin Ore",
@@ -156,6 +156,14 @@
   "block.factocrafty.high_insulated_silver_cable": "H-Insulated Silver Cable",
   "block.factocrafty.medium_insulated_silver_cable": "M-Insulated Silver Cable",
   "block.factocrafty.crystal_cable": "Crystal Cable",
+
+
+  "_comment": "Fluid Pipe",
+  "block.factocrafty.basic_fluid_pipe": "Basic Fluid Pipe",
+  "block.factocrafty.advanced_fluid_pipe": "Advanced Fluid Pipe",
+  "block.factocrafty.high_fluid_pipe": "High Fluid Pipe",
+  "block.factocrafty.ultimate_fluid_pipe": "Ultimate Fluid Pipe",
+  "block.factocrafty.quantum_fluid_pipe": "Quantum Fluid Pipe",
 
   "_comment": "Transformer",
   "block.factocrafty.lv_transformer": "BT Transformer",
@@ -515,6 +523,10 @@
   "tooltip.factocrafty.config.input_type.fluid": "%s Fluids",
   "tooltip.factocrafty.config.infusion_mode.mixer": "%s Mixing",
   "tooltip.factocrafty.config.infusion_mode.electrolyzer": "%s Electrolyzing",
+  "tooltip.factocrafty.config.pump_mode.insert": "Draining",
+  "tooltip.factocrafty.config.pump_mode.extract": "Filling",
+  "tooltip.factocrafty.config.pump_mode.extract_insert": "Draining and Filling",
+  "tooltip.factocrafty.config.pump_mode.none": "None",
   "tooltip.factocrafty.upgrade_right_click": "Right-click in the machine to upgrade",
   "tooltip.factocrafty.upgrade.overclock": "Improves machine speed up to 100x, but increases CY consume",
   "tooltip.factocrafty.upgrade.transformer": "Increases machine supported Energy tier",
@@ -530,6 +542,7 @@
   "category.factocrafty.recipe.recycling": "Recycling",
   "category.factocrafty.recipe.refining": "Refining",
   "category.factocrafty.recipe.enriching": "Enriching",
+  "category.factocrafty.recipe.sawing": "Sawing",
   "category.factocrafty.recipe.gaseous_infusion": "Gaseous Infusion",
   "category.factocrafty.recipe.smelting": "Electric Smelting",
   "category.factocrafty.recipe.scrap_box": "Scrap Box Items",
@@ -543,6 +556,7 @@
   "subtitles.factocrafty.macerator": "Macerator working",
   "subtitles.factocrafty.extractor": "Extractor working",
   "subtitles.factocrafty.compressor": "Compressor working",
+  "subtitles.factocrafty.sawmill": "Sawmill working",
   "subtitles.factocrafty.electric_shock": "Electric shock",
   "subtitles.factocrafty.jetpack_flight": "Jetpack Flight",
 
@@ -603,17 +617,18 @@
   "mode.factocrafty.2": "Charge Items not in hand",
   "mode.factocrafty.3": "Charge Item in hand",
 
-  "_comment": "IE Meter",
-  "ie.factocrafty.desc": "Reads info about cable networks and electric blocks",
-  "ie.factocrafty.network_info": "Energy Network Info",
-  "ie.factocrafty.connected_generators": "Connected generators: %s",
-  "ie.factocrafty.connected_machines": "Connected machines: %s",
-  "ie.factocrafty.connected_batteries": "Connected batteries: %s",
-  "ie.factocrafty.machine_info": "Machine Info",
-  "ie.factocrafty.last_generated": "Generating: %s",
-  "ie.factocrafty.total_generated": "Total generated: %s",
-  "ie.factocrafty.last_consumed": "Consuming: %s",
-  "ie.factocrafty.total_consumed": "Total consumed: %s",
+
+  "_comment": "Advancements",
+  "advancements.factocrafty.progress.root.description": "Start your Factocrafty progression!",
+  "advancements.factocrafty.progress.rubber.title": "Rubber? That again?",
+  "advancements.factocrafty.progress.rubber.description": "Obtain your first rubber",
+  "advancements.factocrafty.progress.machines.title": "Only the result is needed",
+  "advancements.factocrafty.progress.machines.description": "Craft a machine for processing",
+  "advancements.factocrafty.progress.generator.title": "Why furnaces?",
+  "advancements.factocrafty.progress.generator.description": "Craft a Thermal Generator to produce Crafty Energy",
+  "advancements.factocrafty.progress.cut_rubber_log.title": "Cutting again...",
+  "advancements.factocrafty.progress.cut_rubber_log.description": "Cut a Stripped Rubber Log with a axe to find latex and obtain Sticky Resin by doing it",
+
 
   "item.factocrafty.corrupted_enderman_spawn_egg": "Corrupted Enderman Spawn Egg",
 

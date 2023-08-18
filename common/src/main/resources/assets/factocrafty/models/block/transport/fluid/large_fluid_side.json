@@ -1,0 +1,21 @@
+{
+	"credit": "Made with Blockbench",
+	"elements": [
+		{
+			"name": "fluid_side",
+			"from": [4.5, 11.5, 4.5],
+			"to": [11.5, 16, 11.5],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+			"color": 8,
+			"faces": {
+				"north": {"uv": [4.4, 0, 11.4, 4.5], "texture": "#missing", "tintindex": 0},
+				"east": {"uv": [11.5, 4.5, 16, 11.5], "rotation": 90, "texture": "#missing", "tintindex": 0},
+				"south": {"uv": [4.5, 11.5, 11.5, 16], "rotation": 180, "texture": "#missing", "tintindex": 0},
+				"west": {"uv": [0, 4.5, 4.5, 11.5], "rotation": 270, "texture": "#missing", "tintindex": 0},
+				"up": {"uv": [4.5, 4.5, 11.5, 11.5], "texture": "#missing", "tintindex": 0},
+				"down": {"uv": [4.5, 4.5, 11.5, 11.5], "texture": "#missing", "tintindex": 0}
+			}
+		}
+	],
+	"gui_light": "front"
+}

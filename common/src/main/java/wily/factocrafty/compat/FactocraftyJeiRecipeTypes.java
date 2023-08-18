@@ -29,9 +29,12 @@ public class FactocraftyJeiRecipeTypes {
 
     public static RecipeType<FactocraftyMachineRecipe> RECYCLING = create("recycling", FactocraftyMachineRecipe.class);
     public static RecipeType<FactocraftyMachineRecipe> REFINING = create("refining", FactocraftyMachineRecipe.class);
+    public static RecipeType<FactocraftyMachineRecipe> SAWING = create("sawing", FactocraftyMachineRecipe.class);
+
     public static RecipeType<EnricherRecipe> ENRICHING = create("enriching", EnricherRecipe.class);
 
     public static RecipeType<GasInfuserRecipe> GAS_INFUSION = create("gaseous_infusion", GasInfuserRecipe.class);
+
 
     public static RecipeType<IScrapBoxRecipe> SCRAP_BOX_ITEMS = new RecipeType<>(getModResource("scrap_box"),IScrapBoxRecipe.class);
 

@@ -6,10 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.machines.entity.ElectricFurnaceBlockEntity;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 
-public class ElectricFurnaceScreen extends FactocraftyMachineScreen<ElectricFurnaceBlockEntity> {
-    public ElectricFurnaceScreen(FactocraftyProcessMenu<ElectricFurnaceBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+public class ElectricFurnaceScreen extends FactocraftyStorageScreen<ElectricFurnaceBlockEntity> {
+    public ElectricFurnaceScreen(FactocraftyStorageMenu<ElectricFurnaceBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
     }
     public static ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/electric_furnace.png");

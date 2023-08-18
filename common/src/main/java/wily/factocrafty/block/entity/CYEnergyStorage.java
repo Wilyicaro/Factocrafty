@@ -34,6 +34,12 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     public void setStoredTier(FactoryCapacityTiers tier) {
         storedTier = tier;
     }
+
+    @Override
+    public void setSupportedTier(FactoryCapacityTiers tier) {
+        supportableTier = tier;
+    }
+
     @Override
     public FactoryCapacityTiers getSupportedTier() {
         return supportableTier;
@@ -109,13 +115,15 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
         CompoundTag tag = new CompoundTag();
         tag.putInt(KEY, this.energy);
         tag.putInt("tier", storedTier.ordinal());
+        tag.putInt("supportedTier", supportableTier.ordinal());
         return tag;
     }
 
     @Override
     public void deserializeTag(CompoundTag compoundTag) {
-        this.energy = compoundTag.getInt(KEY);
-        this.storedTier = FactoryCapacityTiers.values()[compoundTag.getInt("tier")];
+        setEnergyStored(compoundTag.getInt(KEY));
+        setStoredTier(FactoryCapacityTiers.values()[compoundTag.getInt("tier")]);
+        setSupportedTier(FactoryCapacityTiers.values()[compoundTag.getInt("supportedTier")]);
     }
     public int getMaxConsume(){
         return Math.min(getEnergyStored(),getTransport().canExtract() ? maxInOut : 0);

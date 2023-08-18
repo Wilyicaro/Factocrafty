@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,11 +14,10 @@ import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
-import wily.factocrafty.block.transport.energy.CableBlock;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
+import wily.factocrafty.block.transport.FactocraftyConduitBlock;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
@@ -25,24 +25,26 @@ import wily.factoryapi.base.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
+import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
+
+public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements IFactoryProgressiveStorage {
 
 
     private final int FUEL_SLOT = 0;
 
 
     public Progress burnTime = new Progress(Progress.Identifier.BURN_TIME,56,36,0);
+    public Progress progress = new Progress(Progress.Identifier.DEFAULT, 80,39,200);
     public final Bearer<Integer> energyTick = Bearer.of(0);
 
     public GeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        this(FactocraftyMenus.GENERATOR,Registration.GENERATOR_BLOCK_ENTITY.get(), blockPos, blockState);
+        this(Registration.GENERATOR_MENU.get(),Registration.GENERATOR_BLOCK_ENTITY.get(), blockPos, blockState);
     }
-    public GeneratorBlockEntity(FactocraftyMenus menu,BlockEntityType blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(menu, FactoryCapacityTiers.BASIC, blockEntityType, blockPos, blockState);
+    public GeneratorBlockEntity(MenuType<?> menu, BlockEntityType blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(menu, blockEntityType, blockPos, blockState);
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.NONE);
-        progress = new Progress(Progress.Identifier.DEFAULT, 80,39,200);
         additionalSyncInt.add(energyTick);
-        DRAIN_SLOT = FILL_SLOT = 1;
+        STORAGE_SLOTS = new int[]{1};
         fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> f.getFluid() == Fluids.WATER, SlotsIdentifier.WATER, TransportState.INSERT);
     }
 
@@ -55,7 +57,7 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
                 return FuelRegistry.get(itemStack) > 0;
             }
         });
-        slots.add(new FactocraftyCYItemSlot(this, FILL_SLOT,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC){
+        slots.add(new FactocraftyCYItemSlot(this, 1,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC){
         });
         return slots;
     }
@@ -115,10 +117,10 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
             super.tick();
             for (Direction direction : Direction.values()) {
                 BlockPos pos = getBlockPos().relative(direction);
-                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof CableBlock)) {
+                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof  FactocraftyConduitBlock<?,?>)) {
                     IFactoryStorage CYEbe = (IFactoryStorage) level.getBlockEntity(pos);
                     if (CYEbe != null)
-                        CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(direction, e));
+                        CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(this, direction, e));
                 }
             }
             if (wasBurning != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)) level.setBlock(getBlockPos(),getBlockState().setValue(FactocraftyMachineBlock.ACTIVE, burnTime.first().get() > 0), 3);
@@ -126,7 +128,7 @@ public class GeneratorBlockEntity extends FactocraftyProcessBlockEntity {
         }
     }
 
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    public void addTanks(List<IPlatformFluidHandler<?>> list) {
         list.add(fluidTank.identifier().differential(), fluidTank);
     }
 

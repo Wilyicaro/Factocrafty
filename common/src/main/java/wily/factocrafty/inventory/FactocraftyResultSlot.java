@@ -4,18 +4,18 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
+import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
 import wily.factoryapi.base.FactoryItemSlot;
 import wily.factoryapi.base.SlotsIdentifier;
 import wily.factoryapi.base.TransportState;
 
 public class FactocraftyResultSlot extends FactoryItemSlot {
-    private FactocraftyMachineBlockEntity be;
+    private ProcessMachineBlockEntity be;
     private final Player player;
     private int removeCount;
 
 
-    public FactocraftyResultSlot(FactocraftyMachineBlockEntity be, @Nullable Player player, int i, int j, int k) {
+    public FactocraftyResultSlot(ProcessMachineBlockEntity be, @Nullable Player player, int i, int j, int k) {
         super(be.inventory, SlotsIdentifier.OUTPUT, TransportState.EXTRACT,i, j, k);
         this.be = be;
 

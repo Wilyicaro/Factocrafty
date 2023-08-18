@@ -8,18 +8,18 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.ICraftyEnergyItem;
+import wily.factoryapi.base.ICraftyStorageItem;
 import wily.factoryapi.base.TransportState;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class EnergyItem extends Item implements ICraftyEnergyItem<CYItemEnergyStorage> {
+public class EnergyItem extends Item implements ICraftyStorageItem {
     public EnergyItem(FactoryCapacityTiers tier, TransportState canIE, Properties properties) {
         super(properties);
         energyTier = tier;
         energyState = canIE;
-        capacity = energyTier.energyCapacity;
+        capacity = energyTier.initialCapacity;
     }
     public FactoryCapacityTiers energyTier;
     public TransportState energyState;
@@ -30,10 +30,10 @@ public class EnergyItem extends Item implements ICraftyEnergyItem<CYItemEnergySt
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(energyTier.getEnergyTierComponent(false));
-        list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
+        list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getEnergyStorage(itemStack)));
     }
     public float getChargedLevel(ItemStack stack){
-        int e = getCraftyEnergy(stack).getEnergyStored();
+        int e = getEnergyStorage(stack).getEnergyStored();
         if (e > 0 ) {
             return e /(float)capacity;
         }
@@ -41,10 +41,10 @@ public class EnergyItem extends Item implements ICraftyEnergyItem<CYItemEnergySt
     }
 
     @Override
-    public boolean isBarVisible(ItemStack itemStack) {return getCraftyEnergy(itemStack).getSpace() > 0;}
+    public boolean isBarVisible(ItemStack itemStack) {return getEnergyStorage(itemStack).getSpace() > 0;}
 
     public int getBarWidth(ItemStack itemStack) {
-        return Math.round( getCraftyEnergy(itemStack).getEnergyStored() * 13.0F / (float)this.getCraftyEnergy(itemStack).getMaxEnergyStored());
+        return Math.round( getEnergyStorage(itemStack).getEnergyStored() * 13.0F / (float)this.getEnergyStorage(itemStack).getMaxEnergyStored());
     }
 
     public int getBarColor(ItemStack itemStack) {
@@ -52,12 +52,19 @@ public class EnergyItem extends Item implements ICraftyEnergyItem<CYItemEnergySt
     }
 
     @Override
-    public CYItemEnergyStorage getCraftyEnergy(ItemStack stack) {
-        return new CYItemEnergyStorage(stack,0,capacity, energyState, energyTier);
+    public int getCapacity() {
+        return capacity;
     }
 
     @Override
-    public FactoryCapacityTiers getEnergyTier() {
+    public TransportState getTransport() {
+        return energyState;
+    }
+
+    @Override
+    public FactoryCapacityTiers getSupportedEnergyTier() {
         return energyTier;
     }
+
+
 }

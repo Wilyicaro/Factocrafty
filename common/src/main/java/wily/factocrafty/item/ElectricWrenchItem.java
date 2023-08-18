@@ -16,7 +16,7 @@ import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<CYItemEnergyStorage>,FactocraftyDiggerItem {
+public class ElectricWrenchItem extends WrenchItem implements ICraftyStorageItem,FactocraftyDiggerItem {
 
 
     private final FactoryCapacityTiers energyTier;
@@ -27,8 +27,8 @@ public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<
     }
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(getEnergyTier().getEnergyTierComponent(false));
-        list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
+        list.add(getSupportedEnergyTier().getEnergyTierComponent(false));
+        list.add( StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getEnergyStorage(itemStack)));
     }
     public boolean isActivated(ItemStack itemStack){
         return itemStack.getOrCreateTag().getBoolean("activated");
@@ -36,12 +36,12 @@ public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<
 
     @Override
     protected boolean canUseWrench(ItemStack stack) {
-        return isActivated(stack) && getCraftyEnergy(stack).getEnergyStored() > 0;
+        return isActivated(stack) && getEnergyStorage(stack).getEnergyStored() > 0;
     }
 
     @Override
     protected void whenUseWrench(int used, UseOnContext useOnContext) {
-        getCraftyEnergy(useOnContext.getItemInHand()).consumeEnergy(new CraftyTransaction(used, energyTier),false);
+        getEnergyStorage(useOnContext.getItemInHand()).consumeEnergy(new CraftyTransaction(used, energyTier),false);
     }
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
@@ -52,26 +52,34 @@ public class ElectricWrenchItem extends WrenchItem implements ICraftyEnergyItem<
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
         if (isActivated(stack) && !level.isClientSide && level.random.nextFloat() <= 0.7 && entity.tickCount % 18 == 0)
-            getCraftyEnergy(stack).consumeEnergy(1,false);
+            getEnergyStorage(stack).consumeEnergy(1,false);
         super.inventoryTick(stack, level, entity, i, bl);
     }
 
+
     @Override
-    public CYItemEnergyStorage getCraftyEnergy(ItemStack stack) {
-        return new CYItemEnergyStorage(stack,0,getEnergyTier().energyCapacity, TransportState.INSERT, getEnergyTier());
+    public int getCapacity() {
+        return getSupportedEnergyTier().initialCapacity;
     }
+
     @Override
-    public boolean isBarVisible(ItemStack itemStack) {return getCraftyEnergy(itemStack).getSpace() > 0;}
+    public TransportState getTransport() {
+        return TransportState.INSERT;
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack itemStack) {return getEnergyStorage(itemStack).getSpace() > 0;}
 
     public int getBarWidth(ItemStack itemStack) {
-        return Math.round( getCraftyEnergy(itemStack).getEnergyStored() * 13.0F / (float)this.getCraftyEnergy(itemStack).getMaxEnergyStored());
+        return Math.round( getEnergyStorage(itemStack).getEnergyStored() * 13.0F / (float)this.getEnergyStorage(itemStack).getMaxEnergyStored());
     }
 
     public int getBarColor(ItemStack itemStack) {
         return Mth.hsvToRgb(0.5F, 1.0F, 1.0F);
     }
+
     @Override
-    public FactoryCapacityTiers getEnergyTier() {
+    public FactoryCapacityTiers getSupportedEnergyTier() {
         return energyTier;
     }
 }

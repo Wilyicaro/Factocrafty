@@ -8,11 +8,10 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.CYEnergyStorage;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
-import wily.factoryapi.base.ICraftyEnergyItem;
+import wily.factocrafty.network.FactocraftySyncEnergyPacket;
 import wily.factoryapi.base.ICraftyEnergyStorage;
+import wily.factoryapi.base.ICraftyStorageItem;
 
 public class FactocraftyItemMenuContainer extends AbstractContainerMenu {
     public final Player player;
@@ -48,15 +47,15 @@ public class FactocraftyItemMenuContainer extends AbstractContainerMenu {
     protected void updateChanges() {
         if (player instanceof ServerPlayer sp && blockPos != null) {
             if (player.level().getBlockEntity(blockPos) instanceof FactocraftyStorageBlockEntity be) {
-                be.syncAdditionalMenuData(this, sp);
+                Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftySyncEnergyPacket(be.getBlockPos(),be.energyStorage.getEnergyStored(),be.energyStorage.getStoredTier()));
             }
         }
     }
     @Override
     public boolean stillValid(Player player) {
         boolean b = true;
-        if (itemContainer.getItem() instanceof ICraftyEnergyItem<?> item) {
-            ICraftyEnergyStorage storage = item.getCraftyEnergy(itemContainer);
+        if (itemContainer.getItem() instanceof ICraftyStorageItem item) {
+            ICraftyEnergyStorage storage = item.getEnergyStorage(itemContainer);
             if(player.level().random.nextFloat() >= 0.7 && player.tickCount % 10 == 0) storage.consumeEnergy(1,false);
             if (storage.getEnergyStored() <= 0) b = false;
         }

@@ -33,11 +33,16 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.material.*;
-import wily.factocrafty.FactocraftyFluidAttributes;
+import wily.factocrafty.block.transport.fluid.FluidPipeBlock;
+import wily.factocrafty.block.transport.fluid.FluidPipeBlockEntity;
+import wily.factocrafty.fluid.FactocraftyFluidAttributes;
 import wily.factocrafty.block.*;
-import wily.factocrafty.util.registering.FactocraftyCables;
 import wily.factocrafty.block.transport.energy.CableBlock;
 import wily.factocrafty.block.transport.energy.SolidCableBlock;
+import wily.factocrafty.fluid.FactocraftyFlowingFluid;
+import wily.factocrafty.fluid.FactocraftySourceFluid;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
+import wily.factocrafty.util.registering.FactocraftyCables;
 import wily.factocrafty.block.transport.energy.entity.CableBlockEntity;
 import wily.factocrafty.block.transport.energy.entity.SolidCableBlockEntity;
 import wily.factocrafty.block.entity.*;
@@ -56,7 +61,6 @@ import wily.factocrafty.gen.BasinFeature;
 import wily.factocrafty.gen.RubberTreeFoliagePlacer;
 import wily.factocrafty.gen.RubberTreeGrower;
 import wily.factocrafty.inventory.FactocraftyItemMenuContainer;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
 import wily.factocrafty.item.*;
 import wily.factocrafty.recipes.*;
 import wily.factocrafty.tag.Fluids;
@@ -68,6 +72,7 @@ import wily.factoryapi.base.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static wily.factocrafty.Factocrafty.MOD_ID;
@@ -108,6 +113,8 @@ public class Registration {
     public static List<ResourceLocation> RegistrarBlockItems = new ArrayList<>();
 
     public static List<ResourceLocation> RegistrarItems = new ArrayList<>();
+
+    public static Map<ResourceLocation, Function<Block,BlockItem>> blockItemOverrides = new HashMap<>();
     
     //
     public static ResourceLocation getModResource(String id){ return new ResourceLocation( MOD_ID, id);}
@@ -131,9 +138,9 @@ public class Registration {
                     Item item = (Item) var2.next();
                     if (item.arch$registryName().getNamespace().equals(MOD_ID)) {
                         output.accept(item);
-                        if (item instanceof ICraftyEnergyItem<?> energyItem) {
+                        if (item instanceof ICraftyStorageItem energyItem) {
                             ItemStack charged = new ItemStack(item);
-                            ICraftyEnergyStorage storage = energyItem.getCraftyEnergy(charged);
+                            ICraftyEnergyStorage storage = energyItem.getEnergyStorage(charged);
                             storage.receiveEnergy(new CraftyTransaction(storage.getMaxEnergyStored(), storage.getSupportedTier()), false);
                             output.accept(charged);
                         } else if (item instanceof FluidCellItem cell) {
@@ -158,6 +165,8 @@ public class Registration {
     public static final RegistrySupplier<SoundEvent> CABLE_PLACE = SOUNDS.register("block.cable.place",() -> SoundEvent.createVariableRangeEvent(getModResource("block.cable.place")));
 
     public static final RegistrySupplier<SoundEvent> MACERATOR_ACTIVE = SOUNDS.register("block.macerator",() -> SoundEvent.createVariableRangeEvent((getModResource("block.macerator"))));
+
+    public static final RegistrySupplier<SoundEvent> SAWMILL_ACTIVE = SOUNDS.register("block.sawmill",() -> SoundEvent.createVariableRangeEvent((getModResource("block.sawmill"))));
 
     public static final RegistrySupplier<SoundEvent> COMPRESSOR_ACTIVE = SOUNDS.register("block.compressor",() -> SoundEvent.createVariableRangeEvent((getModResource("block.compressor"))));
 
@@ -217,6 +226,7 @@ public class Registration {
 
     public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> MACERATOR_RECIPE = RECIPE_TYPES.register("macerating", () -> new RecipeType<>() {});
 
+
     public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> COMPRESSOR_RECIPE = RECIPE_TYPES.register("compressing", () -> new RecipeType<>() {});
     public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> EXTRACTOR_RECIPE = RECIPE_TYPES.register("extracting", () -> new RecipeType<>() {});
 
@@ -227,6 +237,8 @@ public class Registration {
     public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> RECYCLER_RECIPE = RECIPE_TYPES.register("recycling", () -> new RecipeType<>() {});
 
     public static final RegistrySupplier<RecipeType<GasInfuserRecipe>> GASEOUS_INFUSION_RECIPE = RECIPE_TYPES.register("gaseous_infusion", () -> new RecipeType<>() {});
+
+    public static final RegistrySupplier<RecipeType<FactocraftyMachineRecipe>> SAWMILL_RECIPE = RECIPE_TYPES.register("sawing", () -> new RecipeType<>() {});
 
     public static final RegistrySupplier<RecipeSerializer<SolderingCraftingRecipe>> SOLDERING_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("soldering_crafting", ()-> new SolderingCraftingRecipe.SimpleSerializer<>(SolderingCraftingRecipe::new));
 
@@ -263,27 +275,37 @@ public class Registration {
         }
     }),200,200));
 
+    public static final RegistrySupplier<RecipeSerializer<FactocraftyMachineRecipe>> SAWMILL_RECIPE_SERIALIZER = RECIPE_SERIALIZER.register("sawing", () -> new FactocraftyMachineRecipe.Serializer<>((resourceLocation -> new FactocraftyMachineRecipe("sawing",resourceLocation)),200));
+
+
     public static final RegistrySupplier<Block> GENERATOR = registerFactocraftyBlockItem(()-> new GeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).destroyTime(2f)), FactocraftyBlocks.GENERATOR.getName());
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<GeneratorBlockEntity>>> GENERATOR_MENU = MENUS.register(FactocraftyBlocks.GENERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.GENERATOR,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<GeneratorBlockEntity>>> GENERATOR_MENU = MENUS.register(FactocraftyBlocks.GENERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.GENERATOR_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<GeneratorBlockEntity>>> GEOTHERMAL_GENERATOR_MENU = MENUS.register(FactocraftyBlocks.GEOTHERMAL_GENERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.GEOTHERMAL_GENERATOR,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<GeneratorBlockEntity>>> GEOTHERMAL_GENERATOR_MENU = MENUS.register(FactocraftyBlocks.GEOTHERMAL_GENERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.GEOTHERMAL_GENERATOR_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<ElectricFurnaceBlockEntity>>> ELECTRIC_FURNACE_MENU = MENUS.register(FactocraftyBlocks.ELECTRIC_FURNACE.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.ELECTRIC_FURNACE,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<Block> FLUID_PUMP = registerFactocraftyBlockItem(()-> new FluidPumpBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).destroyTime(2f)), FactocraftyBlocks.FLUID_PUMP.getName(), b-> new FactocraftyMachineBlockItem(b,fullStackItemProperties()));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<FluidPumpBlockEntity>>> FLUID_PUMP_MENU = MENUS.register(FactocraftyBlocks.FLUID_PUMP.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.FLUID_PUMP_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> COMPRESSOR_MENU = MENUS.register(FactocraftyBlocks.COMPRESSOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.COMPRESSOR,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<BlockEntityType<FluidPumpBlockEntity>> FLUID_PUMP_BLOCK_ENTITY = BLOCK_ENTITIES.register(FactocraftyBlocks.FLUID_PUMP.getName(), () -> BlockEntityType.Builder.of(FluidPumpBlockEntity::new, FLUID_PUMP.get()).build(null));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> MACERATOR_MENU = MENUS.register(FactocraftyBlocks.MACERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.MACERATOR,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ElectricFurnaceBlockEntity>>> ELECTRIC_FURNACE_MENU = MENUS.register(FactocraftyBlocks.ELECTRIC_FURNACE.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.ELECTRIC_FURNACE_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> EXTRACTOR_MENU = MENUS.register(FactocraftyBlocks.EXTRACTOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.EXTRACTOR,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> COMPRESSOR_MENU = MENUS.register(FactocraftyBlocks.COMPRESSOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.COMPRESSOR_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> RECYCLER_MENU = MENUS.register(FactocraftyBlocks.RECYCLER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.RECYCLER,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> MACERATOR_MENU = MENUS.register(FactocraftyBlocks.MACERATOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.MACERATOR_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> REFINER_MENU = MENUS.register(FactocraftyBlocks.REFINER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.REFINER,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> EXTRACTOR_MENU = MENUS.register(FactocraftyBlocks.EXTRACTOR.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.EXTRACTOR_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> ENRICHER_MENU = MENUS.register(FactocraftyBlocks.ENRICHER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.ENRICHER,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> RECYCLER_MENU = MENUS.register(FactocraftyBlocks.RECYCLER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.RECYCLER_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyMachineBlockEntity>>> GAS_INFUSER_MENU = MENUS.register(FactocraftyBlocks.GAS_INFUSER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.GAS_INFUSER,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> REFINER_MENU = MENUS.register(FactocraftyBlocks.REFINER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.REFINER_MENU.get(),id, buf.readBlockPos(), inventory.player)));
+
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> ENRICHER_MENU = MENUS.register(FactocraftyBlocks.ENRICHER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.ENRICHER_MENU.get(),id, buf.readBlockPos(), inventory.player)));
+
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> GAS_INFUSER_MENU = MENUS.register(FactocraftyBlocks.GAS_INFUSER.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.GAS_INFUSER_MENU.get(),id, buf.readBlockPos(), inventory.player)));
+
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<ProcessMachineBlockEntity>>> SAWMILL_MENU = MENUS.register(FactocraftyBlocks.SAWMILL.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.SAWMILL_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
     public static final RegistrySupplier<MenuType<FactocraftyItemMenuContainer>> RGB_MENU = MENUS.register("rgb_controller", () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyItemMenuContainer(Registration.RGB_MENU.get(),id, inventory.player, buf.readBlockPos())));
 
@@ -292,11 +314,11 @@ public class Registration {
     public static final RegistrySupplier<Block> GEOTHERMAL_GENERATOR = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.GEOTHERMAL_GENERATOR.getName(), () -> new GeothermalGeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final RegistrySupplier<BlockEntityType<GeothermalGeneratorBlockEntity>> GEOTHERMAL_GENERATOR_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.GEOTHERMAL_GENERATOR.getName(), () -> BlockEntityType.Builder.of(GeothermalGeneratorBlockEntity::new, GEOTHERMAL_GENERATOR.get()).build(BlockEntityUtil.blockEntityType(FactocraftyBlocks.GEOTHERMAL_GENERATOR.getName())));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyEnergyStorageBlockEntity>>> ENERGY_CELL_MENU = MENUS.register(FactocraftyMenus.ENERGY_CELL.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.ENERGY_CELL,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<FactocraftyEnergyStorageBlockEntity>>> ENERGY_STORAGE_MENU = MENUS.register("energy_storage", () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.ENERGY_STORAGE_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<FactocraftyFluidTankBlockEntity>>> FLUID_TANK_MENU = MENUS.register(FactocraftyMenus.FLUID_TANK.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.FLUID_TANK,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<FactocraftyFluidTankBlockEntity>>> FLUID_TANK_MENU = MENUS.register("fluid_tank", () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.FLUID_TANK_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
-    public static final RegistrySupplier<MenuType<FactocraftyProcessMenu<SolarPanelBlockEntity>>> SOLAR_PANEL_MENU = MENUS.register(FactocraftyMenus.SOLAR_PANEL.getName(), () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyProcessMenu<>(FactocraftyMenus.SOLAR_PANEL,id, buf.readBlockPos(), inventory.player)));
+    public static final RegistrySupplier<MenuType<FactocraftyStorageMenu<SolarPanelBlockEntity>>> SOLAR_PANEL_MENU = MENUS.register("solar_panel", () -> MenuRegistry.ofExtended((id, inventory, buf) -> new FactocraftyStorageMenu<>(Registration.SOLAR_PANEL_MENU.get(),id, buf.readBlockPos(), inventory.player)));
 
     public static final RegistrySupplier<Block> IRON_FURNACE = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.IRON_FURNACE.getName(), () -> new IronFurnace(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final RegistrySupplier<BlockEntityType<IronFurnaceBlockEntity>> IRON_FURNACE_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.IRON_FURNACE.getName(), () -> BlockEntityType.Builder.of(IronFurnaceBlockEntity::new, IRON_FURNACE.get()).build(BlockEntityUtil.blockEntityType(FactocraftyBlocks.IRON_FURNACE.getName())));
@@ -329,6 +351,9 @@ public class Registration {
 
     public static final RegistrySupplier<Block> GAS_INFUSER = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.GAS_INFUSER.getName(), () -> new FactocraftyMachineBlock(FactoryCapacityTiers.BASIC,BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final RegistrySupplier<BlockEntityType<GasInfuserBlockEntity>> GAS_INFUSER_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.GAS_INFUSER.getName(), () -> BlockEntityType.Builder.of(GasInfuserBlockEntity::new, GAS_INFUSER.get()).build(null));
+
+    public static final RegistrySupplier<Block> SAWMILL = Registration.BLOCKS_ITEMS.register(FactocraftyBlocks.SAWMILL.getName(), () -> new FactocraftyMachineBlock(FactoryCapacityTiers.BASIC,BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final RegistrySupplier<BlockEntityType<SawmillBlockEntity>> SAWMILL_BLOCK_ENTITY = Registration.BLOCK_ENTITIES.register(FactocraftyBlocks.SAWMILL.getName(), () -> BlockEntityType.Builder.of(SawmillBlockEntity::new, SAWMILL.get()).build(null));
 
 
     public static final RegistrySupplier<Block> LED_BLOCK = Registration.BLOCKS_ITEMS.register("led_block", () -> new FactocraftyLedBlock(BlockBehaviour.Properties.copy(Blocks.GLASS), false));
@@ -532,15 +557,19 @@ public class Registration {
             registrarFactocraftyItem(() -> new HoeItem(oreMaterials.getToolTier(),-3, 0.0F ,defaultStackItemProperties().rarity(oreMaterials.getRarity())),oreMaterials.getName() + "_hoe");
         }
     }
-    private static void registerCables(FactocraftyCables cable) {
+    private static void registerCable(FactocraftyCables cable) {
         if (cable.cableShape == FactocraftyCables.Shape.SOLID){
             registrarFactocraftyBlockItem(() -> new SolidCableBlock(cable, cableBehaviour()), cable.getName());
-            BLOCK_ENTITIES_REGISTRAR.register(getModResource(cable.getName()), () -> BlockEntityType.Builder.of((blockPos, blockState) -> new SolidCableBlockEntity(cable, blockPos, blockState), cable.get()).build(null));
+            BLOCK_ENTITIES_REGISTRAR.register(getModResource(cable.getName()), () -> BlockEntityType.Builder.of(SolidCableBlockEntity::new, cable.get()).build(null));
         }
         else {
             registrarFactocraftyBlockItem(() ->  new CableBlock(cable, cableBehaviour()), cable.getName());
-            BLOCK_ENTITIES_REGISTRAR.register(getModResource(cable.getName()), () -> BlockEntityType.Builder.of((blockPos, blockState) -> new CableBlockEntity(cable, blockPos, blockState), cable.get()).build(null));
+            BLOCK_ENTITIES_REGISTRAR.register(getModResource(cable.getName()), () -> BlockEntityType.Builder.of(CableBlockEntity::new, cable.get()).build(null));
         }
+    }
+    private static void registerFluidPipe(FactocraftyFluidPipes pipe) {
+        registrarFactocraftyBlockItem(() ->  new FluidPipeBlock(pipe,BlockBehaviour.Properties.copy(Blocks.GLASS)), pipe.getName());
+        BLOCK_ENTITIES_REGISTRAR.register(getModResource(pipe.getName()), () -> BlockEntityType.Builder.of(FluidPipeBlockEntity::new, pipe.get()).build(null));
     }
     private static void registerSolarPanel(SolarPanelTiers tier) {
         RegistrySupplier<Block> b = registrarFactocraftyBlockItem(() -> tier.ordinal() <= 1 ? new FlexibleSolarPanelBlock(tier,BlockBehaviour.Properties.copy(Blocks.BROWN_STAINED_GLASS_PANE)) : new SolarPanelBlock(tier, BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)), tier.getName());
@@ -550,7 +579,7 @@ public class Registration {
 
             registrarFactocraftyBlock(() -> new FactocraftyEnergyStorageBlock(storage.capacityTier, BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)), storage.getName());
             registrarFactocraftyItem(()-> new EnergyBlockItem(storage.get(),storage.capacityTier, TransportState.EXTRACT_INSERT, fullStackItemProperties()), storage.getName());
-            BLOCK_ENTITIES_REGISTRAR.register(getModResource(storage.getName()), () -> BlockEntityType.Builder.of((bp, bs) -> new FactocraftyEnergyStorageBlockEntity(storage.capacityTier, bp, bs), storage.get()).build(null));
+            BLOCK_ENTITIES_REGISTRAR.register(getModResource(storage.getName()), () -> BlockEntityType.Builder.of(FactocraftyEnergyStorageBlockEntity::new, storage.get()).build(null));
 
     }
     private static void registerFluidTank(FactocraftyFluidTanks tank) {
@@ -567,7 +596,7 @@ public class Registration {
 
         FLUIDS.getRegistrar().register(getModResource(name),() -> new FactocraftySourceFluid(FLUID_ATTRIBUTE, whenSpreadToFluid, isGas));
         FLUIDS.getRegistrar().register(getModResource("flowing_" + name),() -> new FactocraftyFlowingFluid(FLUID_ATTRIBUTE, whenSpreadToFluid,isGas));
-        BLOCKS_REGISTRAR.register(getModResource(name), () -> new FactocraftyFluidBlock(()-> (FlowingFluid) getRegistrarFluidEntry(name), properties));
+        BLOCKS_REGISTRAR.register(getModResource(name), () -> new FactocraftyFluidBlock(()-> (FlowingFluid) getRegistrarFluidEntry(name), properties, isGas));
         if (!isGas)ITEMS_REGISTRAR.register( getModResource( name+ "_bucket"), () -> new ArchitecturyBucketItem(()-> getRegistrarFluidEntry(name), defaultStackItemProperties() ));
 
     }
@@ -591,6 +620,11 @@ public class Registration {
     private static RegistrySupplier<Block> registerFactocraftyBlockItem(Supplier<Block> block, String name){
         return BLOCKS_ITEMS.register(name, block);
     }
+    private static RegistrySupplier<Block> registerFactocraftyBlockItem(Supplier<Block> block, String name, Function<Block,BlockItem> blockItem){
+        RegistrySupplier<Block> supplier = registerFactocraftyBlockItem(block,name);
+        blockItemOverrides.put(supplier.getId(), blockItem);
+        return supplier;
+    }
 
     private static RegistrySupplier<Block> registerFactocraftyBlock(Supplier<Block> block, String name){
         return BLOCKS.register(name, block);
@@ -603,11 +637,11 @@ public class Registration {
     // Main Register
     public static void registerObjects(){
         WoodType.register(FactocraftyWoodType.RUBBER);
-        SimpleFluidLoggedBlock.BLOCK_LOGGABLE_FLUIDS_SUPPLIER.add(FactocraftyFluids.COOLANT);
+        SimpleFluidLoggedBlock.BLOCK_LOGGABLE_FLUIDS_SUPPLIER.addAll(List.of(FactocraftyFluids.COOLANT, FactocraftyFluids.PETROLEUM,FactocraftyFluids.OXYGEN,FactocraftyFluids.HYDROGEN,FactocraftyFluids.ISOPRENE,FactocraftyFluids.NAPHTHA,FactocraftyFluids.WATER_VAPOR));
         SOUNDS.register();
 
         BLOCKS_ITEMS.register();
-        BLOCKS_ITEMS.forEach((blockEntry) -> {ITEMS_REGISTRAR.register(blockEntry.getId(), () -> new BlockItem(blockEntry.get(), fullStackItemProperties()));});
+        BLOCKS_ITEMS.forEach((blockEntry) -> {ITEMS_REGISTRAR.register(blockEntry.getId(), () -> blockItemOverrides.getOrDefault(blockEntry.getId(),b-> new BlockItem(b,fullStackItemProperties())).apply(blockEntry.get()));});
         FactocraftyFlowingFluid.whenSpreadToFluid spreadFlammable = (levelAccessor, blockPos, blockState, direction, fluidState) -> {
             FluidState fluidState2 = levelAccessor.getFluidState(blockPos);
             if ((fluidState.is(Fluids.PETROLEUM) || fluidState.is(Fluids.GASOLINE)) && ((fluidState2.is(FluidTags.LAVA) || levelAccessor.getBlockState(blockPos).is(BlockTags.FIRE)))) {
@@ -638,7 +672,8 @@ public class Registration {
         for (FactocraftyOre.Material material : FactocraftyOre.Material.values()) registerAllOreDerivatives(material);
         for (FactocraftyEnergyStorages storage : FactocraftyEnergyStorages.values()) registerEnergyStorage(storage);
         for (FactocraftyFluidTanks tank : FactocraftyFluidTanks.values()) registerFluidTank(tank);
-        for (FactocraftyCables tier : FactocraftyCables.values()) registerCables(tier);
+        for (FactocraftyCables tier : FactocraftyCables.values()) registerCable(tier);
+        for (FactocraftyFluidPipes tier : FactocraftyFluidPipes.values()) registerFluidPipe(tier);
         RegistrarBlockItems.forEach((blockEntry) -> {ITEMS_REGISTRAR.register(blockEntry, () -> new BlockItem(Objects.requireNonNull(BLOCKS_REGISTRAR.get(blockEntry)), fullStackItemProperties()));});
         RECIPE_TYPES.register();
         RECIPE_SERIALIZER.register();

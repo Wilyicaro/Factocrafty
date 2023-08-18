@@ -20,14 +20,14 @@ import java.util.Optional;
 
 import static wily.factocrafty.block.FactocraftyLedBlock.LIGHT_VALUE;
 
-public class FactocraftyLedBlockEntity extends FactocraftyStorageBlockEntity {
+public class FactocraftyLedBlockEntity extends FactocraftyMenuBlockEntity {
     public Bearer<Integer> actualRgb = Bearer.of(0xFFFFFF);
     public int savedLightValue;
     private final FactocraftyLedBlock block;
 
     private int lightTime;
     public FactocraftyLedBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(Registration.LED_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(Registration.RGB_MENU.get(),Registration.LED_BLOCK_ENTITY.get(), blockPos, blockState);
         this.block = (FactocraftyLedBlock) blockState.getBlock();
         this.energyStorage = new CYEnergyStorage(this, 0, 800, block.getEnergyTier());
         if (block.hasRGB) additionalSyncInt.add(actualRgb);
@@ -36,6 +36,11 @@ public class FactocraftyLedBlockEntity extends FactocraftyStorageBlockEntity {
     @Override
     public boolean hasEnergyCell() {
         return true;
+    }
+
+    @Override
+    public boolean hasUpgradeStorage() {
+        return false;
     }
 
     @Override

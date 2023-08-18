@@ -16,7 +16,7 @@ import wily.factocrafty.util.ScreenUtil;
 
 import java.util.List;
 
-public class EnricherCategory extends FactocraftyProgressCategory<EnricherRecipe>{
+public class EnricherCategory extends FactocraftyMachineCategory<EnricherRecipe> {
 
     public EnricherCategory(IGuiHelper guiHelper) {
         super(EnricherScreen.BACKGROUND_LOCATION,FactocraftyJeiRecipeTypes.ENRICHING, guiHelper,FactocraftyDrawables.MACHINE_PROGRESS, 145, 67);

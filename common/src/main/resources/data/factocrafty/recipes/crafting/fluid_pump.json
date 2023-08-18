@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FRF",
+    "#H#",
+    "TGT"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:basic_fluid_pipe"
+    },
+    "G": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "H": {
+      "item": "factocrafty:machine_frame"
+    },
+    "F": {
+      "item": "factocrafty:fluid_cell"
+    },
+    "T": {
+      "item": "factocrafty:refined_iron"
+    },
+    "R": {
+      "tag": "factocrafty:rubber"
+    }
+  },
+  "result": {
+    "item": "factocrafty:fluid_pump"
+  }
+}

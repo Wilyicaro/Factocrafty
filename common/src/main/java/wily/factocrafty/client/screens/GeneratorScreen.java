@@ -11,12 +11,12 @@ import wily.factocrafty.block.generator.entity.GeneratorBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.client.screens.widgets.FactocraftyInfoWidget;
 import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 
 import static wily.factoryapi.util.StorageStringUtil.*;
 
-public class GeneratorScreen extends FactocraftyMachineScreen<GeneratorBlockEntity> {
-    public GeneratorScreen(FactocraftyProcessMenu<GeneratorBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+public class GeneratorScreen extends FactocraftyStorageScreen<GeneratorBlockEntity> {
+    public GeneratorScreen(FactocraftyStorageMenu<GeneratorBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
 
     }

@@ -4,20 +4,16 @@ import dev.architectury.fluid.FluidStack;
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -28,14 +24,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.FactocraftyUpgradeItem;
 import wily.factocrafty.item.WrenchItem;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
@@ -79,17 +75,22 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
             boolean fluidItem = ItemContainerUtil.isFluidContainer(stack);
             boolean isWrench = stack.getItem() instanceof WrenchItem;
             if (!level.isClientSide) {
-                if (!stack.isEmpty() && level.getBlockEntity(blockPos) instanceof IFactoryStorage be && (isWrench || fluidItem && !be.getTanks().isEmpty())) {
-                    if (fluidItem) {
-                        if (this.interactFluidItem(be, player, interactionHand).shouldSwing())
-                            return InteractionResult.SUCCESS;
-                    }else return InteractionResult.FAIL;
+                if (!stack.isEmpty() && level.getBlockEntity(blockPos) instanceof IFactoryExpandedStorage be) {
+                    if ((isWrench || fluidItem && !be.getTanks().isEmpty())) {
+                        if (fluidItem) {
+                            if (this.interactFluidItem(be, player, interactionHand).shouldSwing())
+                                return InteractionResult.SUCCESS;
+                        } else return InteractionResult.FAIL;
+                    }
+                    if (be instanceof FactocraftyMenuBlockEntity fBe && stack.getItem() instanceof FactocraftyUpgradeItem && fBe.hasUpgradeStorage() && fBe.storedUpgrades.add(player.isCreative()? stack.copy() : stack)){
+                        return InteractionResult.SUCCESS;
+                    }
                 }
                  this.interactWith(level, blockPos, player);
             } else return InteractionResult.SUCCESS;
             return InteractionResult.CONSUME;
     }
-    public InteractionResult interactFluidItem(IFactoryStorage storage, Player player, InteractionHand hand) {
+    public InteractionResult interactFluidItem(IFactoryExpandedStorage storage, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         for(IPlatformFluidHandler tank : storage.getTanks()) {
             FluidStack fluidStack = ItemContainerUtil.getFluid(player, hand);
@@ -126,7 +127,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
         ItemStack itself = new ItemStack(asItem());
         ItemStack tool = builder.getParameter(LootContextParams.TOOL);
 
-            if (builder.getParameter(LootContextParams.BLOCK_ENTITY) instanceof FactocraftyProcessBlockEntity be)
+            if (builder.getParameter(LootContextParams.BLOCK_ENTITY) instanceof FactocraftyMenuBlockEntity be)
                 if (( tool.getItem() instanceof WrenchItem || (EnchantmentHelper.getEnchantments(tool).containsKey(Enchantments.SILK_TOUCH) && tool.isCorrectToolForDrops(blockState)) || be.getLevel().random.nextFloat() <= 0.5)) {
                 be.saveToItem(itself);
                 list.add(itself);

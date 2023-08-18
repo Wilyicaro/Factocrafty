@@ -1,0 +1,36 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "RFR",
+    "TCT"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "I": {
+      "item": "factocrafty:refined_iron"
+    },
+    "F": {
+      "item": "factocrafty:machine_frame"
+    },
+    "C": {
+      "item": "factocrafty:circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:tin_cable"
+        ]
+      }
+    },
+    "R": {
+      "item": "factocrafty:platinum_plate"
+    },
+    "T": {
+      "item": "factocrafty:copper_cable"
+    }
+  },
+  "result": {
+    "item": "factocrafty:sawmill"
+  }
+}

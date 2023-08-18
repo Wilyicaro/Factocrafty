@@ -1,0 +1,38 @@
+{
+  "criteria": {
+    "machine_frame": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "factocrafty:machine_frame"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "factocrafty:textures/block/machine_frame.png",
+    "description": {
+      "translate": "advancements.factocrafty.progress.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "factocrafty:macerator"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "itemGroup.factocrafty.tab"
+    }
+  },
+  "requirements": [
+    [
+      "machine_frame"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

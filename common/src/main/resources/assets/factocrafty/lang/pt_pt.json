@@ -3,20 +3,6 @@
 
   "factocrafty.generic": "%s",
 
-  "_comment": "Energy",
-  "energy.factocrafty.power": "%s IE",
-  "energy.factocrafty.power_tick": "%s IE/t",
-
-  "_comment": "Tier",
-  "tier.factocrafty.energy": "Nível Energético: %s",
-  "tier.factocrafty.burned": "Queimado (Clique-direito com um armazenamento de energia do nível da máquina para reparar) ",
-  "tier.factocrafty.basic": "Básico",
-  "tier.factocrafty.advanced": "Avançado",
-  "tier.factocrafty.high": "Alto",
-  "tier.factocrafty.ultimate": "Ultimate",
-  "tier.factocrafty.quantum": "Quântico",
-  "tier.factocrafty.creative": "Criativo",
-
   "_comment": "GUI",
   "gui.factocrafty.energy": "%s / %s IE",
   "gui.factocrafty.fluid": "%s: %s / %s mB",

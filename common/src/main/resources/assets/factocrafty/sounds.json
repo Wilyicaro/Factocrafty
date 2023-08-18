@@ -49,6 +49,7 @@
   },
 
   "block.sawmill": {
+    "subtitle": "subtitles.factocrafty.sawmill",
     "sounds": [
       {
         "name": "factocrafty:sawmill"

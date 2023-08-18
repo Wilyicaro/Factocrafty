@@ -1,27 +1,24 @@
 package wily.factocrafty.client.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
+import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
 import wily.factocrafty.block.machines.entity.EnricherBlockEntity;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncProgressPacket;
 import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.IFactoryDrawableType;
 
 import java.util.List;
-import java.util.Map;
 
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 
 public class EnricherScreen extends ChangeableInputMachineScreen{
-    public EnricherScreen(FactocraftyProcessMenu<FactocraftyMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+    public EnricherScreen(FactocraftyStorageMenu<ProcessMachineBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
         imageHeight = 171;
         inventoryLabelY += 7;

@@ -7,22 +7,18 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.entity.FactocraftyMachineBlockEntity;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
-import wily.factocrafty.util.registering.FactocraftyMenus;
-import wily.factoryapi.base.FactoryCapacityTiers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecyclerBlockEntity extends FactocraftyMachineBlockEntity<FactocraftyMachineRecipe> {
+public class RecyclerBlockEntity extends ProcessMachineBlockEntity<FactocraftyMachineRecipe> {
 
 
     public RecyclerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.RECYCLER, FactoryCapacityTiers.BASIC,Registration.RECYCLER_RECIPE.get(),Registration.RECYCLER_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(Registration.RECYCLER_MENU.get(),Registration.RECYCLER_RECIPE.get(),Registration.RECYCLER_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
     @Override

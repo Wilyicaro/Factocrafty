@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"active=false":	{ "model": "factocrafty:block/machines/fluid_pump" },
+		"active=true":	{ "model": "factocrafty:block/machines/fluid_pump_active" }
+	}
+}

@@ -13,7 +13,6 @@ import wily.factocrafty.FactocraftyExpectPlatform;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.recipes.GasInfuserRecipe;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 
@@ -26,10 +25,10 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     public SlotsIdentifier IO_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.DARK_PURPLE,"io", 1);
     public SlotsIdentifier OI_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.DARK_RED,"oi", 2);
     public GasInfuserBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.GAS_INFUSER, Registration.GASEOUS_INFUSION_RECIPE.get(), Registration.GAS_INFUSER_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(Registration.GAS_INFUSER_MENU.get(), Registration.GASEOUS_INFUSION_RECIPE.get(), Registration.GAS_INFUSER_BLOCK_ENTITY.get(), blockPos, blockState);
         fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f ->  FactocraftyExpectPlatform.isGas(f.getFluid()) && getFilteredRecipes().anyMatch(rcp-> getInfusionMode().isMixer() ? rcp.getFluidIngredient().isFluidEqual(f) : rcp.getResultFluid().isFluidEqual(f)), GAS_TANK_IDENTIFIER, TransportState.EXTRACT_INSERT);
         additionalSyncInt.add(infusionMode);
-        DRAIN_SLOT = FILL_SLOT = 0;
+        STORAGE_SLOTS = new int[]{0};
     }
 
     @Override
@@ -58,7 +57,7 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     @Override
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
         NonNullList<FactoryItemSlot> slots= NonNullList.create();
-        slots.add(new FactocraftyCYItemSlot(this, DRAIN_SLOT, 56,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this, 0, 56,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
         return slots;
     }
 
@@ -83,7 +82,7 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     }
 
     @Override
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    public void addTanks(List<IPlatformFluidHandler<?>> list) {
         list.add(fluidTank);
         list.add(ioTank);
         list.add(oiTank);

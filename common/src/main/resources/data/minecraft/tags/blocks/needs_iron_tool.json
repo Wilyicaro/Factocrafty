@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "factocrafty:advanced_machine_frame",
     "factocrafty:platinum_ore",
     "factocrafty:raw_platinum_block",
     "factocrafty:platinum_block",

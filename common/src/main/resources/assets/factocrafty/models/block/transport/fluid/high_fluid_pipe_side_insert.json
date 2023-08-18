@@ -1,0 +1,7 @@
+{
+	"parent": "factocrafty:block/transport/fluid/fluid_pipe_side_insert",
+	"textures": {
+		"pipe": "factocrafty:block/transport/fluid/high_pipe",
+		"frame": "factocrafty:block/transport/fluid/high_pipe_frame"
+	}
+}

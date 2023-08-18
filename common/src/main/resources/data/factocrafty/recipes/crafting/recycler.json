@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#P#",
+    "RFR",
+    "PCP"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:refined_iron"
+    },
+    "F": {
+      "item": "factocrafty:compressor"
+    },
+    "C": {
+      "item": "factocrafty:electronic_circuit"
+    },
+    "R": {
+      "item": "minecraft:dirt"
+    },
+    "P": {
+      "item": "factocrafty:platinum_plate"
+    }
+  },
+  "result": {
+    "item": "factocrafty:recycler"
+  }
+}

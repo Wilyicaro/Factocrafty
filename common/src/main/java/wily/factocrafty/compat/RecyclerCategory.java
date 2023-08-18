@@ -15,7 +15,7 @@ import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 
 import static wily.factocrafty.util.ScreenUtil.renderScaled;
 
-public class RecyclerCategory extends FactocraftyProgressCategory<FactocraftyMachineRecipe>{
+public class RecyclerCategory extends FactocraftyMachineCategory<FactocraftyMachineRecipe> {
     public RecyclerCategory(IGuiHelper guiHelper) {
         super(FactocraftyJeiRecipeTypes.RECYCLING, guiHelper);
     }

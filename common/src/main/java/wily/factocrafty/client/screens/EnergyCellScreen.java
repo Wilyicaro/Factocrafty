@@ -8,10 +8,10 @@ import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.storage.energy.entity.FactocraftyEnergyStorageBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 
-public class EnergyCellScreen extends FactocraftyMachineScreen<FactocraftyEnergyStorageBlockEntity> {
-    public EnergyCellScreen(FactocraftyProcessMenu<FactocraftyEnergyStorageBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+public class EnergyCellScreen extends FactocraftyStorageScreen<FactocraftyEnergyStorageBlockEntity> {
+    public EnergyCellScreen(FactocraftyStorageMenu<FactocraftyEnergyStorageBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
     }
 

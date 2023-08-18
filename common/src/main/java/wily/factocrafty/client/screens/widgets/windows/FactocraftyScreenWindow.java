@@ -8,10 +8,10 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
-import wily.factocrafty.client.screens.FactocraftyMachineScreen;
+import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.util.ScreenUtil;
@@ -36,8 +36,8 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
 
     protected final ItemRenderer itemRenderer;
 
-    public FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent;
-    public FactocraftyScreenWindow(FactocraftyConfigWidget config, int width, int height, int x, int y, int uvX, int uvY, FactocraftyMachineScreen<? extends FactocraftyProcessBlockEntity> parent){
+    public FactocraftyStorageScreen<? extends FactocraftyMenuBlockEntity> parent;
+    public FactocraftyScreenWindow(FactocraftyConfigWidget config, int width, int height, int x, int y, int uvX, int uvY, FactocraftyStorageScreen<? extends FactocraftyMenuBlockEntity> parent){
         super(x,y,width,height,Component.empty());
         this.config = config;
         this.lastX = x;

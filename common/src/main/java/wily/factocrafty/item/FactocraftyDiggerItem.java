@@ -10,7 +10,7 @@ public interface FactocraftyDiggerItem {
         return null;
     };
 
-    default boolean allowContinuingBlockBreaking(Player player, ItemStack oldStack, ItemStack newStack) {
+    default boolean shouldContinueBlockBreaking(Player player, ItemStack oldStack, ItemStack newStack) {
         return true;
     }
 }

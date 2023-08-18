@@ -15,7 +15,7 @@ import wily.factocrafty.util.ScreenUtil;
 
 import static wily.factocrafty.util.ScreenUtil.renderScaled;
 
-public class GasInfuserCategory extends FactocraftyProgressCategory<GasInfuserRecipe>{
+public class GasInfuserCategory extends FactocraftyMachineCategory<GasInfuserRecipe> {
 
     public GasInfuserCategory(IGuiHelper guiHelper) {
         super(GasInfuserScreen.BACKGROUND_LOCATION,FactocraftyJeiRecipeTypes.GAS_INFUSION, guiHelper,FactocraftyDrawables.MACHINE_PROGRESS, 145, 63);

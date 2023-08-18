@@ -9,9 +9,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.Factocrafty;
 import wily.factocrafty.FactocraftyExpectPlatform;
 
 import java.util.*;
@@ -28,7 +28,7 @@ public class DynamicBakedModel implements BakedModel {
     private BlockModel blockModel;
     private TextureAtlasSprite allSprite;
 
-    private float height = 1.0F;
+    private Vec3 scale = new Vec3(1.0,1.0,1.0);
 
     public DynamicBakedModel(TextureAtlasSprite particleSprite, ItemTransforms itemTransforms, ItemOverrides itemOverrides,boolean gui3d,boolean ambientOcclusion,boolean usesBlockLight){
         this.particleSprite = particleSprite;
@@ -45,8 +45,11 @@ public class DynamicBakedModel implements BakedModel {
         this.blockModel = blockModel;
     }
 
-    public void setHeightScale(float heightScale) {
-        this.height = heightScale;
+    public void setScale(Vec3 vec3) {
+        this.scale = vec3;
+    }
+    public void setScale(double x, double y, double z) {
+        this.scale = new Vec3(x,y,z);
     }
 
     public static BakedQuad changeQuadUV(BakedQuad bakedQuad, TextureAtlasSprite sprite, BlockElement element, float height){
@@ -63,9 +66,6 @@ public class DynamicBakedModel implements BakedModel {
         TextureAtlasSprite newSprite = new TextureAtlasSprite(sprite.atlasLocation(),contents, (int) Math.pow(sprite.getU0() / sprite.getX(),-1), (int)(Math.pow(sprite.getV0()/ sprite.getY(),-1) ),  sprite.getX(), sprite.getY());
         for(int i = 0; i < 4; ++i) {
             int j = i *8;
-            if (height!= 1.0F && i==3  && Direction.Plane.HORIZONTAL.test(bakedQuad.getDirection())) {
-                uv2.uvs[i] *= height;
-            }
             is[j + 4] = Float.floatToRawIntBits(newSprite.getU(uv2.getU(i))) ;
             is[j + 5] = Float.floatToRawIntBits(newSprite.getV(uv2.getV(i))) ;
         }
@@ -92,19 +92,19 @@ public class DynamicBakedModel implements BakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource) {
         List<BakedQuad> quads = new ArrayList<>(bakedModel.getQuads(blockState,direction,randomSource));
-        if (height != 1.0F) {
+        if (scale.y != 1.0F) {
             float[] allY = new float[8];
             for (BakedQuad q : quads)
                 for (int i = 0; i < 4; ++i)
                     allY = ArrayUtils.add(allY, Float.intBitsToFloat(q.getVertices()[i * 8 + 1]));
             Arrays.sort(allY);
-            for (int i = 0; i < quads.size(); i++)  quads.set(i,setQuadHeight(height,allY,quads.get(i)));
+            for (int i = 0; i < quads.size(); i++)  quads.set(i,setQuadHeight((float) scale.y,allY,quads.get(i)));
         }
 
         for (int i = 0; i < quads.size(); i++) {
             BakedQuad b = quads.get(i);
             if (DYNAMIC_QUADS.contains(b)) continue;
-            addQuad(allSprite == null ? b : changeQuadUV( b,allSprite,blockModel.getElements().get(i /6), height));
+            addQuad(allSprite == null ? b : changeQuadUV( b,allSprite,blockModel.getElements().get(i /6), (float) scale.y));
         }
 
         return DYNAMIC_QUADS;

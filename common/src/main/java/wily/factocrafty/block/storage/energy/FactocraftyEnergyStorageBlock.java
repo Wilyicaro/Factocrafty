@@ -23,7 +23,7 @@ public class FactocraftyEnergyStorageBlock extends FactocraftyMachineBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new FactocraftyEnergyStorageBlockEntity(capacityTier,blockPos,blockState);
+        return new FactocraftyEnergyStorageBlockEntity(blockPos,blockState);
     }
 
     @Override

@@ -6,10 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
-import wily.factoryapi.base.FluidSide;
-import wily.factoryapi.base.ItemSide;
-import wily.factoryapi.base.TransportState;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
+import wily.factoryapi.base.*;
 
 import java.util.function.Supplier;
 
@@ -49,12 +47,11 @@ public class FactocraftyStateButtonPacket {
             Player player = ctx.get().getPlayer();
             BlockEntity te = player.level().getBlockEntity(pos);
             if (player.level().isLoaded(pos)) {
-                if (te instanceof FactocraftyProcessBlockEntity fs) {
+                if (te instanceof IFactoryExpandedStorage fs) {
                     Direction d = Direction.values()[direction];
-                    if (sideType == 0) fs.itemSides.put(d, new ItemSide( fs.getSlotsIdentifiers().get(slotIdentifier), transportState));
-                    else if (sideType == 1) fs.energySides.put(d, transportState);
-                    else if (sideType == 2)
-                        fs.fluidSides.put(d, new FluidSide(fs.getTanks().get(slotIdentifier), transportState));
+                    if (sideType == 0) fs.itemSides().ifPresent((i)-> i.get(d).withTransport(transportState).identifier = fs.getSlotsIdentifiers().get(slotIdentifier));
+                    else if (sideType == 1) fs.energySides().ifPresent(i-> i.put(d, transportState));
+                    else if (sideType == 2) fs.fluidSides().ifPresent(i-> i.get(d).withTransport(transportState).setFluidHandler(fs.getTanks().get(slotIdentifier)));
                 }
                 te.setChanged();
             }

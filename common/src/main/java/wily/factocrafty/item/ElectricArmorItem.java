@@ -2,32 +2,30 @@ package wily.factocrafty.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.ICraftyEnergyItem;
-import wily.factoryapi.base.ITagSerializable;
+import wily.factoryapi.base.ICraftyEnergyStorage;
+import wily.factoryapi.base.ICraftyStorageItem;
 import wily.factoryapi.base.TransportState;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
-import java.util.function.BiPredicate;
 
-public class ElectricArmorItem extends ArmorItem implements ICraftyEnergyItem<CYItemEnergyStorage> {
+public class ElectricArmorItem extends ArmorItem implements ICraftyStorageItem {
     private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     private final FactoryCapacityTiers energyTier;
     private final int capacity;
@@ -47,12 +45,12 @@ public class ElectricArmorItem extends ArmorItem implements ICraftyEnergyItem<CY
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(energyTier.getEnergyTierComponent(false));
-        list.add(StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getCraftyEnergy(itemStack)));
+        list.add(StorageStringUtil.getEnergyTooltip("tooltip.factory_api.energy_stored", getEnergyStorage(itemStack)));
     }
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack){
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         UUID uUID = ARMOR_MODIFIER_UUID_PER_SLOT[slot.getIndex()];
-        CYItemEnergyStorage cell = getCraftyEnergy(stack);
+        ICraftyEnergyStorage cell = getEnergyStorage(stack);
         float f = cell.getEnergyStored() != 0 ? ((float) cell.getEnergyStored() / cell.getMaxEnergyStored()) > 0.2F ? 1 : 0.4F : 0;
         if (f!= 0) {
             builder.put(Attributes.ARMOR, new AttributeModifier(uUID, "Armor modifier", f * getDefense(), AttributeModifier.Operation.ADDITION));
@@ -78,7 +76,7 @@ public class ElectricArmorItem extends ArmorItem implements ICraftyEnergyItem<CY
     }
 
     public boolean hasFeature(ArmorFeatures feature, ItemStack s, boolean needsEnergy){
-        return feature.hasFeature(this,s) && (!needsEnergy || (getCraftyEnergy(s).getEnergyStored() / (float) getCraftyEnergy(s).getMaxEnergyStored() >= 0.1));
+        return feature.hasFeature(this,s) && (!needsEnergy || (getEnergyStorage(s).getEnergyStored() / (float) getEnergyStorage(s).getMaxEnergyStored() >= 0.1));
     }
     public boolean hasActiveFeature(ArmorFeatures feature, ItemStack s, boolean needsEnergy){
         return hasFeature(feature,s,needsEnergy) && feature.isActive(s.getOrCreateTag());
@@ -89,22 +87,29 @@ public class ElectricArmorItem extends ArmorItem implements ICraftyEnergyItem<CY
 
 
     @Override
-    public boolean isBarVisible(ItemStack itemStack) {return getCraftyEnergy(itemStack).getSpace() > 0;}
+    public boolean isBarVisible(ItemStack itemStack) {return getEnergyStorage(itemStack).getSpace() > 0;}
 
     public int getBarWidth(ItemStack itemStack) {
-        return Math.round( getCraftyEnergy(itemStack).getEnergyStored() * 13.0F / (float)this.getCraftyEnergy(itemStack).getMaxEnergyStored());
+        return Math.round( getEnergyStorage(itemStack).getEnergyStored() * 13.0F / (float)this.getEnergyStorage(itemStack).getMaxEnergyStored());
     }
 
     public int getBarColor(ItemStack itemStack) {
         return Mth.hsvToRgb(0.5F, 1.0F, 1.0F);
     }
+
     @Override
-    public CYItemEnergyStorage getCraftyEnergy(ItemStack stack) {
-        return new CYItemEnergyStorage(stack,0,capacity, TransportState.INSERT, energyTier);
+    public int getCapacity() {
+        return capacity;
     }
 
     @Override
-    public FactoryCapacityTiers getEnergyTier() {
+    public TransportState getTransport() {
+        return TransportState.INSERT;
+    }
+
+    @Override
+    public FactoryCapacityTiers getSupportedEnergyTier() {
         return energyTier;
     }
+
 }

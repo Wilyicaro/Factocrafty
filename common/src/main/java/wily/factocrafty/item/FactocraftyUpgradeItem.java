@@ -9,7 +9,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class FactocraftyUpgradeItem extends Item {
     public boolean isSameType(FactocraftyUpgradeItem upg){
         return upgradeType == upg.upgradeType;
     }
-    public boolean isValid(FactocraftyProcessBlockEntity blockEntity){
+    public boolean isValid(FactocraftyMenuBlockEntity blockEntity){
         return  isEnabled() && blockEntity.storedUpgrades.stream().map((i-> (FactocraftyUpgradeItem)i.getItem())).allMatch(this::isUpgradeCompatibleWith);
     }
 

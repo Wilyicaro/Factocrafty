@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -49,8 +50,11 @@ public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implement
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return SimpleFluidLoggedBlock.super.getStateForPlacement(IFactocraftyOrientableBlock.super.getStateForPlacement(ctx),ctx);
     }
-
-
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        FluidState f = BLOCK_LOGGABLE_FLUIDS_SUPPLIER.get( state.getValue(FLUIDLOGGED())).get().defaultFluidState();
+        return f.getType() instanceof FlowingFluid g ? g.getSource(false) : f;
+    }
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {

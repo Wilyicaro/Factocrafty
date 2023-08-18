@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import wily.factoryapi.base.IFactoryProcessableStorage;
+import wily.factoryapi.base.IFactoryProgressiveStorage;
 
 import java.util.function.Supplier;
 
@@ -38,7 +38,7 @@ public class FactocraftySyncProgressPacket {
         ctx.get().queue(() -> {
             Player player = ctx.get().getPlayer();
             BlockEntity be = player.level().getBlockEntity(pos);
-            if (player.level().isLoaded(pos) && be instanceof IFactoryProcessableStorage s) {
+            if (player.level().isLoaded(pos) && be instanceof IFactoryProgressiveStorage s) {
                 s.getProgresses().get(index).setValues(values);
                 be.setChanged();
             }

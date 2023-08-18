@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "factocrafty:block/machines/fluid_pump_bottom",
+		"up": "factocrafty:block/machines/fluid_pump_top",
+		"north": "factocrafty:block/machines/fluid_pump_front_active",
+		"east": "factocrafty:block/machines/fluid_pump_leftright_active",
+		"south": "factocrafty:block/machines/fluid_pump_back",
+		"west": "factocrafty:block/machines/fluid_pump_leftright_active",
+		"particle": "factocrafty:block/machines/fluid_pump_front_active"
+	}
+}

@@ -21,9 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.Nullable;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
@@ -37,7 +36,7 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
     protected boolean hasSmokeParticles = false;
 
     public FactocraftyMachineBlock(FactoryCapacityTiers tier, Properties properties) {
-        super(tier,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  14 : 0));
+        super(tier,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  6 : 0));
         this.registerDefaultState(defaultBlockState().setValue(getFacingProperty(), Direction.NORTH));
     }
 
@@ -60,7 +59,7 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
     @Override
     public void unsupportedTierBurn(Level level, BlockPos pos) {
         IFactocraftyCYEnergyBlock.super.unsupportedTierBurn(level, pos);
-        if (level.getBlockEntity(pos) instanceof FactocraftyProcessBlockEntity be) {
+        if (level.getBlockEntity(pos) instanceof FactocraftyMenuBlockEntity be) {
             be.energyStorage.storedTier = FactoryCapacityTiers.BURNED;
             be.energyStorage.setEnergyStored(0);
             be.setChanged();
@@ -84,7 +83,7 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
                 level.playLocalSound(d, e, f, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
             }
 
-            Direction direction = (Direction)blockState.getValue(getFacingProperty());
+            Direction direction = blockState.getValue(getFacingProperty());
             Direction.Axis axis = direction.getAxis();
             double g = 0.52;
             double h = randomSource.nextDouble() * 0.6 - 0.3;

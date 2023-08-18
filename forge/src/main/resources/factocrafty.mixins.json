@@ -6,10 +6,7 @@
     "AddJetpackModel"
   ],
   "mixins": [
-    "AddFactocraftyMachineCapability",
-    "AddFluidItemCapability",
-    "AddEnergyItemCapability",
-    "AddFluidTankBlockEntityItemRenderer",
+    "AddItemsBlockEntityRenderer",
     "ForgeAxeItemRedirector"
   ],
   "injectors": {

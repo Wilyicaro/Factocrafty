@@ -15,7 +15,6 @@ import wily.factocrafty.util.registering.FactocraftyOre;
 import wily.factocrafty.recipes.EnricherRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.tag.Items;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 
@@ -35,7 +34,7 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
     public Bearer<Integer> matterInt = Bearer.of(0);
 
     public EnricherBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.ENRICHER, Registration.ENRICHER_RECIPE.get(),Registration.ENRICHER_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(Registration.ENRICHER_MENU.get(), Registration.ENRICHER_RECIPE.get(),Registration.ENRICHER_BLOCK_ENTITY.get(), blockPos, blockState);
         inputType = InputType.FLUID;
         resultTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.OUTPUT, TransportState.EXTRACT);
         matterAmount = new Progress(Progress.Identifier.MATTER,1,800);
@@ -87,7 +86,7 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    public void addTanks(List<IPlatformFluidHandler> list) {
+    public void addTanks(List<IPlatformFluidHandler<?>> list) {
         super.addTanks(list);
         list.add(resultTank);
     }

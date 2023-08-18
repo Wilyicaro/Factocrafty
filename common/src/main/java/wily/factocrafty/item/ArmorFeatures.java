@@ -23,7 +23,7 @@ public enum ArmorFeatures {
         return tick;
     }
     public static BiConsumer<Player,ItemStack> getDefaultTick(ArmorFeatures feature){
-        return  (p,i)-> {if (p.getRandom().nextFloat() >= 0.7F && feature.isActive(i.getOrCreateTag()) && p.getItemBySlot(((ElectricArmorItem)i.getItem()).getEquipmentSlot()) == i) ((ElectricArmorItem)i.getItem()).getCraftyEnergy(i).consumeEnergy(1,false);};
+        return  (p,i)-> {if (p.getRandom().nextFloat() >= 0.7F && feature.isActive(i.getOrCreateTag()) && p.getItemBySlot(((ElectricArmorItem)i.getItem()).getEquipmentSlot()) == i) ((ElectricArmorItem)i.getItem()).getEnergyStorage(i).consumeEnergy(1,false);};
     }
 
     ArmorFeatures(BiPredicate<ElectricArmorItem, ItemStack> condition) {

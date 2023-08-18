@@ -1,0 +1,28 @@
+{
+  "type": "factocrafty:sawing",
+  "ingredient": {
+    "tag": "minecraft:bamboo_blocks"
+  },
+  "result": {
+    "item": "minecraft:bamboo_planks",
+    "count": 4
+  },
+  "otherResults": [
+    {
+    "result": "factocrafty:sawdust",
+    "chance" : 0.4,
+    "count": 2
+  },
+    {
+      "result": "factocrafty:sawdust",
+      "chance": 0.6
+    },
+    {
+      "result": "minecraft:stick",
+      "chance": 0.6,
+      "count": 3
+    }
+  ],
+  "experience": 0.3,
+  "processtime": 150
+}

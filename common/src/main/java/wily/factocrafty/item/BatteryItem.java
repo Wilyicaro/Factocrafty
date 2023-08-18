@@ -11,6 +11,6 @@ public class BatteryItem extends EnergyItem{
     }
     @Override
     public boolean isBarVisible(ItemStack itemStack) {
-        return capacity > FactoryCapacityTiers.HIGH.energyCapacity && super.isBarVisible(itemStack);
+        return capacity > FactoryCapacityTiers.HIGH.initialCapacity && super.isBarVisible(itemStack);
     }
 }

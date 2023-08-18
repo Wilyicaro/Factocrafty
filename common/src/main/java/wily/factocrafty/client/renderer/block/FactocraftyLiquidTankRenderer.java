@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factocrafty.block.storage.fluid.entity.FactocraftyFluidTankBlockEntity;
 import wily.factocrafty.client.renderer.DynamicBakedModel;
-import wily.factocrafty.util.DirectionUtil;
+import wily.factoryapi.util.DirectionUtil;
 
 import static wily.factocrafty.client.renderer.ModelHelper.FLUID_MODEL;
 
@@ -30,7 +29,7 @@ public class FactocraftyLiquidTankRenderer implements BlockEntityRenderer<Factoc
     Minecraft mc = Minecraft.getInstance();
 
 
-    ModelResourceLocation fluidModelLocation = new ModelResourceLocation( new ResourceLocation("factocrafty:fluid_model"),"");
+    public static final ResourceLocation FLUID_MODEL_LOCATION = new ResourceLocation("factocrafty:block/fluid_tank/fluid_model");
 
 
     public FactocraftyLiquidTankRenderer(BlockEntityRendererProvider.Context context) {
@@ -41,8 +40,7 @@ public class FactocraftyLiquidTankRenderer implements BlockEntityRenderer<Factoc
         BlockRenderDispatcher dispatcher = context.getBlockRenderDispatcher();
         FluidStack fluid = be.fluidTank.getFluidStack();
         ModelManager modelManager = dispatcher.getBlockModelShaper().getModelManager();
-        BakedModel tank = dispatcher.getBlockModel(be.getBlockState());
-        DynamicBakedModel fluidModel = new DynamicBakedModel(modelManager.getModel(fluidModelLocation),FluidStackHooks.getStillTexture(fluid), FLUID_MODEL);
+        DynamicBakedModel fluidModel = new DynamicBakedModel(modelManager.bakedRegistry.get(FLUID_MODEL_LOCATION),FluidStackHooks.getStillTexture(fluid), FLUID_MODEL);
 
 
         int k = be.getLevel() == null ? FluidStackHooks.getColor(fluid) : FluidStackHooks.getColor(be.getLevel(),be.getBlockPos(),fluid.getFluid().defaultFluidState());
@@ -53,7 +51,7 @@ public class FactocraftyLiquidTankRenderer implements BlockEntityRenderer<Factoc
         stack.translate(0.5,0.5,0.5);
         stack.mulPose(DirectionUtil.getRotation( be.getBlockState().getValue(BlockStateProperties.FACING)));
         stack.translate(-0.5,-0.5,-0.5);
-        dispatcher.getModelRenderer().renderModel(stack.last(),bufferSource.getBuffer(Sheets.cutoutBlockSheet()),be.getBlockState(), tank,1,1,1,i,j);
+        dispatcher.getModelRenderer().renderModel(stack.last(),bufferSource.getBuffer(Sheets.cutoutBlockSheet()),be.getBlockState(), dispatcher.getBlockModel(be.getBlockState()),1,1,1,i,j);
 
         if (!fluid.isEmpty()){
             if (be.hasLevel()) {
@@ -64,7 +62,7 @@ public class FactocraftyLiquidTankRenderer implements BlockEntityRenderer<Factoc
                     stack.translate(0, be.unitHeight= -(0.8125D-0.8125D*relBe.smoothFluidAmount / (float)relBe.fluidTank.getMaxFluid()) - 0.22 + relBe.unitHeight, 0);
                 }
             }
-            fluidModel.setHeightScale(Math.max(0.05F,(!be.hasLevel() ? be.fluidTank.getFluidStack().getAmount() : be.smoothFluidAmount) / (float)be.fluidTank.getMaxFluid()));
+            fluidModel.setScale(1.0F,Math.max(0.05F,(!be.hasLevel() ? be.fluidTank.getFluidStack().getAmount() : be.smoothFluidAmount) / (float)be.fluidTank.getMaxFluid()),1.0F);
             dispatcher.getModelRenderer().renderModel(stack.last(),bufferSource.getBuffer(Sheets.translucentCullBlockSheet()),be.getBlockState(), fluidModel,r,g,b,i,j);
 
         }

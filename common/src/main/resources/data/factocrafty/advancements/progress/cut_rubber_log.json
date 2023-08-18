@@ -1,0 +1,58 @@
+{
+  "parent": "factocrafty:progress/root",
+  "criteria": {
+    "cut": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": ["factocrafty:stripped_rubber_log"]
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "tag": "minecraft:axes"
+            }
+          }
+        ]
+      }
+    },
+    "sticky_resin": {
+      "conditions": {
+        "items": [
+          {
+            "items": ["factocrafty:sticky_resin"]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.factocrafty.progress.cut_rubber_log.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "factocrafty:sticky_resin"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.factocrafty.progress.cut_rubber_log.title"
+    }
+  },
+  "requirements": [
+    [
+      "cut",
+      "sticky_resin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

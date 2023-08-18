@@ -10,35 +10,35 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
-import wily.factocrafty.block.transport.energy.CableBlock;
-import wily.factocrafty.block.entity.FactocraftyProcessBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.block.generator.SolarPanelTiers;
+import wily.factocrafty.block.transport.FactocraftyConduitBlock;
+import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
-import wily.factocrafty.util.registering.FactocraftyMenus;
 import wily.factoryapi.base.*;
 
 import java.util.List;
 
-public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
+import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
+
+public class SolarPanelBlockEntity extends FactocraftyMenuBlockEntity {
 
 
     public SolarPanelTiers solarTier;
     public Bearer<Integer> tickEnergy;
 
     public SolarPanelBlockEntity(SolarPanelTiers tier, BlockPos blockPos, BlockState blockState) {
-        super(FactocraftyMenus.SOLAR_PANEL,tier.energyTier,tier.getBlockEntity(), blockPos, blockState);
-        FILL_SLOT = 0;
-        DRAIN_SLOT = 0;
+        super(Registration.SOLAR_PANEL_MENU.get(),tier.getBlockEntity(), blockPos, blockState);
+        STORAGE_SLOTS = new int[]{0};
         this.solarTier = tier;
         this.tickEnergy = Bearer.of(0);
         this.additionalSyncInt.add(tickEnergy);
 
-        if (blockState.isFaceSturdy(level,blockPos,Direction.UP)) energySides.replace(Direction.UP, TransportState.NONE);
     }
 
     @Override
     public int getInitialEnergyCapacity() {
-        return defaultEnergyTier.energyCapacity;
+        return getDefaultEnergyTier().initialCapacity;
     }
 
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
@@ -71,10 +71,10 @@ public class SolarPanelBlockEntity extends FactocraftyProcessBlockEntity {
             super.tick();
             for (Direction direction : Direction.values()) {
                 BlockPos pos = getBlockPos().relative(direction);
-                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof CableBlock)) {
+                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof FactocraftyConduitBlock<?,?>)) {
                     IFactoryStorage CYEbe = (IFactoryStorage) level.getBlockEntity(pos);
                     if (CYEbe != null)
-                        CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(direction, e));
+                        CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(this,direction, e));
                 }
             }
             if ( tickEnergy.get() > 0 != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)) level.setBlock(worldPosition,getBlockState().setValue(FactocraftyMachineBlock.ACTIVE,tickEnergy.get() > 0),3);

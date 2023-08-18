@@ -12,14 +12,14 @@ import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.generator.entity.SolarPanelBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
-import wily.factocrafty.inventory.FactocraftyProcessMenu;
+import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factoryapi.base.IFactoryDrawableType;
 
 import static wily.factoryapi.util.StorageStringUtil.*;
 
 
-public class SolarPanelScreen extends FactocraftyMachineScreen<SolarPanelBlockEntity> {
-    public SolarPanelScreen(FactocraftyProcessMenu<SolarPanelBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
+public class SolarPanelScreen extends FactocraftyStorageScreen<SolarPanelBlockEntity> {
+    public SolarPanelScreen(FactocraftyStorageMenu<SolarPanelBlockEntity> abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
 
     }

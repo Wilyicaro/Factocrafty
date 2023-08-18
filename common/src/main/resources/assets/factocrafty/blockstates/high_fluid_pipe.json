@@ -1,0 +1,7 @@
+{
+	"variants": {
+	  "": {
+		"model": "factocrafty:block/transport/fluid/high_fluid_pipe_center"
+	  }
+	}
+  }

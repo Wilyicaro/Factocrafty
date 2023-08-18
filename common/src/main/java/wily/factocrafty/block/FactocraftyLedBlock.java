@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.ICraftyEnergyItem;
+import wily.factoryapi.base.ICraftyStorageItem;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class FactocraftyLedBlock extends FactocraftyBlock implements EntityBlock
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         ItemStack hand = player.getItemInHand(interactionHand);
-        if (hand.is(Registration.WRENCH.get()) || (hand.is(Registration.RGB_CONTROLLER.get()) && hand.getItem() instanceof ICraftyEnergyItem<?> i && i.getCraftyEnergy(hand).getEnergyStored() > 0))
+        if (hand.is(Registration.WRENCH.get()) || (hand.is(Registration.RGB_CONTROLLER.get()) && hand.getItem() instanceof ICraftyStorageItem i && i.getEnergyStorage(hand).getEnergyStored() > 0))
             return InteractionResult.FAIL;
         if (level.isClientSide) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(blockPos) instanceof FactocraftyLedBlockEntity be) {
