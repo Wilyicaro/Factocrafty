@@ -49,14 +49,7 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyMenuBlockEntity 
                 smoothFluidAmount = (long) Mth.clamp((long) (smoothFluidAmount + Math.pow(oldFluidAmount, -0.02) * fluidTank.getMaxFluid() / 16), 0, oldFluidAmount);
             if (oldFluidAmount != fluidTank.getFluidStack().getAmount()){
                 oldFluidAmount = fluidTank.getFluidStack().getAmount();
-                BlockState blockState1 = getBlockState();
-                if (Platform.isFabric()) {
-                    int i = ((FactocraftyFluidTankBlock) blockState1.getBlock()).getLightEmission(blockState1, level, worldPosition);
-                    if (blockState1.getValue(FactocraftyLedBlock.LIGHT_VALUE) != i){
-                        level.setBlock(getBlockPos(),blockState1.setValue(FactocraftyLedBlock.LIGHT_VALUE,i),3);
-                    }
-                }
-                level.sendBlockUpdated(getBlockPos(),getBlockState(),blockState1, Block.UPDATE_CLIENTS);
+                level.sendBlockUpdated(getBlockPos(),getBlockState(),getBlockState(), Block.UPDATE_CLIENTS);
                 level.getProfiler().push("queueCheckLight");
                 level.getChunkSource().getLightEngine().checkBlock(worldPosition);
                 level.getProfiler().pop();

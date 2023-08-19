@@ -41,9 +41,9 @@ public class CableBlockEntity extends ConduitBlockEntity<FactocraftyCables> {
                     energyStorage.consumeEnergy((e.receiveEnergy(new CraftyTransaction(Math.min(i, maxEnergyTransfer()), energyStorage.storedTier), false).reduce(getConduitType().transferenceEfficiency())), false);
                 }
             }else {
-                if ((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && !energyBlock.produceEnergy()) ||  storage.energySides().isPresent() && storage.energySides().get().get(direction.getOpposite()).canInsert())
+                if ((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && !energyBlock.produceEnergy()) ||  (storage.energySides().isEmpty() || storage.energySides().get().get(direction.getOpposite()).canInsert()))
                     transferEnergyTo(this, direction,e);
-                if((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && (!energyBlock.isEnergyReceiver() || energyBlock.produceEnergy()))|| (storage.energySides().isPresent() && storage.energySides().get().get(direction.getOpposite()) == TransportState.EXTRACT))
+                if((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && (!energyBlock.isEnergyReceiver() || energyBlock.produceEnergy()))|| (storage.energySides().isEmpty() || storage.energySides().get().get(direction.getOpposite()) == TransportState.EXTRACT))
                     transferEnergyFrom(this, direction, e);
 
             }

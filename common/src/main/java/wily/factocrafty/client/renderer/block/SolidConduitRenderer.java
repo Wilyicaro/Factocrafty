@@ -39,7 +39,7 @@ public class SolidConduitRenderer<C extends ConduitBlockEntity<?>> implements Bl
         Storages.Storage<?> s =  be.getConduitType().getTransferenceStorage();
         Optional<?> op = (s == Storages.FLUID ? be.fluidSides() : s == Storages.CRAFTY_ENERGY ? be.energySides() : s== Storages.ITEM ? be.itemSides(): Optional.empty());
         for (Direction d : Direction.values()) {
-            ConduitSide side = blockState.getValue(FactocraftyConduitBlock.PROPERTY_BY_DIRECTION.get(d));
+            ConduitSide side = blockState.getValue(be.getBlock().PROPERTY_BY_DIRECTION.get(d));
             if (side.isConnected()) {
                 BakedModel cableSide = modelManager.bakedRegistry.get(be.getConduitType().getSideModelLocation(op.isPresent() ? ((SideList<?>)op.get()).getTransport(d) : TransportState.EXTRACT_INSERT));
                 stack.pushPose();

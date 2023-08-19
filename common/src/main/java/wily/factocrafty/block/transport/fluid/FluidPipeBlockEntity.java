@@ -57,14 +57,15 @@ public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFlu
                     fluidHandler.drain(fluidHandler.getFluidStack().copyWithAmount(e.fill(fluidHandler.getFluidStack().copyWithAmount(Math.min(i , maxFluidTransfer())), false)), false);
                 }
             }else {
-                if (storage.fluidSides().isPresent() && ((fluidSides.get(direction).transportState == TransportState.EXTRACT && storage.fluidSides().get().get(direction.getOpposite()).transportState.canInsert()) || (fluidSides.get(direction).transportState.canExtract() && storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.INSERT)))
+                if (!fluidHandler.getFluidStack().isEmpty() && ((fluidSides.get(direction).transportState == TransportState.EXTRACT && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState.canInsert())) || (fluidSides.get(direction).transportState.canExtract() && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.INSERT))))
                     transferFluidTo(this, direction, e);
-                if (storage.fluidSides().isPresent() && ((fluidSides.get(direction).transportState.canInsert() && storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.EXTRACT)|| (fluidSides.get(direction).transportState == TransportState.INSERT && storage.fluidSides().get().get(direction.getOpposite()).transportState.canExtract())))
+                if (!e.getFluidStack().isEmpty() && ((fluidSides.get(direction).transportState.canInsert() && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.EXTRACT))|| (fluidSides.get(direction).transportState == TransportState.INSERT && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState.canExtract()))))
                     transferFluidFrom(this, direction, e);
 
             }
         });
     }
+
     public long smoothFluidAmount = 0;
     private long oldFluidAmount = fluidHandler.getFluidStack().getAmount();
     @Override
@@ -73,14 +74,7 @@ public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFlu
             smoothFluidAmount = (long) Mth.clamp((long) (smoothFluidAmount + Math.pow(oldFluidAmount, -0.02) * fluidHandler.getMaxFluid() / 16), 0, oldFluidAmount);
         if (oldFluidAmount != fluidHandler.getFluidStack().getAmount()){
             oldFluidAmount = fluidHandler.getFluidStack().getAmount();
-            BlockState blockState1 = getBlockState();
-            if (Platform.isFabric()) {
-                int i = ((FluidPipeBlock) blockState1.getBlock()).getLightEmission(blockState1, level, worldPosition);
-                if (blockState1.getValue(FactocraftyLedBlock.LIGHT_VALUE) != i){
-                    level.setBlock(getBlockPos(),blockState1.setValue(FactocraftyLedBlock.LIGHT_VALUE,i),3);
-                }
-            }
-            level.sendBlockUpdated(getBlockPos(),getBlockState(),blockState1, Block.UPDATE_CLIENTS);
+            level.sendBlockUpdated(getBlockPos(),getBlockState(),getBlockState(), Block.UPDATE_CLIENTS);
             level.getProfiler().push("queueCheckLight");
             level.getChunkSource().getLightEngine().checkBlock(worldPosition);
             level.getProfiler().pop();

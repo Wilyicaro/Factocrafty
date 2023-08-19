@@ -29,14 +29,16 @@ import java.util.List;
 import java.util.Map;
 
 public class FactocraftyConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,? extends FactocraftyConduitBlock<T,BE>,BE>, BE extends BlockEntity>  extends BaseEntityBlock{
-    public static final EnumProperty<ConduitSide> NORTH = EnumProperty.create("north", ConduitSide.class);
-    public static final EnumProperty<ConduitSide> EAST = EnumProperty.create("east", ConduitSide.class);
-    public static final EnumProperty<ConduitSide> SOUTH = EnumProperty.create("south", ConduitSide.class);
-    public static final EnumProperty<ConduitSide> WEST = EnumProperty.create("west", ConduitSide.class);
+    public EnumProperty<ConduitSide> NORTH;
+    public EnumProperty<ConduitSide> EAST;
+    public EnumProperty<ConduitSide> SOUTH;
+    public EnumProperty<ConduitSide> WEST;
 
-    public static final Map<Direction, EnumProperty<ConduitSide>> PROPERTY_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.EAST, EAST, Direction.SOUTH, SOUTH, Direction.WEST, WEST));
+    public Map<Direction, EnumProperty<ConduitSide>> PROPERTY_BY_DIRECTION;
 
-
+    public boolean isConnectionTypeValid(ConduitSide conduitSide){
+        return true;
+    }
     public final T conduitType;
     public FactocraftyConduitBlock(T cable, Properties properties) {
         super(properties);
@@ -110,6 +112,11 @@ public class FactocraftyConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,?
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        NORTH = EnumProperty.create("north", ConduitSide.class, this::isConnectionTypeValid);
+        EAST = EnumProperty.create("east", ConduitSide.class, this::isConnectionTypeValid);
+        SOUTH = EnumProperty.create("south", ConduitSide.class, this::isConnectionTypeValid);
+        WEST = EnumProperty.create("west", ConduitSide.class, this::isConnectionTypeValid);
+        PROPERTY_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.EAST, EAST, Direction.SOUTH, SOUTH, Direction.WEST, WEST));
         builder.add(NORTH, EAST, SOUTH, WEST);
     }
 

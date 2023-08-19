@@ -18,8 +18,8 @@ import wily.factoryapi.util.VoxelShapeUtil;
 
 public abstract class FactocraftySolidConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,? extends FactocraftyConduitBlock<T,BE>,BE>, BE extends BlockEntity> extends FactocraftyConduitBlock<T,BE> implements SimpleFluidLoggedBlock {
 
-    public static final EnumProperty<ConduitSide> UP = EnumProperty.create("up", ConduitSide.class);
-    public static final EnumProperty<ConduitSide> DOWN = EnumProperty.create("down", ConduitSide.class);
+    public EnumProperty<ConduitSide> UP;
+    public EnumProperty<ConduitSide> DOWN;
 
 
 
@@ -29,6 +29,11 @@ public abstract class FactocraftySolidConduitBlock<T extends Enum<T> & IFactocra
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return this.getStateForPlacement(defaultBlockState(),ctx);
+    }
+
+    @Override
+    public boolean isConnectionTypeValid(ConduitSide conduitSide) {
+        return conduitSide != ConduitSide.UP && conduitSide != ConduitSide.DOWN;
     }
 
     protected abstract VoxelShape getCenterCubeShape();
@@ -65,6 +70,8 @@ public abstract class FactocraftySolidConduitBlock<T extends Enum<T> & IFactocra
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
+        UP = EnumProperty.create("up", ConduitSide.class,this::isConnectionTypeValid);
+        DOWN = EnumProperty.create("down", ConduitSide.class, this::isConnectionTypeValid);
         builder.add(UP,DOWN,FLUIDLOGGED());
     }
 

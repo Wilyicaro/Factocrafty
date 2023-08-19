@@ -12,7 +12,6 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
         super(new Slot(pBe.inventory,i,x,y){
             @Override
             public void set(ItemStack itemStack) {
-                Factocrafty.LOGGER.info(pBe.getLevel().isClientSide + "?");
                 for (ItemStack i: pBe.storedUpgrades) {
                     if (ItemStack.isSameItemSameTags(itemStack,i)) {
                         if (pBe.selectedUpgrade.get() <0) i.grow(itemStack.getCount());
@@ -22,7 +21,6 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
                 }
                 if (pBe.storedUpgrades.stream().noneMatch(i->ItemStack.isSameItem(i,itemStack))){
                     if (itemStack.isEmpty()) pBe.storedUpgrades.removeIf(i-> {
-                        //Factocrafty.LOGGER.info("HERE 2");
                         boolean b = pBe.storedUpgrades.indexOf(i) == pBe.selectedUpgrade.get();
                         if (b) pBe.selectedUpgrade.set(-1);
                         return b;

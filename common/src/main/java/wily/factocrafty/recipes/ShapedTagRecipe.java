@@ -300,7 +300,6 @@ public class ShapedTagRecipe extends CustomRecipe {
             NonNullList<Pair<Ingredient,CompoundTag>> nonNullList = NonNullList.withSize(i * j, Pair.of(Ingredient.EMPTY,new CompoundTag()));
 
             nonNullList.replaceAll(ignored -> {
-                Factocrafty.LOGGER.warning("a" + i * j);
                 return Pair.of(Ingredient.fromNetwork(friendlyByteBuf), friendlyByteBuf.readNbt());
             });
 

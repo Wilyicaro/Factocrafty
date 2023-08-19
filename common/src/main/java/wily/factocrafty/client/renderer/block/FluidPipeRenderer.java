@@ -59,7 +59,7 @@ public class FluidPipeRenderer extends SolidConduitRenderer<FluidPipeBlockEntity
                 stack.popPose();
 
             for (Direction d : Direction.values()) {
-                ConduitSide side = blockState.getValue(FactocraftyConduitBlock.PROPERTY_BY_DIRECTION.get(d));
+                ConduitSide side = blockState.getValue(be.getBlock().PROPERTY_BY_DIRECTION.get(d));
                 if (side.isConnected()) {
                     DynamicBakedModel fluidSide = new DynamicBakedModel(modelManager.bakedRegistry.get(fluidSideLocation(isLarge,!be.fluidSides.getTransport(d).isUsable())),sprite,be.fluidSides.getTransport(d).isUsable() ? isLarge ?  ModelHelper.LARGE_FLUID_SIDE_MODEL: ModelHelper.FLUID_SIDE_MODEL : isLarge ?  ModelHelper.LARGE_FLUID_SIDE_NONE_MODEL: ModelHelper.FLUID_SIDE_NONE_MODEL);
                     stack.pushPose();

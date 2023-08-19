@@ -37,16 +37,6 @@ public abstract class ItemRendererInjector {
             boolean bl2 = transformType == ItemDisplayContext.GUI || transformType == ItemDisplayContext.GROUND || transformType == ItemDisplayContext.FIXED;
             if (bl2 && itemStack.getItem() instanceof BlockItem b && b.getBlock() instanceof FactocraftyConduitBlock<?,?>)
                 return  itemModelShaper.getModelManager().getModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + b.arch$registryName().getPath()), "inventory"));
-            if (Platform.isFabric())
-                if (itemStack.getItem() instanceof BlockItem b && b instanceof FactocraftyMachineBlockItem) {
-                    poseStack.pushPose();
-                    bakedModel.getTransforms().getTransform(transformType).apply(bl, poseStack);
-                    poseStack.translate(-0.5, -0.5, -0.5);
-                    FactocraftyBlockEntityWLRenderer.INSTANCE.renderByItem(itemStack, transformType, poseStack, multiBufferSource, i, j);
-                    poseStack.popPose();
-                    return bakedModel;
-
-                }
         }
         return bakedModel;
     }

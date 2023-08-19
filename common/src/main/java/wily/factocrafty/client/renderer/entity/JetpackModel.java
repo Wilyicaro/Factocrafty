@@ -28,10 +28,10 @@ public class JetpackModel<T extends LivingEntity> extends HumanoidModel<T> {
 
         super.setupAnim(livingEntity, f, g, h, i, j);
     }
-    public static ResourceLocation geteElectricTexture(){
+    public static ResourceLocation getElectricTexture(){
         return new ResourceLocation(MOD_ID,"textures/models/armor/electric_jetpack.png");
     }
-    public static ResourceLocation geteFlexTexture(){
+    public static ResourceLocation getFlexTexture(){
         return new ResourceLocation(MOD_ID,"textures/models/armor/flex_jetpack.png");
     }
 

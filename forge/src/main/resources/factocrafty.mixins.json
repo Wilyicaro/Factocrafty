@@ -2,11 +2,8 @@
   "required": true,
   "package": "wily.factocrafty.forge.mixin",
   "compatibilityLevel": "JAVA_17",
-  "client": [
-    "AddJetpackModel"
-  ],
+  "client": [],
   "mixins": [
-    "AddItemsBlockEntityRenderer",
     "ForgeAxeItemRedirector"
   ],
   "injectors": {

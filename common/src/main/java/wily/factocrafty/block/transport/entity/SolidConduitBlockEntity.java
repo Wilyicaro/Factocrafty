@@ -26,7 +26,7 @@ public abstract class SolidConduitBlockEntity<C extends IFactocraftyConduit<?,?,
 
     @Override
     public void updateAllStates(){
-        Map<Direction, EnumProperty<ConduitSide>> directionProperty = FactocraftyConduitBlock.PROPERTY_BY_DIRECTION;
+        Map<Direction, EnumProperty<ConduitSide>> directionProperty = getBlock().PROPERTY_BY_DIRECTION;
 
         BlockState blockState = getBlockState();
         for (Direction direction : Direction.values()){

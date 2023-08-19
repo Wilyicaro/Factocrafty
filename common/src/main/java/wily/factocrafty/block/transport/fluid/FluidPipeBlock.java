@@ -21,22 +21,23 @@ import wily.factocrafty.block.storage.fluid.entity.FactocraftyFluidTankBlockEnti
 import wily.factocrafty.block.transport.FactocraftySolidConduitBlock;
 import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
 import wily.factocrafty.util.registering.FactocraftyFluidPipes;
+import wily.factoryapi.base.IFactoryBlock;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class FluidPipeBlock extends FactocraftySolidConduitBlock<FactocraftyFluidPipes, FluidPipeBlockEntity> {
+public class FluidPipeBlock extends FactocraftySolidConduitBlock<FactocraftyFluidPipes, FluidPipeBlockEntity> implements IFactoryBlock {
     public FluidPipeBlock(FactocraftyFluidPipes tier, Properties properties) {
-        super(tier, properties.lightLevel((b)-> Platform.isFabric()? b.getValue(FactocraftyLedBlock.LIGHT_VALUE) : 0));
-        if (Platform.isFabric()) registerDefaultState(defaultBlockState().setValue(FactocraftyLedBlock.LIGHT_VALUE,0));
+        super(tier, properties);
     }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new FluidPipeBlockEntity(blockPos,blockState);
     }
-    public int getLightEmission(BlockState state, BlockGetter getter, BlockPos pos) {
-        return (getter.getBlockEntity(pos) instanceof FluidPipeBlockEntity fbe) ? FluidStackHooks.getLuminosity(fbe.fluidHandler.getFluidStack(), null, null) : 0;
+    @Override
+    public int getLuminance(BlockState state, BlockGetter level, BlockPos pos) {
+        return (level.getBlockEntity(pos) instanceof FluidPipeBlockEntity fbe) ? FluidStackHooks.getLuminosity(fbe.fluidHandler.getFluidStack(), null, null) : 0;
     }
 
     @Override
@@ -44,11 +45,6 @@ public class FluidPipeBlock extends FactocraftySolidConduitBlock<FactocraftyFlui
         list.add((conduitType.getCapacityTier().getTierComponent(false)));
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        if(Platform.isFabric())builder.add(FactocraftyLedBlock.LIGHT_VALUE);
-    }
 
     private static final VoxelShape SHAPE_CUBE = Block.box(5, 5, 5, 11, 11, 11);
     @Override

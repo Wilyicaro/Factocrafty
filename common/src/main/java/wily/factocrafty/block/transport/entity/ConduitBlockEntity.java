@@ -41,17 +41,19 @@ public abstract class ConduitBlockEntity<T extends IFactocraftyConduit<?,?,?>> e
     public T getConduitType(){
         return getBlockState().getBlock() instanceof FactocraftyConduitBlock<?,?> type ? (T)type.conduitType : null;
     }
-
+    public FactocraftyConduitBlock<?,?> getBlock(){
+        return (FactocraftyConduitBlock<?,?>)getBlockState().getBlock();
+    }
     @Override
     public List<Direction> getBlockedSides() {
         List<Direction> list = new ArrayList<>();
-        FactocraftyConduitBlock.PROPERTY_BY_DIRECTION.forEach((d, e)-> {if (getBlockState().getOptionalValue(e).isPresent() && getBlockState().getValue(e) != ConduitSide.SIDE) list.add(d);});
+        getBlock().PROPERTY_BY_DIRECTION.forEach((d, e)-> {if (getBlockState().getOptionalValue(e).isPresent() && getBlockState().getValue(e) != ConduitSide.SIDE) list.add(d);});
         return list;
     }
 
 
     public void updateAllStates(){
-        Map<Direction, EnumProperty<ConduitSide>> directionProperty = FactocraftyConduitBlock.PROPERTY_BY_DIRECTION;
+        Map<Direction, EnumProperty<ConduitSide>> directionProperty = getBlock().PROPERTY_BY_DIRECTION;
 
         BlockState blockState = getBlockState();
         for (Direction direction : Direction.values()){

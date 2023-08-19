@@ -34,7 +34,7 @@ public class ConduitRenderer<C extends ConduitBlockEntity<?>> implements BlockEn
         BakedModel cableSide = modelManager.bakedRegistry.get(be.getConduitType().getSideModelLocation());
         dispatcher.getModelRenderer().renderModel(stack.last(),multiBufferSource.getBuffer(renderType),be.getBlockState(), dispatcher.getBlockModel(blockState),1,1,1,i,j);
         for (Direction d : Direction.Plane.HORIZONTAL) {
-            ConduitSide side = be.getBlockState().getValue(FactocraftyConduitBlock.PROPERTY_BY_DIRECTION.get(d));
+            ConduitSide side = be.getBlockState().getValue(be.getBlock().PROPERTY_BY_DIRECTION.get(d));
             stack.pushPose();
             stack.translate(0.5,0.5,0.5);
             stack.mulPose(DirectionUtil.getHorizontalRotation(d));

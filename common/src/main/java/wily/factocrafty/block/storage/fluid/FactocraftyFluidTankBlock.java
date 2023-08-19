@@ -17,7 +17,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -26,18 +28,19 @@ import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyStorageBlock;
 import wily.factocrafty.block.IFactocraftyOrientableBlock;
 import wily.factocrafty.block.storage.fluid.entity.FactocraftyFluidTankBlockEntity;
+import wily.factocrafty.block.transport.fluid.FluidPipeBlockEntity;
 import wily.factoryapi.base.FactoryCapacityTiers;
+import wily.factoryapi.base.IFactoryBlock;
 import wily.factoryapi.base.SimpleFluidLoggedBlock;
 import wily.factoryapi.util.VoxelShapeUtil;
 
 import java.util.List;
 
-public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implements SimpleFluidLoggedBlock, IFactocraftyOrientableBlock {
+public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implements SimpleFluidLoggedBlock, IFactocraftyOrientableBlock, IFactoryBlock {
     
     public FactocraftyFluidTankBlock(FactoryCapacityTiers tier, Properties properties) {
-        super(tier, properties.noOcclusion().lightLevel((b)-> Platform.isFabric()? b.getValue(FactocraftyLedBlock.LIGHT_VALUE) : 0));
+        super(tier, properties.noOcclusion());
         BlockState state = defaultBlockState().setValue(FLUIDLOGGED(), 0).setValue(getFacingProperty(), Direction.UP);
-        if (Platform.isFabric()) state.setValue(FactocraftyLedBlock.LIGHT_VALUE,0);
         registerDefaultState(state);
     }
     public static final VoxelShape BASIC_TANK_DEFAULT_SHAPE = Shapes.or( Block.box(1, 0, 1, 15, 16, 15),Block.box(1.2, 15.4, 1.2, 14.8, 16.4, 14.8));
@@ -50,10 +53,16 @@ public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implement
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return SimpleFluidLoggedBlock.super.getStateForPlacement(IFactocraftyOrientableBlock.super.getStateForPlacement(ctx),ctx);
     }
+
     @Override
-    public FluidState getFluidState(BlockState state) {
-        FluidState f = BLOCK_LOGGABLE_FLUIDS_SUPPLIER.get( state.getValue(FLUIDLOGGED())).get().defaultFluidState();
-        return f.getType() instanceof FlowingFluid g ? g.getSource(false) : f;
+    public List<Fluid> getBlockLoggableFluids() {
+        if (Platform.isFabric()) return  List.of(Fluids.WATER);
+        return SimpleFluidLoggedBlock.super.getBlockLoggableFluids();
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState blockState) {
+        return getSimpleFluidState(blockState);
     }
 
     @Override
@@ -61,8 +70,9 @@ public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implement
         return VoxelShapeUtil.rotate(BASIC_TANK_DEFAULT_SHAPE, blockState.getValue(BlockStateProperties.FACING).getOpposite());
     }
 
-    public int getLightEmission(BlockState state, BlockGetter getter, BlockPos pos) {
-        return (getter.getBlockEntity(pos) instanceof FactocraftyFluidTankBlockEntity fbe) ? FluidStackHooks.getLuminosity(fbe.fluidTank.getFluidStack(), null, null) : 0;
+    @Override
+    public int getLuminance(BlockState state, BlockGetter level, BlockPos pos) {
+        return (level.getBlockEntity(pos) instanceof FactocraftyFluidTankBlockEntity fbe) ? FluidStackHooks.getLuminosity(fbe.fluidTank.getFluidStack(), null, null) : 0;
     }
 
 
@@ -70,7 +80,6 @@ public class FactocraftyFluidTankBlock extends FactocraftyStorageBlock implement
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(getFacingProperty(), FLUIDLOGGED());
-        if (Platform.isFabric()) builder.add(FactocraftyLedBlock.LIGHT_VALUE);
     }
     @Override
     public RenderShape getRenderShape(BlockState blockState) {
