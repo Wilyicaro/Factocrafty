@@ -30,6 +30,7 @@ public class FactocraftyFabricClient implements ClientModInitializer {
         FactocraftyClient.enqueueInit();
         FactocraftyClient.registerEntityRenderers(EntityRendererRegistry::register);
         FactocraftyClient.registerEntityModelLayers(EntityModelLayerRegistry::register);
+        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> FactocraftyClient.registerAdditionalModels(out));
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((a,b,c,d)->{
             FactocraftyClient.registerEntityRenderLayers((type) -> b, d.getModelSet(), new FactocraftyClient.FactocraftyRenderLayerRegistry() {
                 @Override

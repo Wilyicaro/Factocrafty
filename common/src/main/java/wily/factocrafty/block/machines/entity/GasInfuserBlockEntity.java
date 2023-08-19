@@ -57,7 +57,7 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     @Override
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
         NonNullList<FactoryItemSlot> slots= NonNullList.create();
-        slots.add(new FactocraftyCYItemSlot(this, 0, 56,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this, 0, 56,53, TransportState.INSERT, FactoryCapacityTiers.BASIC));
         return slots;
     }
 

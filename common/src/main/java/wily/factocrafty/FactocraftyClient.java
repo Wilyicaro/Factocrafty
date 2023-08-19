@@ -58,6 +58,7 @@ import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.TransportState;
 import wily.factoryapi.util.DirectionUtil;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -176,6 +177,32 @@ public class FactocraftyClient {
         if (function.apply(EntityType.ARMOR_STAND) instanceof ArmorStandRenderer r)
             event.register(r ,new HangGliderLayer<>(r, entityModelSet));
     }
+    public static void registerAdditionalModels(Consumer<ResourceLocation> registry){
+        for (FactocraftyCables value : FactocraftyCables.values()){
+            registry.accept(new ModelResourceLocation( new ResourceLocation("factocrafty:" + value.getName() + "_in_hand"),"inventory"));
+            registry.accept(value.getSideModelLocation());
+            if (value.cableShape != FactocraftyCables.Shape.SOLID){
+                registry.accept(value.getUpModelLocation());
+                BlockEntityRendererRegistry.register(value.getBlockEntity(), ConduitRenderer::new);
+            }else BlockEntityRendererRegistry.register(value.getBlockEntity(), SolidConduitRenderer::new);
+        }
+        for (FactocraftyFluidPipes value : FactocraftyFluidPipes.values()) {
+            registry.accept(new ModelResourceLocation(new ResourceLocation("factocrafty:" + value.getName() + "_in_hand"), "inventory"));
+            for (TransportState state : TransportState.values()) registry.accept(value.getSideModelLocation(state));
+            BlockEntityRendererRegistry.register(value.getBlockEntity(), FluidPipeRenderer::new);
+        }
+        boolean[] booleans = new boolean[]{false,true};
+        for (boolean b : booleans) {
+            registry.accept(FluidPipeRenderer.fluidCenterLocation(b));
+            for (boolean b1 : booleans)
+                registry.accept(FluidPipeRenderer.fluidSideLocation(b,b1));
+        }
+        registry.accept(FactocraftyLiquidTankRenderer.FLUID_MODEL_LOCATION);
+        registry.accept(TreeTapRenderer.TREETAP_BOWL);
+        registry.accept(TreeTapRenderer.TREETAP_LATEX);
+        registry.accept(TreeTapRenderer.TREETAP_LATEX_FALL);
+        registry.accept(new ResourceLocation("block/leaves"));
+    }
     public static void init(){
         Factocrafty.LOGGER.info("Initializing Client Side...");
         KeyMappingRegistry.register(GRAVITY_KEYMAPPING);
@@ -219,30 +246,6 @@ public class FactocraftyClient {
             }
         });
         FactocraftyWoodType.addWoodType(FactocraftyWoodType.RUBBER);
-        for (FactocraftyCables value : FactocraftyCables.values()){
-            FactocraftyExpectPlatform.registerModel(new ModelResourceLocation( new ResourceLocation("factocrafty:" + value.getName() + "_in_hand"),"inventory"));
-            FactocraftyExpectPlatform.registerModel(value.getSideModelLocation());
-            if (value.cableShape != FactocraftyCables.Shape.SOLID){
-                FactocraftyExpectPlatform.registerModel(value.getUpModelLocation());
-                BlockEntityRendererRegistry.register(value.getBlockEntity(), ConduitRenderer::new);
-            }else BlockEntityRendererRegistry.register(value.getBlockEntity(), SolidConduitRenderer::new);
-        }
-        for (FactocraftyFluidPipes value : FactocraftyFluidPipes.values()) {
-            FactocraftyExpectPlatform.registerModel(new ModelResourceLocation(new ResourceLocation("factocrafty:" + value.getName() + "_in_hand"), "inventory"));
-            for (TransportState state : TransportState.values()) FactocraftyExpectPlatform.registerModel(value.getSideModelLocation(state));
-            BlockEntityRendererRegistry.register(value.getBlockEntity(), FluidPipeRenderer::new);
-        }
-        boolean[] booleans = new boolean[]{false,true};
-        for (boolean b : booleans) {
-            FactocraftyExpectPlatform.registerModel(FluidPipeRenderer.fluidCenterLocation(b));
-            for (boolean b1 : booleans)
-                FactocraftyExpectPlatform.registerModel(FluidPipeRenderer.fluidSideLocation(b,b1));
-        }
-        FactocraftyExpectPlatform.registerModel(FactocraftyLiquidTankRenderer.FLUID_MODEL_LOCATION);
-        FactocraftyExpectPlatform.registerModel(TreeTapRenderer.TREETAP_BOWL);
-        FactocraftyExpectPlatform.registerModel(TreeTapRenderer.TREETAP_LATEX);
-        FactocraftyExpectPlatform.registerModel(TreeTapRenderer.TREETAP_LATEX_FALL);
-        FactocraftyExpectPlatform.registerModel(new ResourceLocation("block/leaves"));
         RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.ISOPRENE.get(),FactocraftyFluids.FLOWING_ISOPRENE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get(),FactocraftyFluids.OXYGEN.get(),FactocraftyFluids.FLOWING_OXYGEN.get(),FactocraftyFluids.HYDROGEN.get(),FactocraftyFluids.FLOWING_HYDROGEN.get());
         RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), FactocraftyCables.CRYSTAL_CABLE.get());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);

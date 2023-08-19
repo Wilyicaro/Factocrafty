@@ -79,7 +79,7 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
                 return isInputSlotActive() && !getRecipes().isEmpty() && getRecipes().get(0) != null ;
             }
         });
-        slots.add(new FactocraftyCYItemSlot(this, 1, 56,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this, 1, 56,53, TransportState.INSERT, FactoryCapacityTiers.BASIC));
         slots.add(new FactocraftyResultSlot(this,player, OUTPUT_SLOT,116,35).withType(FactoryItemSlot.Type.BIG));
         return slots;
     }

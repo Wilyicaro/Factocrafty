@@ -43,9 +43,6 @@ public class FactocraftyExpectPlatformImpl {
     public static boolean platformCorrectDiggerToolForDrops(Tier tier, TagKey<Block> tag, BlockState blockState) {
         return blockState.is(tag) && TierSortingRegistry.isCorrectTierForDrops(tier, blockState);
     }
-    public static void registerModel(ResourceLocation modelResourceLocation) {
-        FactocraftyForgeClient.REGISTER_MODELS.add(modelResourceLocation);
-    }
 
 
     public static void setQuadsEmission(List<BakedQuad> quads) {

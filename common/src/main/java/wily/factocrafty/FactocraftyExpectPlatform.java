@@ -44,11 +44,6 @@ public class FactocraftyExpectPlatform {
     }
 
     @ExpectPlatform
-    public static void registerModel(ResourceLocation modelResourceLocation){
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
     public static void setQuadsEmission(List<BakedQuad> quads){
         throw new AssertionError();
     }

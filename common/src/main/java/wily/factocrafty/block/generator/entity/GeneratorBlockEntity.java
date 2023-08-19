@@ -57,7 +57,7 @@ public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements 
                 return FuelRegistry.get(itemStack) > 0;
             }
         });
-        slots.add(new FactocraftyCYItemSlot(this, 1,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC){
+        slots.add(new FactocraftyCYItemSlot(this, 1,147,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC){
         });
         return slots;
     }

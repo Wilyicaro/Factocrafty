@@ -31,7 +31,7 @@ side = "BOTH"
 [[dependencies.factocrafty]]
 modId = "factory_api"
 mandatory = true
-versionRange = "[0.1.8,)"
+versionRange = "[1.1.1,)"
 ordering = "NONE"
 side = "BOTH"
 

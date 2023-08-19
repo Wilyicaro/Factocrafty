@@ -58,6 +58,6 @@ public class FactocraftyForgeClient {
     }
     @SubscribeEvent
     public static void clientInit(ModelEvent.RegisterAdditional event){
-            REGISTER_MODELS.forEach((event::register));
+            FactocraftyClient.registerAdditionalModels(event::register);
     }
 }

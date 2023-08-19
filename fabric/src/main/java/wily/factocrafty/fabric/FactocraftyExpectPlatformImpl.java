@@ -50,9 +50,6 @@ public class FactocraftyExpectPlatformImpl {
             return (i >= 1 || !blockState.is(BlockTags.NEEDS_STONE_TOOL)) && blockState.is(tag);
         }
     }
-    public static void registerModel(ResourceLocation modelResourceLocation){
-         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> out.accept(modelResourceLocation));
-    }
     public static void setQuadsEmission(List<BakedQuad> quads) {
         quads.forEach((q)->{
             int a = quads.indexOf(q);

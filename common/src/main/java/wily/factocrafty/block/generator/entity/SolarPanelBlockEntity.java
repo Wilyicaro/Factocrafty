@@ -43,7 +43,7 @@ public class SolarPanelBlockEntity extends FactocraftyMenuBlockEntity {
 
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
         NonNullList<FactoryItemSlot> slots = super.getSlots(player);
-        slots.add(new FactocraftyCYItemSlot(this,0,147,53, TransportState.INSERT, FactoryCapacityTiers.BASIC));
+        slots.add(new FactocraftyCYItemSlot(this,0,147,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC));
         return slots;
     }
 
