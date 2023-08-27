@@ -4,10 +4,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import dev.architectury.platform.Platform;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import wily.factocrafty.init.Registration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static wily.factocrafty.util.FluidStackUtil.getPlatformFluidAmount;
@@ -88,6 +95,13 @@ public class CompoundTagUtil {
         }
         else if (p.isBoolean()) tag.add(ByteTag.valueOf(p.getAsBoolean()));
         else if (p.isString()) tag.add(StringTag.valueOf(p.getAsString()));
+    }
+
+    public static List<Item> getItemComponents(ItemStack itemStack){
+        List<Item> list = new ArrayList<>();
+        if (itemStack.hasTag() && !itemStack.getTag().getList("Components",8).isEmpty())
+            itemStack.getTag().getList("Components",8).forEach(t->list.add(Registration.ITEMS_REGISTRAR.get(new ResourceLocation(t.getAsString()))));
+        return list;
     }
 
 }

@@ -15,8 +15,6 @@ public class FactocraftySlotWrapper extends Slot {
     public final int initialX;
     public final int initialY;
 
-    public float blitOffset;
-
     public FactocraftySlotWrapper(Slot slot, int i, int x, int y) {
         super(slot.container, i, x, y);
         this.target = slot;

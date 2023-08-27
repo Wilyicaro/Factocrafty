@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
+import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class FactocraftyUpgradeItem extends Item {
     private String tooltipName;
     private Component tooltip;
     public UpgradeType upgradeType;
-    // Use a different int for each type of upgrade
+
     public FactocraftyUpgradeItem(Properties properties, UpgradeType Type) {
         super(properties);
         upgradeType = Type;
@@ -36,8 +37,8 @@ public class FactocraftyUpgradeItem extends Item {
     public boolean isSameType(FactocraftyUpgradeItem upg){
         return upgradeType == upg.upgradeType;
     }
-    public boolean isValid(FactocraftyMenuBlockEntity blockEntity){
-        return  isEnabled() && blockEntity.storedUpgrades.stream().map((i-> (FactocraftyUpgradeItem)i.getItem())).allMatch(this::isUpgradeCompatibleWith);
+    public boolean isValid(FactocraftyStorageBlockEntity blockEntity){
+        return isEnabled() && blockEntity.storedUpgrades.stream().map((i-> (FactocraftyUpgradeItem)i.getItem())).allMatch(this::isUpgradeCompatibleWith);
     }
 
     public boolean isUpgradeCompatibleWith(FactocraftyUpgradeItem upg){

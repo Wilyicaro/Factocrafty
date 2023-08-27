@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import wily.factocrafty.init.Registration;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

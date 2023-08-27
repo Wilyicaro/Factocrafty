@@ -9,13 +9,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
-import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.FactoryDrawableButton;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import java.util.List;
 
@@ -95,8 +95,8 @@ public abstract class FactocraftyScreenWindow extends FactocraftyWidget {
     }
 
     @Override
-    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
-        list.add(new FactocraftyDrawableButton(getX() + width - 18,getY() + 10, (b)-> onClose(), Component.translatable("tooltip.factocrafty.config.close"), FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(0)));
+    public List<FactoryDrawableButton> addButtons(List<FactoryDrawableButton> list) {
+        list.add(new FactoryDrawableButton(getX() + width - 18,getY() + 10, (b)-> onClose(), Component.translatable("tooltip.factocrafty.config.close"), FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(0)));
         return super.addButtons(list);
     }
 

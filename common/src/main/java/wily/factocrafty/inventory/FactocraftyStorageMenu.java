@@ -149,8 +149,8 @@ public class FactocraftyStorageMenu<T extends BlockEntity> extends AbstractConta
                 FluidStack newFluid = tank.getFluidStack();
                 Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncFluidPacket(be.getBlockPos(), tank.identifier().differential(), newFluid));
             });
-            storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)-> Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncEnergyPacket(be.getBlockPos(), e.getEnergyStored(), e.getStoredTier())));
-
+            storage.getStorage(Storages.CRAFTY_ENERGY).ifPresent((e)-> Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncEnergyPacket(be.getBlockPos(), e)));
+            storage.getStorage(Storages.ENERGY).ifPresent((e)-> Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncEnergyPacket(be.getBlockPos(), e)));
             if (storage instanceof IFactoryProgressiveStorage pStorage)
                 pStorage.getProgresses().forEach((p) -> {Factocrafty.NETWORK.sendToPlayer(sp, new FactocraftySyncProgressPacket(be.getBlockPos(), pStorage.getProgresses().indexOf(p), p.getValues()));});
 

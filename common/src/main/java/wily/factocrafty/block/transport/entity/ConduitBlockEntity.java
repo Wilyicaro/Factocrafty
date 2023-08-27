@@ -47,7 +47,7 @@ public abstract class ConduitBlockEntity<T extends IFactocraftyConduit<?,?,?>> e
     @Override
     public List<Direction> getBlockedSides() {
         List<Direction> list = new ArrayList<>();
-        getBlock().PROPERTY_BY_DIRECTION.forEach((d, e)-> {if (getBlockState().getOptionalValue(e).isPresent() && getBlockState().getValue(e) != ConduitSide.SIDE) list.add(d);});
+        getBlock().PROPERTY_BY_DIRECTION.forEach((d, e)-> {if (getBlockState().getOptionalValue(e).isPresent() && !getBlockState().getValue(e).isConnected()) list.add(d);});
         return list;
     }
 

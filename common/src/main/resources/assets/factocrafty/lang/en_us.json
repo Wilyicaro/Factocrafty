@@ -5,12 +5,9 @@
   "factocrafty.generic": "%s",
 
   "_comment": "Tier",
-  "tier.factocrafty.burned.note": "Right-click with a machine Circuit Board to repair",
+  "tier.factocrafty.burned.note": "Right-click with the machine used Circuit Board to repair",
 
   "_comment": "GUI",
-  "gui.factocrafty.energy": "%s / %s IE",
-  "gui.factocrafty.fluid": "%s: %s / %s mB",
-
   "gui.factocrafty.progress": "Progress %s/%s",
   "gui.factocrafty.fuelBurnTimeProgress": "Fuel burn time %s/%s",
   "gui.factocrafty.heat": "Output Heat: %s",
@@ -22,9 +19,6 @@
   "gui.factocrafty.window.upgrade": "Upgrade Storage",
   "gui.factocrafty.window.upgrade.efficiency": "Total Efficiency: %s",
   "gui.factocrafty.window.equipment": "Equipment Slots",
-
-  "gui.factocrafty.can_operate_in": "Can operate in %ss",
-  "gui.factocrafty.can_operate": "This machine is ready!",
 
   "_comment": "Block",
   "block.factocrafty.generator": "Thermal Generator",
@@ -433,21 +427,19 @@
   "item.factocrafty.reactor_heat_vent": "Reactor Heat Vent",
   "item.factocrafty.reactor_plating": "Reactor Plating",
 
-  "_comment": "Battery Box",
+  "_comment": "Energy Storages",
   "block.factocrafty.battery_box": "Crafty Battery Box (CBB)",
   "block.factocrafty.advanced_functional_storage": "Advanced Functional Crafty storage (AFC)",
   "block.factocrafty.high_functional_storage": "High Functional Crafty storage (HFC)",
   "block.factocrafty.ultimate_functional_unit": "Ultimate Functional Crafty Unit (UFCU)",
   "block.factocrafty.quantum_unit": "Quantum Crafty Unit (QCU)",
 
-  "_comment": "Charge Pad",
-  "block.factocrafty.charge_pad_battery_box": "Charge Pad (Battery Box)",
-  "block.factocrafty.charge_pad_cesu": "Charge Pad (CESU)",
-  "block.factocrafty.charge_pad_mfe": "Charge Pad (MFE)",
-  "block.factocrafty.charge_pad_mfsu": "Charge Pad (MFSU)",
+  "_comment": "Energy Transformers",
+  "block.factocrafty.advanced_functional_transformer": "Advanced Functional Crafty transformer (AFC)",
+  "block.factocrafty.high_functional_transformer": "High Functional Crafty transformer (HFC)",
+  "block.factocrafty.ultimate_functional_transformer": "Ultimate Functional Crafty Transformer (UFCT)",
+  "block.factocrafty.quantum_transformer": "Quantum Crafty Transformer (QCT)",
 
-  "_comment": "Energy Converter",
-  "block.factocrafty.wooden_energy_converter": "Wooden Energy Converter",
 
   "_comment": "Fluid",
   "fluid.factocrafty.latex": "Latex",
@@ -527,6 +519,7 @@
   "tooltip.factocrafty.config.pump_mode.extract": "Filling",
   "tooltip.factocrafty.config.pump_mode.extract_insert": "Draining and Filling",
   "tooltip.factocrafty.config.pump_mode.none": "None",
+  "tooltip.factocrafty.config.conversion_mode.lower_tier": "Lower Tier",
   "tooltip.factocrafty.upgrade_right_click": "Right-click in the machine to upgrade",
   "tooltip.factocrafty.upgrade.overclock": "Improves machine speed up to 100x, but increases CY consume",
   "tooltip.factocrafty.upgrade.transformer": "Increases machine supported Energy tier",

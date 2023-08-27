@@ -35,7 +35,6 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
 
     public EnricherBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.ENRICHER_MENU.get(), Registration.ENRICHER_RECIPE.get(),Registration.ENRICHER_BLOCK_ENTITY.get(), blockPos, blockState);
-        inputType = InputType.FLUID;
         resultTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.OUTPUT, TransportState.EXTRACT);
         matterAmount = new Progress(Progress.Identifier.MATTER,1,800);
         additionalSyncInt.add(matterInt);

@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "factocrafty:block/energy_transformer/hfc_bottom",
+		"up": "factocrafty:block/energy_transformer/hfc_top",
+		"north": "factocrafty:block/energy_transformer/hfc_front",
+		"east": "factocrafty:block/energy_transformer/hfc_leftright",
+		"south": "factocrafty:block/energy_transformer/hfc_back",
+		"west": "factocrafty:block/energy_transformer/hfc_leftright",
+		"particle": "factocrafty:block/energy_transformer/hfc_leftright"
+	}
+}

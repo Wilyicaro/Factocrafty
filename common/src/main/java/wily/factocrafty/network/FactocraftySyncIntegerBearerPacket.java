@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 
 import java.util.function.Supplier;
@@ -33,7 +34,7 @@ public class FactocraftySyncIntegerBearerPacket {
             Player player = ctx.get().getPlayer();
             BlockEntity be = player.level().getBlockEntity(pos);
             if (player.level().isLoaded(pos)) {
-                if (be instanceof FactocraftyStorageBlockEntity s) {
+                if (be instanceof FactocraftyMenuBlockEntity s) {
                     s.additionalSyncInt.get(index).set(value);
                 be.setChanged();
                 player.level().sendBlockUpdated(pos,be.getBlockState(),be.getBlockState(),3);

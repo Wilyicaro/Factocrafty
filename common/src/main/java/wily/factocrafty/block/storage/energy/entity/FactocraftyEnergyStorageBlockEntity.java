@@ -5,6 +5,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,19 +15,24 @@ import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.util.registering.FactocraftyBlockEntities;
+import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.StorageStringUtil;
 
 import static wily.factoryapi.util.StorageUtil.transferEnergyFrom;
+import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
 
 public class FactocraftyEnergyStorageBlockEntity extends FactocraftyMenuBlockEntity {
-    public FactocraftyEnergyStorageBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(Registration.ENERGY_STORAGE_MENU.get(), FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
+    public FactocraftyEnergyStorageBlockEntity(MenuType<?> menu, BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(menu, blockEntityType, blockPos, blockState);
         for (BlockSide side : BlockSide.values())
             replaceSidedStorage(side,energySides, TransportState.EXTRACT_INSERT);
         replaceSidedStorage(BlockSide.BACK,energySides, TransportState.EXTRACT);
         replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.INSERT);
         STORAGE_SLOTS = new int[]{0,1};
+    }
+    public FactocraftyEnergyStorageBlockEntity(BlockPos blockPos, BlockState blockState) {
+        this(Registration.ENERGY_STORAGE_MENU.get(), FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
     }
 
     @Override
@@ -40,9 +48,19 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyMenuBlockEnt
     @Override
     public void tick() {
         super.tick();
-        for  (Direction d : Direction.values()){
-            if (level.getBlockEntity(getBlockPos().relative(d)) instanceof IFactoryStorage storage) {
-                if (energySides.get(d).canInsert() && storage.energySides().isPresent() && storage.energySides().get().get(d.getOpposite()).canExtract() ) transferEnergyFrom(this, d,storage.getStorage(Storages.CRAFTY_ENERGY,d.getOpposite()).get());
+        if (!level.isClientSide) {
+            for (Direction d : Direction.values()) {
+                BlockEntity be = level.getBlockEntity(getBlockPos().relative(d));
+                if (be != null) {
+                    IFactoryStorage storage = FactoryAPIPlatform.getPlatformFactoryStorage(be);
+                    storage.getStorage(Storages.CRAFTY_ENERGY, d.getOpposite()).ifPresent(e->{
+                        TransportState state = energySides.get(d);
+                        if (state == TransportState.INSERT && (storage.energySides().isEmpty() || storage.energySides().get().get(d.getOpposite()).canExtract()))
+                            transferEnergyFrom(this, d,e);
+                        if (state == TransportState.EXTRACT && (storage.energySides().isEmpty() || storage.energySides().get().get(d.getOpposite()).canInsert()))
+                            transferEnergyTo(this, d, e);
+                    });
+                }
             }
         }
     }

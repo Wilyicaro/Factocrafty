@@ -1,0 +1,28 @@
+{
+  "type": "factocrafty:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:insulated_copper_cable"
+    },
+    "C": {
+      "item": "factocrafty:advanced_circuit"
+    },
+    "I": {
+      "item": "factocrafty:advanced_circuit_board",
+      "nbt": {
+        "Components": [
+          "factocrafty:coil",
+          "factocrafty:copper_cable",
+          "factocrafty:coil"
+        ]
+      }
+    }
+},
+  "result": {
+    "item": "factocrafty:transformer_unit"
+  }
+}

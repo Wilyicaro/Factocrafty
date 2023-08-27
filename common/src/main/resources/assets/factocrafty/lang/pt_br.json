@@ -4,12 +4,9 @@
   "factocrafty.generic": "%s",
 
   "_comment": "Tier",
-  "tier.factocrafty.burned.note": "Clique-direito com uma placa de circuito para reparar",
+  "tier.factocrafty.burned.note": "Clique-direito com a placa de circuito usada na máquina para reparar",
 
   "_comment": "GUI",
-  "gui.factocrafty.energy": "%s / %s IE",
-  "gui.factocrafty.fluid": "%s: %s / %s mB",
-
   "gui.factocrafty.progress": "Progresso %s/%s",
   "gui.factocrafty.fuelBurnTimeProgress": "Tempo de queima do combustível %s/%s",
   "gui.factocrafty.heat": "Calor: %s",
@@ -22,8 +19,6 @@
   "gui.factocrafty.window.upgrade.efficiency": "Eficiência total: %s",
   "gui.factocrafty.window.equipment": "Slots de equipamento",
 
-  "gui.factocrafty.can_operate_in": "Pode produzir em %ss",
-  "gui.factocrafty.can_operate": "Essa máquina esta pronta!",
 
   "_comment": "Block",
   "block.factocrafty.generator": "Gerador térmico",
@@ -418,21 +413,19 @@
   "item.factocrafty.reactor_heat_vent": "Ventilação de calor de reator",
   "item.factocrafty.reactor_plating": "Placa de reator",
 
-  "_comment": "Battery Box",
+  "_comment": "Energy Storages",
   "block.factocrafty.battery_box": "Caixa de baterias Crafty (CBC)",
   "block.factocrafty.advanced_functional_storage": "Armazenamento Avançado Funcional de Crafty (AFC)",
   "block.factocrafty.high_functional_storage": "Armazenamento Híbrido Funcional de Crafty (HFC)",
   "block.factocrafty.ultimate_functional_unit": "Unidade Funcional Ultimate de Crafty (UFUC)",
   "block.factocrafty.quantum_unit": "Unidade Quântica de Crafty (UQC)",
 
-  "_comment": "Charge Pad",
-  "block.factocrafty.charge_pad_battery_box": "Tapete de carregamento (Caixa de baterias)",
-  "block.factocrafty.charge_pad_cesu": "Tapete de carregamento (CESU)",
-  "block.factocrafty.charge_pad_mfe": "Tapete de carregamento (MFE)",
-  "block.factocrafty.charge_pad_mfsu": "Tapete de carregamento (MFSU)",
+  "_comment": "Energy Transformers",
+  "block.factocrafty.advanced_functional_transformer": "Transformador Avançado Funcional de Crafty (AFC)",
+  "block.factocrafty.high_functional_transformer": "Transformador Híbrido Funcional de Crafty (HFC)",
+  "block.factocrafty.ultimate_functional_transformer": "Transformador Funcional Ultimate de Crafty (TFUC)",
+  "block.factocrafty.quantum_transformer": "Transformador Quântico de Crafty (QCT)",
 
-  "_comment": "Energy Converter",
-  "block.factocrafty.wooden_energy_converter": "Conversor de energia de madeira",
 
   "_comment": "Fluid",
   "fluid.factocrafty.construction_foam": "Espuma de construção",
@@ -447,7 +440,7 @@
   "fluid.factocrafty.methane": "Metano",
   "fluid.factocrafty.isoprene": "Isopreno",
   "fluid.factocrafty.oxygen": "Oxigênio",
-  "fluid.factocrafty.hydrogen": "Hydrogênio",
+  "fluid.factocrafty.hydrogen": "Hidrogênio",
   "fluid.factocrafty.water_vapor": "Vapor de água",
 
 
@@ -498,7 +491,7 @@
   "tooltip.factocrafty.config.south": "Sul",
   "tooltip.factocrafty.config.east": "Leste",
   "tooltip.factocrafty.config.west": "Oeste",
-  "tooltip.factocrafty.config": "Configuração do %s",
+  "tooltip.factocrafty.config": "Configuração do(a) %s",
   "tooltip.factocrafty.config.input_type.item": "%s de itens",
   "tooltip.factocrafty.config.input_type.fluid": "%s de fluídos",
   "tooltip.factocrafty.config.infusion_mode.mixer": "%s de mistura",
@@ -506,6 +499,7 @@
   "tooltip.factocrafty.config.pump_mode.insert": "Drenar",
   "tooltip.factocrafty.config.pump_mode.extract": "Colocar",
   "tooltip.factocrafty.config.pump_mode.extract_insert": "Drenar e Colocar",
+  "tooltip.factocrafty.config.conversion_mode.lower_tier": "Diminuir Nível",
   "tooltip.factocrafty.upgrade_right_click": "Clique-direito na máquina para inserir o upgrade",
   "tooltip.factocrafty.upgrade.overclock": "Aumenta a velocidade da máquina em 100x, mas aumenta o consumo de CY",
   "tooltip.factocrafty.upgrade.transformer": "Aumenta o nível de energia suportado da máquina",

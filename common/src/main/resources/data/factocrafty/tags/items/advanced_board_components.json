@@ -1,0 +1,12 @@
+{
+"values": [
+  "#factocrafty:board_components",
+  "factocrafty:copper_cable",
+  "factocrafty:gold_cable",
+  "factocrafty:silver_cable",
+  "factocrafty:advanced_battery",
+  "factocrafty:advanced_circuit",
+  "factocrafty:energy_crystal",
+  "factocrafty:lapotron_crystal"
+]
+}

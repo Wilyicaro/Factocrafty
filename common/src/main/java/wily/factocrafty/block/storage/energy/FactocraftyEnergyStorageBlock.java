@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.storage.energy.entity.FactocraftyEnergyStorageBlockEntity;
+import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.WeldableItem;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
 import java.util.List;
@@ -26,10 +28,6 @@ public class FactocraftyEnergyStorageBlock extends FactocraftyMachineBlock {
         return new FactocraftyEnergyStorageBlockEntity(blockPos,blockState);
     }
 
-    @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(capacityTier.getEnergyTierComponent(false));
-    }
     @Override
     public Item asItem() {
         return super.asItem();

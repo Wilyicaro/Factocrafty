@@ -2,6 +2,7 @@ package wily.factocrafty.client.screens.widgets.windows;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import wily.factocrafty.Factocrafty;
@@ -11,6 +12,7 @@ import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.item.FactocraftyUpgradeItem;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
 import wily.factoryapi.base.*;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class UpgradesWindow extends SlotsWindow{
     @Override
     public void renderToolTip(GuiGraphics graphics, int i, int j) {
         super.renderToolTip(graphics, i, j);
-        if (parent.getMenu().be.selectedUpgrade.get() >= 0 && blockedUpgradeChanges != parent.getMenu().be.selectedUpgrade.get()) {
+        if (parent.getMenu().be.selectedUpgrade.get() >= 0 && parent.getMenu().be.storedUpgrades.size() > parent.getMenu().be.selectedUpgrade.get() && blockedUpgradeChanges != parent.getMenu().be.selectedUpgrade.get()) {
             ItemStack stack = parent.getMenu().be.storedUpgrades.get(parent.getMenu().be.selectedUpgrade.get());
             graphics.renderComponentTooltip(font,List.of(stack.getHoverName(), Component.translatable( "gui.factocrafty.window.upgrade.efficiency" , parent.getMenu().be.storedUpgrades.getUpgradeEfficiency(((FactocraftyUpgradeItem)stack.getItem()).upgradeType) * 100 + "%")), i, j);
         }
@@ -56,17 +58,13 @@ public class UpgradesWindow extends SlotsWindow{
         parent.getMenu().be.storedUpgrades.forEach((item)-> {
             int index = parent.getMenu().be.storedUpgrades.indexOf(item);
             graphics.renderFakeItem(item, 11,  getUpgradeY(index));
-            if (IFactoryDrawableType.getMouseLimit(i,j, getX() + 11,getY() + getUpgradeY(index),14,14)){
+            if (IFactoryDrawableType.getMouseLimit(i,j, getX() + 11,getY() + getUpgradeY(index),14,14) && !IFactoryDrawableType.getMouseLimit(i,j, getX() + 11,getY() + getUpgradeY(index + 1),14,14)  ){
                 if (parent.getMenu().be.selectedUpgrade.get() != index) Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(parent.getMenu().be.getBlockPos(), index, parent.getMenu().be.additionalSyncInt.indexOf(parent.getMenu().be.selectedUpgrade)));
             }
         });
         if (!IFactoryDrawableType.getMouseLimit(i,j, getX() + 11,getY() + 38,14,44) && parent.getMenu().be.selectedUpgrade.get() != blockedUpgradeChanges) Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(parent.getMenu().be.getBlockPos(), blockedUpgradeChanges, parent.getMenu().be.additionalSyncInt.indexOf(parent.getMenu().be.selectedUpgrade)));
-        RenderSystem.disableDepthTest();
-        RenderSystem.colorMask(true, true, true, false);
         if (parent.getMenu().be.selectedUpgrade.get() >= 0 && blockedUpgradeChanges != parent.getMenu().be.selectedUpgrade.get())
-            graphics.fillGradient( 13,  getUpgradeY(parent.getMenu().be.selectedUpgrade.get()) + 2, 25, getUpgradeY(parent.getMenu().be.selectedUpgrade.get()) + 14, -2130706433, -2130706433, 0);
-        RenderSystem.colorMask(true, true, true, true);
-        RenderSystem.enableDepthTest();
+            graphics.fillGradient(RenderType.guiOverlay(), 13,  getUpgradeY(parent.getMenu().be.selectedUpgrade.get()) + 2, 25, getUpgradeY(parent.getMenu().be.selectedUpgrade.get()) + 14, -2130706433, -2130706433, 0);
         graphics.pose().popPose();
     }
 

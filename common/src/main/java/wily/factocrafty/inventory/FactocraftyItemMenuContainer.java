@@ -47,7 +47,7 @@ public class FactocraftyItemMenuContainer extends AbstractContainerMenu {
     protected void updateChanges() {
         if (player instanceof ServerPlayer sp && blockPos != null) {
             if (player.level().getBlockEntity(blockPos) instanceof FactocraftyStorageBlockEntity be) {
-                Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftySyncEnergyPacket(be.getBlockPos(),be.energyStorage.getEnergyStored(),be.energyStorage.getStoredTier()));
+                Factocrafty.NETWORK.sendToPlayer(sp,new FactocraftySyncEnergyPacket(be.getBlockPos(),be.energyStorage));
             }
         }
     }

@@ -6,34 +6,31 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import wily.factocrafty.Factocrafty;
-import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
+import wily.factocrafty.inventory.UpgradeList;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class FactocraftySyncUpgradeStorage {
 
     private final BlockPos pos;
-    private final ItemStack itemStack;
-    private final int index;
+    private final List<ItemStack> itemStackList;
 
 
     public FactocraftySyncUpgradeStorage(FriendlyByteBuf buf) {
-        this(buf.readBlockPos(), buf.readItem(), buf.readVarInt());
+        this(buf.readBlockPos(), buf.readList(FriendlyByteBuf::readItem));
 
     }
 
-    public FactocraftySyncUpgradeStorage(BlockPos pos, ItemStack itemStack, int index) {
+    public FactocraftySyncUpgradeStorage(BlockPos pos, List<ItemStack> stackList) {
         this.pos = pos;
-        this.itemStack = itemStack;
-        this.index = index;
+        this.itemStackList = stackList;
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeBlockPos(pos);
-        buf.writeItem(itemStack);
-        buf.writeVarInt(index);
+        buf.writeCollection(itemStackList,FriendlyByteBuf::writeItem);
     }
 
     public void apply(Supplier<NetworkManager.PacketContext> ctx) {
@@ -41,10 +38,8 @@ public class FactocraftySyncUpgradeStorage {
             Player player = ctx.get().getPlayer();
             BlockEntity te = player.level().getBlockEntity(pos);
             if (player.level().isLoaded(pos)) {
-                if (te instanceof FactocraftyStorageBlockEntity fs) {
-                    if (index <= -1 && itemStack.isEmpty()) fs.storedUpgrades.clear();
-                    else if (index >= fs.storedUpgrades.size())fs.storedUpgrades.add(itemStack);
-                    else if (fs.storedUpgrades.get(index) != itemStack) fs.storedUpgrades.set(index,itemStack);
+                if (te instanceof FactocraftyStorageBlockEntity fs && (fs.storedUpgrades.size() != itemStackList.size() || !fs.storedUpgrades.containsAll(itemStackList))){
+                    fs.storedUpgrades.list = itemStackList;
                 }
                 te.setChanged();
             }

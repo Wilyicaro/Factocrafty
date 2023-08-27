@@ -25,10 +25,8 @@ import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
 public abstract class FactocraftyStorageBlockEntity extends BlockEntity implements IFactoryExpandedStorage {
 
 
-    public final List<Bearer<Integer>> additionalSyncInt = new ArrayList<>();
     public FactocraftyStorageBlockEntity(BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
         super(blockEntity, blockPos, blockState);
-        additionalSyncInt.add(selectedUpgrade);
     }
 
     public UpgradeList storedUpgrades = UpgradeList.create();
@@ -126,7 +124,6 @@ public abstract class FactocraftyStorageBlockEntity extends BlockEntity implemen
     @Override
     public void saveAdditional(CompoundTag compoundTag) {
         saveTag(compoundTag);
-        if (!additionalSyncInt.isEmpty()) compoundTag.putIntArray("additionalInt", additionalSyncInt.stream().map(Bearer::get).toList());
         if (hasUpgradeStorage()) {
             ListTag upgradeItems = new ListTag();
             storedUpgrades.forEach((i) -> upgradeItems.add(i.save(new CompoundTag())));
@@ -138,9 +135,7 @@ public abstract class FactocraftyStorageBlockEntity extends BlockEntity implemen
     @Override
     public void load(CompoundTag compoundTag) {
         loadTag(compoundTag);
-        int[] ar = compoundTag.getIntArray("additionalInt");
         if (hasUpgradeStorage()) {
-            for (int i = 0; i < ar.length; i++) additionalSyncInt.get(i).set(ar[i]);
             compoundTag.getList("StoredUpgrades", 10).forEach((t -> {
                 if (t instanceof CompoundTag cT && storedUpgrades.stream().noneMatch(i -> ItemStack.isSameItem(i, ItemStack.of(cT))))
                     storedUpgrades.add(ItemStack.of(cT));

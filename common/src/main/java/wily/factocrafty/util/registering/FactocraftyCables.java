@@ -51,5 +51,8 @@ public enum FactocraftyCables implements IFactocraftyConduit<FactocraftyCables, 
     public float transferenceEfficiency() {
         return (float) Math.min(Math.pow(energyTier.getConductivity(), 0.16F / (insulation + 1)), 0.99F);
     }
+    public int maxEnergyTransfer() {
+        return (int) (energyTier.initialCapacity * energyTier.getConductivity());
+    }
 
 }

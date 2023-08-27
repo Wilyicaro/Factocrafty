@@ -44,6 +44,8 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.Level;
 import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyWoodType;
+import wily.factocrafty.block.machines.entity.ChangeableInputMachineBlockEntity;
+import wily.factocrafty.block.machines.entity.CompressorBlockEntity;
 import wily.factocrafty.client.renderer.block.*;
 import wily.factocrafty.util.registering.*;
 import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
@@ -258,17 +260,18 @@ public class FactocraftyClient {
         MenuRegistry.registerScreenFactory(Registration.GEOTHERMAL_GENERATOR_MENU.get(), GeothermalGeneratorScreen::new);
         MenuRegistry.registerScreenFactory(Registration.FLUID_PUMP_MENU.get(), FluidPumpScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.MACERATOR_MENU.get(), BasicMachineScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.RECYCLER_MENU.get(), BasicMachineScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.MACERATOR_MENU.get(), BasicMachineScreen.cast());
+        MenuRegistry.registerScreenFactory(Registration.RECYCLER_MENU.get(), BasicMachineScreen.cast());
         MenuRegistry.registerScreenFactory(Registration.ENERGY_STORAGE_MENU.get(), EnergyCellScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.ENERGY_TRANSFORMER_MENU.get(), EnergyTransformerScreen::new);
         MenuRegistry.registerScreenFactory(Registration.FLUID_TANK_MENU.get(), FluidTankScreen::new);
         MenuRegistry.registerScreenFactory(Registration.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), ChangeableInputMachineScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.COMPRESSOR_MENU.get(), BasicMachineScreen.cast());
+        MenuRegistry.registerScreenFactory(Registration.EXTRACTOR_MENU.get(), ChangeableInputMachineScreen.extractor());
         MenuRegistry.registerScreenFactory(Registration.REFINER_MENU.get(), RefinerScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ENRICHER_MENU.get(), EnricherScreen::new);
         MenuRegistry.registerScreenFactory(Registration.GAS_INFUSER_MENU.get(), GasInfuserScreen::new);
-        MenuRegistry.registerScreenFactory(Registration.SAWMILL_MENU.get(), BasicMachineScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.SAWMILL_MENU.get(), BasicMachineScreen.cast());
         MenuRegistry.registerScreenFactory(Registration.RGB_MENU.get(), RGBControllerScreen::new);
 
 

@@ -1,21 +1,25 @@
 package wily.factocrafty.block;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,20 +28,46 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.init.Registration;
+import wily.factocrafty.item.WeldableItem;
+import wily.factocrafty.recipes.ShapedTagRecipe;
+import wily.factocrafty.util.FactocraftyRecipeUtil;
+import wily.factoryapi.base.Bearer;
 import wily.factoryapi.base.FactoryCapacityTiers;
 
-import java.util.List;
+import java.util.function.Function;
 
 public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements IFactocraftyCYEnergyBlock,IFactocraftyOrientableBlock {
 
 
     protected boolean hasFireParticles = false;
-
     protected boolean hasSmokeParticles = false;
+
+    protected boolean hasTopSmokeParticles = false;
+
+    protected final LoadingCache<Item, Function<RecipeManager,ItemStack>> repairItemCache;
 
     public FactocraftyMachineBlock(FactoryCapacityTiers tier, Properties properties) {
         super(tier,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  6 : 0));
         this.registerDefaultState(defaultBlockState().setValue(getFacingProperty(), Direction.NORTH));
+        repairItemCache = CacheBuilder.newBuilder().maximumSize(25).build(new CacheLoader<>() {
+            @Override
+            public Function<RecipeManager,ItemStack> load(Item item) {
+                return (manager)-> {
+                    Bearer<ItemStack> stack = Bearer.of(ItemStack.EMPTY);
+                    FactocraftyRecipeUtil.getRecipesStream(manager, RecipeType.CRAFTING).filter(rcp -> rcp instanceof ShapedTagRecipe r && r.getResultItem(RegistryAccess.EMPTY).is(item)).map(r -> (ShapedTagRecipe) r).forEach(r -> {
+                        for (Pair<Ingredient, CompoundTag> pair : r.recipeItems) {
+                            ItemStack itemStack = FactocraftyRecipeUtil.getFactocraftyStack(pair.first());
+                            if (itemStack.getItem() instanceof WeldableItem) {
+                                itemStack.setTag(pair.second());
+                                stack.set(itemStack);
+                                break;
+                            }
+                        }
+                    });
+                    return stack.get();
+                };
+            }
+        });
     }
 
     @Nullable
@@ -57,31 +87,37 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
     }
 
     @Override
-    public void unsupportedTierBurn(Level level, BlockPos pos) {
-        IFactocraftyCYEnergyBlock.super.unsupportedTierBurn(level, pos);
+    public ItemStack getBurnRepairItem(RecipeManager recipeManager) {
+        ItemStack stack =  repairItemCache.getUnchecked(asItem()).apply(recipeManager);
+        return stack.isEmpty() ? IFactocraftyCYEnergyBlock.super.getBurnRepairItem(recipeManager) : stack;
+    }
+
+    @Override
+    public void unsupportedTierBurn(Level level, BlockPos pos, FactoryCapacityTiers higherTier) {
+        IFactocraftyCYEnergyBlock.super.unsupportedTierBurn(level, pos, higherTier);
         if (level.getBlockEntity(pos) instanceof FactocraftyMenuBlockEntity be) {
-            be.energyStorage.storedTier = FactoryCapacityTiers.BURNED;
-            be.energyStorage.setEnergyStored(0);
-            be.setChanged();
+            if (higherTier.ordinal() - be.energyStorage.supportableTier.ordinal() >= 3){
+                level.destroyBlock(pos,true);
+                level.explode(null,pos.getX(),pos.getY(),pos.getZ(),0.28F * higherTier.ordinal() - be.energyStorage.supportableTier.ordinal(), Level.ExplosionInteraction.BLOCK);
+            }else{
+                be.energyStorage.storedTier = FactoryCapacityTiers.BURNED;
+                be.energyStorage.setEnergyStored(0);
+                be.setChanged();
+            }
         }
     }
-    @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-        if(capacityTier !=null)
-            list.add(capacityTier.getEnergyTierComponent(false));
-    }
+
     public DirectionProperty getFacingProperty() {
         return BlockStateProperties.HORIZONTAL_FACING;
     }
     @Override
     public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
-        if ((hasSmokeParticles || hasFireParticles) && blockState.getValue(ACTIVE)) {
+        if ((hasSmokeParticles || hasFireParticles || hasTopSmokeParticles) && blockState.getValue(ACTIVE)) {
             double d = (double)blockPos.getX() + 0.5;
             double e = (double)blockPos.getY() + 0.1;
             double f = (double)blockPos.getZ() + 0.5;
-            if ( randomSource.nextDouble() < 0.1) {
+            if (hasFireParticles && randomSource.nextDouble() < 0.1)
                 level.playLocalSound(d, e, f, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
-            }
 
             Direction direction = blockState.getValue(getFacingProperty());
             Direction.Axis axis = direction.getAxis();
@@ -90,6 +126,8 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
             double i = axis == Direction.Axis.X ? (double)direction.getStepX() * 0.52 : h;
             double j = randomSource.nextDouble() * 6.0 / 16.0;
             double k = axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52 : h;
+
+            if (hasTopSmokeParticles) level.addParticle(ParticleTypes.SMOKE, d, e + 1.1, f, 0.0, 0.0, 0.0);
             if (hasSmokeParticles) level.addParticle(ParticleTypes.SMOKE, d + i, e + j, f + k, 0.0, 0.0, 0.0);
             if (hasFireParticles) level.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
         }

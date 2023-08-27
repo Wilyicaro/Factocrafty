@@ -10,7 +10,7 @@
       "item": "factocrafty:mono_solar_panel"
     },
     "B": {
-      "item": "factocrafty:circuit_board",
+      "item": "factocrafty:advanced_circuit_board",
       "nbt": {
         "Components": [
           "factocrafty:copper_cable",

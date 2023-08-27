@@ -29,7 +29,7 @@ import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.FactocraftyRecipeUtil;
 import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import java.util.ArrayList;
 import java.util.List;

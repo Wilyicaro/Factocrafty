@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north":	{ "model": "factocrafty:block/energy_transformer/ufct" },
+		"facing=south":	{ "model": "factocrafty:block/energy_transformer/ufct", "y": 180 },
+		"facing=west":	{ "model": "factocrafty:block/energy_transformer/ufct", "y": 270 },
+		"facing=east":	{ "model": "factocrafty:block/energy_transformer/ufct", "y": 90 },
+		"facing=up":	{ "model": "factocrafty:block/energy_transformer/ufct", "x": -90 },
+		"facing=down":	{ "model": "factocrafty:block/energy_transformer/ufct", "x": 90 }
+	}
+}

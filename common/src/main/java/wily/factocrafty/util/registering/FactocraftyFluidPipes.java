@@ -1,6 +1,7 @@
 package wily.factocrafty.util.registering;
 
 
+import dev.architectury.fluid.FluidStack;
 import net.minecraft.resources.ResourceLocation;
 import wily.factocrafty.block.transport.fluid.FluidPipeBlock;
 import wily.factocrafty.block.transport.fluid.FluidPipeBlockEntity;
@@ -29,7 +30,9 @@ public enum FactocraftyFluidPipes implements IFactocraftyConduit<FactocraftyFlui
     public ResourceLocation getSideModelLocation(TransportState state) {
         return new ResourceLocation("factocrafty:block/transport/fluid/" + getName() + "_side" +(state == TransportState.EXTRACT_INSERT ? "" : "_" + state.toString()));
     }
-
+    public long maxFluidTransfer(){
+        return capacityTier.capacityMultiplier * (long)(FluidStack.bucketAmount() * capacityTier.getPowFactor());
+    }
     @Override
     public Shape getConduitShape() {
         return pipeShape;

@@ -13,7 +13,7 @@ import wily.factocrafty.block.generator.entity.SolarPanelBlockEntity;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import static wily.factoryapi.util.StorageStringUtil.*;
 

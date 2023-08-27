@@ -1,19 +1,31 @@
 package wily.factocrafty.block;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import dev.architectury.fluid.FluidStack;
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import dev.architectury.registry.menu.MenuRegistry;
+import it.unimi.dsi.fastutil.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -32,12 +44,18 @@ import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.FactocraftyUpgradeItem;
+import wily.factocrafty.item.WeldableItem;
 import wily.factocrafty.item.WrenchItem;
+import wily.factocrafty.recipes.ShapedTagRecipe;
+import wily.factocrafty.util.CompoundTagUtil;
+import wily.factocrafty.util.FactocraftyRecipeUtil;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
+import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class FactocraftyStorageBlock extends BaseEntityBlock {
 
@@ -45,10 +63,30 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
 
 
     public FactoryCapacityTiers capacityTier;
+
+    protected final LoadingCache<Item, Function<RecipeManager,ItemStack>> baseDropCache;
     public FactocraftyStorageBlock(FactoryCapacityTiers tier, Properties properties) {
         super(properties);
         this.registerDefaultState(defaultBlockState().setValue(ACTIVE, false));
         capacityTier = tier;
+        baseDropCache = CacheBuilder.newBuilder().maximumSize(25).build(new CacheLoader<>() {
+            @Override
+            public Function<RecipeManager,ItemStack> load(Item item) {
+                return (manager)-> {
+                    Bearer<ItemStack> stack = Bearer.of(ItemStack.EMPTY);
+                    FactocraftyRecipeUtil.getRecipesStream(manager, RecipeType.CRAFTING).filter(rcp -> rcp.getResultItem(RegistryAccess.EMPTY).is(item)).forEach(r -> {
+                        for (Ingredient first : r.getIngredients()) {
+                            ItemStack itemStack = FactocraftyRecipeUtil.getFactocraftyStack(first);
+                            if (itemStack.getItem() instanceof BlockItem b && (b.getBlock() instanceof FactocraftyBlock || b.getBlock() instanceof FactocraftyStorageBlock)) {
+                                stack.set(itemStack);
+                                break;
+                            }
+                        }
+                    });
+                    return stack.get();
+                };
+            }
+        });
     }
 
     @Override
@@ -67,7 +105,10 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
         }
     }
 
-
+    public ItemStack getBaseDropItem(RecipeManager manager){
+        ItemStack baseDrop = baseDropCache.getUnchecked(asItem()).apply(manager);
+        return baseDrop.isEmpty() && this instanceof IFactocraftyCYEnergyBlock b? b.getBurnRepairItem(manager) : baseDrop;
+    }
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
@@ -83,6 +124,12 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
                         } else return InteractionResult.FAIL;
                     }
                     if (be instanceof FactocraftyMenuBlockEntity fBe && stack.getItem() instanceof FactocraftyUpgradeItem && fBe.hasUpgradeStorage() && fBe.storedUpgrades.add(player.isCreative()? stack.copy() : stack)){
+                        return InteractionResult.SUCCESS;
+                    }
+                    if (this instanceof IFactocraftyCYEnergyBlock b && ItemStack.isSameItem(stack,b.getBurnRepairItem(level.getRecipeManager())) && CompoundTagUtil.compoundContains(b.getBurnRepairItem(level.getRecipeManager()).getOrCreateTag(),stack.getOrCreateTag()) && be instanceof FactocraftyStorageBlockEntity sBe && sBe.hasEnergyCell() && sBe.energyStorage.storedTier.isBurned()){
+                        sBe.energyStorage.storedTier = FactoryCapacityTiers.BASIC;
+                        if (!player.isCreative()) stack.shrink(1);
+                        level.playSound(null,blockPos, SoundEvents.VILLAGER_WORK_MASON, SoundSource.BLOCKS,1.0F,1.0F);
                         return InteractionResult.SUCCESS;
                     }
                 }
@@ -118,7 +165,12 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
-
+    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
+        if (this instanceof IFactocraftyCYEnergyBlock b) {
+            list.add(b.getEnergyTier().getEnergyTierComponent(false));
+            list.add(StorageStringUtil.getMaxCraftyTransferTooltip((int) (b.getEnergyTier().initialCapacity * b.getEnergyTier().getConductivity())).withStyle(ChatFormatting.AQUA));
+        }
+    }
 
     @Override
     public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
@@ -131,7 +183,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
                 if (( tool.getItem() instanceof WrenchItem || (EnchantmentHelper.getEnchantments(tool).containsKey(Enchantments.SILK_TOUCH) && tool.isCorrectToolForDrops(blockState)) || be.getLevel().random.nextFloat() <= 0.5)) {
                 be.saveToItem(itself);
                 list.add(itself);
-            }else list.add(new ItemStack(Registration.MACHINE_FRAME_BASE.get()));
+            }else list.add(getBaseDropItem(be.getLevel().getRecipeManager()));
             else list.add(itself);
 
         return list;

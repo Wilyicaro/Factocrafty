@@ -27,7 +27,6 @@ public class Factocrafty {
         NETWORK.register(FactocraftySyncEnergyPacket.class,FactocraftySyncEnergyPacket::encode,FactocraftySyncEnergyPacket::new, FactocraftySyncEnergyPacket::apply);
         NETWORK.register(FactocraftySyncProgressPacket.class,FactocraftySyncProgressPacket::encode,FactocraftySyncProgressPacket::new, FactocraftySyncProgressPacket::apply);
         NETWORK.register(FactocraftyStateButtonPacket.class,FactocraftyStateButtonPacket::encode,FactocraftyStateButtonPacket::new, FactocraftyStateButtonPacket::apply);
-        NETWORK.register(FactocraftySyncInputTypePacket.class, FactocraftySyncInputTypePacket::encode, FactocraftySyncInputTypePacket::new, FactocraftySyncInputTypePacket::apply);
         NETWORK.register(FactocraftyJetpackLaunchPacket.class, FactocraftyJetpackLaunchPacket::encode, FactocraftyJetpackLaunchPacket::new, FactocraftyJetpackLaunchPacket::apply);
         NETWORK.register(FactocraftySyncUpgradeStorage.class, FactocraftySyncUpgradeStorage::encode, FactocraftySyncUpgradeStorage::new, FactocraftySyncUpgradeStorage::apply);
         NETWORK.register(FactocraftySyncIntegerBearerPacket.class, FactocraftySyncIntegerBearerPacket::encode, FactocraftySyncIntegerBearerPacket::new, FactocraftySyncIntegerBearerPacket::apply);

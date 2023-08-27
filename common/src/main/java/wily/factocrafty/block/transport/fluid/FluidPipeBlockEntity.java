@@ -45,16 +45,14 @@ public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFlu
         if (storage.getStorage(Storages.FLUID, direction == null ? null : direction.getOpposite()).isEmpty()) return false;
         return direction == null || (storage.fluidSides().isEmpty()  || storage.fluidSides().get().getTransport(direction.getOpposite()).isUsable());
     }
-    protected long maxFluidTransfer(){
-        return getConduitType().capacityTier.capacityMultiplier * (long)(FluidStack.bucketAmount() * getConduitType().capacityTier.getPowFactor());
-    }
+
     @Override
     public void manageSidedTransference(BlockState state, IFactoryStorage storage, Direction direction) {
         storage.getStorage(Storages.FLUID, direction.getOpposite()).ifPresent((e)->{
             if (storage instanceof ConduitBlockEntity<?>) {
                 if ((e.getFluidStack().isFluidEqual(fluidHandler.getFluidStack()) || e.getFluidStack().isEmpty()) && e.getFluidStack().getAmount() < fluidHandler.getFluidStack().getAmount()) {
                     long i = Math.max(1,(fluidHandler.getFluidStack().getAmount() - e.getFluidStack().getAmount()) / 2);
-                    fluidHandler.drain(fluidHandler.getFluidStack().copyWithAmount(e.fill(fluidHandler.getFluidStack().copyWithAmount(Math.min(i , maxFluidTransfer())), false)), false);
+                    fluidHandler.drain(fluidHandler.getFluidStack().copyWithAmount(e.fill(fluidHandler.getFluidStack().copyWithAmount(Math.min(i , getConduitType().maxFluidTransfer())), false)), false);
                 }
             }else {
                 if (!fluidHandler.getFluidStack().isEmpty() && ((fluidSides.get(direction).transportState == TransportState.EXTRACT && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState.canInsert())) || (fluidSides.get(direction).transportState.canExtract() && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.INSERT))))

@@ -8,18 +8,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
-import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.network.FactocraftyStateButtonPacket;
 import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.*;
+import wily.factoryapi.base.client.FactoryDrawableButton;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static wily.factoryapi.util.DirectionUtil.nearestRotation;
 import static wily.factoryapi.util.DirectionUtil.rotationCyclic;
@@ -40,11 +40,11 @@ public class MachineSidesConfig extends FactocraftyScreenWindow{
     }
 
     @Override
-    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
-        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 11, (b)-> sideConfigState = getNextSide(), getSidesConfigTooltip(),FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(sideConfigState)));
-        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 30,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : ((ISideType) getSideType().get(selectedDirection)).nextSlotIndex(getSlotsIdentifiers()))), getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank")),FactocraftyDrawables.LARGE_BUTTON).color(getSideIdentifier().getColor()));
-        list.add(new FactocraftyDrawableButton(getX() + 7,getY() + 49, (b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().nextStateSide(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers()))),getStateSide().getTooltip(), FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getSideType().getTransport(selectedDirection).ordinal() + 4)));
-        list.add(new FactocraftyDrawableButton(getX() + width - 18,getY() + 54, (b)-> {for (Direction d : Direction.values()) Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(), sideConfigState, d.ordinal(), TransportState.NONE, sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers())));}, Component.translatable("tooltip.factocrafty.config.reset"), FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(1)));
+    public List<FactoryDrawableButton> addButtons(List<FactoryDrawableButton> list) {
+        list.add(new FactoryDrawableButton(getX() + 7,getY() + 11, (b)-> sideConfigState = getNextSide(), getSidesConfigTooltip(),FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(sideConfigState)));
+        list.add(new FactoryDrawableButton(getX() + 7,getY() + 30,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : ((ISideType) getSideType().get(selectedDirection)).nextSlotIndex(getSlotsIdentifiers()))), getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank")),FactocraftyDrawables.LARGE_BUTTON).color(getSideIdentifier().getColor()));
+        list.add(new FactoryDrawableButton(getX() + 7,getY() + 49, (b)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().nextStateSide(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers()))),getStateSide().getTooltip(), FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getSideType().getTransport(selectedDirection).ordinal() + 4)));
+        list.add(new FactoryDrawableButton(getX() + width - 18,getY() + 54, (b)-> {for (Direction d : Direction.values()) Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(be.getBlockPos(), sideConfigState, d.ordinal(), TransportState.NONE, sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers())));}, Component.translatable("tooltip.factocrafty.config.reset"), FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(1)));
         return super.addButtons(list);
     }
     public TransportState getStateSide(){return getSideType().getTransport(selectedDirection);}

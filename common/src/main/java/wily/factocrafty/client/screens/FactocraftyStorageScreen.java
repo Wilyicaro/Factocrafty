@@ -38,9 +38,10 @@ import wily.factocrafty.inventory.FactocraftySlotWrapper;
 import wily.factocrafty.item.FactocraftyMachineBlockItem;
 import wily.factocrafty.util.ScreenUtil;
 import wily.factoryapi.base.FactoryItemSlot;
-import wily.factoryapi.base.IFactoryDrawableType;
 import wily.factoryapi.base.IFactoryProgressiveStorage;
 import wily.factoryapi.base.Storages;
+import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.client.IWindowWidget;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -67,7 +68,7 @@ public class FactocraftyStorageScreen<T extends FactocraftyMenuBlockEntity> exte
     protected MachineSidesConfig configWindow;
 
 
-
+    protected T be = getMenu().be;
 
     @Override
     protected void init() {
@@ -83,6 +84,10 @@ public class FactocraftyStorageScreen<T extends FactocraftyMenuBlockEntity> exte
 
     @Override
     public void renderSlot(GuiGraphics graphics, Slot slot) {
+        if (slot instanceof FactoryItemSlot s && (s.getCustomX() != s.x || s.getCustomY() != s.y)){
+            slot.x = s.getCustomX();
+            slot.y = s.getCustomY();
+        }
         if (!(slot instanceof FactocraftySlotWrapper)) super.renderSlot(graphics, slot);
     }
     public void renderWindowSlot(GuiGraphics graphics, Slot slot) {
@@ -182,11 +187,11 @@ public class FactocraftyStorageScreen<T extends FactocraftyMenuBlockEntity> exte
         getMenu().slots.forEach((slot)-> {
             if (slot instanceof FactoryItemSlot s && s.isActive()) {
                 int size = s.getType() == FactoryItemSlot.Type.BIG ? 26 : 18;
-                ScreenUtil.drawGUISlot(graphics,s.getType().getOutPos(leftPos + s.x), s.getType().getOutPos(topPos + s.y),size,size);
+                ScreenUtil.drawGUISlot(graphics,s.getType().getOutPos(leftPos + s.getCustomX()), s.getType().getOutPos(topPos + s.getCustomY()),size,size);
                 if (configWindow.isVisible()) {
                     int c = Objects.requireNonNullElse(s.identifier().color().getColor(), 0xFFFFF);
                     RenderSystem.setShaderColor(ScreenUtil.getRed(c), ScreenUtil.getGreen(c), ScreenUtil.getBlue(c), 1.0F);
-                    ScreenUtil.drawGUISlotOutline(graphics, s.getType().getOutPos(leftPos + s.x), s.getType().getOutPos(topPos + s.y),size,size);
+                    ScreenUtil.drawGUISlotOutline(graphics, s.getType().getOutPos(leftPos + s.getCustomX()), s.getType().getOutPos(topPos + s.getCustomY()),size,size);
                     RenderSystem.setShaderColor(1.0F,1.0F,1.0F, 1.0F);
                 }
             }

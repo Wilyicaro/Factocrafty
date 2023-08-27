@@ -12,6 +12,7 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
         super(new Slot(pBe.inventory,i,x,y){
             @Override
             public void set(ItemStack itemStack) {
+                if (pBe.hasLevel() && pBe.getLevel().isClientSide) return;
                 for (ItemStack i: pBe.storedUpgrades) {
                     if (ItemStack.isSameItemSameTags(itemStack,i)) {
                         if (pBe.selectedUpgrade.get() <0) i.grow(itemStack.getCount());
@@ -27,14 +28,21 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
                     });
                     else pBe.storedUpgrades.add(itemStack);
                 }
+                this.setChanged();
+            }
+
+            @Override
+            public void setChanged() {
+                super.setChanged();
+                pBe.storedUpgrades.checkEmptyValues();
+                pBe.storedUpgrades.setChanged(pBe.selectedUpgrade.get(),false,getItem());
             }
 
             @Override
             public ItemStack safeInsert(ItemStack itemStack, int i) {
-                if (!itemStack.isEmpty() && itemStack.getItem() instanceof FactocraftyUpgradeItem upg && this.mayPlace(itemStack)) {
+                if (!pBe.getLevel().isClientSide && !itemStack.isEmpty() && itemStack.getItem() instanceof FactocraftyUpgradeItem upg && this.mayPlace(itemStack)) {
                     ItemStack itemStack2 = pBe.storedUpgrades.getUpgradeStack(upg.upgradeType).copy();
                     int j = Math.min(Math.min(i, itemStack.getCount()), this.getMaxStackSize(itemStack) - itemStack2.getCount());
-                    //Factocrafty.LOGGER.info(itemStack2.getDisplayName().getString() +"-"+ itemStack2.getCount());
                     if (itemStack2.isEmpty()) {
                         this.setByPlayer(itemStack.split(j));
                     } else if (ItemStack.isSameItemSameTags(itemStack2, itemStack)) {
@@ -42,10 +50,8 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
                         itemStack2.grow(j);
                         this.setByPlayer(itemStack2);
                     }
-                    return itemStack;
-                } else {
-                    return itemStack;
                 }
+                return itemStack;
             }
 
             @Override
@@ -60,15 +66,15 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
 
             @Override
             public ItemStack remove(int i) {
+                if (pBe.getLevel().isClientSide) return ItemStack.EMPTY;
                 ItemStack stack = pBe.storedUpgrades.get(pBe.selectedUpgrade.get());
                 ItemStack itemStack = stack.getCount() <= i ? pBe.storedUpgrades.remove((int)pBe.selectedUpgrade.get()) : stack.split(i);
                 if (!itemStack.isEmpty()) {
-                    this.setChanged();
                     if (!pBe.storedUpgrades.contains(stack)) {
                         pBe.selectedUpgrade.set(-1);
                     }
                 }
-                //Factocrafty.LOGGER.info("HERE 1");
+                this.setChanged();
                 return itemStack;
             }
 

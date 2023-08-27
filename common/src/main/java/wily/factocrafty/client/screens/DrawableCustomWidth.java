@@ -1,7 +1,7 @@
 package wily.factocrafty.client.screens;
 
 import net.minecraft.client.gui.GuiGraphics;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 public class DrawableCustomWidth extends IFactoryDrawableType.DrawableStatic<IFactoryDrawableType> {
     public Integer customWidth;

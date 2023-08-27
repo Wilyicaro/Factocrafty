@@ -1,5 +1,6 @@
 package wily.factocrafty.block.transport.energy;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +20,8 @@ import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.registering.FactocraftyCables;
 import wily.factoryapi.base.CraftyTransaction;
 import wily.factoryapi.base.FactoryCapacityTiers;
+import wily.factoryapi.util.StorageStringUtil;
+import wily.factoryapi.util.StorageUtil;
 
 import java.util.List;
 
@@ -38,14 +41,15 @@ public class CableBlock extends FactocraftyConduitBlock<FactocraftyCables,CableB
     }
 
     @Override
-    public void unsupportedTierBurn(Level level, BlockPos pos) {
-        IFactocraftyCYEnergyBlock.super.unsupportedTierBurn(level, pos);
+    public void unsupportedTierBurn(Level level, BlockPos pos, FactoryCapacityTiers higherTier) {
+        IFactocraftyCYEnergyBlock.super.unsupportedTierBurn(level, pos,higherTier);
         level.removeBlock(pos, true);
     }
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(conduitType.getCapacityTier().getEnergyTierComponent(false));
+        list.add(StorageStringUtil.getMaxCraftyTransferTooltip(conduitType.maxEnergyTransfer()).withStyle(ChatFormatting.AQUA));
     }
 
     @Override

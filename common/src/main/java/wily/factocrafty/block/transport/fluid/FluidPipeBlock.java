@@ -2,6 +2,7 @@ package wily.factocrafty.block.transport.fluid;
 
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +44,7 @@ public class FluidPipeBlock extends FactocraftySolidConduitBlock<FactocraftyFlui
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
         list.add((conduitType.getCapacityTier().getTierComponent(false)));
+        list.add(StorageStringUtil.getMaxFluidTransferTooltip((int) conduitType.maxFluidTransfer()));
     }
 
 

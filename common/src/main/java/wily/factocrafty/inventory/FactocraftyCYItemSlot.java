@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.init.Registration;
+import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
 
 import java.util.function.Supplier;
@@ -17,9 +18,15 @@ public class FactocraftyCYItemSlot extends FactoryItemSlot {
     private final Supplier<FactoryCapacityTiers> energyTier;
     public static ResourceLocation CRAFTY_SLOT_EMPTY = Registration.getModResource("item/crafty_slot");
 
-    public FactocraftyCYItemSlot(FactocraftyMenuBlockEntity be, int i, int j, int k, TransportState canIE,SlotsIdentifier identifier,  Supplier<FactoryCapacityTiers> energyTier) {
+    public final boolean acceptPlatformEnergy;
+
+    public FactocraftyCYItemSlot(FactocraftyMenuBlockEntity be, int i, int j, int k, TransportState canIE,SlotsIdentifier identifier,  Supplier<FactoryCapacityTiers> energyTier, boolean acceptPlatformEnergy) {
         super(be.inventory, identifier,canIE,i, j, k);
         this.energyTier = energyTier;
+        this.acceptPlatformEnergy = acceptPlatformEnergy;
+    }
+    public FactocraftyCYItemSlot(FactocraftyMenuBlockEntity be, int i, int j, int k, TransportState canIE,SlotsIdentifier identifier,  Supplier<FactoryCapacityTiers> energyTier) {
+        this(be,i, j, k,canIE,SlotsIdentifier.ENERGY,energyTier,false);
     }
     public FactocraftyCYItemSlot(FactocraftyMenuBlockEntity be, int i, int j, int k, TransportState canIE, FactoryCapacityTiers energyTier) {
         this(be,i, j, k,canIE,SlotsIdentifier.ENERGY,()-> energyTier);
@@ -27,7 +34,7 @@ public class FactocraftyCYItemSlot extends FactoryItemSlot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return (stack.getItem() instanceof ICraftyStorageItem cy && (cy.getEnergyStorage(stack).getTransport().canExtract() && transportState.canInsert()|| cy.getEnergyStorage(stack).getTransport().canInsert() && transportState.canExtract())) && cy.getSupportedEnergyTier().supportTier(energyTier.get()) && super.mayPlace(stack);
+        return ((ItemContainerUtil.isEnergyContainer(stack) && acceptPlatformEnergy) || ((stack.getItem() instanceof ICraftyStorageItem cy && (cy.getEnergyStorage(stack).getTransport().canExtract() && transportState.canInsert()|| cy.getEnergyStorage(stack).getTransport().canInsert() && transportState.canExtract())) && cy.getSupportedEnergyTier().supportTier(energyTier.get()))) && super.mayPlace(stack);
     }
 
     @Nullable

@@ -12,10 +12,11 @@ import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
 import wily.factocrafty.inventory.FactocraftyItemMenuContainer;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
 import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.FactoryDrawableSlider;
+import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.client.IWindowWidget;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,11 +34,11 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
 
     private IFactoryDrawableType.DrawableStatic RGB_PICKER;
 
-    private FactocraftyDrawableSlider red;
+    private FactoryDrawableSlider red;
 
-    private FactocraftyDrawableSlider green;
+    private FactoryDrawableSlider green;
 
-    private FactocraftyDrawableSlider blue;
+    private FactoryDrawableSlider blue;
 
     private int viewedColor = -1;
 
@@ -54,9 +55,9 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
     @Override
     protected void init() {
         super.init();
-        red = new FactocraftyDrawableSlider(leftPos + 12, topPos + 82, (s,i)-> sendServerActualColor(Optional.of(s.value),Optional.empty(),Optional.empty()), i->Component.literal("Red: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.red(be.actualRgb.get()), 255);
-        green = new FactocraftyDrawableSlider(leftPos + 12, topPos + 96, (s,i)-> sendServerActualColor(Optional.empty(),Optional.of(s.value),Optional.empty()), i->Component.literal("Green: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.green(be.actualRgb.get()), 255);
-        blue = new FactocraftyDrawableSlider(leftPos + 12, topPos + 110, (s,i)-> sendServerActualColor(Optional.empty(),Optional.empty(),Optional.of(s.value)), i->Component.literal("Blue: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.blue(be.actualRgb.get()), 255);
+        red = new FactoryDrawableSlider(leftPos + 12, topPos + 82, (s, i)-> sendServerActualColor(Optional.of(s.value),Optional.empty(),Optional.empty()), i->Component.literal("Red: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.red(be.actualRgb.get()), 255);
+        green = new FactoryDrawableSlider(leftPos + 12, topPos + 96, (s, i)-> sendServerActualColor(Optional.empty(),Optional.of(s.value),Optional.empty()), i->Component.literal("Green: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.green(be.actualRgb.get()), 255);
+        blue = new FactoryDrawableSlider(leftPos + 12, topPos + 110, (s, i)-> sendServerActualColor(Optional.empty(),Optional.empty(),Optional.of(s.value)), i->Component.literal("Blue: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.blue(be.actualRgb.get()), 255);
         RGB_PICKER = FactocraftyDrawables.RGB_PICKER.createStatic(leftPos + 46, topPos + 17);
     }
     protected void sendServerActualColor(Optional<Integer> red, Optional<Integer> green, Optional<Integer> blue ){
@@ -64,7 +65,7 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
     }
 
     @Override
-    public List<FactocraftyDrawableSlider> configSliders() {
+    public List<FactoryDrawableSlider> configSliders() {
         return List.of(red,green,blue);
     }
 

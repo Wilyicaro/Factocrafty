@@ -4,7 +4,10 @@ import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
@@ -104,7 +107,15 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
         STORAGE_SLOTS = new int[]{0,1,2};
         additionalSyncInt.add(pumpMode);
     }
+    @Override
+    public void saveTag(CompoundTag compoundTag) {
+        IFactoryProgressiveStorage.super.saveTag(compoundTag);
+    }
 
+    @Override
+    public void loadTag(CompoundTag compoundTag) {
+        IFactoryProgressiveStorage.super.loadTag(compoundTag);
+    }
 
     public NonNullList<FactoryItemSlot> getSlots(@Nullable Player player) {
         NonNullList<FactoryItemSlot> slots = super.getSlots(player);
@@ -168,13 +179,18 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
         }
     }
 
+    @Override
+    public void syncAdditionalMenuData(AbstractContainerMenu menu, ServerPlayer player) {
+        super.syncAdditionalMenuData(menu, player);
+    }
+
     public void addTanks(List<IPlatformFluidHandler<?>> list) {
         list.add(fluidTank.identifier().differential(), fluidTank);
     }
 
     @Override
     public List<Progress> getProgresses() {
-        return new ArrayList<>(List.of(progress));
+        return List.of(progress);
     }
 
 }

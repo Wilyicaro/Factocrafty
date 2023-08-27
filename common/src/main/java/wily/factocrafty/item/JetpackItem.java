@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import wily.factocrafty.FactocraftyClient;
 import wily.factocrafty.client.renderer.entity.JetpackModel;
 import wily.factoryapi.base.IFactoryItem;
-import wily.factoryapi.base.IFactoryItemClientExtension;
+import wily.factoryapi.base.client.IFactoryItemClientExtension;
 
 import java.util.function.Consumer;
 

@@ -22,7 +22,6 @@ public class RefinerBlockEntity extends ChangeableInputMachineBlockEntity {
 
     public RefinerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.REFINER_MENU.get(), Registration.REFINER_RECIPE.get(),Registration.REFINER_BLOCK_ENTITY.get(), blockPos, blockState);
-        inputType = InputType.FLUID;
         resultTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.OUTPUT, TransportState.EXTRACT);
         additionalSyncInt.add(recipeIndex);
         additionalSyncInt.add(recipeSize);

@@ -24,7 +24,7 @@ public class SolidCableBlockEntity extends SolidConduitBlockEntity<FactocraftyCa
 
     public SolidCableBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(blockPos, blockState);
-        energyStorage = new CYEnergyStorage(this, 0,getConduitType().energyTier.initialCapacity, maxEnergyTransfer(),getConduitType().energyTier);
+        energyStorage = new CYEnergyStorage(this, getConduitType().energyTier.initialCapacity, maxEnergyTransfer(),getConduitType().energyTier);
     }
 
     @Override

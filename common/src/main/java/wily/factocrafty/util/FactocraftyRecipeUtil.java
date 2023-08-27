@@ -11,11 +11,15 @@ import wily.factocrafty.Factocrafty;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FactocraftyRecipeUtil {
-    public static <T extends Recipe<Container>> List<T> getRecipes(RecipeManager manager, RecipeType<?> type) {
+    public static <T extends Recipe<? extends Container>> List<T> getRecipes(RecipeManager manager, RecipeType<T> type) {
+        return getRecipesStream(manager,type).toList();
+    }
+    public static <T extends Recipe<? extends Container>> Stream<T> getRecipesStream(RecipeManager manager, RecipeType<T> type) {
         Collection<Recipe<?>> recipes = manager.getRecipes();
-        return (List)recipes.stream().filter((iRecipe) -> iRecipe.getType() == type).collect(Collectors.toList());
+        return (Stream<T>) recipes.stream().filter((iRecipe) -> iRecipe.getType() == type);
     }
     public static ItemStack getFactocraftyStack(Ingredient i){
         for (int j = 0; j < i.getItems().length; j++) {

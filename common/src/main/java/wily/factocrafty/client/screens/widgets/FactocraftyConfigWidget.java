@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 public class FactocraftyConfigWidget extends FactocraftyInfoWidget {
     protected final boolean invert;

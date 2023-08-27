@@ -27,11 +27,7 @@ public class ScrapBoxCategory implements IRecipeCategory<FactocraftyJeiRecipeTyp
 
     private final Component title;
     private final IDrawable background;
-
-
     protected final IGuiHelper guiHelper;
-
-
 
     public ScrapBoxCategory( IGuiHelper guiHelper) {
         this.title = Component.translatable("category.factocrafty.recipe." + getRecipeType().getUid().getPath());
@@ -39,7 +35,6 @@ public class ScrapBoxCategory implements IRecipeCategory<FactocraftyJeiRecipeTyp
         this.guiHelper = guiHelper;
 
     }
-
 
     @Override
     public void draw(FactocraftyJeiRecipeTypes.IScrapBoxRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
@@ -52,11 +47,9 @@ public class ScrapBoxCategory implements IRecipeCategory<FactocraftyJeiRecipeTyp
         })));
 
     }
-
     public RecipeType<FactocraftyJeiRecipeTypes.IScrapBoxRecipe> getRecipeType() {
         return FactocraftyJeiRecipeTypes.SCRAP_BOX_ITEMS;
     }
-
     @Override
     public Component getTitle() {
         return title;

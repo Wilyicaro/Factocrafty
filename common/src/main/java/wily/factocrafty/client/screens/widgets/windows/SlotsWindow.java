@@ -3,11 +3,11 @@ package wily.factocrafty.client.screens.widgets.windows;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
-import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
 import wily.factocrafty.inventory.FactocraftySlotWrapper;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.FactoryDrawableButton;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class SlotsWindow extends FactocraftyScreenWindow{
     }
 
     @Override
-    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
+    public List<FactoryDrawableButton> addButtons(List<FactoryDrawableButton> list) {
         return list;
     }
 }

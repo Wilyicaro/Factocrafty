@@ -5,6 +5,7 @@ import dev.architectury.registry.fuel.FuelRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
@@ -57,7 +58,7 @@ public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements 
                 return FuelRegistry.get(itemStack) > 0;
             }
         });
-        slots.add(new FactocraftyCYItemSlot(this, 1,147,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC){
+        slots.add(new FactocraftyCYItemSlot(this, 1,148,53, TransportState.EXTRACT, FactoryCapacityTiers.BASIC){
         });
         return slots;
     }
@@ -127,7 +128,15 @@ public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements 
 
         }
     }
+    @Override
+    public void saveTag(CompoundTag compoundTag) {
+        IFactoryProgressiveStorage.super.saveTag(compoundTag);
+    }
 
+    @Override
+    public void loadTag(CompoundTag compoundTag) {
+        IFactoryProgressiveStorage.super.loadTag(compoundTag);
+    }
     public void addTanks(List<IPlatformFluidHandler<?>> list) {
         list.add(fluidTank.identifier().differential(), fluidTank);
     }

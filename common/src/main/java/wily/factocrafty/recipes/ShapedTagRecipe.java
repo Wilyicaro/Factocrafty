@@ -27,7 +27,7 @@ import java.util.*;
 public class ShapedTagRecipe extends CustomRecipe {
     final int width;
     final int height;
-    final NonNullList<Pair<Ingredient,CompoundTag>> recipeItems;
+    public final NonNullList<Pair<Ingredient,CompoundTag>> recipeItems;
     final ItemStack result;
     final String group;
     final boolean showNotification;

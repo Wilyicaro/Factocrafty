@@ -7,7 +7,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import wily.factocrafty.client.renderer.block.FactocraftyBlockEntityWLRenderer;
 import wily.factoryapi.base.IFactoryItem;
-import wily.factoryapi.base.IFactoryItemClientExtension;
+import wily.factoryapi.base.client.IFactoryItemClientExtension;
 
 import java.util.function.Consumer;
 

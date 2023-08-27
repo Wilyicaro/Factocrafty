@@ -26,7 +26,6 @@ import static wily.factocrafty.client.renderer.ModelHelper.FLUID_MODEL;
 public class FactocraftyLiquidTankRenderer implements BlockEntityRenderer<FactocraftyFluidTankBlockEntity> {
 
     BlockEntityRendererProvider.Context context;
-    Minecraft mc = Minecraft.getInstance();
 
 
     public static final ResourceLocation FLUID_MODEL_LOCATION = new ResourceLocation("factocrafty:block/fluid_tank/fluid_model");

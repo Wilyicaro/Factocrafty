@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WW#",
+    "WCW",
+    "#WW"
+  ],
+  "key": {
+    "#": {
+      "item": "factocrafty:iron_rod"
+    },
+    "W": {
+      "item": "minecraft:white_wool"
+    },
+    "C": {
+      "item": "factocrafty:carbon_plate"
+    }
+  },
+  "result": {
+    "item": "factocrafty:basic_hang_glider"
+  }
+}

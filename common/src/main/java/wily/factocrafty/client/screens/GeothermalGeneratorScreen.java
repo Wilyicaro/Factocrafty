@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.generator.entity.GeothermalGeneratorBlockEntity;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 

@@ -1,0 +1,19 @@
+{
+  "type": "factocrafty:macerating",
+  "ingredient": {
+    "item": "minecraft:suspicious_gravel"
+  },
+  "result": "minecraft:suspicious_sand",
+  "otherResults": [
+    {
+      "result": "minecraft:gold_nugget",
+      "chance": 0.1
+    },{
+      "result": "minecraft:iron_nugget",
+      "chance" : 0.13
+    }
+  ],
+
+  "experience": 0.25,
+  "processtime": 200
+}

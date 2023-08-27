@@ -36,10 +36,6 @@ public class SolarPanelBlock extends FactocraftyStorageBlock implements IFactocr
         }));
         solarTier = tier;
     }
-    @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(capacityTier.getEnergyTierComponent(false));
-    }
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {

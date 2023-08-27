@@ -9,10 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import wily.factocrafty.Factocrafty;
-import wily.factocrafty.client.screens.FactocraftyDrawableButton;
 import wily.factocrafty.client.screens.FactocraftyWidget;
 import wily.factoryapi.base.Bearer;
-import wily.factoryapi.base.IFactoryDrawableType;
+import wily.factoryapi.base.client.FactoryDrawableButton;
+import wily.factoryapi.base.client.IFactoryDrawableType;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -41,7 +41,7 @@ public class FactocraftyInfoWidget extends FactocraftyWidget {
     };
 
     @Override
-    public List<FactocraftyDrawableButton> addButtons(List<FactocraftyDrawableButton> list) {
+    public List<FactoryDrawableButton> addButtons(List<FactoryDrawableButton> list) {
         if (button != null) list.add(button.create(getX(), getY()));
         return super.addButtons(list);
     }
@@ -102,7 +102,7 @@ public class FactocraftyInfoWidget extends FactocraftyWidget {
     }
 
     public interface InfoButton{
-        FactocraftyDrawableButton create(int x, int y);
+        FactoryDrawableButton create(int x, int y);
     }
 
 

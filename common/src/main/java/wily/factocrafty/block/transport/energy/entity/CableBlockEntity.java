@@ -11,6 +11,7 @@ import wily.factocrafty.block.entity.FilteredCYEnergyStorage;
 import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
 import wily.factocrafty.util.registering.FactocraftyCables;
 import wily.factoryapi.base.*;
+import wily.factoryapi.util.StorageUtil;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class CableBlockEntity extends ConduitBlockEntity<FactocraftyCables> {
 
     public CableBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(blockPos, blockState);
-        energyStorage = new CYEnergyStorage(this, 0,getConduitType().energyTier.initialCapacity, maxEnergyTransfer(),getConduitType().energyTier);
+        energyStorage = new CYEnergyStorage(this,getConduitType().energyTier.initialCapacity, getConduitType().maxEnergyTransfer(),getConduitType().energyTier);
     }
 
     @Override
@@ -36,12 +37,10 @@ public class CableBlockEntity extends ConduitBlockEntity<FactocraftyCables> {
 
         storage.getStorage(Storages.CRAFTY_ENERGY, direction.getOpposite()).ifPresent((e)->{
             if (storage instanceof ConduitBlockEntity<?>) {
-                if (e.getEnergyStored() < energyStorage.getEnergyStored()) {
-                    int i = (energyStorage.getEnergyStored() - e.getEnergyStored()) / 2;
-                    energyStorage.consumeEnergy((e.receiveEnergy(new CraftyTransaction(Math.min(i, maxEnergyTransfer()), energyStorage.storedTier), false).reduce(getConduitType().transferenceEfficiency())), false);
-                }
+                if (e.getEnergyStored() < energyStorage.getEnergyStored())
+                    transferEnergyTo(this,c-> new CraftyTransaction(Math.max(1,(energyStorage.getEnergyStored() - e.getEnergyStored())/2),c.tier), c->c.reduce(getConduitType().transferenceEfficiency()), direction,e);
             }else {
-                if ((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && !energyBlock.produceEnergy()) ||  (storage.energySides().isEmpty() || storage.energySides().get().get(direction.getOpposite()).canInsert()))
+                if ((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && !energyBlock.produceEnergy()) || (storage.energySides().isEmpty() || storage.energySides().get().get(direction.getOpposite()).canInsert()))
                     transferEnergyTo(this, direction,e);
                 if((state.getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && (!energyBlock.isEnergyReceiver() || energyBlock.produceEnergy()))|| (storage.energySides().isEmpty() || storage.energySides().get().get(direction.getOpposite()) == TransportState.EXTRACT))
                     transferEnergyFrom(this, direction, e);
@@ -52,9 +51,6 @@ public class CableBlockEntity extends ConduitBlockEntity<FactocraftyCables> {
 
     public final CYEnergyStorage energyStorage;
 
-    public int maxEnergyTransfer() {
-        return (int) (getConduitType().energyTier.initialCapacity * getConduitType().energyTier.getConductivity());
-    }
 
     @Override
     public <T extends IPlatformHandlerApi<?>> Optional<T> getStorage(Storages.Storage<T> storage, Direction direction) {

@@ -86,9 +86,10 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
     public boolean isInputSlotActive(){
         return true;
     }
+
     @Override
-    public void saveTag(CompoundTag compoundTag) {
-        super.saveTag(compoundTag);
+    public void saveAdditional(CompoundTag compoundTag) {
+        super.saveAdditional(compoundTag);
         if (!recipesUsed.isEmpty()) {
             CompoundTag compoundTag2 = new CompoundTag();
             this.recipesUsed.forEach((resourceLocation, integer) -> {
@@ -97,6 +98,17 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
             compoundTag.put("RecipesUsed", compoundTag2);
         }
     }
+
+    @Override
+    public void saveTag(CompoundTag compoundTag) {
+        IFactoryProgressiveStorage.super.saveTag(compoundTag);
+    }
+
+    @Override
+    public void loadTag(CompoundTag compoundTag) {
+        IFactoryProgressiveStorage.super.loadTag(compoundTag);
+    }
+
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
@@ -135,7 +147,7 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
     }
     protected static boolean canSlotAcceptItem(Container inv, int slot, ItemStack stack){
         ItemStack slotStack = inv.getItem(slot);
-        return !stack.isEmpty() && (slotStack.isEmpty() ||(ItemStack.isSameItem(stack,slotStack) &&   slotStack.getCount() + stack.getCount() < Math.min(inv.getMaxStackSize(),slotStack.getMaxStackSize())));
+        return !stack.isEmpty() && (slotStack.isEmpty() ||(ItemStack.isSameItem(stack,slotStack) &&  slotStack.getCount() + stack.getCount() <= Math.min(inv.getMaxStackSize(),slotStack.getMaxStackSize())));
     }
     protected static boolean canProcessFluid(@Nullable Recipe<?> recipe, IPlatformFluidHandler tank,@Nullable IPlatformFluidHandler resultTank,Container inv, int output) {
         if (!tank.getFluidStack().isEmpty() && recipe instanceof FactocraftyMachineRecipe rcp && rcp.matchesFluid(tank,null)) {
@@ -167,7 +179,6 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
     public void tick() {
         if (!level.isClientSide) {
             boolean bl2 = false;
-
             super.tick();
 
             if (energyStorage.getEnergyStored() > 0) {
@@ -191,7 +202,7 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
                     int energy = (recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getEnergyConsume() : 3) * (int)Math.pow(72,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK));
                     if (energyStorage.getEnergyStored() > energy) {
                         bl2 = true;
-                        energyStorage.consumeEnergy(new CraftyTransaction(energy, energyStorage.supportableTier), false);
+                        energyStorage.consumeEnergy(new CraftyTransaction(energy, energyStorage.storedTier), false);
                         this.progress.first().add((int) Math.pow(getTotalProcessTime(), storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK)));
                     } else if (!isActive()){
                         this.progress.first().set(0);
