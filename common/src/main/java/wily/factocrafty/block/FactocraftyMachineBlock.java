@@ -41,33 +41,12 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
 
     protected boolean hasFireParticles = false;
     protected boolean hasSmokeParticles = false;
-
     protected boolean hasTopSmokeParticles = false;
 
-    protected final LoadingCache<Item, Function<RecipeManager,ItemStack>> repairItemCache;
 
     public FactocraftyMachineBlock(FactoryCapacityTiers tier, Properties properties) {
         super(tier,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  6 : 0));
         this.registerDefaultState(defaultBlockState().setValue(getFacingProperty(), Direction.NORTH));
-        repairItemCache = CacheBuilder.newBuilder().maximumSize(25).build(new CacheLoader<>() {
-            @Override
-            public Function<RecipeManager,ItemStack> load(Item item) {
-                return (manager)-> {
-                    Bearer<ItemStack> stack = Bearer.of(ItemStack.EMPTY);
-                    FactocraftyRecipeUtil.getRecipesStream(manager, RecipeType.CRAFTING).filter(rcp -> rcp instanceof ShapedTagRecipe r && r.getResultItem(RegistryAccess.EMPTY).is(item)).map(r -> (ShapedTagRecipe) r).forEach(r -> {
-                        for (Pair<Ingredient, CompoundTag> pair : r.recipeItems) {
-                            ItemStack itemStack = FactocraftyRecipeUtil.getFactocraftyStack(pair.first());
-                            if (itemStack.getItem() instanceof WeldableItem) {
-                                itemStack.setTag(pair.second());
-                                stack.set(itemStack);
-                                break;
-                            }
-                        }
-                    });
-                    return stack.get();
-                };
-            }
-        });
     }
 
     @Nullable

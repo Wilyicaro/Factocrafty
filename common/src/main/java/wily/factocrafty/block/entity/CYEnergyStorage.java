@@ -1,7 +1,6 @@
 package wily.factocrafty.block.entity;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factocrafty.block.IFactocraftyCYEnergyBlock;
 import wily.factoryapi.base.CraftyTransaction;
@@ -14,22 +13,27 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     private static final String KEY = "energy";
     private int energy;
     public int capacity;
-    private int maxInOut = 1000000;
+    private final int maxConsume;
+    private final int maxReceive;
 
     public FactoryCapacityTiers supportableTier;
 
     public FactoryCapacityTiers storedTier = FactoryCapacityTiers.BASIC;
 
     BlockEntity be;
-    public CYEnergyStorage(BlockEntity be, int energy, int capacity, FactoryCapacityTiers supportableTier){
+    public CYEnergyStorage(BlockEntity be, int capacity, FactoryCapacityTiers supportableTier){
+        this(be,capacity,capacity,supportableTier);
+    }
+    public CYEnergyStorage(BlockEntity be, int capacity,int maxTransfer, FactoryCapacityTiers supportableTier){
+        this(be,0,capacity,maxTransfer,maxTransfer,supportableTier);
+    }
+    public CYEnergyStorage(BlockEntity be, int energy, int capacity, int maxConsume, int maxReceive, FactoryCapacityTiers supportableTier){
         this.energy = energy;
         this.capacity = capacity;
         this.be = be;
         this.supportableTier = supportableTier;
-    }
-    public CYEnergyStorage(BlockEntity be, int energy, int capacity, int maxInOut, FactoryCapacityTiers supportableTier){
-        this(be, energy, capacity,supportableTier);
-        this.maxInOut = maxInOut;
+        this.maxConsume = maxConsume;
+        this.maxReceive = maxConsume;
     }
     public void setStoredTier(FactoryCapacityTiers tier) {
         storedTier = tier;
@@ -52,7 +56,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     @Override
     public CraftyTransaction receiveEnergy(CraftyTransaction transaction, boolean simulate) {
         if (transaction.isEmpty()) return CraftyTransaction.EMPTY;
-        int energyReceived = Math.min(getSpace(), Math.min(this.maxInOut, transaction.energy));
+        int energyReceived = Math.min(getMaxReceive(), transaction.energy);
 
         if (!simulate && energyReceived != 0) {
 
@@ -68,7 +72,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
             else {
                 if (be.getLevel().random.nextFloat() >= 0.9 && energyReceived > 0) {
                     if (be.getBlockState().getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock)
-                        energyBlock.unsupportedTierBurn(be.getLevel(), be.getBlockPos());
+                        energyBlock.unsupportedTierBurn(be.getLevel(), be.getBlockPos(),transaction.tier);
                 }
                 return new CraftyTransaction((int) ((transaction.tier.getConductivity() - supportableTier.getConductivity()) * energyReceived), transaction.tier);
             }
@@ -83,15 +87,14 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
     public CraftyTransaction consumeEnergy(CraftyTransaction transaction, boolean simulate) {
         if (transaction.isEmpty()) return  CraftyTransaction.EMPTY;
-        int energyExtracted = Math.min(energy, Math.min(this.maxInOut, transaction.energy));
+        int energyExtracted = Math.min(getMaxConsume(), transaction.convertEnergyTo(storedTier));
 
         if (!simulate) {
-            if (!storedTier.supportTier(transaction.tier)) energyExtracted = storedTier.convertEnergyTo(energyExtracted,transaction.tier);
             energy -= energyExtracted;
+            if (energy == 0) storedTier = FactoryCapacityTiers.BASIC;
             this.be.setChanged();
         }
-
-        return new CraftyTransaction(energyExtracted, storedTier);
+        return new CraftyTransaction(Math.min(getMaxConsume(), transaction.energy), storedTier);
     }
 
     @Override
@@ -126,7 +129,11 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
         setSupportedTier(FactoryCapacityTiers.values()[compoundTag.getInt("supportedTier")]);
     }
     public int getMaxConsume(){
-        return Math.min(getEnergyStored(),getTransport().canExtract() ? maxInOut : 0);
+        return Math.min(getEnergyStored(),getTransport().canExtract() ? Math.min(ICraftyEnergyStorage.super.getMaxConsume(),maxConsume) : 0);
+    }
+    @Override
+    public int getMaxReceive() {
+        return Math.min(getSpace(),getTransport().canInsert() ? Math.min(ICraftyEnergyStorage.super.getMaxReceive(),maxReceive) : 0);
     }
 
     @Override

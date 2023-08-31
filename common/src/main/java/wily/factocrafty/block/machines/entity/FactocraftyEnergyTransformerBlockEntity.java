@@ -89,10 +89,8 @@ public class FactocraftyEnergyTransformerBlockEntity extends FactocraftyEnergySt
     }
     @Override
     public <T extends IPlatformHandlerApi<?>> Optional<T> getStorage(Storages.Storage<T> storage, Direction direction) {
-        if (energySides.getTransportOrDefault(direction,TransportState.EXTRACT) == TransportState.EXTRACT) {
-            if (storage == Storages.ENERGY && getConversionMode().isPlatform())
-                return (Optional<T>) Optional.of(platformEnergyStorage);
-        }
+        if (storage == Storages.ENERGY && getConversionMode().isPlatform())
+            return (Optional<T>) Optional.of(FactoryAPIPlatform.filteredOf(platformEnergyStorage,energySides.getTransportOrDefault(direction,TransportState.EXTRACT)));
         return super.getStorage(storage, direction);
     }
 

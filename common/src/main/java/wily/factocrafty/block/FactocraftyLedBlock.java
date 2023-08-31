@@ -53,8 +53,8 @@ public class FactocraftyLedBlock extends FactocraftyBlock implements EntityBlock
             return InteractionResult.FAIL;
         if (level.isClientSide) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(blockPos) instanceof FactocraftyLedBlockEntity be) {
-            if (player.isCrouching()) be.savedLightValue = be.savedLightValue - 1 < 0 ? maxLight : be.savedLightValue - 1;
-            else be.savedLightValue = be.savedLightValue + 1 > maxLight ? 0 : be.savedLightValue + 1;
+            if (player.isCrouching()) be.savedLightValue.set(be.savedLightValue.get() - 1 < 0 ? maxLight : be.savedLightValue.get() - 1);
+            else be.savedLightValue.set(be.savedLightValue.get() + 1 > maxLight ? 0 : be.savedLightValue.get() + 1);
         }
         return InteractionResult.SUCCESS;
     }

@@ -44,7 +44,7 @@ public class FluidPipeBlock extends FactocraftySolidConduitBlock<FactocraftyFlui
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
         list.add((conduitType.getCapacityTier().getTierComponent(false)));
-        list.add(StorageStringUtil.getMaxFluidTransferTooltip((int) conduitType.maxFluidTransfer()));
+        list.add(StorageStringUtil.getMaxFluidTransferTooltip(StorageStringUtil.calculateFluid(conduitType.maxFluidTransfer(),1000)));
     }
 
 

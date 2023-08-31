@@ -36,8 +36,8 @@ public class FactocraftySyncIntegerBearerPacket {
             if (player.level().isLoaded(pos)) {
                 if (be instanceof FactocraftyMenuBlockEntity s) {
                     s.additionalSyncInt.get(index).set(value);
-                be.setChanged();
-                player.level().sendBlockUpdated(pos,be.getBlockState(),be.getBlockState(),3);
+                    s.setChanged();
+                    player.level().sendBlockUpdated(pos,be.getBlockState(),be.getBlockState(),3);
                 }
             }
         });

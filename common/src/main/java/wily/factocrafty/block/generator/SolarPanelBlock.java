@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -42,7 +43,11 @@ public class SolarPanelBlock extends FactocraftyStorageBlock implements IFactocr
         return cache.getUnchecked(solarTier.heightSize);
 
     }
-
+    @Override
+    public ItemStack getBurnRepairItem(RecipeManager recipeManager) {
+        ItemStack stack =  repairItemCache.getUnchecked(asItem()).apply(recipeManager);
+        return stack.isEmpty() ? IFactocraftyCYEnergyBlock.super.getBurnRepairItem(recipeManager) : stack;
+    }
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

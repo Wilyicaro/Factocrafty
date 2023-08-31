@@ -65,6 +65,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     public FactoryCapacityTiers capacityTier;
 
     protected final LoadingCache<Item, Function<RecipeManager,ItemStack>> baseDropCache;
+    protected final LoadingCache<Item, Function<RecipeManager,ItemStack>> repairItemCache;
     public FactocraftyStorageBlock(FactoryCapacityTiers tier, Properties properties) {
         super(properties);
         this.registerDefaultState(defaultBlockState().setValue(ACTIVE, false));
@@ -78,6 +79,25 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
                         for (Ingredient first : r.getIngredients()) {
                             ItemStack itemStack = FactocraftyRecipeUtil.getFactocraftyStack(first);
                             if (itemStack.getItem() instanceof BlockItem b && (b.getBlock() instanceof FactocraftyBlock || b.getBlock() instanceof FactocraftyStorageBlock)) {
+                                stack.set(itemStack);
+                                break;
+                            }
+                        }
+                    });
+                    return stack.get();
+                };
+            }
+        });
+        repairItemCache = CacheBuilder.newBuilder().maximumSize(25).build(new CacheLoader<>() {
+            @Override
+            public Function<RecipeManager,ItemStack> load(Item item) {
+                return (manager)-> {
+                    Bearer<ItemStack> stack = Bearer.of(ItemStack.EMPTY);
+                    FactocraftyRecipeUtil.getRecipesStream(manager, RecipeType.CRAFTING).filter(rcp -> rcp instanceof ShapedTagRecipe r && r.getResultItem(RegistryAccess.EMPTY).is(item)).map(r -> (ShapedTagRecipe) r).forEach(r -> {
+                        for (Pair<Ingredient, CompoundTag> pair : r.recipeItems) {
+                            ItemStack itemStack = FactocraftyRecipeUtil.getFactocraftyStack(pair.first());
+                            if (itemStack.getItem() instanceof WeldableItem) {
+                                itemStack.setTag(pair.second());
                                 stack.set(itemStack);
                                 break;
                             }
