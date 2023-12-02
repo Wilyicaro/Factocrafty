@@ -1,6 +1,7 @@
 package wily.factocrafty.client.screens;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
@@ -11,17 +12,18 @@ import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
 import wily.factocrafty.inventory.FactocraftyItemMenuContainer;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
-import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.client.FactoryDrawableSlider;
-import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.ArbitrarySupplier;
 import wily.factoryapi.base.client.IWindowWidget;
+import wily.factoryapi.base.client.drawable.DrawableStatic;
+import wily.factoryapi.base.client.drawable.FactoryDrawableSlider;
+import wily.factoryapi.util.ScreenUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static wily.factoryapi.util.StorageStringUtil.getCompleteEnergyTooltip;
 
@@ -29,16 +31,10 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
 
     private final FactocraftyLedBlockEntity be;
 
-
+    protected final List<Renderable> renderables = new ArrayList<>();
     protected double[] lastRGBMousePos = new double[2];
 
-    private IFactoryDrawableType.DrawableStatic RGB_PICKER;
-
-    private FactoryDrawableSlider red;
-
-    private FactoryDrawableSlider green;
-
-    private FactoryDrawableSlider blue;
+    private DrawableStatic RGB_PICKER;
 
     private int viewedColor = -1;
 
@@ -55,19 +51,16 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
     @Override
     protected void init() {
         super.init();
-        red = new FactoryDrawableSlider(leftPos + 12, topPos + 82, (s, i)-> sendServerActualColor(Optional.of(s.value),Optional.empty(),Optional.empty()), i->Component.literal("Red: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.red(be.actualRgb.get()), 255);
-        green = new FactoryDrawableSlider(leftPos + 12, topPos + 96, (s, i)-> sendServerActualColor(Optional.empty(),Optional.of(s.value),Optional.empty()), i->Component.literal("Green: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.green(be.actualRgb.get()), 255);
-        blue = new FactoryDrawableSlider(leftPos + 12, topPos + 110, (s, i)-> sendServerActualColor(Optional.empty(),Optional.empty(),Optional.of(s.value)), i->Component.literal("Blue: " + i), FactocraftyDrawables.MEDIUM_BUTTON,  5, 128,FastColor.ARGB32.blue(be.actualRgb.get()), 255);
+        renderables.clear();
+        addNestedRenderable(new FactoryDrawableSlider(leftPos + 12, topPos + 82, i->Component.literal("Red: " + i.value), FactocraftyDrawables.MEDIUM_BUTTON,  FactocraftyDrawables.MEDIUM_BUTTON_BACKGROUND,5, 128,FastColor.ARGB32.red(be.actualRgb.get()), 255).onPress((s, i)-> sendServerActualColor(()->s.value,()-> null,()-> null)));
+        addNestedRenderable(new FactoryDrawableSlider(leftPos + 12, topPos + 96, i->Component.literal("Green: " + i.value), FactocraftyDrawables.MEDIUM_BUTTON,  FactocraftyDrawables.MEDIUM_BUTTON_BACKGROUND,  5, 128,FastColor.ARGB32.green(be.actualRgb.get()), 255).onPress((s, i)-> sendServerActualColor(()-> null,()->s.value,()-> null)));
+        addNestedRenderable(new FactoryDrawableSlider(leftPos + 12, topPos + 110, i->Component.literal("Blue: " + i.value), FactocraftyDrawables.MEDIUM_BUTTON,  FactocraftyDrawables.MEDIUM_BUTTON_BACKGROUND,  5, 128,FastColor.ARGB32.blue(be.actualRgb.get()), 255).onPress((s, i)-> sendServerActualColor(()-> null,()-> null,()->s.value)));
         RGB_PICKER = FactocraftyDrawables.RGB_PICKER.createStatic(leftPos + 46, topPos + 17);
     }
-    protected void sendServerActualColor(Optional<Integer> red, Optional<Integer> green, Optional<Integer> blue ){
-        Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(menu.blockPos,FastColor.ARGB32.color(255,red.orElse(FastColor.ARGB32.red(be.actualRgb.get())) ,green.orElse(FastColor.ARGB32.green(be.actualRgb.get())),blue.orElse(FastColor.ARGB32.blue(be.actualRgb.get()))), be.additionalSyncInt.indexOf(be.actualRgb)));
+    protected void sendServerActualColor(ArbitrarySupplier<Integer> red, ArbitrarySupplier<Integer> green, ArbitrarySupplier<Integer> blue ){
+        Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(menu.blockPos,FastColor.ARGB32.color(255,red.or(FastColor.ARGB32.red(be.actualRgb.get())) ,green.or(FastColor.ARGB32.green(be.actualRgb.get())),blue.or(FastColor.ARGB32.blue(be.actualRgb.get()))), be.additionalSyncInt.indexOf(be.actualRgb)));
     }
 
-    @Override
-    public List<FactoryDrawableSlider> configSliders() {
-        return List.of(red,green,blue);
-    }
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int i, int j) {
@@ -82,7 +75,7 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
     }
     @Override
     public boolean mouseClicked(double d, double e, int i) {
-        if (mouseClickedButtons(d,e,i)) return true;
+        if (IWindowWidget.super.mouseClicked(d,e,i)) return true;
         if (RGB_PICKER.inMouseLimit((int) d, (int) e)) {
             lastRGBMousePos[0] = d;
             lastRGBMousePos[1] = e;
@@ -94,7 +87,7 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
             Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(menu.blockPos,viewedColor, be.additionalSyncInt.indexOf(be.actualRgb)));
             return true;
         }
-        if (mouseClickedButtons(d,e,i)) return true;
+        if (IWindowWidget.super.mouseClicked(d,e,i)) return true;
         return super.mouseClicked(d, e, i);
     }
 
@@ -105,11 +98,10 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
         ScreenUtil.drawGUISlot(graphics, leftPos + 110,topPos + 16, 18,36);
         ScreenUtil.drawGUISlot(graphics, leftPos + 129,topPos + 16, 18,36);
         if (RGB_PICKER.inMouseLimit(i,j))
-            graphics.fill( leftPos + 111,topPos + 17, leftPos + 111 + 16,topPos + 17+ 34, viewedColor = getPixelColor(FactocraftyDrawables.WIDGETS,i - RGB_PICKER.posX,j -RGB_PICKER.posY + 131));
+            graphics.fill( leftPos + 111,topPos + 17, leftPos + 111 + 16,topPos + 17+ 34, viewedColor = getPixelColor(FactocraftyDrawables.WIDGETS,i - RGB_PICKER.getX(),j -RGB_PICKER.getY() + 131));
         graphics.fill( leftPos + 130,topPos + 17, leftPos + 130 + 16,topPos + 17+ 34, be.actualRgb.get());
-        renderButtons(graphics,i,j);
+        IWindowWidget.super.render(graphics,i,j,f);
         renderTooltip(graphics,i,j);
-        renderButtonsTooltip(font,graphics,i,j);
 
     }
     public int getPixelColor(ResourceLocation location,int x, int y) {
@@ -125,7 +117,7 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
     @Override
     protected void renderBg(GuiGraphics graphics, float f, int i, int j) {
         ScreenUtil.drawGUIBackground(graphics,leftPos, topPos, imageWidth, imageHeight);
-        ScreenUtil.drawGUISubSlot(graphics, RGB_PICKER.posX - 2, RGB_PICKER.posY - 2, 64, 64);
+        ScreenUtil.drawGUISubSlot(graphics, RGB_PICKER.getX() - 2, RGB_PICKER.getY() - 2, 64, 64);
         RGB_PICKER.draw(graphics);
         FactocraftyDrawables.ENERGY_CELL_SLOT.draw(graphics, leftPos + 6, topPos + 16);
         FactocraftyDrawables.ENERGY_CELL.drawProgress(graphics, leftPos + 7, topPos + 17, be.energyStorage.getEnergyStored(), be.energyStorage.getMaxEnergyStored());
@@ -133,12 +125,12 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
 
     @Override
     public boolean mouseReleased(double d, double e, int i) {
-        if (mouseReleasedSliders(d,e,i)) return true;
+        if (IWindowWidget.super.mouseReleased(d,e,i)) return true;
         return super.mouseReleased(d, e, i);
     }
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        if (mouseDraggedSliders(d,e,i)) return true;
+        if (IWindowWidget.super.mouseDragged(d,e,i,f,g)) return true;
         return super.mouseDragged(d, e, i, f, g);
     }
 
@@ -156,5 +148,16 @@ public class RGBControllerScreen extends AbstractContainerScreen<FactocraftyItem
     @Override
     public boolean isVisible() {
         return true;
+    }
+
+    @Override
+    public <R extends Renderable> R addNestedRenderable(R drawable) {
+        renderables.add(drawable);
+        return drawable;
+    }
+
+    @Override
+    public List<? extends Renderable> getNestedRenderables() {
+        return renderables;
     }
 }

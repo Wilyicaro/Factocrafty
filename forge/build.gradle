@@ -32,17 +32,18 @@ configurations {
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
-    // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
+    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    modApi "wily.factory_api:factory_api-forge:${minecraft_version}-${factory_api_version}"
 
     modCompileOnly "mezz.jei:jei-${jei_minecraft_version}-forge-api:${jei_version}"
     modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}"
-    //modRuntimeOnly("curse.maven:jei-238222:4473386")
+    //modRuntimeOnly("earth.terrarium.athena:athena-forge-${minecraft_version}:${athena_version}")
+    //modRuntimeOnly("team.chisel.ctm:CTM:${minecraft_version}-1.1.8+4")
     //modRuntimeOnly("curse.maven:roughly-enough-items-310111:4440735")
     //modRuntimeOnly("curse.maven:cloth-config-348521:4440461")
     //modRuntimeOnly("curse.maven:world-edit-225608:4445118")
-    modApi "wily.factory_api:factory_api-forge:${minecraft_version}-${factory_api_version}"
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 

@@ -21,7 +21,7 @@ public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
 
     public GeothermalGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.GEOTHERMAL_GENERATOR_MENU.get(),Registration.GEOTHERMAL_GENERATOR_BLOCK_ENTITY.get(), blockPos, blockState);
-        replaceSidedStorage(BlockSide.LEFT,fluidSides, new FluidSide(lavaTank, TransportState.EXTRACT_INSERT));
+        replaceSidedStorage(BlockSide.LEFT,fluidSides, new TransportSide(lavaTank.identifier(), TransportState.EXTRACT_INSERT));
     }
 
 
@@ -48,6 +48,6 @@ public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
     }
     public void addTanks(List<IPlatformFluidHandler<?>> list) {
         super.addTanks(list);
-        list.add(lavaTank.identifier().differential(),lavaTank);
+        list.add(lavaTank);
     }
 }

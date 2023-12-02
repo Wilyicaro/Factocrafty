@@ -10,10 +10,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.phys.Vec3;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.generator.entity.SolarPanelBlockEntity;
-import wily.factocrafty.client.screens.widgets.FactocraftyConfigWidget;
-import wily.factocrafty.client.screens.widgets.windows.SlotsWindow;
+import wily.factocrafty.client.screens.widgets.SlotsWindow;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
-import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.client.drawable.FactoryDrawableButton;
+import wily.factoryapi.base.client.drawable.IFactoryDrawableType;
 
 import static wily.factoryapi.util.StorageStringUtil.*;
 
@@ -29,14 +29,14 @@ public class SolarPanelScreen extends FactocraftyStorageScreen<SolarPanelBlockEn
     @Override
     protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
         super.renderStorageTooltips(graphics, i, j);
-        if (IFactoryDrawableType.getMouseLimit(i,j, leftPos + 78, topPos + 31, 20,20)) graphics.renderTooltip(font, Component.translatable("tooltip.factocrafty.generating",  getStorageAmount(getMenu().be.tickEnergy.get(),false,"",kiloCY,CYMeasure)).withStyle(ChatFormatting.GRAY), i,j);
+        if (IFactoryDrawableType.getMouseLimit(i,j, leftPos + 78, topPos + 31, 20,20)) graphics.renderTooltip(font, Component.translatable("tooltip.factocrafty.generating",  getStorageAmount(getMenu().be.tickEnergy.get(),false,CYMeasure,kiloCY,megaCY)).withStyle(ChatFormatting.GRAY), i,j);
     }
 
     @Override
     protected void init() {
         super.init();
-        energyCellType.posX = leftPos + 112;
-        this.addConfigToGui(new FactocraftyConfigWidget(leftPos + imageWidth,  topPos + 46, true,Component.translatable("gui.factocrafty.window.equipment"), FactocraftyDrawables.getInfoIcon(1))
+        energyCellType.setX(leftPos + 112);
+        this.addWindowToGui(new FactoryDrawableButton(leftPos + imageWidth - 3,  topPos + 46, FactocraftyDrawables.MACHINE_CONFIG_BUTTON_INVERTED).icon(FactocraftyDrawables.getInfoIcon(1)).tooltip(Component.translatable("gui.factocrafty.window.equipment"))
                 ,(config)-> new SlotsWindow(config,leftPos + imageWidth + 21,topPos, this, menu.equipmentSlots));
     }
 

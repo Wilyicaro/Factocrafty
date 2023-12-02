@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
-import wily.factocrafty.util.registering.FactocraftyBlockEntities;
+import wily.factocrafty.util.registering.IFactocraftyBlockEntityType;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.StorageStringUtil;
@@ -25,14 +25,12 @@ import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
 public class FactocraftyEnergyStorageBlockEntity extends FactocraftyMenuBlockEntity {
     public FactocraftyEnergyStorageBlockEntity(MenuType<?> menu, BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(menu, blockEntityType, blockPos, blockState);
-        for (BlockSide side : BlockSide.values())
-            replaceSidedStorage(side,energySides, TransportState.EXTRACT_INSERT);
-        replaceSidedStorage(BlockSide.BACK,energySides, TransportState.EXTRACT);
-        replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.INSERT);
+        replaceSidedStorage(BlockSide.BACK,energySides, new TransportSide(SlotsIdentifier.ENERGY,TransportState.EXTRACT));
+        replaceSidedStorage(BlockSide.FRONT,energySides, new TransportSide(SlotsIdentifier.ENERGY,TransportState.INSERT));
         STORAGE_SLOTS = new int[]{0,1};
     }
     public FactocraftyEnergyStorageBlockEntity(BlockPos blockPos, BlockState blockState) {
-        this(Registration.ENERGY_STORAGE_MENU.get(), FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
+        this(Registration.ENERGY_STORAGE_MENU.get(), IFactocraftyBlockEntityType.ofBlock(blockState.getBlock()), blockPos, blockState);
     }
 
     @Override
@@ -54,10 +52,10 @@ public class FactocraftyEnergyStorageBlockEntity extends FactocraftyMenuBlockEnt
                 if (be != null) {
                     IFactoryStorage storage = FactoryAPIPlatform.getPlatformFactoryStorage(be);
                     storage.getStorage(Storages.CRAFTY_ENERGY, d.getOpposite()).ifPresent(e->{
-                        TransportState state = energySides.get(d);
-                        if (state == TransportState.INSERT && (storage.energySides().isEmpty() || storage.energySides().get().get(d.getOpposite()).canExtract()))
+                        TransportState state = energySides.get(d).getTransport();
+                        if (state == TransportState.INSERT && (storage.getStorageSides(Storages.CRAFTY_ENERGY).isEmpty() || storage.getStorageSides(Storages.CRAFTY_ENERGY).get().getTransport(d.getOpposite()).canExtract()))
                             transferEnergyFrom(this, d,e);
-                        if (state == TransportState.EXTRACT && (storage.energySides().isEmpty() || storage.energySides().get().get(d.getOpposite()).canInsert()))
+                        if (state == TransportState.EXTRACT && (storage.getStorageSides(Storages.CRAFTY_ENERGY).isEmpty() || storage.getStorageSides(Storages.CRAFTY_ENERGY).get().getTransport(d.getOpposite()).canInsert()))
                             transferEnergyTo(this, d, e);
                     });
                 }

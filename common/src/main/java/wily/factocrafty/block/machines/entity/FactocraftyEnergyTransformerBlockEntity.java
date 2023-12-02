@@ -6,21 +6,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.CYEnergyStorage;
-import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
-import wily.factocrafty.block.entity.FilteredCYEnergyStorage;
 import wily.factocrafty.block.storage.energy.entity.FactocraftyEnergyStorageBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
 import wily.factocrafty.item.UpgradeType;
-import wily.factocrafty.util.registering.FactocraftyBlockEntities;
+import wily.factocrafty.util.registering.IFactocraftyBlockEntityType;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.StorageStringUtil;
@@ -33,7 +28,7 @@ import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
 
 public class FactocraftyEnergyTransformerBlockEntity extends FactocraftyEnergyStorageBlockEntity implements IFactoryProgressiveStorage{
     public FactocraftyEnergyTransformerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(Registration.ENERGY_TRANSFORMER_MENU.get(), FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
+        super(Registration.ENERGY_TRANSFORMER_MENU.get(), IFactocraftyBlockEntityType.ofBlock(blockState.getBlock()), blockPos, blockState);
         additionalSyncInt.add(conversionMode);
         energyStorage = new CYEnergyStorage(this,getInitialEnergyCapacity(), (int)(getDefaultEnergyTier().initialCapacity * getDefaultEnergyTier().getConductivity()),getDefaultEnergyTier()){
             @Override
@@ -88,9 +83,9 @@ public class FactocraftyEnergyTransformerBlockEntity extends FactocraftyEnergySt
         IFactoryProgressiveStorage.super.loadTag(compoundTag);
     }
     @Override
-    public <T extends IPlatformHandlerApi<?>> Optional<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
         if (storage == Storages.ENERGY && getConversionMode().isPlatform())
-            return (Optional<T>) Optional.of(FactoryAPIPlatform.filteredOf(platformEnergyStorage,energySides.getTransportOrDefault(direction,TransportState.EXTRACT)));
+            return ()-> (T) FactoryAPIPlatform.filteredOf(platformEnergyStorage,energySides.getTransportOrDefault(direction,TransportState.EXTRACT));
         return super.getStorage(storage, direction);
     }
 

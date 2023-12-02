@@ -28,15 +28,14 @@ import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.recipes.AbstractFactocraftyProcessRecipe;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
 import wily.factocrafty.util.FactocraftyRecipeUtil;
-import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.client.drawable.IFactoryDrawableType;
+import wily.factoryapi.util.ScreenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static wily.factocrafty.client.screens.BasicMachineScreen.BACKGROUND_LOCATION;
 import static wily.factocrafty.compat.FactocraftyJeiUtils.fromProgress;
-import static wily.factocrafty.util.ScreenUtil.renderScaled;
 import static wily.factoryapi.util.StorageStringUtil.*;
 
 public class FactocraftyMachineCategory<T extends Recipe<Container>> implements IRecipeCategory<T> {
@@ -87,7 +86,7 @@ public class FactocraftyMachineCategory<T extends Recipe<Container>> implements 
     public List<Component> getTooltipStrings(T recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         List<Component> tooltips = new ArrayList<>();
         int energyConsume = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getEnergyConsume() : 3;
-        if (FactocraftyDrawables.ENERGY_CELL.inMouseLimit((int) mouseX, (int) mouseY,2,6)) tooltips.add(Component.translatable("tooltip.factocrafty.consuming",  getStorageAmount(energyConsume,false,"",kiloCY,CYMeasure)).withStyle(ChatFormatting.AQUA));
+        if (FactocraftyDrawables.ENERGY_CELL.inMouseLimit((int) mouseX, (int) mouseY,2,6)) tooltips.add(Component.translatable("tooltip.factocrafty.consuming",  getStorageAmount(energyConsume,false,CYMeasure,kiloCY,megaCY)).withStyle(ChatFormatting.AQUA));
         return tooltips;
     }
 
@@ -102,8 +101,8 @@ public class FactocraftyMachineCategory<T extends Recipe<Container>> implements 
         boolean b = !hasOtherResults(recipe);
         int max = getMaxProcess(recipe);
         drawExp(recipe, graphics);
-        renderScaled(graphics.pose(), (float) max / 20 + "s", 62, 52, 1f, 0x7E7E7E, false);
-        if (!b) recipeSlotsView.findSlotByName("otherOutput").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) renderScaled(graphics.pose(), Math.round(((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().get(i) * 100) + "%",92,42,0.5F,0x7E7E7E,false);})));
+        ScreenUtil.renderScaled(graphics.pose(), (float) max / 20 + "s", 62, 52, 1f, 0x7E7E7E, false);
+        if (!b) recipeSlotsView.findSlotByName("otherOutput").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) ScreenUtil.renderScaled(graphics.pose(), Math.round(((AbstractFactocraftyProcessRecipe) recipe).getOtherResults().get(i) * 100) + "%",92,42,0.5F,0x7E7E7E,false);})));
         IDrawableAnimated cache = cachedProgressAnim.getUnchecked(max);
         cache.draw(graphics, type== FactocraftyDrawables.PROGRESS ? 61 : 62, type.equals(FactocraftyDrawables.PROGRESS) ? 23 : 29);
         energyCell.draw(graphics,2,6);
@@ -113,14 +112,14 @@ public class FactocraftyMachineCategory<T extends Recipe<Container>> implements 
         boolean b = !hasOtherResults(recipe);
         ScreenUtil.drawGUISlot(graphics, b ? 93 : 106, 19,26,26);
         if (recipe instanceof FactocraftyMachineRecipe rcp){
-            if (!b)ScreenUtil.drawGUISlot(graphics,88, 23, 18,18);
+            if (!b) ScreenUtil.drawGUISlot(graphics,88, 23, 18,18);
             if (rcp.hasFluidIngredient() && !rcp.getFluidIngredient().isEmpty()) ScreenUtil.drawGUIFluidSlot(graphics, 37,2,18,21);
             else ScreenUtil.drawGUISlot(graphics,37, 5, 18, 18);
         }
     }
     public void drawExp(T recipe, GuiGraphics graphics){
         float exp = recipe instanceof AbstractFactocraftyProcessRecipe rcp ? rcp.getExperience() : recipe instanceof AbstractCookingRecipe rcp ? rcp.getExperience():0;
-        if (exp > 0)renderScaled(graphics.pose(),   I18n.get("gui.jei.category.smelting.experience", exp), 62, 2, 1f, 0x7E7E7E, false);
+        if (exp > 0)ScreenUtil.renderScaled(graphics.pose(),   I18n.get("gui.jei.category.smelting.experience", exp), 62, 2, 1f, 0x7E7E7E, false);
     }
     @Override
     public RecipeType<T> getRecipeType() {

@@ -1,0 +1,13 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type": "CTM",
+        "layer": "SOLID",
+        "textures":[
+            "factocrafty:block/ctm/nuclear_reactor_casing"
+        ],
+        "extra": {
+            "connect_to": [{"block":"factocrafty:nuclear_reactor_casing"},{"block":"factocrafty:nuclear_reactor_chamber"}, {"block": "factocrafty:nuclear_reactor_core"}]
+        }
+    }
+}

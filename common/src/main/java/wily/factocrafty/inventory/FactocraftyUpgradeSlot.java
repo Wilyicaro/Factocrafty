@@ -1,13 +1,19 @@
 package wily.factocrafty.inventory;
 
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
+import wily.factocrafty.init.Registration;
 import wily.factocrafty.item.FactocraftyUpgradeItem;
 
 public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
+    public static ResourceLocation UPGRADE_SLOT_EMPTY = Registration.getModResource("item/upgrade_slot");
     public FactocraftyUpgradeSlot(FactocraftyMenuBlockEntity pBe, int i, int x, int y) {
         super(new Slot(pBe.inventory,i,x,y){
             @Override
@@ -36,6 +42,10 @@ public class FactocraftyUpgradeSlot extends FactocraftySlotWrapper{
                 super.setChanged();
                 pBe.storedUpgrades.checkEmptyValues();
                 pBe.storedUpgrades.setChanged(pBe.selectedUpgrade.get(),false,getItem());
+            }
+            @Override
+            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+                return Pair.of(InventoryMenu.BLOCK_ATLAS,UPGRADE_SLOT_EMPTY);
             }
 
             @Override

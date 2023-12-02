@@ -16,24 +16,24 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     private final int maxConsume;
     private final int maxReceive;
 
-    public FactoryCapacityTiers supportableTier;
+    public FactoryCapacityTiers supportedTier;
 
     public FactoryCapacityTiers storedTier = FactoryCapacityTiers.BASIC;
 
     BlockEntity be;
-    public CYEnergyStorage(BlockEntity be, int capacity, FactoryCapacityTiers supportableTier){
-        this(be,capacity,capacity,supportableTier);
+    public CYEnergyStorage(BlockEntity be, int capacity, FactoryCapacityTiers supportedTier){
+        this(be,capacity,capacity, supportedTier);
     }
-    public CYEnergyStorage(BlockEntity be, int capacity,int maxTransfer, FactoryCapacityTiers supportableTier){
-        this(be,0,capacity,maxTransfer,maxTransfer,supportableTier);
+    public CYEnergyStorage(BlockEntity be, int capacity,int maxTransfer, FactoryCapacityTiers supportedTier){
+        this(be,0,capacity,maxTransfer,maxTransfer, supportedTier);
     }
-    public CYEnergyStorage(BlockEntity be, int energy, int capacity, int maxConsume, int maxReceive, FactoryCapacityTiers supportableTier){
+    public CYEnergyStorage(BlockEntity be, int energy, int capacity, int maxConsume, int maxReceive, FactoryCapacityTiers supportedTier){
         this.energy = energy;
         this.capacity = capacity;
         this.be = be;
-        this.supportableTier = supportableTier;
+        this.supportedTier = supportedTier;
         this.maxConsume = maxConsume;
-        this.maxReceive = maxConsume;
+        this.maxReceive = maxReceive;
     }
     public void setStoredTier(FactoryCapacityTiers tier) {
         storedTier = tier;
@@ -41,12 +41,12 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
     @Override
     public void setSupportedTier(FactoryCapacityTiers tier) {
-        supportableTier = tier;
+        supportedTier = tier;
     }
 
     @Override
     public FactoryCapacityTiers getSupportedTier() {
-        return supportableTier;
+        return supportedTier;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
 
         if (!simulate && energyReceived != 0) {
 
-            if (supportableTier.supportTier(transaction.tier)) {
+            if (supportedTier.supportTier(transaction.tier)) {
                 if (storedTier.supportTier(transaction.tier)){
                     energyReceived = transaction.tier.convertEnergyTo(energyReceived, storedTier);
                     transaction.tier = storedTier;
@@ -74,7 +74,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
                     if (be.getBlockState().getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock)
                         energyBlock.unsupportedTierBurn(be.getLevel(), be.getBlockPos(),transaction.tier);
                 }
-                return new CraftyTransaction((int) ((transaction.tier.getConductivity() - supportableTier.getConductivity()) * energyReceived), transaction.tier);
+                return new CraftyTransaction((int) ((transaction.tier.getConductivity() - supportedTier.getConductivity()) * energyReceived), transaction.tier);
             }
 
             energy += energyReceived;
@@ -116,17 +116,26 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     @Override
     public CompoundTag serializeTag() {
         CompoundTag tag = new CompoundTag();
+        tag.putIntArray(KEY, new int[]{this.energy, storedTier.ordinal(), supportedTier.ordinal(), capacity});
         tag.putInt(KEY, this.energy);
         tag.putInt("tier", storedTier.ordinal());
-        tag.putInt("supportedTier", supportableTier.ordinal());
+        tag.putInt("supportedTier", supportedTier.ordinal());
         return tag;
     }
 
     @Override
     public void deserializeTag(CompoundTag compoundTag) {
-        setEnergyStored(compoundTag.getInt(KEY));
-        setStoredTier(FactoryCapacityTiers.values()[compoundTag.getInt("tier")]);
-        setSupportedTier(FactoryCapacityTiers.values()[compoundTag.getInt("supportedTier")]);
+        if (compoundTag.contains("tier") || compoundTag.contains("supportedTier")){
+            setEnergyStored(compoundTag.getInt(KEY));
+            setStoredTier(FactoryCapacityTiers.values()[compoundTag.getInt("tier")]);
+            if (compoundTag.contains("supportedTier"))setSupportedTier(FactoryCapacityTiers.values()[compoundTag.getInt("supportedTier")]);
+        } else {
+            int[] values = compoundTag.getIntArray(KEY);
+            setEnergyStored(values[0]);
+            setStoredTier(FactoryCapacityTiers.values()[values[1]]);
+            setSupportedTier(FactoryCapacityTiers.values()[values[2]]);
+            capacity = values[3];
+        }
     }
     public int getMaxConsume(){
         return Math.min(getEnergyStored(),getTransport().canExtract() ? Math.min(ICraftyEnergyStorage.super.getMaxConsume(),maxConsume) : 0);

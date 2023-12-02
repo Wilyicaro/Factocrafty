@@ -10,7 +10,7 @@ import wily.factoryapi.base.FactoryCapacityTiers;
 
 public class GeneratorBlock extends FactocraftyMachineBlock {
     public GeneratorBlock(Properties properties) {
-        super(FactoryCapacityTiers.BASIC,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  6 : 0));
+        super(FactoryCapacityTiers.BASIC,properties.lightLevel((b) -> b.getValue(ACTIVE) ?  14 : 0));
         hasFireParticles = hasSmokeParticles = true;
     }
 

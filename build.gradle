@@ -37,6 +37,9 @@ allprojects {
             url "https://www.cursemaven.com"
         }
         maven {
+            url = "https://maven.resourcefulbees.com/repository/maven-public/"
+        }
+        maven {
             // location of the maven that hosts JEI files since January 2023
             name = "Jared's maven"
             url = "https://maven.blamejared.com/"
@@ -63,6 +66,17 @@ allprojects {
             }
             filter {
                 includeGroup "maven.modrinth"
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "CTM"
+                    url = "https://maven.tterrag.com/"
+                }
+            }
+            filter {
+                includeGroup "team.chisel.ctm"
             }
         }
     }

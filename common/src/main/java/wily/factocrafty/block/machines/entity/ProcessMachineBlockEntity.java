@@ -49,7 +49,7 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
         this.recipesUsed = new Object2IntOpenHashMap();
         this.recipeType = recipe;
         STORAGE_SLOTS = new int[]{1};
-        replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.NONE);
+        replaceSidedStorage(BlockSide.FRONT,energySides, new TransportSide(SlotsIdentifier.ENERGY,TransportState.NONE));
 
     }
 

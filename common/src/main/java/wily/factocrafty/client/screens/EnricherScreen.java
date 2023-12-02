@@ -9,11 +9,10 @@ import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.machines.entity.EnricherBlockEntity;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncProgressPacket;
-import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.client.FactoryDrawableButton;
-import wily.factoryapi.base.client.IFactoryDrawableType;
-
-import java.util.List;
+import wily.factoryapi.base.client.drawable.DrawableStatic;
+import wily.factoryapi.base.client.drawable.DrawableStaticProgress;
+import wily.factoryapi.base.client.drawable.FactoryDrawableButton;
+import wily.factoryapi.util.ScreenUtil;
 
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 
@@ -23,22 +22,17 @@ public class EnricherScreen extends ChangeableInputMachineScreen<EnricherBlockEn
         imageHeight = 171;
         inventoryLabelY += 7;
     }
-    private IFactoryDrawableType.DrawableStaticProgress matterProgress;
-    private IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> resultTank;
+    private DrawableStaticProgress matterProgress;
+    private DrawableStatic resultTank;
 
     @Override
     protected void init() {
         super.init();
+
+        addNestedRenderable(new FactoryDrawableButton(leftPos + 157,topPos + 71,FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(2)).tooltip( Component.translatable("tooltip.factocrafty.config.eject")).onPress((b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncProgressPacket(be.getBlockPos(), be.getProgresses().indexOf(be.matterAmount), be.matterAmount.getValues()))));
         matterProgress = FactocraftyDrawables.MATTER_PROGRESS.createStatic(leftPos + 20, topPos + 74);
         resultTank = FactocraftyDrawables.FLUID_TANK.createStatic(leftPos + 138, topPos + 17);
     }
-
-    @Override
-    public List<FactoryDrawableButton> addButtons(List<FactoryDrawableButton> list) {
-        list.add(new FactoryDrawableButton(leftPos + 157,topPos + 71,(i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncProgressPacket(be.getBlockPos(), be.getProgresses().indexOf(be.matterAmount), be.matterAmount.getValues())), Component.translatable("tooltip.factocrafty.config.eject"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(2)));
-        return super.addButtons(list);
-    }
-
 
     public static ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/enricher.png");
     @Override

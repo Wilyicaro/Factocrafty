@@ -130,7 +130,6 @@ public abstract class DynamicFluidHandlerModel implements BakedModel, UnbakedMod
 
     @Override
     public TextureAtlasSprite getParticleIcon() {
-
         return Minecraft.getInstance().getTextureAtlas(BLOCK_ATLAS).apply(new ResourceLocation(getBaseModel().getNamespace(),getBaseModel().getPath()));
     }
 

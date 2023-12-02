@@ -57,7 +57,7 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
         public boolean connectionTick(BlockEntity be,BlockPos blockPos, Direction direction) {
             if(isRemoved()) return true;
             IFactoryExpandedStorage storage = (IFactoryExpandedStorage) be;
-            if (!storage.fluidSides().isEmpty() && !storage.fluidSides().get().getTransport(direction).canInsert()) return false;
+            if (!storage.getStorageSides(Storages.FLUID).isEmpty() && !storage.getStorageSides(Storages.FLUID).get().getTransport(direction).canInsert()) return false;
             BlockState state = be.getLevel().getBlockState(blockPos);
             Fluid fluid = state.getFluidState().getType();
             BucketPickup p = (BucketPickup) state.getBlock();
@@ -83,7 +83,7 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
         public boolean connectionTick(BlockEntity be,BlockPos blockPos, Direction direction) {
             if(isRemoved()) return true;
             IFactoryExpandedStorage storage = (IFactoryExpandedStorage) be;
-            if (!storage.fluidSides().isEmpty() && !storage.fluidSides().get().getTransport(direction).canExtract()) return false;
+            if (!storage.getStorageSides(Storages.FLUID).isEmpty() && !storage.getStorageSides(Storages.FLUID).get().getTransport(direction).canExtract()) return false;
             BlockState state = be.getLevel().getBlockState(blockPos);
             for (IPlatformFluidHandler<?> tank : storage.getTanks()) {
                 FluidStack fluidStack = tank.getFluidStack();
@@ -100,9 +100,9 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
 
     public FluidPumpBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.FLUID_PUMP_MENU.get(),Registration.FLUID_PUMP_BLOCK_ENTITY.get(), blockPos, blockState);
-        replaceSidedStorage(BlockSide.FRONT,energySides, TransportState.NONE);
-        replaceSidedStorage(BlockSide.BACK,fluidSides, new FluidSide(fluidTank,TransportState.EXTRACT));
-        replaceSidedStorage(BlockSide.BOTTOM,fluidSides, new FluidSide(fluidTank,TransportState.INSERT));
+        replaceSidedStorage(BlockSide.FRONT,energySides, new TransportSide(SlotsIdentifier.ENERGY,TransportState.NONE));
+        replaceSidedStorage(BlockSide.BACK,fluidSides, new TransportSide(fluidTank.identifier(),TransportState.EXTRACT));
+        replaceSidedStorage(BlockSide.BOTTOM,fluidSides, new TransportSide(fluidTank.identifier(),TransportState.INSERT));
         fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f -> true, SlotsIdentifier.GENERIC, TransportState.EXTRACT_INSERT);
         STORAGE_SLOTS = new int[]{0,1,2};
         additionalSyncInt.add(pumpMode);
@@ -185,7 +185,7 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
     }
 
     public void addTanks(List<IPlatformFluidHandler<?>> list) {
-        list.add(fluidTank.identifier().differential(), fluidTank);
+        list.add(fluidTank);
     }
 
     @Override

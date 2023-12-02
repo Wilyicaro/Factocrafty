@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"": { "model": "factocrafty:block/reactor_containment" }
+	},
+	"athena:loader": "athena:ctm",
+	"ctm_textures": {
+		"center": "factocrafty:block/ctm/reactor_containment_center",
+		"empty": "factocrafty:block/ctm/reactor_containment_empty",
+		"horizontal": "factocrafty:block/ctm/reactor_containment_horizontal",
+		"vertical": "factocrafty:block/ctm/reactor_containment_vertical",
+		"particle": "factocrafty:block/reactor_containment"
+	}
+}

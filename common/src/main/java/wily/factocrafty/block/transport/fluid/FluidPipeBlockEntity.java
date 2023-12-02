@@ -29,21 +29,17 @@ import static wily.factoryapi.util.StorageUtil.*;
 
 public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFluidPipes> {
     public IPlatformFluidHandler<?> fluidHandler = FactoryAPIPlatform.getFluidHandlerApi(getConduitType().capacityTier.capacityMultiplier * FluidStack.bucketAmount(),this,(f)-> true,SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
-    public SideList<FluidSide> fluidSides = SideList.createSideTypeList(()->new FluidSide(fluidHandler,TransportState.EXTRACT_INSERT));
+    public SideList<? super ISideType<?>> fluidSides = new SideList<>(()->new TransportSide(fluidHandler.identifier(),TransportState.EXTRACT_INSERT));
 
     public FluidPipeBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(blockPos, blockState);
     }
 
-    @Override
-    public Optional<SideList<FluidSide>> fluidSides() {
-        return Optional.of(fluidSides);
-    }
 
     @Override
     protected boolean shouldConnectToStorage(IFactoryStorage storage, @Nullable Direction direction) {
         if (storage.getStorage(Storages.FLUID, direction == null ? null : direction.getOpposite()).isEmpty()) return false;
-        return direction == null || (storage.fluidSides().isEmpty()  || storage.fluidSides().get().getTransport(direction.getOpposite()).isUsable());
+        return direction == null || (storage.getStorageSides(Storages.FLUID).isEmpty()  || storage.getStorageSides(Storages.FLUID).get().getTransport(direction.getOpposite()).isUsable());
     }
 
     @Override
@@ -55,9 +51,9 @@ public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFlu
                     fluidHandler.drain(fluidHandler.getFluidStack().copyWithAmount(e.fill(fluidHandler.getFluidStack().copyWithAmount(Math.min(i , getConduitType().maxFluidTransfer())), false)), false);
                 }
             }else {
-                if (!fluidHandler.getFluidStack().isEmpty() && ((fluidSides.get(direction).transportState == TransportState.EXTRACT && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState.canInsert())) || (fluidSides.get(direction).transportState.canExtract() && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.INSERT))))
+                if (!fluidHandler.getFluidStack().isEmpty() && ((fluidSides.get(direction).getTransport() == TransportState.EXTRACT && (storage.getStorageSides(Storages.FLUID).isEmpty() || storage.getStorageSides(Storages.FLUID).get().get(direction.getOpposite()).getTransport().canInsert())) || (fluidSides.get(direction).getTransport().canExtract() && storage.getStorageSides(Storages.FLUID).isPresentAnd(f-> f.getTransport(direction.getOpposite()) == TransportState.INSERT))))
                     transferFluidTo(this, direction, e);
-                if (!e.getFluidStack().isEmpty() && ((fluidSides.get(direction).transportState.canInsert() && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState == TransportState.EXTRACT))|| (fluidSides.get(direction).transportState == TransportState.INSERT && (storage.fluidSides().isEmpty() || storage.fluidSides().get().get(direction.getOpposite()).transportState.canExtract()))))
+                if (!e.getFluidStack().isEmpty() && ((fluidSides.get(direction).getTransport().canInsert() && storage.getStorageSides(Storages.FLUID).isPresentAnd(f-> f.getTransport(direction.getOpposite()) == TransportState.EXTRACT))|| (fluidSides.get(direction).getTransport() == TransportState.INSERT && (storage.getStorageSides(Storages.FLUID).isEmpty() || storage.getStorageSides(Storages.FLUID).get().get(direction.getOpposite()).getTransport().canExtract()))))
                     transferFluidFrom(this, direction, e);
 
             }
@@ -86,12 +82,18 @@ public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFlu
     }
 
     @Override
-    public <T extends IPlatformHandlerApi<?>> Optional<T> getStorage(Storages.Storage<T> storage, Direction direction) {
-        if (storage == Storages.FLUID) {
-                return (Optional<T>) Optional.of(FactoryAPIPlatform.filteredOf(fluidHandler, getBlockedSides().contains(direction) ? TransportState.NONE : fluidSides.getTransport(direction)));
-        }
-        return Optional.empty();
+    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+        if (storage == Storages.FLUID)
+                return ()-> (T) FactoryAPIPlatform.filteredOf(fluidHandler, getBlockedSides().contains(direction) ? TransportState.NONE : fluidSides.getTransport(direction));
+        return ArbitrarySupplier.empty();
     }
+
+    @Override
+    public ArbitrarySupplier<SideList<? super ISideType<?>>> getStorageSides(Storages.Storage<?> storage) {
+        if (storage == Storages.FLUID) return ()->fluidSides;
+        return super.getStorageSides(storage);
+    }
+
     @Nullable
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {return ClientboundBlockEntityDataPacket.create(this);}

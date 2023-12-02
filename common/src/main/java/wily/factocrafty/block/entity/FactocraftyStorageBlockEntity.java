@@ -22,7 +22,7 @@ import java.util.*;
 import static wily.factoryapi.util.StorageUtil.transferEnergyFrom;
 import static wily.factoryapi.util.StorageUtil.transferEnergyTo;
 
-public abstract class FactocraftyStorageBlockEntity extends BlockEntity implements IFactoryExpandedStorage {
+public abstract class FactocraftyStorageBlockEntity extends BlockEntity implements IFactoryExpandedStorage,ITicker {
 
 
     public FactocraftyStorageBlockEntity(BlockEntityType blockEntity, BlockPos blockPos, BlockState blockState) {
@@ -39,11 +39,11 @@ public abstract class FactocraftyStorageBlockEntity extends BlockEntity implemen
     public IPlatformItemHandler<?> inventory = FactoryAPIPlatform.getItemHandlerApi(getInvSize(), this);
 
 
-    public SideList<FluidSide> fluidSides = SideList.createSideTypeList(()->new FluidSide(fluidTank,TransportState.EXTRACT_INSERT));
+    public SideList<? super ISideType<?>> fluidSides = new SideList<>(()->new TransportSide(fluidTank.identifier(),TransportState.EXTRACT_INSERT));
 
-    public SideList<ItemSide> itemSides =  SideList.createSideTypeList(()->new ItemSide(SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT));
+    public SideList<? super ISideType<?>> itemSides =  new SideList<>(()->new TransportSide(SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT));
 
-    public SideList<TransportState> energySides = new SideList<>(()->TransportState.EXTRACT_INSERT);
+    public SideList<? super ISideType<?>> energySides = new SideList<>(()-> new TransportSide(SlotsIdentifier.ENERGY,TransportState.EXTRACT_INSERT));
 
     public CYEnergyStorage energyStorage;
 
@@ -62,53 +62,44 @@ public abstract class FactocraftyStorageBlockEntity extends BlockEntity implemen
     }
 
     public boolean hasUpgradeStorage(){ return true;}
-    @Override
-    public <T extends IPlatformHandlerApi<?>> Optional<T> getStorage(Storages.Storage<T> storage) {
-        return IFactoryExpandedStorage.super.getStorage(storage);
-    }
+
 
     @Override
-    public <T extends IPlatformHandlerApi<?>> Optional<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
         boolean b =  (direction == null);
-        if (!b && getBlockedSides().contains(direction)) return Optional.empty();
+        if (!b && getBlockedSides().contains(direction)) return ArbitrarySupplier.empty();
 
         if (storage == Storages.CRAFTY_ENERGY && hasEnergyCell()) {
             if (!b) {
-                return (Optional<T>) Optional.of(FilteredCYEnergyStorage.of(energyStorage, energySides.get(direction)));
-            }else return (Optional<T>) Optional.of(energyStorage);//(FilteredCYEnergyStorage.readable(energyStorage))
+                return ()-> (T) FilteredCYEnergyStorage.of(energyStorage, energySides.get(direction).getTransport());
+            }else return ()-> (T)energyStorage;
         }
         if (storage == Storages.ITEM && hasInventory()) {
             if (!b)
-                return (Optional<T>) Optional.of(FactoryAPIPlatform.filteredOf(inventory, direction, itemSlotsIdentifiers().get(itemSides.get(direction).identifier), itemSides.getTransport(direction)));
-            else return (Optional<T>) Optional.of(inventory);//(FilteredItemHandler.readable(inventory,null,new int[]{}))
+                return ()-> (T)FactoryAPIPlatform.filteredOf(inventory, direction, itemSlotsIdentifiers().get(itemSides.get(direction).identifier()), itemSides.getTransport(direction));
+            else return ()-> (T)inventory;
         }
         if (storage == Storages.FLUID && !getTanks().isEmpty()) {
-            if (!b && fluidSides().isPresent()) {
+            if (!b && getStorageSides(Storages.FLUID).isPresent()) {
                 for (IPlatformFluidHandler<?> f : getTanks()) {
-                    if(fluidSides.get(direction).identifier().differential() == f.identifier().differential())
-                        return (Optional<T>) Optional.of(FactoryAPIPlatform.filteredOf(f, fluidSides.getTransport(direction)));
+                    if(fluidSides.get(direction).identifier() == f.identifier())
+                        return ()-> (T) FactoryAPIPlatform.filteredOf(f, fluidSides.getTransport(direction));
                 }
             }
-            else return (Optional<T>) Optional.of(FactoryAPIPlatform.filteredOf(fluidTank,TransportState.NONE));
+            else return ()-> (T) FactoryAPIPlatform.filteredOf(fluidTank,TransportState.NONE);
         }
 
-        return Optional.empty();
+        return ArbitrarySupplier.empty();
     }
 
     @Override
-    public Optional<SideList<ItemSide>> itemSides() {
-        return hasInventory() ? Optional.of(itemSides) : Optional.empty();
+    public ArbitrarySupplier<SideList<? super ISideType<?>>> getStorageSides(Storages.Storage<?> storage) {
+        if (hasInventory() && storage == Storages.ITEM) return ()->itemSides;
+        if (hasEnergyCell() && storage == Storages.CRAFTY_ENERGY || storage == Storages.ENERGY) return ()->energySides;
+        if (!getTanks().isEmpty() && storage == Storages.FLUID) return ()->fluidSides;
+        return IFactoryExpandedStorage.super.getStorageSides(storage);
     }
 
-    @Override
-    public Optional<SideList<TransportState>> energySides() {
-        return hasEnergyCell() ? Optional.of(energySides) : Optional.empty();
-    }
-
-    @Override
-    public Optional<SideList<FluidSide>> fluidSides() {
-        return getTanks().isEmpty() ?  Optional.empty(): Optional.of(fluidSides);
-    }
 
     @Override
     public List<IPlatformFluidHandler<?>> getTanks() {
@@ -154,8 +145,6 @@ public abstract class FactocraftyStorageBlockEntity extends BlockEntity implemen
             load(tag);
 
     }
-
-
 
     @Override
     public CompoundTag getUpdateTag() {

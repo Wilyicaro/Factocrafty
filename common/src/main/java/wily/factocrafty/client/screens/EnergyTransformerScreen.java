@@ -1,18 +1,20 @@
 package wily.factocrafty.client.screens;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.machines.entity.FactocraftyEnergyTransformerBlockEntity;
-import wily.factocrafty.client.screens.widgets.FactocraftyInfoWidget;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
 import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.client.FactoryDrawableButton;
-import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.client.drawable.DrawableStatic;
+import wily.factoryapi.base.client.drawable.DrawableStaticProgress;
+import wily.factoryapi.base.client.drawable.FactoryDrawableButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -25,17 +27,20 @@ public class EnergyTransformerScreen extends FactocraftyStorageScreen<Factocraft
         super(abstractContainerMenu, inventory, component);
     }
 
-    protected Supplier<IFactoryDrawableType.DrawableStaticProgress> convertedEnergyCellType;
+    protected Supplier<DrawableStaticProgress> convertedEnergyCellType;
 
     @Override
     protected void init() {
         super.init();
         convertedEnergyCellType = ()-> FactocraftyDrawables.PLATFORM_ENERGY_CELL.createStatic(leftPos + 112, topPos+ 17);
         defaultProgress = FactocraftyDrawables.TRANSFORMER_PROGRESS.createStatic(leftPos,topPos);
-        addWidget(new FactocraftyInfoWidget(leftPos - 20,  topPos + 100,218 , 20,()->Component.translatable("tooltip.factocrafty.config", getTitle().getString()), null)).button =
-                (x,y)->new FactoryDrawableButton(x + 2, y + 2,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(be.getBlockPos(), be.conversionMode.get() >= 1 ? 0: 1, be.additionalSyncInt.indexOf(be.conversionMode))), be.getConversionMode().getComponent(), FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(be.getConversionMode().isPlatform() ? 11 : 10));
+        addNestedRenderable(new DrawableStatic( FactocraftyDrawables.MACHINE_BUTTON_LAYOUT,leftPos - 20,  topPos + 100));
     }
-
+    public List<? extends Renderable> getNestedRenderables() {
+        List<Renderable> list = new ArrayList<>(nestedRenderables);
+        list.add(new FactoryDrawableButton(leftPos - 20 + 2, topPos + 100 + 2, FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(be.getConversionMode().isPlatform() ? 11 : 10)).tooltips(List.of(Component.translatable("tooltip.factocrafty.machine_config", title.getString()),be.getConversionMode().getComponent())).onPress((b, i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(be.getBlockPos(), be.conversionMode.get() >= 1 ? 0: 1, be.additionalSyncInt.indexOf(be.conversionMode)))));
+        return list;
+    }
     @Override
     protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
         List<Component> energyComponents = getCompleteEnergyTooltip("tooltip.factory_api.energy_stored", Component.translatable("tier.factocrafty.burned.note"),be.energyStorage);

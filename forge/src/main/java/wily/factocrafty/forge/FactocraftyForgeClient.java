@@ -29,8 +29,6 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = Factocrafty.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FactocraftyForgeClient {
 
-    public static List<ResourceLocation> REGISTER_MODELS = new ArrayList<>();
-
     @SubscribeEvent
     public static void clientInit(FMLClientSetupEvent event){event.enqueueWork(FactocraftyClient::enqueueInit);}
     @SubscribeEvent

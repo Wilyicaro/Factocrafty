@@ -10,7 +10,8 @@
   "_comment": "GUI",
   "gui.factocrafty.progress": "Progress %s/%s",
   "gui.factocrafty.fuelBurnTimeProgress": "Fuel burn time %s/%s",
-  "gui.factocrafty.heat": "Output Heat: %s",
+  "gui.factocrafty.output_heat": "Output Heat: %s ºC",
+  "gui.factocrafty.heat": "Heat: %s ºC",
   "gui.factocrafty.armour": "Armour",
   "gui.factocrafty.waste": "Waste: %s",
   "gui.factocrafty.heat_up": "Heat up",
@@ -19,6 +20,8 @@
   "gui.factocrafty.window.upgrade": "Upgrade Storage",
   "gui.factocrafty.window.upgrade.efficiency": "Total Efficiency: %s",
   "gui.factocrafty.window.equipment": "Equipment Slots",
+  "gui.factocrafty.nuclear_reactor": "Nuclear Reactor",
+  "gui.factocrafty.window.injection_rate": "Injection Rate: %s g/t",
 
   "_comment": "Block",
   "block.factocrafty.generator": "Thermal Generator",
@@ -30,6 +33,7 @@
   "block.factocrafty.hybrid_solar_panel": "Hybrid Solar Panel",
   "block.factocrafty.ultimate_solar_panel": "Ultimate Solar Panel",
   "block.factocrafty.quantum_solar_panel": "Quantum Solar Panel",
+  "block.factocrafty.nuclear_reactor_core": "Nuclear Reactor Core",
 
 
   "block.factocrafty.iron_furnace": "Iron Furnace",
@@ -72,6 +76,12 @@
 
   "block.factocrafty.machine_frame": "Machine Frame",
   "block.factocrafty.advanced_machine_frame": "Advanced Machine Frame",
+
+  "block.factocrafty.nuclear_reactor_casing": "Reactor Casing",
+  "block.factocrafty.nuclear_reactor_chamber": "Reactor Chamber",
+  "block.factocrafty.reactor_containment": "Reactor Containment",
+  "block.factocrafty.reactor_glass": "Reactor Glass",
+
 
   "block.factocrafty.resin_sheet": "Resin Sheet",
   "block.factocrafty.rubber_sheet": "Rubber Sheet",
@@ -259,6 +269,14 @@
 
 
   "item.factocrafty.iron_rod": "Iron Rod",
+
+  "item.factocrafty.uranium_rod": "Uranium Rod",
+  "item.factocrafty.control_rod": "Control Rod",
+  "item.factocrafty.control_uranium_rod": "Control Uranium Rod",
+  "item.factocrafty.dual_uranium_rod": "Dual Uranium Rod",
+  "item.factocrafty.triple_uranium_rod": "Triple Uranium Rod",
+  "item.factocrafty.quadruple_uranium_rod": "Quadruple Uranium Rod",
+  "item.factocrafty.sextruple_uranium_rod": "Sextruple Uranium Rod",
 
   "item.factocrafty.poly_solar_panel": "Poly Solar Panel",
   "item.factocrafty.mono_solar_panel": "Mono Solar Panel",
@@ -510,7 +528,7 @@
   "tooltip.factocrafty.config.south": "South",
   "tooltip.factocrafty.config.east": "East",
   "tooltip.factocrafty.config.west": "West",
-  "tooltip.factocrafty.config": "%s Configs",
+  "tooltip.factocrafty.machine_config": "%s Configs",
   "tooltip.factocrafty.config.input_type.item": "%s Items",
   "tooltip.factocrafty.config.input_type.fluid": "%s Fluids",
   "tooltip.factocrafty.config.infusion_mode.mixer": "%s Mixing",
@@ -527,6 +545,9 @@
   "tooltip.factory_api.config.identifier.gas": "Gas",
   "tooltip.factory_api.config.identifier.io": "Input/Output",
   "tooltip.factory_api.config.identifier.oi": "Output/Input",
+  "tooltip.factory_api.config.identifier.principal_chamber" : "Principal Chamber",
+  "tooltip.factory_api.config.identifier.second_chamber" : "2nd Chamber",
+  "tooltip.factory_api.config.identifier.third_chamber" : "3rd Chamber",
 
   "_comment": "Category",
   "category.factocrafty.recipe.macerating": "Macerating",
@@ -541,10 +562,10 @@
   "category.factocrafty.recipe.scrap_box": "Scrap Box Items",
   "category.factocrafty.keyboard.armor_features" :  "Factocrafty Armor Features",
 
-  "key.factocrafty.v" : "Vision change",
-  "key.factocrafty.b" : "Boots features",
-  "key.factocrafty.l" : "Leggings features",
-  "key.factocrafty.g" : "Gravity 0 feature",
+  "key.factocrafty.v" : "Toggle Vision feature",
+  "key.factocrafty.b" : "Toggle Boots features",
+  "key.factocrafty.l" : "Toggle Leggings features",
+  "key.factocrafty.g" : "Toggle Gravity 0 feature",
 
   "subtitles.factocrafty.macerator": "Macerator working",
   "subtitles.factocrafty.extractor": "Extractor working",

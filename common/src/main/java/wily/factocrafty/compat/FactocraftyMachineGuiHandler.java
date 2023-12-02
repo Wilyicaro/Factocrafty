@@ -2,12 +2,16 @@ package wily.factocrafty.compat;
 
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.renderer.Rect2i;
 import org.jetbrains.annotations.NotNull;
 import wily.factocrafty.block.machines.entity.ProcessMachineBlockEntity;
 import wily.factocrafty.client.screens.FactocraftyStorageScreen;
 import wily.factocrafty.client.screens.FactocraftyWidget;
+import wily.factoryapi.base.client.IWindowWidget;
+import wily.factoryapi.base.client.drawable.AbstractDrawableButton;
+import wily.factoryapi.base.client.drawable.AbstractDrawableStatic;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,9 +22,10 @@ public class FactocraftyMachineGuiHandler implements IGuiContainerHandler<Factoc
     public @NotNull List<Rect2i> getGuiExtraAreas(FactocraftyStorageScreen<?> containerScreen) {
         List<Rect2i> extraAreas = new ArrayList<>();
         extraAreas.add(containerScreen.getBounds());
-        for ( GuiEventListener listener :containerScreen.children())
-            if (listener instanceof FactocraftyWidget widget && widget.isVisible())
+        for (Renderable listener : containerScreen.getNestedRenderables())
+            if (listener instanceof IWindowWidget widget && widget.isVisible())
                 extraAreas.add(widget.getBounds());
+            else if (listener instanceof AbstractDrawableStatic<?,?> b) extraAreas.add(b);
         return extraAreas;
     }
 

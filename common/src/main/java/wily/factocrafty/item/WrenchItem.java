@@ -8,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
@@ -16,15 +15,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
-import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
 import wily.factocrafty.block.transport.fluid.FluidPipeBlockEntity;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.network.FactocraftyStateButtonPacket;
-import wily.factoryapi.base.FluidSide;
+import wily.factocrafty.network.FactocraftyStorageSidesPacket;
+import wily.factoryapi.base.Storages;
 
 public class WrenchItem extends Item {
     public WrenchItem(Properties properties) {
@@ -67,10 +64,9 @@ public class WrenchItem extends Item {
                     Vec3 center = useOnContext.getClickedPos().getCenter();
                     Vec3 subtract = center.subtract(useOnContext.getClickLocation());
                     Direction direction = player.isShiftKeyDown() ? useOnContext.getClickedFace() : Direction.getNearest(subtract.x, subtract.y, subtract.z).getOpposite();
-                    if (be.fluidSides().isPresent() && !be.fluidSides().get().isEmpty()) {
-                        FluidSide fluidSide = be.fluidSides().get().get(direction);
-                        Factocrafty.NETWORK.sendToServer(new FactocraftyStateButtonPacket(pos, 2, direction.ordinal(),(fluidSide.transportState =  fluidSide.transportState.nextStateSide()), 0));
-                    }
+                    be.getStorageSides(Storages.FLUID).ifPresent(t ->
+                        Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(pos, 2, direction.ordinal(), t.get(direction).withTransport(t.getTransport(direction).next()).getTransport(), 0))
+                    );
                     be.setChanged();
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide);

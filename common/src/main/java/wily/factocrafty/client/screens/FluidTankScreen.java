@@ -17,8 +17,8 @@ public class FluidTankScreen extends FactocraftyStorageScreen<FactocraftyFluidTa
     protected void init() {
         super.init();
         fluidTankType.drawable = FactocraftyDrawables.BIG_FLUID_TANK;
-        fluidTankType.posX = leftPos + 81;
-        fluidTankType.posY = topPos + 17;
+        fluidTankType.setX(leftPos + 81);
+        fluidTankType.setY(topPos + 17);
     }
 
     public ResourceLocation GUI() {return new ResourceLocation(Factocrafty.MOD_ID , "textures/gui/container/fluid_tank.png");}

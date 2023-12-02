@@ -137,12 +137,12 @@ public class FactocraftyMenuBlockEntity extends FactocraftyStorageBlockEntity im
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-        return new FactocraftyStorageMenu<>(menu, i,getBlockPos(),player);
+        return new FactocraftyStorageMenu<>(menu, i,getBlockPos(),player.getInventory());
     }
 
 
     @Override
     public void saveExtraData(FriendlyByteBuf buf) {
-        buf.writeBlockPos(getBlockPos());
+        buf.writeBlockPos(worldPosition);
     }
 }

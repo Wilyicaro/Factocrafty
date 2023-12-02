@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"": { "model": "factocrafty:block/nuclear_reactor_chamber" }
+	},
+	"athena:loader": "athena:ctm",
+	"ctm_textures": {
+		"center": "factocrafty:block/ctm/nuclear_reactor_chamber_center",
+		"empty": "factocrafty:block/ctm/nuclear_reactor_chamber_empty",
+		"horizontal": "factocrafty:block/ctm/nuclear_reactor_chamber_horizontal",
+		"vertical": "factocrafty:block/ctm/nuclear_reactor_chamber_vertical",
+		"particle": "factocrafty:block/nuclear_reactor_chamber"
+	}
+}

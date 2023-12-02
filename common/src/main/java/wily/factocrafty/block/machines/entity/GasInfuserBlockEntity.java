@@ -21,9 +21,9 @@ import java.util.stream.Stream;
 
 public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasInfuserRecipe>{
 
-    public SlotsIdentifier GAS_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.LIGHT_PURPLE,"gas", 0);
-    public SlotsIdentifier IO_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.DARK_PURPLE,"io", 1);
-    public SlotsIdentifier OI_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.DARK_RED,"oi", 2);
+    public SlotsIdentifier GAS_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.LIGHT_PURPLE,"gas");
+    public SlotsIdentifier IO_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.DARK_PURPLE,"io");
+    public SlotsIdentifier OI_TANK_IDENTIFIER =  new SlotsIdentifier(ChatFormatting.DARK_RED,"oi");
     public GasInfuserBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.GAS_INFUSER_MENU.get(), Registration.GASEOUS_INFUSION_RECIPE.get(), Registration.GAS_INFUSER_BLOCK_ENTITY.get(), blockPos, blockState);
         fluidTank = FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity(), this, f ->  FactocraftyExpectPlatform.isGas(f.getFluid()) && getFilteredRecipes().anyMatch(rcp-> getInfusionMode().isMixer() ? rcp.getFluidIngredient().isFluidEqual(f) : rcp.getResultFluid().isFluidEqual(f)), GAS_TANK_IDENTIFIER, TransportState.EXTRACT_INSERT);

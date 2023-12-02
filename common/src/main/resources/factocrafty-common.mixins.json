@@ -19,7 +19,8 @@
     "AxeItemRedirector",
     "EntityInjector",
     "LivingEntityInjector",
-    "MultiplayerGameModeInjector"
+    "MultiplayerGameModeInjector",
+    "ServerGameModeInjector"
   ],
   "injectors": {
     "defaultRequire": 1

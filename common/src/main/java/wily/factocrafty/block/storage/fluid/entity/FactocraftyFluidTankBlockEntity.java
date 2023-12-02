@@ -1,6 +1,5 @@
 package wily.factocrafty.block.storage.fluid.entity;
 
-import dev.architectury.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -10,13 +9,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.FactocraftyExpectPlatform;
-import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
-import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
-import wily.factocrafty.block.storage.fluid.FactocraftyFluidTankBlock;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyFluidItemSlot;
-import wily.factocrafty.util.registering.FactocraftyBlockEntities;
+import wily.factocrafty.util.registering.IFactocraftyBlockEntityType;
 import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 
@@ -26,11 +22,12 @@ import java.util.Optional;
 
 public class FactocraftyFluidTankBlockEntity extends FactocraftyMenuBlockEntity {
     public FactocraftyFluidTankBlockEntity(FactoryCapacityTiers capacityTier, BlockPos blockPos, BlockState blockState) {
-        super(Registration.FLUID_TANK_MENU.get(), FactocraftyBlockEntities.ofBlock(blockState.getBlock()), blockPos, blockState);
-        replaceSidedStorage(BlockSide.FRONT,fluidSides,  new FluidSide(fluidTank,TransportState.EXTRACT));
-        replaceSidedStorage(BlockSide.BACK,fluidSides, new FluidSide(fluidTank, TransportState.INSERT));
+        super(Registration.FLUID_TANK_MENU.get(), IFactocraftyBlockEntityType.ofBlock(blockState.getBlock()), blockPos, blockState);
         fluidTank =  FactoryAPIPlatform.getFluidHandlerApi(getTankCapacity() * capacityTier.capacityMultiplier * 8, this, (f)-> !FactocraftyExpectPlatform.isGas(f.getFluid()), SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
         STORAGE_SLOTS = new int[]{0,1};
+        fluidSides = new SideList<>(()->new TransportSide(fluidTank.identifier(),TransportState.NONE));
+        replaceSidedStorage(BlockSide.FRONT,fluidSides,  new TransportSide(fluidTank.identifier(),TransportState.EXTRACT));
+        replaceSidedStorage(BlockSide.BACK,fluidSides, new TransportSide(fluidTank.identifier(), TransportState.INSERT));
     }
     public double unitHeight = 0;
     public long smoothFluidAmount = 0;
@@ -58,8 +55,8 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyMenuBlockEntity 
     }
 
     @Override
-    public Optional<SideList<FluidSide>> fluidSides() {
-        return super.fluidSides();
+    public Map<SlotsIdentifier, int[]> itemSlotsIdentifiers() {
+        return super.itemSlotsIdentifiers();
     }
 
     @Override

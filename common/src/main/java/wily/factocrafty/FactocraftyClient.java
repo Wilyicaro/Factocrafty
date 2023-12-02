@@ -44,8 +44,6 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.Level;
 import wily.factocrafty.block.FactocraftyLedBlock;
 import wily.factocrafty.block.FactocraftyWoodType;
-import wily.factocrafty.block.machines.entity.ChangeableInputMachineBlockEntity;
-import wily.factocrafty.block.machines.entity.CompressorBlockEntity;
 import wily.factocrafty.client.renderer.block.*;
 import wily.factocrafty.util.registering.*;
 import wily.factocrafty.block.entity.FactocraftyLedBlockEntity;
@@ -249,15 +247,16 @@ public class FactocraftyClient {
         });
         FactocraftyWoodType.addWoodType(FactocraftyWoodType.RUBBER);
         RenderTypeRegistry.register(RenderType.translucent(), FactocraftyFluids.COOLANT.get(),FactocraftyFluids.FLOWING_COOLANT.get(),FactocraftyFluids.GASOLINE.get(),FactocraftyFluids.FLOWING_GASOLINE.get(),FactocraftyFluids.ISOPRENE.get(),FactocraftyFluids.FLOWING_ISOPRENE.get(),FactocraftyFluids.NAPHTHA.get(),FactocraftyFluids.FLOWING_NAPHTHA.get(),FactocraftyFluids.METHANE.get(),FactocraftyFluids.FLOWING_METHANE.get(),FactocraftyFluids.WATER_VAPOR.get(),FactocraftyFluids.FLOWING_WATER_VAPOR.get(),FactocraftyFluids.OXYGEN.get(),FactocraftyFluids.FLOWING_OXYGEN.get(),FactocraftyFluids.HYDROGEN.get(),FactocraftyFluids.FLOWING_HYDROGEN.get());
-        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), FactocraftyCables.CRYSTAL_CABLE.get());
+        RenderTypeRegistry.register(RenderType.cutoutMipped(), Registration.REACTOR_GLASS.get(), Registration.RGB_LED_BLOCK.get(),Registration.RGB_LED_PANEL.get(),Registration.REINFORCED_GLASS.get(), Registration.REINFORCED_GLASS_PANE.get(), Registration.RUBBER_TREE_SAPLING.get(), Registration.STRIPPED_RUBBER_LOG.get(), Registration.RUBBER_DOOR.get(), Registration.RUBBER_TRAPDOOR.get(), Registration.GENERATOR.get(), FactocraftyBlocks.GEOTHERMAL_GENERATOR.get(), FactocraftyCables.CRYSTAL_CABLE.get());
         BlockEntityRendererRegistry.register(Registration.RUBBER_SIGN_BLOCK_ENTITY.get(), RubberSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.RUBBER_HANGING_SIGN_BLOCK_ENTITY.get(), RubberHangingSignRenderer::new);
         BlockEntityRendererRegistry.register(Registration.TREETAP_BLOCK_ENTITY.get(), TreeTapRenderer::new);
         BlockEntityRendererRegistry.register(Registration.FLUID_PUMP_BLOCK_ENTITY.get(), FactocraftyMachineRenderer::new);
         for (FactocraftyFluidTanks tank : FactocraftyFluidTanks.values())
-            BlockEntityRendererRegistry.register(FactocraftyBlockEntities.ofBlock(tank.get()), FactocraftyLiquidTankRenderer::new);
-        MenuRegistry.registerScreenFactory(Registration.GENERATOR_MENU.get(), GeneratorScreen::new);
+            BlockEntityRendererRegistry.register(IFactocraftyBlockEntityType.ofBlock(tank.get()), FactocraftyLiquidTankRenderer::new);
+        MenuRegistry.registerScreenFactory(Registration.GENERATOR_MENU.get(), GeneratorScreen.cast());
         MenuRegistry.registerScreenFactory(Registration.GEOTHERMAL_GENERATOR_MENU.get(), GeothermalGeneratorScreen::new);
+        MenuRegistry.registerScreenFactory(Registration.NUCLEAR_REACTOR_MENU.get(), NuclearReactorScreen::new);
         MenuRegistry.registerScreenFactory(Registration.FLUID_PUMP_MENU.get(), FluidPumpScreen::new);
         MenuRegistry.registerScreenFactory(Registration.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         MenuRegistry.registerScreenFactory(Registration.MACERATOR_MENU.get(), BasicMachineScreen.cast());

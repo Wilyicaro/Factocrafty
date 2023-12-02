@@ -2,17 +2,21 @@ package wily.factocrafty.client.screens;
 
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.machines.entity.ChangeableInputMachineBlockEntity;
-import wily.factocrafty.client.screens.widgets.FactocraftyInfoWidget;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
-import wily.factocrafty.util.ScreenUtil;
-import wily.factoryapi.base.client.FactoryDrawableButton;
+import wily.factoryapi.base.client.drawable.DrawableStatic;
+import wily.factoryapi.base.client.drawable.FactoryDrawableButton;
+import wily.factoryapi.util.ScreenUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static wily.factoryapi.util.StorageStringUtil.getCompleteEnergyTooltip;
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
@@ -34,10 +38,13 @@ public class ChangeableInputMachineScreen<T extends ChangeableInputMachineBlockE
     @Override
     protected void init() {
         super.init();
-        addWidget(new FactocraftyInfoWidget(leftPos - 20,  topPos + 100,218 , 20,()->Component.translatable("tooltip.factocrafty.config", be.getBlockState().getBlock().getName().getString()), null)).button =
-                (x,y)-> new FactoryDrawableButton(x + 2, y + 2,(b)-> Factocrafty.NETWORK.sendToServer( new FactocraftySyncIntegerBearerPacket(be.getBlockPos(), be.inputType.get() >= 1 ? 0: 1, be.additionalSyncInt.indexOf(be.inputType))), Component.translatable("tooltip.factocrafty.config.input_type."+ be.getInputType().getName(), I18n.get("category.factocrafty.recipe." + getRecipeTypeName())), FactocraftyDrawables.LARGE_BUTTON).icon( FactocraftyDrawables.getButtonIcon(be.getInputType().isItem() ? 8 : 2));
+        addNestedRenderable(new DrawableStatic( FactocraftyDrawables.MACHINE_BUTTON_LAYOUT,leftPos - 20,  topPos + 100));
     }
-
+    public List<? extends Renderable> getNestedRenderables() {
+        List<Renderable> list = new ArrayList<>(nestedRenderables);
+        list.add(new FactoryDrawableButton(leftPos - 20 + 2, topPos + 100 + 2, FactocraftyDrawables.LARGE_BUTTON).tooltips(List.of(Component.translatable("tooltip.factocrafty.machine_config", title.getString()).append(":"),Component.translatable("tooltip.factocrafty.config.input_type."+ be.getInputType().getName(), I18n.get("category.factocrafty.recipe." + getRecipeTypeName())))).icon(FactocraftyDrawables.getButtonIcon(be.getInputType().isItem() ? 8 : 2)).onPress((b, i)-> Factocrafty.NETWORK.sendToServer( new FactocraftySyncIntegerBearerPacket(be.getBlockPos(), be.inputType.get() >= 1 ? 0: 1, be.additionalSyncInt.indexOf(be.inputType)))));
+        return list;
+    }
     @Override
     protected void renderStorageTooltips(GuiGraphics graphics, int i, int j) {
         if (energyCellType.inMouseLimit(i,j)) graphics.renderComponentTooltip(font, getCompleteEnergyTooltip("tooltip.factory_api.energy_stored", Component.translatable("tier.factocrafty.burned.note"),be.energyStorage),i, j);

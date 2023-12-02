@@ -15,7 +15,7 @@
   },
   "display": {
     "announce_to_chat": false,
-    "background": "factocrafty:textures/block/machine_frame.png",
+    "background": "factocrafty:textures/block/ctm/nuclear_reactor_casing_empty.png",
     "description": {
       "translate": "advancements.factocrafty.progress.root.description"
     },

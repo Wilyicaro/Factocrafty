@@ -49,8 +49,10 @@ public class FluidPipeBlock extends FactocraftySolidConduitBlock<FactocraftyFlui
 
 
     private static final VoxelShape SHAPE_CUBE = Block.box(5, 5, 5, 11, 11, 11);
+
+    private static final VoxelShape SHAPE_LARGE_CUBE = Block.box(4, 4, 4, 12, 12, 12);
     @Override
     protected VoxelShape getCenterCubeShape() {
-        return SHAPE_CUBE;
+        return conduitType.ordinal() < FactocraftyFluidPipes.values().length - 2 ?  SHAPE_CUBE : SHAPE_LARGE_CUBE;
     }
 }

@@ -80,8 +80,8 @@ public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
         return energyStorage.getMaxEnergyStored();
     }
 
-    public static ICraftyEnergyStorage of(ICraftyEnergyStorage fluidHandler, TransportState transportState){
-        return new FilteredCYEnergyStorage(fluidHandler,transportState){};
+    public static ICraftyEnergyStorage of(ICraftyEnergyStorage energyStorage, TransportState transportState){
+        return new FilteredCYEnergyStorage(energyStorage,transportState){};
     }
 
     @Override

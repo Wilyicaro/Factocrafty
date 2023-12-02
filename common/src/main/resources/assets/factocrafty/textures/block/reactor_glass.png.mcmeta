@@ -1,0 +1,13 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type": "CTM",
+        "layer": "CUTOUT",
+        "textures":[
+            "factocrafty:block/ctm/reactor_glass"
+        ],
+        "extra": {
+            "connect_to": [{"block":"factocrafty:reactor_glass"},{"block":"factocrafty:nuclear_reactor_casing"},{"block":"factocrafty:nuclear_reactor_chamber"}]
+        }
+    }
+}

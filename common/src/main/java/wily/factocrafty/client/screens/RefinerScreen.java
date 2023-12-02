@@ -9,12 +9,10 @@ import wily.factocrafty.Factocrafty;
 import wily.factocrafty.block.machines.entity.RefinerBlockEntity;
 import wily.factocrafty.inventory.FactocraftyStorageMenu;
 import wily.factocrafty.network.FactocraftySyncIntegerBearerPacket;
-import wily.factoryapi.base.client.FactoryDrawableButton;
-import wily.factoryapi.base.client.IFactoryDrawableType;
+import wily.factoryapi.base.client.drawable.DrawableStatic;
+import wily.factoryapi.base.client.drawable.FactoryDrawableButton;
+import wily.factoryapi.util.ScreenUtil;
 
-import java.util.List;
-
-import static wily.factocrafty.util.ScreenUtil.renderScaled;
 import static wily.factoryapi.util.StorageStringUtil.getFluidTooltip;
 
 public class RefinerScreen extends ChangeableInputMachineScreen<RefinerBlockEntity> {
@@ -27,26 +25,22 @@ public class RefinerScreen extends ChangeableInputMachineScreen<RefinerBlockEnti
     }
 
     public ResourceLocation GUI() {return BACKGROUND_LOCATION;}
-    private IFactoryDrawableType.DrawableStatic<IFactoryDrawableType.DrawableImage> resultTank;
+    private DrawableStatic resultTank;
 
     @Override
     protected void init() {
         super.init();
+        addNestedRenderable(new FactoryDrawableButton(leftPos + 85,topPos + 26,FactocraftyDrawables.SMALL_BUTTON).tooltip(Component.translatable("gui.factocrafty.heat_up")).icon(FactocraftyDrawables.getSmallButtonIcon(3)).onPress((b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(be.getBlockPos(),Math.min(be.recipeIndex.get() + 1, be.recipeSize.get() - 1), be.additionalSyncInt.indexOf(be.recipeIndex)))));
+        addNestedRenderable(new FactoryDrawableButton( leftPos + 85,topPos + 48,FactocraftyDrawables.SMALL_BUTTON).tooltip(Component.translatable("gui.factocrafty.heat_down")).icon(FactocraftyDrawables.getSmallButtonIcon(4)).onPress((b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(be.getBlockPos(),Math.max(be.recipeIndex.get() - 1,0), be.additionalSyncInt.indexOf(be.recipeIndex)))));
         resultTank = FactocraftyDrawables.FLUID_TANK.createStatic(leftPos + 138, topPos + 17);
     }
 
-    @Override
-    public List<FactoryDrawableButton> addButtons(List<FactoryDrawableButton> list) {
-        list.add(new FactoryDrawableButton(leftPos + 85,topPos + 26,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(be.getBlockPos(),Math.min(be.recipeIndex.get() + 1, be.recipeSize.get() - 1), be.additionalSyncInt.indexOf(be.recipeIndex))),Component.translatable("gui.factocrafty.heat_up"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(3)));
-        list.add(new FactoryDrawableButton( leftPos + 85,topPos + 48,(b)-> Factocrafty.NETWORK.sendToServer(new FactocraftySyncIntegerBearerPacket(be.getBlockPos(),Math.max(be.recipeIndex.get() - 1,0), be.additionalSyncInt.indexOf(be.recipeIndex))),Component.translatable("gui.factocrafty.heat_down"),FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(4)));
-        return super.addButtons(list);
-    }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int i, int j) {
         super.renderLabels(graphics,i,j);
         String s = I18n.get("gui.factocrafty.heat", be.recipeHeat.get());
-        renderScaled(graphics.pose(),s,  (imageWidth - (font.width(s) / 2)) / 2 + 4, 18,0.5F,0xFF9933,true);
+        ScreenUtil.renderScaled(graphics.pose(),s,  (imageWidth - (font.width(s) / 2)) / 2 + 4, 18,0.5F,0xFF9933,true);
     }
 
     @Override

@@ -14,12 +14,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import wily.factoryapi.util.ScreenUtil;
 
 import java.text.NumberFormat;
 import java.util.List;
 
 import static wily.factocrafty.Factocrafty.MOD_ID;
-import static wily.factocrafty.util.ScreenUtil.renderScaled;
 
 public class ScrapBoxCategory implements IRecipeCategory<FactocraftyJeiRecipeTypes.IScrapBoxRecipe> {
 
@@ -43,7 +43,7 @@ public class ScrapBoxCategory implements IRecipeCategory<FactocraftyJeiRecipeTyp
             NumberFormat n = NumberFormat.getPercentInstance();
             n.setMinimumFractionDigits(0);
             n.setMaximumFractionDigits(3);
-            if (!i.isEmpty() && !list.isEmpty()) renderScaled(graphics.pose(), n.format(list.get(0).second()),16,30,0.5F,0x7E7E7E,false);
+            if (!i.isEmpty() && !list.isEmpty()) ScreenUtil.renderScaled(graphics.pose(), n.format(list.get(0).second()),16,30,0.5F,0x7E7E7E,false);
         })));
 
     }

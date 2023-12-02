@@ -11,9 +11,8 @@ import net.minecraft.client.resources.language.I18n;
 import wily.factocrafty.client.screens.FactocraftyDrawables;
 import wily.factocrafty.client.screens.GasInfuserScreen;
 import wily.factocrafty.recipes.GasInfuserRecipe;
-import wily.factocrafty.util.ScreenUtil;
+import wily.factoryapi.util.ScreenUtil;
 
-import static wily.factocrafty.util.ScreenUtil.renderScaled;
 
 public class GasInfuserCategory extends FactocraftyMachineCategory<GasInfuserRecipe> {
 
@@ -27,7 +26,7 @@ public class GasInfuserCategory extends FactocraftyMachineCategory<GasInfuserRec
 
     }
     public void drawExp(GasInfuserRecipe recipe, GuiGraphics graphics){
-        if (recipe.getExperience() > 0)renderScaled(graphics.pose(),  I18n.get("gui.jei.category.smelting.experience", recipe.getExperience()), 62, -4, 0.5f, 0x7E7E7E, false);
+        if (recipe.getExperience() > 0)ScreenUtil.renderScaled(graphics.pose(),  I18n.get("gui.jei.category.smelting.experience", recipe.getExperience()), 62, -4, 0.5f, 0x7E7E7E, false);
     }
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GasInfuserRecipe recipe, IFocusGroup focuses) {

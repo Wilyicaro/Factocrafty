@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
@@ -15,6 +16,7 @@ import wily.factocrafty.block.generator.SolarPanelTiers;
 import wily.factocrafty.block.transport.FactocraftyConduitBlock;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.inventory.FactocraftyCYItemSlot;
+import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 
 import java.util.List;
@@ -71,13 +73,13 @@ public class SolarPanelBlockEntity extends FactocraftyMenuBlockEntity {
             super.tick();
             for (Direction direction : Direction.values()) {
                 BlockPos pos = getBlockPos().relative(direction);
-                if (level.getBlockState(pos).getBlock() instanceof IFactocraftyCYEnergyBlock energyBlock && energyBlock.isEnergyReceiver() && !(energyBlock instanceof FactocraftyConduitBlock<?,?>)) {
-                    IFactoryStorage CYEbe = (IFactoryStorage) level.getBlockEntity(pos);
-                    if (CYEbe != null)
-                        CYEbe.getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(this,direction, e));
-                }
+                BlockEntity be = level.getBlockEntity(pos);
+                if (be != null && (!(be.getBlockState().getBlock() instanceof IFactocraftyCYEnergyBlock b) || b.isEnergyReceiver()))
+                    FactoryAPIPlatform.getPlatformFactoryStorage(be).getStorage(Storages.CRAFTY_ENERGY,direction.getOpposite()).ifPresent((e)-> transferEnergyTo(this, direction, e));
             }
-            if ( tickEnergy.get() > 0 != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)) level.setBlock(worldPosition,getBlockState().setValue(FactocraftyMachineBlock.ACTIVE,tickEnergy.get() > 0),3);
+            if (tickEnergy.get() > 0 != getBlockState().getValue(FactocraftyMachineBlock.ACTIVE)){
+                level.setBlock(worldPosition,getBlockState().setValue(FactocraftyMachineBlock.ACTIVE,tickEnergy.get() > 0),3);
+            }
         }
     }
 

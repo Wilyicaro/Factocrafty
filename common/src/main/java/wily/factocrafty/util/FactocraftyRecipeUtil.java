@@ -26,6 +26,6 @@ public class FactocraftyRecipeUtil {
             ItemStack s = i.getItems()[j];
             if (s.getItem().arch$registryName().getNamespace().equals(Factocrafty.MOD_ID)) return s;
         }
-        return i.getItems()[0];
+        return i.getItems().length == 0 ? ItemStack.EMPTY : i.getItems()[0];
     }
 }

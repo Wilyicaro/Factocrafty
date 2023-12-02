@@ -19,6 +19,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import wily.factocrafty.block.FactocraftyEntityBlock;
 import wily.factocrafty.block.transport.energy.entity.CableBlockEntity;
 import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
 import wily.factocrafty.util.registering.IFactocraftyConduit;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FactocraftyConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,? extends FactocraftyConduitBlock<T,BE>,BE>, BE extends BlockEntity>  extends BaseEntityBlock{
+public class FactocraftyConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,? extends FactocraftyConduitBlock<T,BE>,BE>, BE extends BlockEntity>  extends FactocraftyEntityBlock {
     public EnumProperty<ConduitSide> NORTH;
     public EnumProperty<ConduitSide> EAST;
     public EnumProperty<ConduitSide> SOUTH;
@@ -79,7 +80,10 @@ public class FactocraftyConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,?
         return SHAPES_CACHE.get(blockState);
     }
 
-
+    @Override
+    public RenderShape getRenderShape(BlockState blockState) {
+        return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
 
     @Override
     public BlockState rotate(BlockState blockState, Rotation rotation) {
@@ -118,22 +122,6 @@ public class FactocraftyConduitBlock<T extends Enum<T> & IFactocraftyConduit<T,?
         WEST = EnumProperty.create("west", ConduitSide.class, this::isConnectionTypeValid);
         PROPERTY_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.EAST, EAST, Direction.SOUTH, SOUTH, Direction.WEST, WEST));
         builder.add(NORTH, EAST, SOUTH, WEST);
-    }
-
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return(level1, pos, blockState1, be) -> {
-            if (be instanceof ConduitBlockEntity<?> conduit)
-                conduit.tick();
-        };
     }
 
     @Override

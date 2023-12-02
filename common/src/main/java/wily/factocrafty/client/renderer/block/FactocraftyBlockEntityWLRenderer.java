@@ -24,8 +24,9 @@ import wily.factocrafty.block.storage.fluid.entity.FactocraftyFluidTankBlockEnti
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.util.registering.FactocraftyFluidTanks;
 import wily.factoryapi.base.FactoryCapacityTiers;
+import wily.factoryapi.base.client.IFactoryBlockEntityWLRenderer;
 
-public class FactocraftyBlockEntityWLRenderer extends BlockEntityWithoutLevelRenderer {
+public class FactocraftyBlockEntityWLRenderer extends BlockEntityWithoutLevelRenderer implements IFactoryBlockEntityWLRenderer {
 
 
     private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;

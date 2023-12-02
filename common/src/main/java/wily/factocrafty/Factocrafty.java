@@ -26,11 +26,12 @@ public class Factocrafty {
         NETWORK.register(FactocraftySyncFluidPacket.class,FactocraftySyncFluidPacket::encode,FactocraftySyncFluidPacket::new, FactocraftySyncFluidPacket::apply);
         NETWORK.register(FactocraftySyncEnergyPacket.class,FactocraftySyncEnergyPacket::encode,FactocraftySyncEnergyPacket::new, FactocraftySyncEnergyPacket::apply);
         NETWORK.register(FactocraftySyncProgressPacket.class,FactocraftySyncProgressPacket::encode,FactocraftySyncProgressPacket::new, FactocraftySyncProgressPacket::apply);
-        NETWORK.register(FactocraftyStateButtonPacket.class,FactocraftyStateButtonPacket::encode,FactocraftyStateButtonPacket::new, FactocraftyStateButtonPacket::apply);
+        NETWORK.register(FactocraftyStorageSidesPacket.class, FactocraftyStorageSidesPacket::encode, FactocraftyStorageSidesPacket::new, FactocraftyStorageSidesPacket::apply);
         NETWORK.register(FactocraftyJetpackLaunchPacket.class, FactocraftyJetpackLaunchPacket::encode, FactocraftyJetpackLaunchPacket::new, FactocraftyJetpackLaunchPacket::apply);
         NETWORK.register(FactocraftySyncUpgradeStorage.class, FactocraftySyncUpgradeStorage::encode, FactocraftySyncUpgradeStorage::new, FactocraftySyncUpgradeStorage::apply);
         NETWORK.register(FactocraftySyncIntegerBearerPacket.class, FactocraftySyncIntegerBearerPacket::encode, FactocraftySyncIntegerBearerPacket::new, FactocraftySyncIntegerBearerPacket::apply);
         NETWORK.register(FactocraftyArmorFeaturePacket.class, FactocraftyArmorFeaturePacket::encode, FactocraftyArmorFeaturePacket::new, FactocraftyArmorFeaturePacket::apply);
+        NETWORK.register(FactocraftySyncMultiBlockPosPacket.class, FactocraftySyncMultiBlockPosPacket::encode, FactocraftySyncMultiBlockPosPacket::new, FactocraftySyncMultiBlockPosPacket::apply);
 
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import wily.factocrafty.init.Registration;
 
-public enum FactocraftyItems {
+public enum FactocraftyItems implements IFactocraftyLazyRegistry<Item> {
     RUBBER,SYNTHETIC_RUBBER,RUBBER_SIGN,
     ELECTRONIC_CIRCUIT,ADVANCED_CIRCUIT,
     CARBON_PLATE,CARBON_FIBERS,COMBINED_CARBON,
@@ -23,8 +23,4 @@ public enum FactocraftyItems {
     public Item get(){
         return Registration.getRegistrarItemEntry(getName());
     }
-    public String getName(){
-        return name().toLowerCase();
-    }
-
 }

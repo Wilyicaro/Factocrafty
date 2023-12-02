@@ -7,8 +7,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import wily.factoryapi.base.FactoryItemSlot;
+import wily.factoryapi.base.SlotsIdentifier;
+import wily.factoryapi.base.TransportState;
 
-public class FactocraftySlotWrapper extends Slot {
+public class FactocraftySlotWrapper extends FactoryItemSlot {
     final Slot target;
 
     public boolean active;
@@ -16,7 +19,7 @@ public class FactocraftySlotWrapper extends Slot {
     public final int initialY;
 
     public FactocraftySlotWrapper(Slot slot, int i, int x, int y) {
-        super(slot.container, i, x, y);
+        super(slot.container, slot instanceof FactoryItemSlot s ?  s.identifier() :SlotsIdentifier.GENERIC, slot instanceof FactoryItemSlot s ?  s.transportState :TransportState.EXTRACT_INSERT,i, x, y);
         this.target = slot;
         this.initialX = x;
         this.initialY = y;

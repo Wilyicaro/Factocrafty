@@ -1,23 +1,14 @@
 package wily.factocrafty.block;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,13 +19,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.entity.FactocraftyMenuBlockEntity;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.item.WeldableItem;
-import wily.factocrafty.recipes.ShapedTagRecipe;
-import wily.factocrafty.util.FactocraftyRecipeUtil;
-import wily.factoryapi.base.Bearer;
 import wily.factoryapi.base.FactoryCapacityTiers;
-
-import java.util.function.Function;
 
 public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements IFactocraftyCYEnergyBlock,IFactocraftyOrientableBlock {
 
@@ -75,9 +60,9 @@ public class FactocraftyMachineBlock extends FactocraftyStorageBlock implements 
     public void unsupportedTierBurn(Level level, BlockPos pos, FactoryCapacityTiers higherTier) {
         IFactocraftyCYEnergyBlock.super.unsupportedTierBurn(level, pos, higherTier);
         if (level.getBlockEntity(pos) instanceof FactocraftyMenuBlockEntity be) {
-            if (higherTier.ordinal() - be.energyStorage.supportableTier.ordinal() >= 3){
+            if (higherTier.ordinal() - be.energyStorage.supportedTier.ordinal() >= 3){
                 level.destroyBlock(pos,true);
-                level.explode(null,pos.getX(),pos.getY(),pos.getZ(),0.28F * higherTier.ordinal() - be.energyStorage.supportableTier.ordinal(), Level.ExplosionInteraction.BLOCK);
+                level.explode(null,pos.getX(),pos.getY(),pos.getZ(),0.28F * higherTier.ordinal() - be.energyStorage.supportedTier.ordinal(), Level.ExplosionInteraction.BLOCK);
             }else{
                 be.energyStorage.storedTier = FactoryCapacityTiers.BURNED;
                 be.energyStorage.setEnergyStored(0);

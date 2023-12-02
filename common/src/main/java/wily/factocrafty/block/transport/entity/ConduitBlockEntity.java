@@ -12,6 +12,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import wily.factocrafty.block.entity.ITicker;
 import wily.factocrafty.block.transport.BlockConnection;
 import wily.factocrafty.block.transport.ConduitSide;
 import wily.factocrafty.block.transport.FactocraftyConduitBlock;
@@ -25,7 +26,7 @@ import wily.factoryapi.util.VoxelShapeUtil;
 import java.util.*;
 import java.util.function.Consumer;
 
-public abstract class ConduitBlockEntity<T extends IFactocraftyConduit<?,?,?>> extends BlockEntity implements IFactoryExpandedStorage {
+public abstract class ConduitBlockEntity<T extends IFactocraftyConduit<?,?,?>> extends BlockEntity implements IFactoryExpandedStorage, ITicker {
 
 
 

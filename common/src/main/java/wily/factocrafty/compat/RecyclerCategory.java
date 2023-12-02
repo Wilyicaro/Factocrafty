@@ -12,8 +12,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import wily.factocrafty.recipes.FactocraftyMachineRecipe;
+import wily.factoryapi.util.ScreenUtil;
 
-import static wily.factocrafty.util.ScreenUtil.renderScaled;
 
 public class RecyclerCategory extends FactocraftyMachineCategory<FactocraftyMachineRecipe> {
     public RecyclerCategory(IGuiHelper guiHelper) {
@@ -23,7 +23,7 @@ public class RecyclerCategory extends FactocraftyMachineCategory<FactocraftyMach
     @Override
     public void draw(FactocraftyMachineRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
-        recipeSlotsView.findSlotByName("output").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) renderScaled(graphics.pose(), Math.round(recipe.getResultChance() * 100) + "%",102,49,0.5F,0x7E7E7E,false);})));
+        recipeSlotsView.findSlotByName("output").ifPresent((s->s.getDisplayedItemStack().ifPresent(i-> {if (!i.isEmpty()) ScreenUtil.renderScaled(graphics.pose(), Math.round(recipe.getResultChance() * 100) + "%",102,49,0.5F,0x7E7E7E,false);})));
     }
 
     @Override

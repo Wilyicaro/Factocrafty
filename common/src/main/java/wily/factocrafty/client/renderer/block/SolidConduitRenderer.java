@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import wily.factocrafty.block.transport.ConduitSide;
 import wily.factocrafty.block.transport.FactocraftyConduitBlock;
 import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
+import wily.factoryapi.base.ArbitrarySupplier;
 import wily.factoryapi.base.SideList;
 import wily.factoryapi.base.Storages;
 import wily.factoryapi.base.TransportState;
@@ -37,7 +38,7 @@ public class SolidConduitRenderer<C extends ConduitBlockEntity<?>> implements Bl
         RenderType renderType = ItemBlockRenderTypes.getRenderType(blockState, false);
         dispatcher.getModelRenderer().renderModel(stack.last(),multiBufferSource.getBuffer(renderType),be.getBlockState(), dispatcher.getBlockModel(blockState),1,1,1,i,j);
         Storages.Storage<?> s =  be.getConduitType().getTransferenceStorage();
-        Optional<?> op = (s == Storages.FLUID ? be.fluidSides() : s == Storages.CRAFTY_ENERGY ? be.energySides() : s== Storages.ITEM ? be.itemSides(): Optional.empty());
+        ArbitrarySupplier<?> op = (s == Storages.FLUID ? be.getStorageSides(Storages.FLUID) : s == Storages.CRAFTY_ENERGY ? be.getStorageSides(Storages.CRAFTY_ENERGY) : s== Storages.ITEM ? be.getStorageSides(Storages.ITEM): ArbitrarySupplier.empty());
         for (Direction d : Direction.values()) {
             ConduitSide side = blockState.getValue(be.getBlock().PROPERTY_BY_DIRECTION.get(d));
             if (side.isConnected()) {

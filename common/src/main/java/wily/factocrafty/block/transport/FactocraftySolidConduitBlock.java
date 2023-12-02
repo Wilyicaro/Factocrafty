@@ -1,8 +1,10 @@
 package wily.factocrafty.block.transport;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,6 +12,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import wily.factocrafty.util.registering.IFactocraftyConduit;
@@ -50,6 +53,11 @@ public abstract class FactocraftySolidConduitBlock<T extends Enum<T> & IFactocra
         PROPERTY_BY_DIRECTION.put(Direction.DOWN,DOWN);
     }
 
+    @Override
+    public VoxelShape getVisualShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+
+        return super.getVisualShape(blockState, blockGetter, blockPos, collisionContext);
+    }
 
     protected VoxelShape calculateShape(BlockState blockState) {
         VoxelShape voxelShape = getCenterCubeShape();

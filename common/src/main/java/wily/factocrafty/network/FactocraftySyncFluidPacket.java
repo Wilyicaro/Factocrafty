@@ -7,30 +7,33 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import wily.factoryapi.base.IFactoryExpandedStorage;
-import wily.factoryapi.base.IFactoryStorage;
 
 import java.util.function.Supplier;
 
 public class FactocraftySyncFluidPacket {
-    private FluidStack stack;
-    private int tankIdentifier;
-    private BlockPos pos;
+    private final FluidStack stack;
+
+    private final long capacity;
+    private final int index;
+    private final BlockPos pos;
 
     public FactocraftySyncFluidPacket(FriendlyByteBuf buf) {
-        this(buf.readBlockPos(),buf.readInt(), FluidStack.read(buf) );
+        this(buf.readBlockPos(),buf.readLong() ,buf.readInt(), FluidStack.read(buf) );
 
     }
 
-    public FactocraftySyncFluidPacket(BlockPos pos, int identifier, FluidStack stack) {
+    public FactocraftySyncFluidPacket(BlockPos pos,long capacity, int index, FluidStack stack) {
         this.pos = pos;
-        this.tankIdentifier = identifier;
+        this.capacity = capacity;
+        this.index = index;
         this.stack = stack;
 
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeBlockPos(pos);
-        buf.writeInt(tankIdentifier);
+        buf.writeLong(capacity);
+        buf.writeInt(index);
         stack.write(buf);
     }
 
@@ -39,7 +42,8 @@ public class FactocraftySyncFluidPacket {
             Player player = ctx.get().getPlayer();
             BlockEntity te = player.level().getBlockEntity(pos);
             if (player.level().isLoaded(pos)) {
-                ((IFactoryExpandedStorage)te).getTanks().get(tankIdentifier).setFluid(stack);
+                ((IFactoryExpandedStorage)te).getTanks().get(index).setFluid(stack);
+                ((IFactoryExpandedStorage)te).getTanks().get(index).setCapacity(capacity);
                 te.setChanged();
             }
         });

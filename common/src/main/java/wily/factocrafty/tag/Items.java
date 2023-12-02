@@ -11,6 +11,10 @@ import static wily.factocrafty.Factocrafty.MOD_ID;
 public class Items {
     public static final String commonName = Platform.isForge() ? "forge" : "c";
 
+    public static final TagKey<Item> NUCLEAR_COMPONENTS = TagKey.create(Registries.ITEM,new ResourceLocation(MOD_ID,"nuclear_components"));
+
+    public static final TagKey<Item> NUCLEAR_RODS = TagKey.create(Registries.ITEM,new ResourceLocation(MOD_ID,"nuclear_rods"));
+
     public static final TagKey<Item> ORES = TagKey.create(Registries.ITEM,new ResourceLocation(commonName,"ores"));
 
     public static final TagKey<Item> PLATES = TagKey.create(Registries.ITEM,new ResourceLocation(commonName,"plates"));

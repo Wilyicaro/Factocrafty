@@ -49,6 +49,7 @@ import wily.factocrafty.item.WrenchItem;
 import wily.factocrafty.recipes.ShapedTagRecipe;
 import wily.factocrafty.util.CompoundTagUtil;
 import wily.factocrafty.util.FactocraftyRecipeUtil;
+import wily.factocrafty.util.registering.IFactocraftyBlockEntityType;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.StorageStringUtil;
@@ -57,7 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class FactocraftyStorageBlock extends BaseEntityBlock {
+public class FactocraftyStorageBlock extends FactocraftyEntityBlock {
 
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
@@ -135,7 +136,8 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
             ItemStack stack = player.getItemInHand(interactionHand);
             boolean fluidItem = ItemContainerUtil.isFluidContainer(stack);
             boolean isWrench = stack.getItem() instanceof WrenchItem;
-            if (!level.isClientSide) {
+            if (level.isClientSide) return InteractionResult.SUCCESS;
+            else {
                 if (!stack.isEmpty() && level.getBlockEntity(blockPos) instanceof IFactoryExpandedStorage be) {
                     if ((isWrench || fluidItem && !be.getTanks().isEmpty())) {
                         if (fluidItem) {
@@ -154,7 +156,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
                     }
                 }
                  this.interactWith(level, blockPos, player);
-            } else return InteractionResult.SUCCESS;
+            }
             return InteractionResult.CONSUME;
     }
     public InteractionResult interactFluidItem(IFactoryExpandedStorage storage, Player player, InteractionHand hand) {
@@ -165,7 +167,7 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
                 if (!tank.drain((int) ItemContainerUtil.fillItem(tank.getFluidStack(),player,hand), false).isEmpty())
                     return InteractionResult.SUCCESS;
             }
-            if (fluidStack.isEmpty() || !tank.isFluidValid(0,fluidStack) || !(fluidStack.isFluidEqual(tank.getFluidStack()) || tank.getFluidStack().isEmpty()) || !tank.getTransport().canInsert()) continue;
+            if (fluidStack.isEmpty() || !tank.isFluidValid(fluidStack) || !(fluidStack.isFluidEqual(tank.getFluidStack()) || tank.getFluidStack().isEmpty()) || !tank.getTransport().canInsert()) continue;
             if (tank.getTotalSpace() > 0 && !(stack.getItem() instanceof BucketItem) || tank.getTotalSpace() >= FluidStack.bucketAmount()) {
                 if (!ItemContainerUtil.drainItem(tank.fill(ItemContainerUtil.getFluid(stack),false), player, hand).isEmpty())
                     return InteractionResult.SUCCESS;
@@ -175,16 +177,13 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
         return InteractionResult.CONSUME;
     }
 
-    private void interactWith(Level world, BlockPos pos, Player player) {
+    protected void interactWith(Level world, BlockPos pos, Player player) {
         BlockEntity be = world.getBlockEntity(pos);
-        if (be instanceof ExtendedMenuProvider) {
-            MenuRegistry.openExtendedMenu((ServerPlayer) player, (ExtendedMenuProvider) be);
+        if (be instanceof ExtendedMenuProvider menu) {
+            MenuRegistry.openExtendedMenu((ServerPlayer) player, menu);
         }
     }
-    @Override
-    public RenderShape getRenderShape(BlockState blockState) {
-        return RenderShape.MODEL;
-    }
+
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
         if (this instanceof IFactocraftyCYEnergyBlock b) {
             list.add(b.getEnergyTier().getEnergyTierComponent(false));
@@ -210,20 +209,6 @@ public class FactocraftyStorageBlock extends BaseEntityBlock {
     }
 
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return null;
-    }
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return(level1, pos, blockState1, be) -> {
-            if (be instanceof FactocraftyStorageBlockEntity blockEntity)
-                blockEntity.tick();
-
-        };
-    }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE);
