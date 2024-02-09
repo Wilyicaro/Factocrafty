@@ -109,7 +109,7 @@ public class FactocraftyMenuBlockEntity extends FactocraftyStorageBlockEntity im
             getSlots(null).forEach(s->{
                 if (ArrayUtils.contains(STORAGE_SLOTS,s.getContainerSlot()) && s instanceof FactocraftyCYItemSlot slot && slot.acceptPlatformEnergy) {
                     ItemStack energyItem = inventory.getItem(s.getContainerSlot());
-                    if (slot.transportState.canExtract() && ItemContainerUtil.isEnergyContainer(energyItem) && FactoryAPIPlatform.getItemEnergyStorage(energyItem).getSpace() > 0)
+                    if (slot.transportState.canExtract() && ItemContainerUtil.isEnergyContainer(energyItem) && FactoryAPIPlatform.getItemEnergyStorage(energyItem).getEnergySpace() > 0)
                         e.consumeEnergy(ItemContainerUtil.insertEnergy(ItemContainerUtil.getEnergy(energyItem), energyItem).contextEnergy(),false);
                 }})
         );

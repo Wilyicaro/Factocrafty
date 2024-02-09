@@ -44,9 +44,9 @@ public class MachineSidesConfig extends FactocraftyScreenWindow<AbstractContaine
     public List<Renderable> getNestedRenderables() {
         List<Renderable> list = super.getNestedRenderables();
         list.add(new FactoryDrawableButton(getX() + 7,getY() + 11,FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(sideConfigState)).tooltip(getSidesConfigTooltip()).onPress((b, i)-> sideConfigState = getNextSide()));
-        list.add(new FactoryDrawableButton(getX() + 7,getY() + 30,FactocraftyDrawables.LARGE_BUTTON).color(getSideIdentifier().getColor()).tooltip(getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank"))).onPress((b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(parent.getMenu().getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : ((ISideType) getSideType().get(selectedDirection)).nextSlotIndex(getSlotsIdentifiers())))));
-        list.add(new FactoryDrawableButton(getX() + 7,getY() + 49, FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getSideType().getTransport(selectedDirection).ordinal() + 4)).tooltip(getStateSide().getTooltip()).onPress( (b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(parent.getMenu().getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().next(), sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers())))));
-        list.add(new FactoryDrawableButton(getX() + width - 18,getY() + 54, FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(1)).tooltip(Component.translatable("tooltip.factocrafty.config.reset")).onPress((b,i)-> {for (Direction d : Direction.values()) Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(parent.getMenu().getBlockPos(), sideConfigState, d.ordinal(), TransportState.NONE, sideConfigState == 1 ? 0 :((ISideType) getSideType().get(selectedDirection)).getSlotIndex(getSlotsIdentifiers())));}));
+        list.add(new FactoryDrawableButton(getX() + 7,getY() + 30,FactocraftyDrawables.LARGE_BUTTON).color(getSideIdentifier().getColor()).tooltip(getSideIdentifier().getTooltip((sideConfigState == 0 ? "slot" : sideConfigState < 2 ? "cell":"tank"))).onPress((b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(parent.getMenu().getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide(), sideConfigState == 1 ? 0 : getSideType().get(selectedDirection).nextSlotIndex(getSlotsIdentifiers())))));
+        list.add(new FactoryDrawableButton(getX() + 7,getY() + 49, FactocraftyDrawables.LARGE_BUTTON).icon(FactocraftyDrawables.getButtonIcon(getSideType().getTransport(selectedDirection).ordinal() + 4)).tooltip(getStateSide().getTooltip()).onPress( (b,i)-> Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(parent.getMenu().getBlockPos(),sideConfigState,selectedDirection.ordinal(),getStateSide().next(), sideConfigState == 1 ? 0 :getSideType().get(selectedDirection).getSlotIndex(getSlotsIdentifiers())))));
+        list.add(new FactoryDrawableButton(getX() + width - 18,getY() + 54, FactocraftyDrawables.SMALL_BUTTON).icon(FactocraftyDrawables.getSmallButtonIcon(1)).tooltip(Component.translatable("tooltip.factocrafty.config.reset")).onPress((b,i)-> {for (Direction d : Direction.values()) Factocrafty.NETWORK.sendToServer(new FactocraftyStorageSidesPacket(parent.getMenu().getBlockPos(), sideConfigState, d.ordinal(), TransportState.NONE, sideConfigState == 1 ? 0 :getSideType().get(selectedDirection).getSlotIndex(getSlotsIdentifiers())));}));
         return list;
     }
     public TransportState getStateSide(){return getSideType().getTransport(selectedDirection);}
@@ -67,11 +67,11 @@ public class MachineSidesConfig extends FactocraftyScreenWindow<AbstractContaine
         int next = sidesType().indexOf(sideConfigState) + 1;
         return  sidesType().get(next < sidesType().size() ?  next : 0);
     }
-    public static SideList<?> getSideType(IFactoryStorage be, int sideConfigState){
+    public static SideList<TransportSide> getSideType(IFactoryStorage be, int sideConfigState){
         return sideConfigState == 0 ? be.getStorageSides(Storages.ITEM).get() : sideConfigState == 1 ? be.getStorageSides(Storages.CRAFTY_ENERGY).get() : sideConfigState == 2 ? be.getStorageSides(Storages.FLUID).get() : null;
     }
-    protected SideList<?> getSideType(){ return getSideType(be,sideConfigState);}
-    protected List<?> getSlotsIdentifiers(){
+    protected SideList<TransportSide> getSideType(){ return getSideType(be,sideConfigState);}
+    protected List<SlotsIdentifier> getSlotsIdentifiers(){
         return sideConfigState == 0 ? be.getItemSlotsIdentifiers() : sideConfigState == 1 ? List.of(SlotsIdentifier.ENERGY) : sideConfigState == 2 ? be.getFluidSlotsIdentifiers() : null;
     }
     protected SlotsIdentifier getSideIdentifier() {

@@ -28,8 +28,8 @@ import java.util.*;
 import static wily.factoryapi.util.StorageUtil.*;
 
 public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFluidPipes> {
-    public IPlatformFluidHandler<?> fluidHandler = FactoryAPIPlatform.getFluidHandlerApi(getConduitType().capacityTier.capacityMultiplier * FluidStack.bucketAmount(),this,(f)-> true,SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
-    public SideList<? super ISideType<?>> fluidSides = new SideList<>(()->new TransportSide(fluidHandler.identifier(),TransportState.EXTRACT_INSERT));
+    public IPlatformFluidHandler fluidHandler = FactoryAPIPlatform.getFluidHandlerApi(getConduitType().capacityTier.capacityMultiplier * FluidStack.bucketAmount(),this,(f)-> true,SlotsIdentifier.GENERIC,TransportState.EXTRACT_INSERT);
+    public SideList<TransportSide> fluidSides = new SideList<>(()->new TransportSide(fluidHandler.identifier(),TransportState.EXTRACT_INSERT));
 
     public FluidPipeBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(blockPos, blockState);
@@ -77,19 +77,19 @@ public class FluidPipeBlockEntity extends SolidConduitBlockEntity<FactocraftyFlu
     }
 
     @Override
-    public List<IPlatformFluidHandler<?>> getTanks() {
+    public List<IPlatformFluidHandler> getTanks() {
         return List.of(fluidHandler);
     }
 
     @Override
-    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+    public <T extends IPlatformHandler> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
         if (storage == Storages.FLUID)
-                return ()-> (T) FactoryAPIPlatform.filteredOf(fluidHandler, getBlockedSides().contains(direction) ? TransportState.NONE : fluidSides.getTransport(direction));
+                return ()-> (T) FactoryAPIPlatform.filteredOf(fluidHandler, direction,getBlockedSides().contains(direction) ? TransportState.NONE : fluidSides.getTransport(direction));
         return ArbitrarySupplier.empty();
     }
 
     @Override
-    public ArbitrarySupplier<SideList<? super ISideType<?>>> getStorageSides(Storages.Storage<?> storage) {
+    public ArbitrarySupplier<SideList<TransportSide>> getStorageSides(Storages.Storage<?> storage) {
         if (storage == Storages.FLUID) return ()->fluidSides;
         return super.getStorageSides(storage);
     }

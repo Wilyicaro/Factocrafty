@@ -60,7 +60,7 @@ public class FactocraftyFluidTankBlockEntity extends FactocraftyMenuBlockEntity 
     }
 
     @Override
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         list.add(fluidTank);
     }
 

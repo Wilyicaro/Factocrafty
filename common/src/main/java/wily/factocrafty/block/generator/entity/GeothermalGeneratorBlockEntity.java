@@ -46,7 +46,7 @@ public class GeothermalGeneratorBlockEntity extends GeneratorBlockEntity {
     protected boolean canConsumeFuel(){
         return lavaTank.getFluidStack().getAmount() >= getPlatformFluidConsume(1);
     }
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         super.addTanks(list);
         list.add(lavaTank);
     }

@@ -142,7 +142,7 @@ public class ProcessMachineBlockEntity<T extends Recipe<Container>> extends Fact
         }return false;
 
     }
-    protected static boolean canTankAcceptResult(IPlatformFluidHandler<?> tank, FluidStack resultFluid){
+    protected static boolean canTankAcceptResult(IPlatformFluidHandler tank, FluidStack resultFluid){
         return tank.getTotalSpace() >= resultFluid.getAmount() && (tank.getFluidStack().isEmpty() || tank.getFluidStack().isFluidEqual((resultFluid)));
     }
     protected static boolean canSlotAcceptItem(Container inv, int slot, ItemStack stack){

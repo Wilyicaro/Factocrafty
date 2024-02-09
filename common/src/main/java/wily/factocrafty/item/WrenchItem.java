@@ -21,6 +21,7 @@ import wily.factocrafty.block.entity.FactocraftyStorageBlockEntity;
 import wily.factocrafty.block.transport.fluid.FluidPipeBlockEntity;
 import wily.factocrafty.init.Registration;
 import wily.factocrafty.network.FactocraftyStorageSidesPacket;
+import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.Storages;
 
 public class WrenchItem extends Item {
@@ -37,11 +38,12 @@ public class WrenchItem extends Item {
         BlockPos pos = useOnContext.getClickedPos();
         Player player = useOnContext.getPlayer();
         ItemStack stack = useOnContext.getItemInHand();
-        if ( canUseWrench(stack)){
+        if (canUseWrench(stack)){
             if (level.getBlockEntity(pos) instanceof FactocraftyStorageBlockEntity be) {
                 level.playSound(null, pos, Registration.WRENCH_TIGHT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 BlockState blockState = be.getBlockState();
                 FluidState fluidState = level.getFluidState(pos);
+                FactoryAPIPlatform.filteredHandlersCache.clear();
                 if (player.isShiftKeyDown()) {
                     BlockEntity blockEntity = blockState.hasBlockEntity() ? be : null;
                     Block.dropResources(blockState, level, pos, blockEntity, player, useOnContext.getItemInHand());

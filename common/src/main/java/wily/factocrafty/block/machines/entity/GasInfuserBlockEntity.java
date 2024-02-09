@@ -82,7 +82,7 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     }
 
     @Override
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         list.add(fluidTank);
         list.add(ioTank);
         list.add(oiTank);
@@ -101,7 +101,7 @@ public class GasInfuserBlockEntity extends CompoundResultMachineBlockEntity<GasI
     public Stream<GasInfuserRecipe> getFilteredRecipes(){
         return getRecipes().stream().filter(r-> r.getDiff() == infusionMode.get());
     }
-    public IPlatformFluidHandler<?> ioTank = FactoryAPIPlatform.getFluidHandlerApi(4 * FluidStack.bucketAmount(),this, f->  getFilteredRecipes().anyMatch(rcp-> rcp.getOtherFluid().isFluidEqual(f)), IO_TANK_IDENTIFIER, TransportState.EXTRACT_INSERT);
+    public IPlatformFluidHandler ioTank = FactoryAPIPlatform.getFluidHandlerApi(4 * FluidStack.bucketAmount(),this, f->  getFilteredRecipes().anyMatch(rcp-> rcp.getOtherFluid().isFluidEqual(f)), IO_TANK_IDENTIFIER, TransportState.EXTRACT_INSERT);
 
-    public IPlatformFluidHandler<?> oiTank = FactoryAPIPlatform.getFluidHandlerApi(4 * FluidStack.bucketAmount(),this, f->  getFilteredRecipes().anyMatch(rcp-> getInfusionMode().isElectrolyzer() ? rcp.getFluidIngredient().isFluidEqual(f) : rcp.getResultFluid().isFluidEqual(f)), OI_TANK_IDENTIFIER, TransportState.EXTRACT_INSERT);
+    public IPlatformFluidHandler oiTank = FactoryAPIPlatform.getFluidHandlerApi(4 * FluidStack.bucketAmount(),this, f->  getFilteredRecipes().anyMatch(rcp-> getInfusionMode().isElectrolyzer() ? rcp.getFluidIngredient().isFluidEqual(f) : rcp.getResultFluid().isFluidEqual(f)), OI_TANK_IDENTIFIER, TransportState.EXTRACT_INSERT);
 }

@@ -44,10 +44,10 @@ public abstract class JetpackItem extends ArmorItem implements IFactoryItem {
                 return new JetpackModel<>(original, Minecraft.getInstance().getEntityModels().bakeLayer(JetpackModel.LAYER_LOCATION));
             }
 
-            @Override
-            public ResourceLocation getArmorTexture() {
-                return asItem() instanceof FlexJetpackItem ?  JetpackModel.getFlexTexture() : JetpackModel.getElectricTexture();
-            }
         });
+    }
+    @Override
+    public ResourceLocation getArmorTexture() {
+        return asItem() instanceof FlexJetpackItem ?  JetpackModel.getFlexTexture() : JetpackModel.getElectricTexture();
     }
 }

@@ -47,11 +47,10 @@ import wily.factocrafty.item.FactocraftyUpgradeItem;
 import wily.factocrafty.item.WeldableItem;
 import wily.factocrafty.item.WrenchItem;
 import wily.factocrafty.recipes.ShapedTagRecipe;
-import wily.factocrafty.util.CompoundTagUtil;
 import wily.factocrafty.util.FactocraftyRecipeUtil;
-import wily.factocrafty.util.registering.IFactocraftyBlockEntityType;
 import wily.factoryapi.ItemContainerUtil;
 import wily.factoryapi.base.*;
+import wily.factoryapi.util.CompoundTagUtil;
 import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.ArrayList;

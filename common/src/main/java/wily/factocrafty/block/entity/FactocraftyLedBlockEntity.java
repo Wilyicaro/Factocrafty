@@ -64,7 +64,7 @@ public class FactocraftyLedBlockEntity extends FactocraftyMenuBlockEntity {
     @Override
     public void syncAdditionalMenuData(AbstractContainerMenu menu, ServerPlayer player) {
         super.syncAdditionalMenuData(menu, player);
-        Factocrafty.NETWORK.sendToPlayer(player,new FactocraftySyncEnergyPacket(getBlockPos(),energyStorage));
+        Factocrafty.NETWORK.sendToPlayer(player,new FactocraftySyncEnergyPacket(getBlockPos(),(CYEnergyStorage)energyStorage));
     }
 
 }

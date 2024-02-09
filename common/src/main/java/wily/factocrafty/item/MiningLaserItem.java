@@ -63,7 +63,7 @@ public class MiningLaserItem extends ProjectileWeaponItem implements ICraftyStor
         return 10;
     }
     @Override
-    public boolean isBarVisible(ItemStack itemStack) {return getEnergyStorage(itemStack).getSpace() > 0;}
+    public boolean isBarVisible(ItemStack itemStack) {return getEnergyStorage(itemStack).getEnergySpace() > 0;}
 
     public int getBarWidth(ItemStack itemStack) {
         return Math.round( getEnergyStorage(itemStack).getEnergyStored() * 13.0F / (float)this.getEnergyStorage(itemStack).getMaxEnergyStored());

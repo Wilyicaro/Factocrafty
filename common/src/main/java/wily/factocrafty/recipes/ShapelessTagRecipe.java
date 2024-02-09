@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import wily.factocrafty.init.Registration;
-import wily.factocrafty.util.CompoundTagUtil;
+import wily.factoryapi.util.CompoundTagUtil;
 
 import java.util.*;
 import java.util.function.Consumer;

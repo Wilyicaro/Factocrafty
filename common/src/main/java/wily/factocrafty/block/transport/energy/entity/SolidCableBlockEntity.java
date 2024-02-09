@@ -12,6 +12,7 @@ import wily.factocrafty.block.entity.FilteredCYEnergyStorage;
 import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
 import wily.factocrafty.block.transport.entity.SolidConduitBlockEntity;
 import wily.factocrafty.util.registering.FactocraftyCables;
+import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.VoxelShapeUtil;
 
@@ -56,17 +57,17 @@ public class SolidCableBlockEntity extends SolidConduitBlockEntity<FactocraftyCa
     public int maxEnergyTransfer() {
         return (int) (getConduitType().energyTier.initialCapacity * getConduitType().energyTier.getConductivity());
     }
-    public SideList<? super ISideType<?>> energySides =  new SideList<>(()->new TransportSide(SlotsIdentifier.ENERGY, TransportState.EXTRACT_INSERT));
+    public SideList<TransportSide> energySides =  new SideList<>(()->new TransportSide(SlotsIdentifier.ENERGY, TransportState.EXTRACT_INSERT));
 
     @Override
-    public ArbitrarySupplier<SideList<? super ISideType<?>>> getStorageSides(Storages.Storage<?> storage) {
+    public ArbitrarySupplier<SideList<TransportSide>> getStorageSides(Storages.Storage<?> storage) {
         return storage == Storages.CRAFTY_ENERGY ? () ->energySides : ArbitrarySupplier.empty();
     }
 
     @Override
-    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+    public <T extends IPlatformHandler> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
         if (storage == Storages.CRAFTY_ENERGY)
-            return ()-> (T) FilteredCYEnergyStorage.of(energyStorage,getBlockedSides().contains(direction) ? TransportState.NONE : getStorageSides(Storages.CRAFTY_ENERGY).get().getTransport(direction));
+            return ()-> (T) (direction != null ?  FactoryAPIPlatform.filteredOf(energyStorage, direction,getBlockedSides().contains(direction) ? TransportState.NONE : getStorageSides(Storages.CRAFTY_ENERGY).get().getTransport(direction),FilteredCYEnergyStorage::of) : energyStorage);
         return ArbitrarySupplier.empty();
     }
 

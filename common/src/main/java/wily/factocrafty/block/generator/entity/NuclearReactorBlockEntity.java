@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wily.factocrafty.block.FactocraftyMachineBlock;
 import wily.factocrafty.block.entity.IMultiBlockShape;
@@ -45,8 +46,15 @@ public class NuclearReactorBlockEntity extends GeneratorBlockEntity implements I
     public NuclearReactorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(Registration.NUCLEAR_REACTOR_MENU.get(), Registration.NUCLEAR_REACTOR_BLOCK_ENTITY.get(), blockPos, blockState);
         additionalSyncInt.add(injectionRate);
-        inventory.setValid(p-> Container.stillValidBlockEntity(this,p,actualMultiBlockPositions.isEmpty() ? 8 : (Math.max(distances.getX(),Math.max(distances.getY(),distances.getZ())) + 8)));
         burnTime = new Progress(Progress.Identifier.BURN_TIME,8,17,1000);
+    }
+    protected FactoryItemHandler getInitialInventory(){
+        return new FactoryItemHandler(getInvSize(), this, TransportState.EXTRACT_INSERT){
+            @Override
+            public boolean stillValid(@NotNull Player player) {
+                return Container.stillValidBlockEntity(NuclearReactorBlockEntity.this,player,actualMultiBlockPositions.isEmpty() ? 8 : (Math.max(distances.getX(),Math.max(distances.getY(),distances.getZ())) + 8));
+            }
+        };
     }
     public static CenteredPredicate nuclearReactorPredicate = (pos, state, distance, maxDistance) -> {
         int x = distance.getX(),y = distance.getY(), z = distance.getZ();
@@ -190,7 +198,7 @@ public class NuclearReactorBlockEntity extends GeneratorBlockEntity implements I
         if (burnTime.first().get() >= 25 && ticks % (int)Math.pow(burnTime.first().get(),0.5) == 0)
             burnTime.first().shrink(1);
         if(isBurning()) {
-            if (energyStorage.getSpace() > 0 && hasFluid){
+            if (energyStorage.getEnergySpace() > 0 && hasFluid){
                 progress.first().add(1);
                 energy = energyStorage.receiveEnergy(new CraftyTransaction(getGenerationRate(), energyStorage.supportedTier), false).energy;
                 if (progress.first().get() >= progress.first().maxProgress) {

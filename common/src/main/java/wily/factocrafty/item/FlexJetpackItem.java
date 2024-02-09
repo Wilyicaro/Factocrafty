@@ -15,7 +15,7 @@ import wily.factoryapi.util.StorageStringUtil;
 
 import java.util.List;
 
-public class FlexJetpackItem extends JetpackItem implements IFluidHandlerItem<IPlatformFluidHandler<?>> {
+public class FlexJetpackItem extends JetpackItem implements IFluidHandlerItem<IPlatformFluidHandler> {
 
 
     public FlexJetpackItem(ArmorMaterial armorMaterial, Properties properties) {

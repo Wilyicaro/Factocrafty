@@ -55,13 +55,13 @@ public class ReactorCasingBlockEntity extends BlockEntity implements IFactorySto
     }
 
     @Override
-    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+    public <T extends IPlatformHandler> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
         if (nuclearCorePos.isPresent() && level.getBlockEntity(nuclearCorePos.get()) instanceof NuclearReactorBlockEntity be) return be.getStorage(storage,direction);
         return ArbitrarySupplier.empty();
     }
 
     @Override
-    public ArbitrarySupplier<SideList<? super ISideType<?>>> getStorageSides(Storages.Storage<?> storage) {
+    public ArbitrarySupplier<SideList<TransportSide>> getStorageSides(Storages.Storage<?> storage) {
         if (nuclearCorePos.isPresent() && level.getBlockEntity(nuclearCorePos.get()) instanceof NuclearReactorBlockEntity be) return be.getStorageSides(storage);
         return ArbitrarySupplier.empty();
     }

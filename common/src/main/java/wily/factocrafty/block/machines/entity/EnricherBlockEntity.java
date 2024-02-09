@@ -85,7 +85,7 @@ public class EnricherBlockEntity extends ChangeableInputMachineBlockEntity {
     }
 
     @Override
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         super.addTanks(list);
         list.add(resultTank);
     }

@@ -10,6 +10,7 @@ import wily.factocrafty.block.entity.CYEnergyStorage;
 import wily.factocrafty.block.entity.FilteredCYEnergyStorage;
 import wily.factocrafty.block.transport.entity.ConduitBlockEntity;
 import wily.factocrafty.util.registering.FactocraftyCables;
+import wily.factoryapi.FactoryAPIPlatform;
 import wily.factoryapi.base.*;
 import wily.factoryapi.util.StorageUtil;
 
@@ -53,10 +54,9 @@ public class CableBlockEntity extends ConduitBlockEntity<FactocraftyCables> {
 
 
     @Override
-    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
-        if (storage == Storages.CRAFTY_ENERGY) {
-            return ()-> (T) FilteredCYEnergyStorage.of(energyStorage,getBlockedSides().contains(direction) ? TransportState.NONE : TransportState.EXTRACT_INSERT);
-        }
+    public <T extends IPlatformHandler> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+        if (storage == Storages.CRAFTY_ENERGY)
+            return ()-> (T) (direction != null ?  FactoryAPIPlatform.filteredOf(energyStorage, direction,getBlockedSides().contains(direction) ? TransportState.NONE : TransportState.EXTRACT_INSERT,FilteredCYEnergyStorage::of) : energyStorage);
         return ArbitrarySupplier.empty();
     }
 

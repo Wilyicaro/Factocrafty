@@ -61,7 +61,7 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
             BlockState state = be.getLevel().getBlockState(blockPos);
             Fluid fluid = state.getFluidState().getType();
             BucketPickup p = (BucketPickup) state.getBlock();
-            for (IPlatformFluidHandler<?> tank : storage.getTanks()) {
+            for (IPlatformFluidHandler tank : storage.getTanks()) {
                 if (progress.first().get() >= progress.first().maxProgress && energyStorage.getEnergyStored() >= 3 && tank.isFluidValid(FluidStack.create(fluid, FluidStack.bucketAmount())) && (tank.getFluidStack().isEmpty() || fluid.isSame(tank.getFluidStack().getFluid())) && tank.getTotalSpace() >= FluidStack.bucketAmount()){
                     if (level.isClientSide) return true;
                     progress.first().set(0);
@@ -85,7 +85,7 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
             IFactoryExpandedStorage storage = (IFactoryExpandedStorage) be;
             if (!storage.getStorageSides(Storages.FLUID).isEmpty() && !storage.getStorageSides(Storages.FLUID).get().getTransport(direction).canExtract()) return false;
             BlockState state = be.getLevel().getBlockState(blockPos);
-            for (IPlatformFluidHandler<?> tank : storage.getTanks()) {
+            for (IPlatformFluidHandler tank : storage.getTanks()) {
                 FluidStack fluidStack = tank.getFluidStack();
                 if (progress.first().get() >= progress.first().maxProgress && energyStorage.getEnergyStored() >= 3 &&  fluidStack.getAmount() >= FluidStack.bucketAmount() && (state.isAir() ||  (state.getBlock() instanceof LiquidBlockContainer p &&  p.canPlaceLiquid(level,blockPos,state,fluidStack.getFluid())))){
                     if (level.isClientSide) return true;
@@ -184,7 +184,7 @@ public class FluidPumpBlockEntity extends FactocraftyMenuBlockEntity implements 
         super.syncAdditionalMenuData(menu, player);
     }
 
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         list.add(fluidTank);
     }
 

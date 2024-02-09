@@ -78,7 +78,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
             }
 
             energy += energyReceived;
-            this.be.setChanged();
+            setChanged();
 
         }
 
@@ -92,7 +92,7 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
         if (!simulate) {
             energy -= energyExtracted;
             if (energy == 0) storedTier = FactoryCapacityTiers.BASIC;
-            this.be.setChanged();
+            setChanged();
         }
         return new CraftyTransaction(Math.min(getMaxConsume(), transaction.energy), storedTier);
     }
@@ -112,6 +112,10 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
         return capacity;
     }
 
+    @Override
+    public void setChanged() {
+        be.setChanged();
+    }
 
     @Override
     public CompoundTag serializeTag() {
@@ -142,16 +146,16 @@ public class CYEnergyStorage implements ICraftyEnergyStorage {
     }
     @Override
     public int getMaxReceive() {
-        return Math.min(getSpace(),getTransport().canInsert() ? Math.min(ICraftyEnergyStorage.super.getMaxReceive(),maxReceive) : 0);
-    }
-
-    @Override
-    public ICraftyEnergyStorage getHandler() {
-        return this;
+        return Math.min(getEnergySpace(),getTransport().canInsert() ? Math.min(ICraftyEnergyStorage.super.getMaxReceive(),maxReceive) : 0);
     }
 
     @Override
     public TransportState getTransport() {
         return storedTier.isBurned() ? TransportState.NONE : TransportState.EXTRACT_INSERT;
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return be != null && be.isRemoved();
     }
 }

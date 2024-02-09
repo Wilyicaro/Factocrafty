@@ -21,7 +21,7 @@ import wily.factoryapi.base.IPlatformFluidHandler;
 
 import static net.minecraft.world.item.Item.getPlayerPOVHitResult;
 
-public interface BucketLikeItem extends IFluidHandlerItem<IPlatformFluidHandler<?>> {
+public interface BucketLikeItem extends IFluidHandlerItem<IPlatformFluidHandler> {
 
     default InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);

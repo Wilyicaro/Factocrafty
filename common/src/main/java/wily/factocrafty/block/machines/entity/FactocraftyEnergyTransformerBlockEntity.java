@@ -59,7 +59,7 @@ public class FactocraftyEnergyTransformerBlockEntity extends FactocraftyEnergySt
         return ConversionMode.values()[conversionMode.get()];
     }
 
-    public IPlatformEnergyStorage<?> platformEnergyStorage = FactoryAPIPlatform.getEnergyStorageApi(getInitialEnergyCapacity(),this);
+    public IPlatformEnergyStorage platformEnergyStorage = FactoryAPIPlatform.getEnergyStorageApi(getInitialEnergyCapacity(),this);
     @Override
     public int getInitialEnergyCapacity() {
         return getDefaultEnergyTier().initialCapacity;
@@ -83,9 +83,9 @@ public class FactocraftyEnergyTransformerBlockEntity extends FactocraftyEnergySt
         IFactoryProgressiveStorage.super.loadTag(compoundTag);
     }
     @Override
-    public <T extends IPlatformHandlerApi<?>> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
+    public <T extends IPlatformHandler> ArbitrarySupplier<T> getStorage(Storages.Storage<T> storage, Direction direction) {
         if (storage == Storages.ENERGY && getConversionMode().isPlatform())
-            return ()-> (T) FactoryAPIPlatform.filteredOf(platformEnergyStorage,energySides.getTransportOrDefault(direction,TransportState.EXTRACT));
+            return ()-> (T) FactoryAPIPlatform.filteredOf(platformEnergyStorage, direction,energySides.getTransportOrDefault(direction,TransportState.EXTRACT));
         return super.getStorage(storage, direction);
     }
 
@@ -93,7 +93,7 @@ public class FactocraftyEnergyTransformerBlockEntity extends FactocraftyEnergySt
     public void tick() {
         super.tick();
         if (!level.isClientSide) {
-            if (getConversionMode().isPlatform() && platformEnergyStorage.getSpace() > 0  && energyStorage.getEnergyStored() > 0){
+            if (getConversionMode().isPlatform() && platformEnergyStorage.getEnergySpace() > 0  && energyStorage.getEnergyStored() > 0){
                 progress.first().add((int) Math.pow(20,storedUpgrades.getUpgradeEfficiency(UpgradeType.OVERCLOCK)));
                 if (progress.first().get() >= progress.first().maxProgress) {
                     progress.first().set(0);

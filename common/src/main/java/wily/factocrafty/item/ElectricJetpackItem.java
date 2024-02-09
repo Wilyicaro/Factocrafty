@@ -41,7 +41,7 @@ public class ElectricJetpackItem extends JetpackItem implements ICraftyStorageIt
 
     @Override
     public boolean isBarVisible(ItemStack itemStack) {
-        return getEnergyStorage(itemStack).getSpace() > 0;
+        return getEnergyStorage(itemStack).getEnergySpace() > 0;
     }
 
     public int getBarWidth(ItemStack itemStack) {

@@ -2,12 +2,9 @@ package wily.factocrafty.block.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import wily.factoryapi.base.CraftyTransaction;
-import wily.factoryapi.base.FactoryCapacityTiers;
-import wily.factoryapi.base.ICraftyEnergyStorage;
-import wily.factoryapi.base.TransportState;
+import wily.factoryapi.base.*;
 
-public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
+public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage, IModifiableTransportHandler
 {
     ICraftyEnergyStorage energyStorage;
     protected TransportState transportState;
@@ -18,8 +15,8 @@ public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
     }
 
     @Override
-    public ICraftyEnergyStorage getHandler() {
-        return this;
+    public boolean isRemoved() {
+        return energyStorage.isRemoved();
     }
 
     @Override
@@ -80,8 +77,11 @@ public abstract class FilteredCYEnergyStorage implements ICraftyEnergyStorage
         return energyStorage.getMaxEnergyStored();
     }
 
-    public static ICraftyEnergyStorage of(ICraftyEnergyStorage energyStorage, TransportState transportState){
-        return new FilteredCYEnergyStorage(energyStorage,transportState){};
+    public static FilteredCYEnergyStorage of(ICraftyEnergyStorage energyStorage){
+        return new FilteredCYEnergyStorage(energyStorage,TransportState.EXTRACT_INSERT){};
+    }
+    public void setTransport(TransportState transportState) {
+        this.transportState = transportState;
     }
 
     @Override

@@ -22,12 +22,8 @@ public class FactocraftySyncEnergyPacket {
     public FactocraftySyncEnergyPacket(FriendlyByteBuf buf) {
         this(buf.readBlockPos(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt());
     }
-    public FactocraftySyncEnergyPacket(BlockPos pos,ICraftyEnergyStorage storage) {
-        this(pos,storage.getEnergyStored(),storage.getMaxEnergyStored(),storage.getStoredTier().ordinal(),storage.getSupportedTier().ordinal());
-
-    }
-    public FactocraftySyncEnergyPacket(BlockPos pos, IPlatformEnergyStorage<?> storage) {
-        this(pos,storage.getEnergyStored(), storage.getMaxEnergyStored(),-1,-1);
+    public FactocraftySyncEnergyPacket(BlockPos pos, IPlatformEnergyStorage st) {
+        this(pos,st.getEnergyStored(), st.getMaxEnergyStored(),st instanceof ICraftyEnergyStorage s ? s.getStoredTier().ordinal() :  -1, st instanceof ICraftyEnergyStorage s ? s.getSupportedTier().ordinal() : -1);
 
     }
     public FactocraftySyncEnergyPacket(BlockPos pos, int energy, int capacity, int storedTier, int supportedTier) {

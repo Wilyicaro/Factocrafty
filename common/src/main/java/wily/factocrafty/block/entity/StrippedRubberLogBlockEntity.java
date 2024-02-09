@@ -40,7 +40,7 @@ public class StrippedRubberLogBlockEntity extends FactocraftyStorageBlockEntity{
         return 6 * FluidStackHooks.bucketAmount();
     }
     @Override
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         list.add(fluidTank);
     }
 }

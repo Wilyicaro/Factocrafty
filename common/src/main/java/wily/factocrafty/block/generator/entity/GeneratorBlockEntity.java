@@ -97,7 +97,7 @@ public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements 
         boolean hasFluid = fluidTank.getFluidStack().getAmount() >= getPlatformFluidConsume(5);
         if(isBurning()) {
             burnTime.first().shrink(1);
-            if (energyStorage.getSpace() > 0 && hasFluid){
+            if (energyStorage.getEnergySpace() > 0 && hasFluid){
                 progress.first().add(1);
                 energy = energyStorage.receiveEnergy(new CraftyTransaction(getGenerationRate(), energyStorage.supportedTier), false).energy;
                 if (progress.first().get() >= progress.first().maxProgress) {
@@ -108,7 +108,7 @@ public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements 
         } else{
             if (progress.first().get() > 0) progress.first().shrink(2); else progress.first().set(0);
 
-            if (hasFluid && canConsumeFuel() && energyStorage.getSpace() > 0)
+            if (hasFluid && canConsumeFuel() && energyStorage.getEnergySpace() > 0)
                 consumeFuel();
 
         }
@@ -132,7 +132,7 @@ public class GeneratorBlockEntity extends FactocraftyMenuBlockEntity implements 
     public void loadTag(CompoundTag compoundTag) {
         IFactoryProgressiveStorage.super.loadTag(compoundTag);
     }
-    public void addTanks(List<IPlatformFluidHandler<?>> list) {
+    public void addTanks(List<IPlatformFluidHandler> list) {
         list.add(fluidTank);
     }
 
